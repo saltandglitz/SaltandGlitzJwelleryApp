@@ -1,0 +1,50 @@
+import 'package:get/get.dart';
+import 'package:solatn_gleeks/view/screens/add_to_cart/add_to_cart_screen.dart';
+import 'package:solatn_gleeks/view/screens/bottom_bar/bottom_bar_screen.dart';
+import 'package:solatn_gleeks/view/screens/create_account/create_account_screen.dart';
+import 'package:solatn_gleeks/view/screens/dashboard/dashboard_screen.dart';
+import 'package:solatn_gleeks/view/screens/edit_profile/edit_profile_screen.dart';
+import 'package:solatn_gleeks/view/screens/login/login_screen.dart';
+
+import '../../view/screens/categories/categories_sccreen.dart';
+import '../../view/screens/categories/men_categories_screen.dart';
+import '../../view/screens/categories/women_categories_screen.dart';
+import '../../view/screens/collection/collection_screen.dart';
+import '../../view/screens/collection_filter/collection_filter_screen.dart';
+import '../../view/screens/my_account/my_account_screen.dart';
+import '../../view/screens/product/product_screen.dart';
+import '../../view/screens/wishlist/wishlist_screen.dart';
+
+class RouteHelper {
+  static const String bottomBarScreen = "/bottom_bar_screen";
+  static const String dashboardScreen = "/dashboard_screen";
+  static const String addCartScreen = "/add_to_cart_screen";
+  static const String categoriesScreen = "/categories_screen";
+  static const String womenCategoriesScreen = "/women_categories_screen";
+  static const String menCategoriesScreen = "/men_categories_screen";
+  static const String wishlistScreen = "/wishlist_screen";
+  static const String collectionScreen = "/collection_screen";
+  static const String collectionFilterScreen = "/collection_filter_screen";
+  static const String productScreen = "/product_screen";
+  static const String myAccountScreen = "/my_account_screen";
+  static const String loginScreen = "/login_screen";
+  static const String createAccountScreen = "/create_screen";
+  static const String editProfileScreen = "/edit_profile_screen";
+
+  List<GetPage> routes = [
+    GetPage(name: bottomBarScreen, page: () => BottomBarScreen()),
+    GetPage(name: dashboardScreen, page: () => const DashboardScreen()),
+    GetPage(name: addCartScreen, page: () => AddToCartScreen()),
+    GetPage(name: categoriesScreen, page: () => CategoriesScreen()),
+    GetPage(name: womenCategoriesScreen, page: () => WomenCategoriesScreen()),
+    GetPage(name: menCategoriesScreen, page: () => MenCategoriesScreen()),
+    GetPage(name: wishlistScreen, page: () => WishlistScreen()),
+    GetPage(name: collectionScreen, page: () => CollectionScreen()),
+    GetPage(name: collectionFilterScreen, page: () => CollectionFilterScreen()),
+    GetPage(name: productScreen, page: () => ProductScreen()),
+    GetPage(name: myAccountScreen, page: () => MyAccountScreen()),
+    GetPage(name: loginScreen, page: () => LoginScreen()),
+    GetPage(name: createAccountScreen, page: () => CreateAccountScreen()),
+    GetPage(name: editProfileScreen, page: () => EditProfileScreen()),
+  ];
+}

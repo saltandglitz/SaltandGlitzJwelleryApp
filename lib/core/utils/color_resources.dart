@@ -1,0 +1,37 @@
+import 'package:flutter/material.dart';
+
+class ColorResources {
+  static const Color activeCardColor = Color(0xff27B8DA);
+  static const Color inactiveCardColor = Color(0xFFF9F9F9);
+  static const Color whiteColor = Color(0xFFFFFFFF);
+  static const Color cardBgColor = Color(0xFFFAFAFA);
+  static const Color borderColor = Color(0xff777777);
+  static const Color buttonColorDark = Color(0xff1F1F1F);
+  static const Color conceptTextColor = Color(0xFF41115B);
+  static const Color offerFirstColor = Color(0xFFFFD180);
+  static const Color offerSecondColor = Color(0xFF604663);
+  static const Color offerThirdTextColor = Color(0xFFCFBEF8);
+  static const Color offerForColor = Color(0xFFA587A9);
+  static const Color offerFiveColor = Color(0xFF937E87);
+  static const Color offerSixColor = Color(0xFFC4B2F2);
+  static const Color offerSevenColor = Color(0xFFC0ABB5);
+  static const Color offerEightColor = Color(0xFF847488);
+  static const Color offerNineColor = Color(0xFFDD9EF3);
+  static const Color offerTenColor = Color(0xFFAA60DD);
+  static const Color deliveryColorColor = Color(0xFF536DFE);
+  static const Color offerColor = Color(0xFFD500F9);
+  static const Color buttonGradientColor = Color(0xFF3949AB);
+  static const Color cardTabColor = Color(0xFF7E57C2);
+  static const Color helpNeedFirstColor = Color(0xFFBBDEFB);
+  static const Color helpNeedSecondColor = Color(0xFFFFCCBC);
+  static const Color helpNeedThirdColor = Color(0xFFFFE0B2);
+  static const Color moveCartColor = Color(0xFF0C6421);
+  static const Color videoCallColor = Color(0xFF64DD17);
+  static const Color sortSelectedColor = Color(0xFF9575CD);
+  static const Color updateCardColor = Color(0xFFFFC107);
+  static const Color filterTitleColor = Color(0xFFEDE7F6);
+  static const Color accountSarviceColor = Color(0xFFFFF59D);
+  static const Color whatsappColor = Color(0xFF36AB3B);
+  static const Color notValidateColor = Color(0xFFDE1A31);
+  static const Color backgroundDatePickerColor = Color(0xFFF8F3F9);
+}
