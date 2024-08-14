@@ -62,93 +62,13 @@ class _MyAccountScreenState extends State<MyAccountScreen>
                 child: Column(
                   children: [
                     /// After login view
-                    Container(
-                      width: double.infinity,
-                      padding: EdgeInsets.only(
-                          top: padding.top * 0.80,
-                          left: 15,
-                          right: 15,
-                          bottom: 20),
-                      color: ColorResources.conceptTextColor,
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  "${LocalStrings.hi}, Pinakin",
-                                  style: mediumOverLarge.copyWith(
-                                      color: ColorResources.inactiveCardColor),
-                                ),
-                                const SizedBox(height: Dimensions.space2),
-                                Text(
-                                  LocalStrings.completeProfile,
-                                  style: mediumLarge.copyWith(
-                                      color: ColorResources.inactiveCardColor),
-                                ),
-                                const SizedBox(height: Dimensions.space12),
-                                GetBuilder(
-                                    init: MyAccountController(),
-                                    builder: (controller) {
-                                      return Row(
-                                        children: [
-                                          ClipRRect(
-                                            borderRadius: BorderRadius.circular(
-                                                Dimensions.defaultRadius),
-                                            child: SizedBox(
-                                              height: size.height * 0.0055,
-                                              width: size.width * 0.30,
-                                              child:
-                                                  const LinearProgressIndicator(
-                                                value: 0.6, // percent filled
-                                                valueColor:
-                                                    AlwaysStoppedAnimation<
-                                                            Color>(
-                                                        ColorResources
-                                                            .videoCallColor),
-                                                backgroundColor: ColorResources
-                                                    .inactiveCardColor,
-                                              ),
-                                            ),
-                                          ),
-                                          const SizedBox(
-                                              width: Dimensions.space5),
-                                          Text(
-                                            "$percentage%",
-                                            style: semiBoldSmall.copyWith(
-                                                color: ColorResources
-                                                    .inactiveCardColor),
-                                          ),
-                                        ],
-                                      );
-                                    }),
-                              ],
-                            ),
-                          ),
-                          const SizedBox(width: Dimensions.space40),
-                          CommonButton(
-                            onTap: () {
-                              Get.toNamed(RouteHelper.editProfileScreen);
-                            },
-                            height: size.height * 0.045,
-                            width: size.width * 0.26,
-                            buttonName: LocalStrings.complete,
-                            buttonColor: ColorResources.buttonColorDark,
-                            textStyle: semiBoldLarge.copyWith(),
-                            gradientFirstColor: ColorResources.offerSixColor,
-                            gradientSecondColor: ColorResources.offerSixColor,
-                          ),
-                        ],
-                      ),
-                    ),
-
-                    /// without Login view
                     // Container(
                     //   width: double.infinity,
                     //   padding: EdgeInsets.only(
-                    //       top: padding.top * 0.80, left: 15, right: 15, bottom: 20),
+                    //       top: padding.top * 0.80,
+                    //       left: 15,
+                    //       right: 15,
+                    //       bottom: 20),
                     //   color: ColorResources.conceptTextColor,
                     //   child: Row(
                     //     crossAxisAlignment: CrossAxisAlignment.center,
@@ -158,27 +78,63 @@ class _MyAccountScreenState extends State<MyAccountScreen>
                     //           crossAxisAlignment: CrossAxisAlignment.start,
                     //           children: [
                     //             Text(
-                    //               LocalStrings.welcome,
+                    //               "${LocalStrings.hi}, Pinakin",
                     //               style: mediumOverLarge.copyWith(
                     //                   color: ColorResources.inactiveCardColor),
                     //             ),
                     //             const SizedBox(height: Dimensions.space2),
                     //             Text(
-                    //               LocalStrings.loginDiscover,
+                    //               LocalStrings.completeProfile,
                     //               style: mediumLarge.copyWith(
                     //                   color: ColorResources.inactiveCardColor),
                     //             ),
+                    //             const SizedBox(height: Dimensions.space12),
+                    //             GetBuilder(
+                    //                 init: MyAccountController(),
+                    //                 builder: (controller) {
+                    //                   return Row(
+                    //                     children: [
+                    //                       ClipRRect(
+                    //                         borderRadius: BorderRadius.circular(
+                    //                             Dimensions.defaultRadius),
+                    //                         child: SizedBox(
+                    //                           height: size.height * 0.0055,
+                    //                           width: size.width * 0.30,
+                    //                           child:
+                    //                               const LinearProgressIndicator(
+                    //                             value: 0.6, // percent filled
+                    //                             valueColor:
+                    //                                 AlwaysStoppedAnimation<
+                    //                                         Color>(
+                    //                                     ColorResources
+                    //                                         .videoCallColor),
+                    //                             backgroundColor: ColorResources
+                    //                                 .inactiveCardColor,
+                    //                           ),
+                    //                         ),
+                    //                       ),
+                    //                       const SizedBox(
+                    //                           width: Dimensions.space5),
+                    //                       Text(
+                    //                         "$percentage%",
+                    //                         style: semiBoldSmall.copyWith(
+                    //                             color: ColorResources
+                    //                                 .inactiveCardColor),
+                    //                       ),
+                    //                     ],
+                    //                   );
+                    //                 }),
                     //           ],
                     //         ),
                     //       ),
                     //       const SizedBox(width: Dimensions.space40),
                     //       CommonButton(
                     //         onTap: () {
-                    //           Get.toNamed(RouteHelper.loginScreen);
+                    //           Get.toNamed(RouteHelper.editProfileScreen);
                     //         },
-                    //         height: size.height * 0.043,
-                    //         width: size.width * 0.22,
-                    //         buttonName: LocalStrings.login,
+                    //         height: size.height * 0.045,
+                    //         width: size.width * 0.26,
+                    //         buttonName: LocalStrings.complete,
                     //         buttonColor: ColorResources.buttonColorDark,
                     //         textStyle: semiBoldLarge.copyWith(),
                     //         gradientFirstColor: ColorResources.offerSixColor,
@@ -187,6 +143,50 @@ class _MyAccountScreenState extends State<MyAccountScreen>
                     //     ],
                     //   ),
                     // ),
+
+                    /// without Login view
+                    Container(
+                      width: double.infinity,
+                      padding: EdgeInsets.only(
+                          top: padding.top * 0.80, left: 15, right: 15, bottom: 20),
+                      color: ColorResources.conceptTextColor,
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  LocalStrings.welcome,
+                                  style: mediumOverLarge.copyWith(
+                                      color: ColorResources.inactiveCardColor),
+                                ),
+                                const SizedBox(height: Dimensions.space2),
+                                Text(
+                                  LocalStrings.loginDiscover,
+                                  style: mediumLarge.copyWith(
+                                      color: ColorResources.inactiveCardColor),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(width: Dimensions.space40),
+                          CommonButton(
+                            onTap: () {
+                              Get.toNamed(RouteHelper.loginScreen);
+                            },
+                            height: size.height * 0.043,
+                            width: size.width * 0.22,
+                            buttonName: LocalStrings.login,
+                            buttonColor: ColorResources.buttonColorDark,
+                            textStyle: semiBoldLarge.copyWith(),
+                            gradientFirstColor: ColorResources.offerSixColor,
+                            gradientSecondColor: ColorResources.offerSixColor,
+                          ),
+                        ],
+                      ),
+                    ),
                     const SizedBox(height: Dimensions.space15),
                     GetBuilder(
                         init: MyAccountController(),
@@ -253,159 +253,10 @@ class _MyAccountScreenState extends State<MyAccountScreen>
                     const SizedBox(height: Dimensions.space15),
 
                     /// with login Offers view
-                    Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 15, vertical: 20),
-                      color: ColorResources.deliveryColorColor.withOpacity(0.2),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              Image.asset(MyImages.dicountImage,
-                                  height: size.height * 0.025,
-                                  color: ColorResources.conceptTextColor),
-                              const SizedBox(width: Dimensions.space7),
-                              Text(LocalStrings.yourOffers,
-                                  style: semiBoldLarge.copyWith(
-                                      color: ColorResources.conceptTextColor)),
-                              const Spacer(),
-                              Text(LocalStrings.viewAll,
-                                  style: mediumLarge.copyWith(
-                                      color: ColorResources.offerColor)),
-                            ],
-                          ),
-                          const SizedBox(height: Dimensions.space20),
-                          SizedBox(
-                            height: size.height * 0.14,
-                            child: ListView.builder(
-                              itemCount: controller.offerLst.length,
-                              shrinkWrap: true,
-                              scrollDirection: Axis.horizontal,
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 10),
-                              physics: const BouncingScrollPhysics(),
-                              itemBuilder: (context, index) {
-                                return Container(
-                                  height: size.height * 0.14,
-                                  width: size.width * 0.53,
-                                  padding: EdgeInsets.zero,
-                                  margin: const EdgeInsets.only(right: 13),
-                                  decoration: BoxDecoration(
-                                    color: ColorResources.whiteColor,
-                                    borderRadius: BorderRadius.circular(
-                                        Dimensions.defaultRadius),
-                                  ),
-                                  child: Stack(
-                                    alignment: Alignment.bottomCenter,
-                                    children: [
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Padding(
-                                            padding: const EdgeInsets.only(
-                                                top: 10, left: 15, right: 15),
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              children: [
-                                                Text(LocalStrings.offFirst,
-                                                    style: semiBoldMediumLarge
-                                                        .copyWith(
-                                                            color: ColorResources
-                                                                .conceptTextColor)),
-                                                const SizedBox(
-                                                    height: Dimensions.space1),
-                                                Text(controller.offerLst[index],
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                    style: mediumSmall.copyWith(
-                                                        color: ColorResources
-                                                            .conceptTextColor)),
-                                              ],
-                                            ),
-                                          ),
-                                          const SizedBox(
-                                              height: Dimensions.space1),
-                                          Divider(
-                                            color: ColorResources.borderColor
-                                                .withOpacity(0.2),
-                                          ),
-                                          Padding(
-                                            padding:
-                                                const EdgeInsets.only(left: 15),
-                                            child: Row(
-                                              children: [
-                                                Text(
-                                                    controller
-                                                        .offerCodeLst[index],
-                                                    style: mediumLarge.copyWith(
-                                                        color: ColorResources
-                                                            .conceptTextColor)),
-                                                const SizedBox(
-                                                    width: Dimensions.space5),
-                                                GestureDetector(
-                                                    onTap: () {
-                                                      Clipboard.setData(
-                                                          ClipboardData(
-                                                              text: controller
-                                                                      .offerCodeLst[
-                                                                  index]));
-                                                      showToast(
-                                                          context: context,
-                                                          message:
-                                                              "Copied ${controller.offerCodeLst[index]}");
-                                                    },
-                                                    child: const Icon(
-                                                        Icons.copy_all_rounded,
-                                                        size: 17,
-                                                        color: ColorResources
-                                                            .offerColor)),
-                                              ],
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                      Container(
-                                        height: size.height * 0.025,
-                                        decoration:  BoxDecoration(
-                                          color: ColorResources.deliveryColorColor.withOpacity(0.7),
-                                          borderRadius: const BorderRadius.only(
-                                              bottomLeft: Radius.circular(
-                                                  Dimensions.defaultRadius),
-                                              bottomRight: Radius.circular(
-                                                  Dimensions.defaultRadius)),
-                                        ),
-                                        child: Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.start,
-                                          children: [
-                                            const SizedBox(
-                                                width: Dimensions.space15),
-                                            Text(LocalStrings.validDateOffer,
-                                                style: mediumSmall.copyWith(
-                                                    color: ColorResources
-                                                        .whiteColor)),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                );
-                              },
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-
-                    /// without login Offers view
                     // Container(
                     //   width: double.infinity,
-                    //   padding:
-                    //       const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+                    //   padding: const EdgeInsets.symmetric(
+                    //       horizontal: 15, vertical: 20),
                     //   color: ColorResources.deliveryColorColor.withOpacity(0.2),
                     //   child: Column(
                     //     crossAxisAlignment: CrossAxisAlignment.start,
@@ -419,25 +270,174 @@ class _MyAccountScreenState extends State<MyAccountScreen>
                     //           Text(LocalStrings.yourOffers,
                     //               style: semiBoldLarge.copyWith(
                     //                   color: ColorResources.conceptTextColor)),
-                    //         ],
-                    //       ),
-                    //       const SizedBox(height: Dimensions.space10),
-                    //       RichText(
-                    //           text: TextSpan(
-                    //         children: [
-                    //           TextSpan(
-                    //               text: LocalStrings.viewOffers,
-                    //               style: regularDefault.copyWith(
-                    //                   color: ColorResources.conceptTextColor)),
-                    //           TextSpan(
-                    //               text: LocalStrings.login,
-                    //               style: mediumDefault.copyWith(
+                    //           const Spacer(),
+                    //           Text(LocalStrings.viewAll,
+                    //               style: mediumLarge.copyWith(
                     //                   color: ColorResources.offerColor)),
                     //         ],
-                    //       ))
+                    //       ),
+                    //       const SizedBox(height: Dimensions.space20),
+                    //       SizedBox(
+                    //         height: size.height * 0.14,
+                    //         child: ListView.builder(
+                    //           itemCount: controller.offerLst.length,
+                    //           shrinkWrap: true,
+                    //           scrollDirection: Axis.horizontal,
+                    //           padding:
+                    //               const EdgeInsets.symmetric(horizontal: 10),
+                    //           physics: const BouncingScrollPhysics(),
+                    //           itemBuilder: (context, index) {
+                    //             return Container(
+                    //               height: size.height * 0.14,
+                    //               width: size.width * 0.53,
+                    //               padding: EdgeInsets.zero,
+                    //               margin: const EdgeInsets.only(right: 13),
+                    //               decoration: BoxDecoration(
+                    //                 color: ColorResources.whiteColor,
+                    //                 borderRadius: BorderRadius.circular(
+                    //                     Dimensions.defaultRadius),
+                    //               ),
+                    //               child: Stack(
+                    //                 alignment: Alignment.bottomCenter,
+                    //                 children: [
+                    //                   Column(
+                    //                     crossAxisAlignment:
+                    //                         CrossAxisAlignment.start,
+                    //                     children: [
+                    //                       Padding(
+                    //                         padding: const EdgeInsets.only(
+                    //                             top: 10, left: 15, right: 15),
+                    //                         child: Column(
+                    //                           crossAxisAlignment:
+                    //                               CrossAxisAlignment.start,
+                    //                           children: [
+                    //                             Text(LocalStrings.offFirst,
+                    //                                 style: semiBoldMediumLarge
+                    //                                     .copyWith(
+                    //                                         color: ColorResources
+                    //                                             .conceptTextColor)),
+                    //                             const SizedBox(
+                    //                                 height: Dimensions.space1),
+                    //                             Text(controller.offerLst[index],
+                    //                                 overflow:
+                    //                                     TextOverflow.ellipsis,
+                    //                                 style: mediumSmall.copyWith(
+                    //                                     color: ColorResources
+                    //                                         .conceptTextColor)),
+                    //                           ],
+                    //                         ),
+                    //                       ),
+                    //                       const SizedBox(
+                    //                           height: Dimensions.space1),
+                    //                       Divider(
+                    //                         color: ColorResources.borderColor
+                    //                             .withOpacity(0.2),
+                    //                       ),
+                    //                       Padding(
+                    //                         padding:
+                    //                             const EdgeInsets.only(left: 15),
+                    //                         child: Row(
+                    //                           children: [
+                    //                             Text(
+                    //                                 controller
+                    //                                     .offerCodeLst[index],
+                    //                                 style: mediumLarge.copyWith(
+                    //                                     color: ColorResources
+                    //                                         .conceptTextColor)),
+                    //                             const SizedBox(
+                    //                                 width: Dimensions.space5),
+                    //                             GestureDetector(
+                    //                                 onTap: () {
+                    //                                   Clipboard.setData(
+                    //                                       ClipboardData(
+                    //                                           text: controller
+                    //                                                   .offerCodeLst[
+                    //                                               index]));
+                    //                                   showToast(
+                    //                                       context: context,
+                    //                                       message:
+                    //                                           "Copied ${controller.offerCodeLst[index]}");
+                    //                                 },
+                    //                                 child: const Icon(
+                    //                                     Icons.copy_all_rounded,
+                    //                                     size: 17,
+                    //                                     color: ColorResources
+                    //                                         .offerColor)),
+                    //                           ],
+                    //                         ),
+                    //                       ),
+                    //                     ],
+                    //                   ),
+                    //                   Container(
+                    //                     height: size.height * 0.025,
+                    //                     decoration:  BoxDecoration(
+                    //                       color: ColorResources.deliveryColorColor.withOpacity(0.7),
+                    //                       borderRadius: const BorderRadius.only(
+                    //                           bottomLeft: Radius.circular(
+                    //                               Dimensions.defaultRadius),
+                    //                           bottomRight: Radius.circular(
+                    //                               Dimensions.defaultRadius)),
+                    //                     ),
+                    //                     child: Row(
+                    //                       mainAxisAlignment:
+                    //                           MainAxisAlignment.start,
+                    //                       children: [
+                    //                         const SizedBox(
+                    //                             width: Dimensions.space15),
+                    //                         Text(LocalStrings.validDateOffer,
+                    //                             style: mediumSmall.copyWith(
+                    //                                 color: ColorResources
+                    //                                     .whiteColor)),
+                    //                       ],
+                    //                     ),
+                    //                   ),
+                    //                 ],
+                    //               ),
+                    //             );
+                    //           },
+                    //         ),
+                    //       ),
                     //     ],
                     //   ),
                     // ),
+
+                    /// without login Offers view
+                    Container(
+                      width: double.infinity,
+                      padding:
+                          const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
+                      color: ColorResources.deliveryColorColor.withOpacity(0.2),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Image.asset(MyImages.dicountImage,
+                                  height: size.height * 0.025,
+                                  color: ColorResources.conceptTextColor),
+                              const SizedBox(width: Dimensions.space7),
+                              Text(LocalStrings.yourOffers,
+                                  style: semiBoldLarge.copyWith(
+                                      color: ColorResources.conceptTextColor)),
+                            ],
+                          ),
+                          const SizedBox(height: Dimensions.space10),
+                          RichText(
+                              text: TextSpan(
+                            children: [
+                              TextSpan(
+                                  text: LocalStrings.viewOffers,
+                                  style: regularDefault.copyWith(
+                                      color: ColorResources.conceptTextColor)),
+                              TextSpan(
+                                  text: LocalStrings.login,
+                                  style: mediumDefault.copyWith(
+                                      color: ColorResources.offerColor)),
+                            ],
+                          ))
+                        ],
+                      ),
+                    ),
 
                     const SizedBox(height: Dimensions.space20),
                     GetBuilder(
@@ -628,9 +628,9 @@ class _MyAccountScreenState extends State<MyAccountScreen>
                                   child: Center(
                                     child: Text(
                                       /// With login view text
-                                      LocalStrings.logout,
+                                      // LocalStrings.logout,
                                       /// Without login view text
-                                      // LocalStrings.login,
+                                      LocalStrings.login,
                                       style: semiBoldDefault.copyWith(
                                           color:
                                               ColorResources.conceptTextColor),
