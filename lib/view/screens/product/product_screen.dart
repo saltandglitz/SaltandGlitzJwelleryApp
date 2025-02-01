@@ -12,6 +12,7 @@ import '../../../core/utils/local_strings.dart';
 import '../../../core/utils/style.dart';
 import '../../components/app_bar_background.dart';
 import '../../components/common_button.dart';
+
 class ProductScreen extends StatefulWidget {
   const ProductScreen({super.key});
 
@@ -31,13 +32,15 @@ class _ProductScreenState extends State<ProductScreen> {
           init: ProductController(),
           builder: (controller) {
             return Scaffold(
+              backgroundColor: ColorResources.scaffoldBackgroundColor,
               appBar: AppBarBackground(
                 additionalHeight: 48.0, // Height of TabBar
                 isShowTabBar: true,
+
                 tabBarWidget: Column(
                   children: [
                     Container(
-                      height: size.height * 0.050,
+                      height: size.height * 0.06,
                       color: ColorResources.whiteColor,
                       padding: const EdgeInsets.symmetric(horizontal: 15),
                       child: TextField(
@@ -52,23 +55,29 @@ class _ProductScreenState extends State<ProductScreen> {
                           contentPadding: const EdgeInsets.symmetric(
                               vertical: 5, horizontal: 10),
                           border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(
-                                  Dimensions.defaultRadius),
-                              borderSide: const BorderSide(
-                                  color: ColorResources.conceptTextColor,
-                                  width: 2.5)),
+                            borderRadius:
+                                BorderRadius.circular(Dimensions.defaultRadius),
+                            borderSide: const BorderSide(
+                              color: ColorResources.conceptTextColor,
+                              width: 2,
+                            ),
+                          ),
                           enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(
-                                  Dimensions.defaultRadius),
-                              borderSide: const BorderSide(
-                                  color: ColorResources.conceptTextColor,
-                                  width: 2.5)),
+                            borderRadius:
+                                BorderRadius.circular(Dimensions.defaultRadius),
+                            borderSide: const BorderSide(
+                              color: ColorResources.conceptTextColor,
+                              width: 2,
+                            ),
+                          ),
                           focusedBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(
-                                  Dimensions.defaultRadius),
-                              borderSide: const BorderSide(
-                                  color: ColorResources.conceptTextColor,
-                                  width: 2.5)),
+                            borderRadius:
+                                BorderRadius.circular(Dimensions.defaultRadius),
+                            borderSide: const BorderSide(
+                              color: ColorResources.conceptTextColor,
+                              width: 2,
+                            ),
+                          ),
                           hintText: LocalStrings.search,
                           hintStyle: mediumDefault.copyWith(
                               color: ColorResources.borderColor),
@@ -86,31 +95,35 @@ class _ProductScreenState extends State<ProductScreen> {
                   //   fontWeight: FontWeight.w500,
                   //   color: ColorResources.conceptTextColor,
                   // ),
-
                   actions: [
                     GestureDetector(
                       onTap: () {},
                       child: const Icon(Icons.favorite_border_rounded,
-                          color: ColorResources.borderColor),
+                          color: ColorResources.iconColor),
                     ),
-                    const SizedBox(width: Dimensions.space10),
+                    const SizedBox(width: Dimensions.space15),
                     GestureDetector(
                       onTap: () {},
                       child: const Icon(Icons.person_outline_outlined,
-                          color: ColorResources.borderColor),
+                          color: ColorResources.iconColor),
                     ),
-                    const SizedBox(width: Dimensions.space10),
+                    const SizedBox(width: Dimensions.space15),
                     GestureDetector(
-                        onTap: () {},
-                        child: const Icon(Icons.shopping_bag,
-                            color: ColorResources.borderColor)),
-                    const SizedBox(width: Dimensions.space10),
-                    GestureDetector(
-                        onTap: () {},
-                        child: const Icon(Icons.menu,
-                            color: ColorResources.borderColor)),
+                      onTap: () {},
+                      child: const Icon(Icons.shopping_cart_rounded,
+                          color: ColorResources.iconColor),
+                    ),
                     const SizedBox(width: Dimensions.space15),
                   ],
+                  leading: IconButton(
+                    onPressed: () {
+                      Get.back();
+                    },
+                    icon: const Icon(
+                      Icons.arrow_back_rounded,
+                      color: ColorResources.conceptTextColor,
+                    ),
+                  ),
                   backgroundColor: ColorResources.whiteColor,
                   // Set the background color of the AppBar
                   elevation: 0, // Remove default shadow
@@ -171,13 +184,13 @@ class _ProductScreenState extends State<ProductScreen> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             const Icon(
-                              Icons.person_outline_outlined,
+                              CupertinoIcons.bag,
                               size: 15,
                               color: ColorResources.whiteColor,
                             ),
                             const SizedBox(width: Dimensions.space5),
                             Text(
-                              LocalStrings.chatWithUs,
+                              LocalStrings.buyNow,
                               style: semiBoldDefault.copyWith(
                                   color: ColorResources.whiteColor),
                             ),
@@ -214,63 +227,85 @@ class _ProductScreenState extends State<ProductScreen> {
                       ),
                     ),
                     const SizedBox(height: Dimensions.space10),
-                    // Image scrolling CarouselSlider show and on clicked show upper chnage image
-                    Obx(() => Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: List.generate(
-                            controller.imageUrls.length,
-                            (i) => Stack(
-                              alignment: Alignment.bottomLeft,
-                              children: [
-                                GestureDetector(
-                                  onTap: () {
-                                    controller.goToPage(
-                                        i); // Navigate to selected page
-                                  },
-                                  child: Container(
-                                    height: size.height * 0.050,
-                                    width: size.width * 0.10,
-                                    margin: const EdgeInsets.only(right: 10),
-                                    decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(
-                                          Dimensions.smallRadius),
-                                      boxShadow: const [
-                                        BoxShadow(
-                                          color: ColorResources.borderColor,
-                                          offset: Offset(0.0, 1.0), //(x,y)
-                                          blurRadius: 1,
-                                        ),
-                                      ],
-                                      color: controller.currentIndex.value == i
-                                          ? ColorResources.borderColor
-                                          : ColorResources.whiteColor,
-                                    ),
-                                    child: Center(
-                                        child: Image.asset(
-                                      controller.imageUrls[i],
-                                      height: 50,
-                                      width: 50,
-                                    )),
-                                  ),
-                                ),
-                                controller.currentIndex.value == i
-                                    ? Container(
-                                        height: size.height * 0.009,
-                                        width: size.width * 0.10,
-                                        decoration: const BoxDecoration(
-                                          borderRadius: BorderRadius.only(
-                                              bottomLeft: Radius.circular(
-                                                  Dimensions.smallRadius),
-                                              bottomRight: Radius.circular(
-                                                  Dimensions.smallRadius)),
-                                          color: ColorResources.buttonColorDark,
-                                        ),
-                                      )
-                                    : const SizedBox(),
-                              ],
+                    Obx(
+                      () => Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: List.generate(
+                          controller.imageUrls.length,
+                          (i) => Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 7,
+                              vertical: 15,
+                            ),
+                            child: CircleAvatar(
+                              radius: 4,
+                              backgroundColor:
+                                  controller.currentIndex.value == i
+                                      ? ColorResources.conceptTextColor
+                                      : Colors.grey.shade300,
                             ),
                           ),
-                        )),
+                        ),
+                      ),
+                    ),
+
+                    // Image scrolling CarouselSlider show and on clicked show upper chnage image
+                    // Obx(() => Row(
+                    //       mainAxisAlignment: MainAxisAlignment.center,
+                    //       children: List.generate(
+                    //         controller.imageUrls.length,
+                    //         (i) => Stack(
+                    //           alignment: Alignment.bottomLeft,
+                    //           children: [
+                    //             GestureDetector(
+                    //               onTap: () {
+                    //                 controller.goToPage(
+                    //                     i); // Navigate to selected page
+                    //               },
+                    //               child: Container(
+                    //                 height: size.height * 0.050,
+                    //                 width: size.width * 0.10,
+                    //                 margin: const EdgeInsets.only(right: 10),
+                    //                 decoration: BoxDecoration(
+                    //                   borderRadius: BorderRadius.circular(
+                    //                       Dimensions.smallRadius),
+                    //                   boxShadow: const [
+                    //                     BoxShadow(
+                    //                       color: ColorResources.borderColor,
+                    //                       offset: Offset(0.0, 1.0), //(x,y)
+                    //                       blurRadius: 1,
+                    //                     ),
+                    //                   ],
+                    //                   color: controller.currentIndex.value == i
+                    //                       ? ColorResources.borderColor
+                    //                       : ColorResources.whiteColor,
+                    //                 ),
+                    //                 child: Center(
+                    //                     child: Image.asset(
+                    //                   controller.imageUrls[i],
+                    //                   height: 50,
+                    //                   width: 50,
+                    //                 )),
+                    //               ),
+                    //             ),
+                    //             controller.currentIndex.value == i
+                    //                 ? Container(
+                    //                     height: size.height * 0.009,
+                    //                     width: size.width * 0.10,
+                    //                     decoration: const BoxDecoration(
+                    //                       borderRadius: BorderRadius.only(
+                    //                           bottomLeft: Radius.circular(
+                    //                               Dimensions.smallRadius),
+                    //                           bottomRight: Radius.circular(
+                    //                               Dimensions.smallRadius)),
+                    //                       color: ColorResources.buttonColorDark,
+                    //                     ),
+                    //                   )
+                    //                 : const SizedBox(),
+                    //           ],
+                    //         ),
+                    //       ),
+                    //     )),
                     const SizedBox(height: Dimensions.space15),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -283,10 +318,12 @@ class _ProductScreenState extends State<ProductScreen> {
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
                                 Expanded(
-                                  child: Text(LocalStrings.goldenRing,
-                                      maxLines: 2,
-                                      softWrap: true,
-                                      style: semiBoldMediumLarge.copyWith()),
+                                  child: Text(
+                                    LocalStrings.goldenRing,
+                                    maxLines: 2,
+                                    softWrap: true,
+                                    style: semiBoldMediumLarge.copyWith(),
+                                  ),
                                 ),
                                 Container(
                                   height: size.height * 0.05,
@@ -341,62 +378,64 @@ class _ProductScreenState extends State<ProductScreen> {
                             Row(
                               children: [
                                 Image.asset(
-                                  MyImages.dicountImage,
+                                  MyImages.discountImage,
                                   height: 15,
                                   width: 15,
                                   color: ColorResources.deliveryColorColor,
                                 ),
                                 const SizedBox(width: Dimensions.space5),
-                                Text(LocalStrings.specialOffer,
-                                    style: mediumSmall.copyWith(
-                                      color: ColorResources.deliveryColorColor,
-                                    )),
+                                Text(
+                                  LocalStrings.specialOffer,
+                                  style: mediumSmall.copyWith(
+                                    color: ColorResources.deliveryColorColor,
+                                  ),
+                                ),
                               ],
                             ),
-                            const SizedBox(height: Dimensions.space7),
-                            ClipPath(
-                              clipper: ZigzagClipper(),
-                              child: Container(
-                                color:
-                                    ColorResources.borderColor.withOpacity(0.2),
-                                padding: const EdgeInsets.symmetric(
-                                    horizontal: 16, vertical: 10),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    RichText(
-                                        text: TextSpan(
-                                      children: [
-                                        TextSpan(
-                                          text: LocalStrings.getOfferId,
-                                          style: boldSmall.copyWith(
-                                              color: ColorResources
-                                                  .buttonColorDark),
-                                        ),
-                                        TextSpan(
-                                          text: LocalStrings.useJb,
-                                          style: mediumSmall.copyWith(
-                                              color: ColorResources
-                                                  .buttonColorDark),
-                                        ),
-                                      ],
-                                    )),
-                                    const Spacer(),
-                                    GestureDetector(
-                                      onTap: () {},
-                                      child: Text(
-                                        LocalStrings.apply,
-                                        style: mediumSmall.copyWith(
-                                            color: ColorResources
-                                                .deliveryColorColor,
-                                            decoration:
-                                                TextDecoration.underline),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
+
+                            // ClipPath(
+                            //   clipper: ZigzagClipper(),
+                            //   child: Container(
+                            //     color:
+                            //         ColorResources.borderColor.withOpacity(0.2),
+                            //     padding: const EdgeInsets.symmetric(
+                            //         horizontal: 16, vertical: 10),
+                            //     child: Row(
+                            //       mainAxisSize: MainAxisSize.min,
+                            //       children: [
+                            //         RichText(
+                            //             text: TextSpan(
+                            //           children: [
+                            //             TextSpan(
+                            //               text: LocalStrings.getOfferId,
+                            //               style: boldSmall.copyWith(
+                            //                   color: ColorResources
+                            //                       .buttonColorDark),
+                            //             ),
+                            //             TextSpan(
+                            //               text: LocalStrings.useJb,
+                            //               style: mediumSmall.copyWith(
+                            //                   color: ColorResources
+                            //                       .buttonColorDark),
+                            //             ),
+                            //           ],
+                            //         )),
+                            //         const Spacer(),
+                            //         GestureDetector(
+                            //           onTap: () {},
+                            //           child: Text(
+                            //             LocalStrings.apply,
+                            //             style: mediumSmall.copyWith(
+                            //                 color: ColorResources
+                            //                     .deliveryColorColor,
+                            //                 decoration:
+                            //                     TextDecoration.underline),
+                            //           ),
+                            //         ),
+                            //       ],
+                            //     ),
+                            //   ),
+                            // ),
                             const SizedBox(height: Dimensions.space20),
                             Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -551,116 +590,6 @@ class _ProductScreenState extends State<ProductScreen> {
                               ),
                             ),
                             const SizedBox(height: Dimensions.space15),
-                            Text(
-                              LocalStrings.yourincode,
-                              style: mediumDefault.copyWith(
-                                  color: ColorResources.borderColor),
-                            ),
-                            const SizedBox(height: Dimensions.space5),
-                            Container(
-                              height: size.height * 0.060,
-                              color: ColorResources.whiteColor,
-                              child: TextField(
-                                controller: controller.pincode,
-                                textInputAction: TextInputAction.done,
-                                keyboardType: TextInputType.name,
-                                style: mediumDefault.copyWith(
-                                    color: ColorResources.conceptTextColor),
-                                decoration: InputDecoration(
-                                  suffixIcon: const Icon(
-                                      Icons.location_on_outlined,
-                                      size: 20,
-                                      color: ColorResources.conceptTextColor),
-                                  contentPadding: const EdgeInsets.symmetric(
-                                      vertical: 5, horizontal: 10),
-                                  border: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(
-                                          Dimensions.defaultRadius),
-                                      borderSide: const BorderSide(
-                                          color:
-                                              ColorResources.conceptTextColor,
-                                          width: 2.5)),
-                                  enabledBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(
-                                          Dimensions.defaultRadius),
-                                      borderSide: const BorderSide(
-                                          color:
-                                              ColorResources.conceptTextColor,
-                                          width: 2.5)),
-                                  focusedBorder: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(
-                                          Dimensions.defaultRadius),
-                                      borderSide: const BorderSide(
-                                          color:
-                                              ColorResources.conceptTextColor,
-                                          width: 2.5)),
-                                ),
-                              ),
-                            ),
-                            const SizedBox(height: Dimensions.space15),
-                            Row(
-                              children: [
-                                Text(
-                                  LocalStrings.categoriesTitle,
-                                  style: mediumDefault.copyWith(
-                                      color: ColorResources.borderColor),
-                                ),
-                                const SizedBox(width: Dimensions.space5),
-                                Text(
-                                  LocalStrings.categoriesItems,
-                                  style: semiBoldSmall.copyWith(),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: Dimensions.space10),
-                            Row(
-                              children: [
-                                Text(
-                                  LocalStrings.tag,
-                                  style: mediumDefault.copyWith(
-                                      color: ColorResources.borderColor),
-                                ),
-                                const SizedBox(width: Dimensions.space5),
-                                Text(
-                                  LocalStrings.workwear,
-                                  style: semiBoldSmall.copyWith(),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: Dimensions.space10),
-                            Row(
-                              children: [
-                                Text(
-                                  LocalStrings.shareOn,
-                                  style: mediumLarge.copyWith(
-                                      color: ColorResources.borderColor),
-                                ),
-                                const SizedBox(width: Dimensions.space10),
-                                GestureDetector(
-                                    onTap: () {},
-                                    child: Image.asset(MyImages.facebookImage,
-                                        height: 27)),
-                                const SizedBox(width: Dimensions.space10),
-                                GestureDetector(
-                                  onTap: () {},
-                                  child: Image.asset(MyImages.whatsappImage,
-                                      height: 25,
-                                      color: ColorResources.moveCartColor),
-                                ),
-                                const SizedBox(width: Dimensions.space10),
-                                GestureDetector(
-                                    onTap: () {},
-                                    child: Image.asset(MyImages.telegramImage,
-                                        height: 25)),
-                                const SizedBox(width: Dimensions.space10),
-                                GestureDetector(
-                                  onTap: () {},
-                                  child: Image.asset(MyImages.clipboardImage,
-                                      height: 25),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: Dimensions.space20),
                             Container(
                               width: double.infinity,
                               color:

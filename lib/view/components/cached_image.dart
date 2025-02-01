@@ -22,9 +22,11 @@ class CachedCommonImage extends StatelessWidget {
       imageUrl: networkImageUrl ?? "",
       fit: BoxFit.cover,
       progressIndicatorBuilder: (context, url, downloadProgress) => Center(
-          child: CircularProgressIndicator(value: downloadProgress.progress)),
-      errorWidget: (context, url, error) =>
-          const Center(child: Icon(Icons.error)),
+        child: CircularProgressIndicator(value: downloadProgress.progress),
+      ),
+      errorWidget: (context, url, error) => const Center(
+        child: Icon(Icons.error),
+      ),
     );
   }
 }

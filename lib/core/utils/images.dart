@@ -27,7 +27,7 @@ class MyImages {
       'https://shyamsundarco.com/images/online_jewellery/lightweight/pendent/21/cr.jpg?v=25072024117';
   static const String goldChains =
       'https://d25g9z9s77rn4i.cloudfront.net/uploads/product/1431/1717143418_f99d6b5091dbdabc982d.png';
-  static const String earings =
+  static const String earrings =
       'https://i.pinimg.com/736x/50/dd/8b/50dd8b835c53aef3d0a1dbf972d22750.jpg';
   static const String nosePins =
       'https://assets0.mirraw.com/images/11994728/image_zoom.jpeg?1698924169';
@@ -45,14 +45,14 @@ class MyImages {
       'https://images.unsplash.com/photo-1599643477877-530eb83abc8e?q=80&w=1974&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D';
   static const String giftsThirdImage =
       'https://images.unsplash.com/photo-1569397288884-4d43d6738fbd?q=80&w=1965&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D';
-  static const String greyYostJwellaryImage =
+  static const String greyYostJewelleryImage =
       'https://images.unsplash.com/photo-1620360094127-854a67f8c959?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D';
   static const String diamondImage =
       'https://media.istockphoto.com/id/639777488/photo/diamond-on-the-water.jpg?s=612x612&w=0&k=20&c=4Nnvy7zs8W5mnbtJubeTWRS2KguoOb4uTZJCDb5B3YE=';
 
   ///<<<---------------------------- Add to cart screen images ---------------------------->>>
   static const String chatImage = '${imagePath}chat_image.png';
-  static const String dicountImage = '${imagePath}discount_image.png';
+  static const String discountImage = '${imagePath}discount_image.png';
   static const String phoneCallImage = '${imagePath}phone_call_image.png';
   static const String whatsappImage = '${imagePath}whatsapp_image.png';
   static const String ringsProductsImage =
@@ -65,7 +65,7 @@ class MyImages {
   ///<<<---------------------------- Women categories screen images ---------------------------->>>
   static const String ringsCategories =
       'https://upload.wikimedia.org/wikipedia/commons/b/b6/Ring_Ruby.jpg';
-  static const String earingsCategories =
+  static const String earringsCategories =
       'https://shyamsundarco.com/images/online_jewellery/new/earring/2.jpg?v=29072024117';
   static const String braceletsCategories =
       'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR6IMmbE5U26WFhn2cKhJ36qnfsnL2UICbn2pQoIIPPujiiPTbg3uWWP3qfNV0zKXE9CTo&usqp=CAU';
@@ -77,7 +77,7 @@ class MyImages {
       'https://shyamsundarco.com/images/online_jewellery/new/mangalsutra//2.jpg?v=28072024117';
   static const String downgradeArrowImage =
       '${imagePath}arrowios_downward_image.png';
-  static const String forwordArrowImage =
+  static const String forwardArrowImage =
       '${imagePath}arrowios_forward_image.png';
   static const String moreJewelleryImage =
       'https://media.istockphoto.com/id/913946528/photo/gold-colored-bracelets.jpg?s=612x612&w=0&k=20&c=wIpYq-DXWIudBkqdBzQizBMJgLDHFlniAv3KzfyY1nU=';
@@ -144,7 +144,7 @@ class MyImages {
       'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRUq9GfaRKqs-TGSLHTVkwcgitkNbc3X4IWghmWyxhsvqtFxY_E5HPSZ1dYxKiqyAFLrfI&usqp=CAU';
   static const String menMilestoneGiftImage =
       'https://m.media-amazon.com/images/I/61gtPXQwWhL._AC_UY1100_.jpg';
-  static const String menPandantsImage =
+  static const String menPendantsImage =
       'https://www.jiomart.com/images/product/original/rv3icmjntl/fashion-frill-men-s-gold-necklace-triangle-arrow-head-pendant-mens-jewelry-gift-for-him-golden-chain-pendant-for-men-boys-product-images-rv3icmjntl-1-202206020629.jpg?im=Resize=(500,630)';
   static const String menRingsImage =
       'https://caratsutra.in/cdn/shop/products/pearl-mens-ring-ottasilver-kr623_1.jpg?v=1653143980';
@@ -171,7 +171,7 @@ class MyImages {
   static const String buyBackImage = '${imagePath}buy_back_image.png';
   static const String exchangeImage = '${imagePath}exchnage_image.png';
   static const String returnImage = '${imagePath}return_image.png';
-  static const String freeShipingImage = '${imagePath}free_shiping_image.png';
+  static const String freeShippingImage = '${imagePath}free_shiping_image.png';
   static const String hallmarkImage = '${imagePath}hallmark_image.png';
   static const String certifiedImage = '${imagePath}certified_image.png';
 
@@ -181,7 +181,10 @@ class MyImages {
   ///<<<---------------------------- Login screen images ---------------------------->>>
   static const String qualityImage = '${imagePath}quality_image.png';
   static const String googleImage = '${imagePath}google_image.png';
+
   ///<<<---------------------------- Edit profile screen images ---------------------------->>>
   static const String securityImage = '${imagePath}security_image.png';
 
+  ///<<<---------------------------- Reset Password screen images ---------------------------->>>
+  static const String resetPasswordImage = '${imagePath}Reset password.png';
 }

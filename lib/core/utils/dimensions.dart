@@ -1,5 +1,6 @@
 class Dimensions {
   // font-size
+
   static const double fontOverSmall = 7.00;
   static const double fontExtraSmall = 9.00;
   static const double fontSmall = 11.00;

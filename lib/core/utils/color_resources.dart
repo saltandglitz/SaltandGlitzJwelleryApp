@@ -1,11 +1,18 @@
 import 'package:flutter/material.dart';
 
 class ColorResources {
+  static const Color bottomSheetContainerColor = Color(0xFFf0f0f0);
+  static const Color scaffoldBackgroundColor = Color(0xFFffffff);
+  static const Color activeTabColor = Color(0xff000000);
+  static const Color blackColor = Color(0xff000000);
+  static const Color inactiveTabColor = Color(0xffaeaeae);
+  static const Color iconColor = Color(0xFF3b3b3b);
   static const Color activeCardColor = Color(0xff27B8DA);
   static const Color inactiveCardColor = Color(0xFFF9F9F9);
   static const Color whiteColor = Color(0xFFFFFFFF);
   static const Color cardBgColor = Color(0xFFFAFAFA);
   static const Color borderColor = Color(0xff777777);
+  static const Color hintTextColor = Color(0xffB7B7B7);
   static const Color buttonColorDark = Color(0xff1F1F1F);
   static const Color conceptTextColor = Color(0xFF41115B);
   static const Color offerFirstColor = Color(0xFFFFD180);
@@ -30,7 +37,7 @@ class ColorResources {
   static const Color sortSelectedColor = Color(0xFF9575CD);
   static const Color updateCardColor = Color(0xFFFFC107);
   static const Color filterTitleColor = Color(0xFFEDE7F6);
-  static const Color accountSarviceColor = Color(0xFFFFF59D);
+  static const Color accountServiceColor = Color(0xFFFFF59D);
   static const Color whatsappColor = Color(0xFF36AB3B);
   static const Color notValidateColor = Color(0xFFDE1A31);
   static const Color backgroundDatePickerColor = Color(0xFFF8F3F9);

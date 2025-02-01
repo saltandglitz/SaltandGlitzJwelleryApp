@@ -4,8 +4,10 @@ import 'package:solatn_gleeks/view/screens/bottom_bar/bottom_bar_screen.dart';
 import 'package:solatn_gleeks/view/screens/create_account/create_account_screen.dart';
 import 'package:solatn_gleeks/view/screens/dashboard/dashboard_screen.dart';
 import 'package:solatn_gleeks/view/screens/edit_profile/edit_profile_screen.dart';
+import 'package:solatn_gleeks/view/screens/forget_password/forget_password.dart';
 import 'package:solatn_gleeks/view/screens/login/login_screen.dart';
-
+import 'package:solatn_gleeks/view/screens/set_otp/set_otp.dart';
+import 'package:solatn_gleeks/view/screens/set_password/set_password.dart';
 import '../../view/screens/categories/categories_sccreen.dart';
 import '../../view/screens/categories/men_categories_screen.dart';
 import '../../view/screens/categories/women_categories_screen.dart';
@@ -30,6 +32,9 @@ class RouteHelper {
   static const String loginScreen = "/login_screen";
   static const String createAccountScreen = "/create_screen";
   static const String editProfileScreen = "/edit_profile_screen";
+  static const String setPasswordScreen = "/set_password_screen";
+  static const String setOtpScreen = "/set_otp_screen";
+  static const String forgetPasswordScreen = "/forget_password_screen";
 
   List<GetPage> routes = [
     GetPage(name: bottomBarScreen, page: () => BottomBarScreen()),
@@ -46,5 +51,8 @@ class RouteHelper {
     GetPage(name: loginScreen, page: () => LoginScreen()),
     GetPage(name: createAccountScreen, page: () => CreateAccountScreen()),
     GetPage(name: editProfileScreen, page: () => EditProfileScreen()),
+    GetPage(name: setPasswordScreen, page: () => SetPassword()),
+    GetPage(name: setOtpScreen, page: () => SetOtp()),
+    GetPage(name: forgetPasswordScreen, page: () => ForgetPassword()),
   ];
 }

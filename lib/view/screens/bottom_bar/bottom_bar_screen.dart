@@ -46,6 +46,7 @@ class _BottomBarScreenState extends State<BottomBarScreen> {
         init: BottomBarController(),
         builder: (controller) {
           return Scaffold(
+            backgroundColor: ColorResources.scaffoldBackgroundColor,
             body: pages[controller.selectedIndex.value],
             bottomNavigationBar: CustomBottomNavigationBar(
               size: size,
@@ -92,13 +93,13 @@ class CustomBottomNavigationBar extends StatelessWidget {
         children: List.generate(icons.length, (index) {
           final isSelected = bottomBarController.selectedIndex.value == index;
           final color = isSelected
-              ? ColorResources.offerColor
-              : ColorResources.conceptTextColor;
+              ? ColorResources.activeTabColor
+              : ColorResources.inactiveTabColor;
           return GestureDetector(
             onTap: () {
               bottomBarController.changeIndex(index);
               if (bottomBarController.selectedIndex.value == 1) {
-                // Closed categoires screen expanded items
+                // Closed categories screen expanded items
                 categoriesController.setExpandedIndex(-1);
                 categoriesController.setMostBrowsedIndex(-1);
               }

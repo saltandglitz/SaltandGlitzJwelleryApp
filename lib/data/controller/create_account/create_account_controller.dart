@@ -12,8 +12,10 @@ class CreateAccountController extends GetxController {
   TextEditingController lastNameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController confirmPasswordController = TextEditingController();
+
   final Color validColor = ColorResources.videoCallColor;
   final Color invalidColor = ColorResources.notValidateColor;
+
   bool hasEightChars = false;
   bool hasUppercase = false;
   bool hasLowercase = false;

@@ -19,7 +19,12 @@ void showSnackBar({
     colorText: Colors.white,
     duration: const Duration(seconds: 3),
     isDismissible: true,
-    padding: const EdgeInsets.only(bottom: 15, top: 10, left: 15, right: 15),
+    padding: const EdgeInsets.only(
+      bottom: 15,
+      top: 10,
+      left: 15,
+      right: 15,
+    ),
     dismissDirection: DismissDirection.horizontal,
     forwardAnimationCurve: Curves.easeInOut,
   );

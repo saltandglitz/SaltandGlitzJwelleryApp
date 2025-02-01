@@ -16,7 +16,7 @@ class WishlistController extends GetxController {
   ];
   List productsName = [
     LocalStrings.rings,
-    LocalStrings.earings,
+    LocalStrings.earrings,
     LocalStrings.chain,
     LocalStrings.noseRings,
     LocalStrings.mangalsutra,

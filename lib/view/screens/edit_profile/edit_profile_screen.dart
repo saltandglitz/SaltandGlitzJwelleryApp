@@ -32,6 +32,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               FocusManager.instance.primaryFocus?.unfocus();
             },
             child: Scaffold(
+              backgroundColor: ColorResources.scaffoldBackgroundColor,
               appBar: AppBarBackground(
                 child: AppBar(
                   automaticallyImplyLeading: false,
@@ -730,7 +731,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   // Selected occupation
   selectOccupationBottomSheet() {
-     return showModalBottomSheet(
+    return showModalBottomSheet(
       backgroundColor: ColorResources.cardBgColor,
       shape: const OutlineInputBorder(
         borderRadius: BorderRadius.only(
@@ -783,7 +784,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     return Expanded(
                       child: ListView.builder(
                         itemCount: controller.selectOccupationLst.length,
-                        padding:  EdgeInsets.zero,
+                        padding: EdgeInsets.zero,
                         shrinkWrap: true,
                         physics: const BouncingScrollPhysics(),
                         itemBuilder: (context, index) {

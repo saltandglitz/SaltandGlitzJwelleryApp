@@ -1,32 +1,38 @@
 class LocalStrings {
-  static const String appName = "Solatn Gleeks";
+  static const String appName = "Salt and Glitz";
 
   ///<<<------------------- Dashboard Screen ------------------->>>
   static const String solitaire = "Solitaire";
-  static const String hardwareSolatn = "HardWare By Solatn Gleeks";
+  static const String hardwareSalt = "HardWare By Salt and Glitz";
   static const String shopNow = "Shop Now >";
   static const String shopBy = "Shop by Category";
   static const String brilliantDesign =
       "Brilliant design and unparalleled craftsmanship.";
+  static const String newArrival = "New Arrivals";
+  static const String planOfPurchase = "Your Plan of Purchase";
+  static const String startYourPop = "Start your pop!";
+  static const String aHassleFree = "A hassle free Plan of Purchase";
+  static const String in9Easy =
+      "In 9 easy installments, own your\nfavorite designs!";
   static const String rings = "Rings";
   static const String pendants = "Pendants";
   static const String goldChains = "GoldChains";
-  static const String earings = "Earings";
+  static const String earrings = "Earrings";
   static const String nosePins = "Nose Pins";
   static const String watches = "Watches";
   static const String giftsGraduate = "Gifts for the Graduate";
   static const String giftsHim = "Gifts for Him";
   static const String giftsHer = "Gifts for Her";
-  static const String shipingReturns = "Shiping & Returns";
-  static const String complementryShiping =
-      "We offer Complementry Shiping & Returns";
+  static const String shippingReturns = "Shipping & Returns";
+  static const String complementaryShipping =
+      "We offer Complementary Shipping & Returns";
   static const String learnMore = "Learn More >";
   static const String yourService = "At Your Service";
   static const String ourClient = "Our Client car experts are always here.";
   static const String contactUs = "Contact Us >";
   static const String bookAppointment = "Book Appointment";
   static const String inStoreVirtual =
-      "We're happy in-store or virtual appointements.";
+      "We're happy in-store or virtual appointments.";
   static const String bookNow = "Book Now >";
   static const String blueBox = "Blue Box";
   static const String purchaseComes = "Purchase comes wrapped in our Blue Box.";
@@ -34,7 +40,7 @@ class LocalStrings {
   static const String clientCare = "Client Care";
   static const String ourCompany = "Our Company";
   static const String contact = "- Contact Us";
-  static const String solatnGleeks = "- Solatn Gleeks";
+  static const String saltAndGlitz = "- Salt and Glitz";
   static const String trackOrder = "- Track Order";
   static const String bookAnAppointment = "- Book an Appointment";
   static const String sustainability = "- Sustainability";
@@ -42,22 +48,22 @@ class LocalStrings {
   static const String askedQuestions = "- Asked Questions";
   static const String californiaPrivacy = "- California Privacy";
   static const String shippingsReturns = "- Shippings & Returns";
-  static const String careers = "- Solatn Gleeks Careers";
-  static const String prodcutsCare = "- Products Care & Returns";
+  static const String careers = "- Salt and Glitz Careers";
+  static const String productsCare = "- Products Care & Returns";
   static const String policies = "- Policies";
   static const String giftCards = "- Gift Cards";
   static const String transparency = "- Transparency in Coverage";
   static const String accessibility = "- Accessibility";
   static const String sharePersonal = "- Do Not Share Personal Information";
-  static const String tragetedAdvetising = "- Targeted Advertising";
-  static const String relatedSite = "Related Solatn Gleeks sites";
+  static const String targetedAdvertising = "- Targeted Advertising";
+  static const String relatedSite = "Related Salt and Glitz sites";
   static const String weddingsGift = "- Wedding & Gift Registry";
   static const String businessAccounts = "- Business Accounts";
-  static const String solatnGleeksPress = "- Solatn Gleeks for the Press";
-  static const String foundation = "- The Solatn Gleeks & Co. Foundation";
-  static const String alertline = "- Solatn Gleeks Alertline";
+  static const String saltAndGlitzPress = "- Salt and Glitz for the Press";
+  static const String foundation = "- The Salt and Glitz & Co. Foundation";
+  static const String alertline = "- Salt and Glitz Alertline";
   static const String siteIndex = "- Site index";
-  static const String latestSolatnGleeks = "Latest from Solatn Gleeks";
+  static const String latestSaltAndGlitz = "Latest from Salt and Glitz";
   static const String knowAbout =
       "Be the first know about exciting new designs,special events, store openings and much more";
   static const String email = "Email";
@@ -67,17 +73,17 @@ class LocalStrings {
 
   ///<<<------------------- Add to cart Screen ------------------->>>
   static const String shoppingCart = "Shopping Cart";
-  static const String pointsOrder = "Get ₹ 2455 xCLusive points on the order.";
+  static const String pointsOrder = "Get ₹ 2455 Exclusive points on the order.";
   static const String nextOrder = "Redeem these points on your next order";
   static const String oderOnline = "Order online & pick up your home";
   static const String sameDay = "on the same day choose nearby store";
   static const String tiaTwine = "Tia Twine solitaire Ring";
   static const String chain = "Chain";
-  static const String oderRuppesFirst = "₹58,296";
-  static const String orderRuppesSecond = "₹72,869";
-  static const String qantity = "Quantity :";
-  static const String qauntityFirst = "1";
-  static const String qauntitySecond = "2";
+  static const String orderRupeesFirst = "₹58,296";
+  static const String orderRupeesSecond = "₹72,869";
+  static const String quantity = "Quantity :";
+  static const String quantityFirst = "1";
+  static const String quantitySecond = "2";
   static const String size = "Size :";
   static const String sizeFirst = "12";
   static const String sizeSecond = "13";
@@ -92,7 +98,7 @@ class LocalStrings {
   static const String shippingInsurance = "Shipping Insurance";
   static const String free = "Free";
   static const String grandTotal = "Grand Total";
-  static const String contactFurther = "Contact us for further assistances";
+  static const String contactFurther = "Contact us for further assistance";
   static const String call = "Call";
   static const String chat = "Chat";
   static const String whatsapp = "Whatsapp";
@@ -149,13 +155,13 @@ class LocalStrings {
   static const String bestSelling = "Best Selling Gifts";
   static const String youMay = "You May Also Like";
   static const String shopOccasions = "Shop For Occasions";
-  static const String solatnPostcards = 'Solatn Gleeks Postcards';
+  static const String saltAndPostcards = 'Salt and Glitz Postcards';
   static const String embedVideo = 'Embed a heartfelt video in your ring!';
   static const String knowHow = 'Know How';
   static const String clTv = 'CL TV';
   static const String watchBuy = 'Watch & Buy With Influencers.';
   static const String playNow = 'Play Now';
-  static const String pop = 'Solatn Gleeks PoP!';
+  static const String pop = 'Salt and Glitz PoP!';
   static const String planYour = 'Plan your purchases in advance.';
   static const String learnMoreText = 'Learn More';
   static const String goldExchange = 'Gold Exchange Program';
@@ -197,7 +203,7 @@ class LocalStrings {
   static const String filter = 'Filter';
   static const String sortBy = 'Sort Designs By';
   static const String latest = 'Latest';
-  static const String discount = 'Discount';
+
   static const String featured = 'Featured';
   static const String priceLow = 'Price: Low to High';
   static const String priceHigh = 'Price: High to Low';
@@ -233,7 +239,6 @@ class LocalStrings {
   ///<<<---------------------------- Collection filter screen String ---------------------------->>>
   static const String filters = 'Filters';
   static const String price = 'Price';
-  static const String discountRanges = 'Discount Ranges';
   static const String productsType = 'Product Type';
   static const String weightRanges = 'Weight Ranges';
   static const String material = 'Material';
@@ -244,18 +249,8 @@ class LocalStrings {
   static const String gifts = 'Gifts';
   static const String theme = 'Theme';
   static const String seeFilter = 'See More Filter';
-  static const String discounts = 'Discounts';
-  static const String gemstoneColour = 'Gemstone colour';
   static const String stoneSize = 'Center Stone Size';
-  static const String collections = 'Collections';
-  static const String necklaceStyle = 'Necklace Style';
-  static const String chainLength = 'Chain Length';
-  static const String braceletStyle = 'Bracelet Style';
-  static const String pendantStyle = 'Pendant Style';
-  static const String tryHome = 'Try@Home';
-  static const String curatedBy = 'Curated by';
   static const String fastDelivery = 'Fast Delivery';
-  static const String alphabet = 'Alphabet';
   static const String mangalsutraStyle = 'Mangalsutra Style';
   static const String engravable = 'Engravable';
   static const String clearAll = 'CLEAR ALL';
@@ -276,7 +271,7 @@ class LocalStrings {
   static const String sizeInches = 'Size 6.5 inches (customisable)';
   static const String deliveryCancellation = 'DELIVERY & CANCELLATION';
   static const String estimatedTime = 'ESTIMATED DELIVERY BY 27TH AUG 2024';
-  static const String yourincode = 'Your pincode';
+  static const String yourPincode = 'Your pincode';
   static const String categoriesTitle = 'CATEGORIES: ';
   static const String categoriesItems =
       'Bracelet, Everyday, Mangalsutra Bracelet';
@@ -313,8 +308,8 @@ class LocalStrings {
   static const String goldPrice = 'Rs.29904/-';
   static const String diamond = 'Diamond';
   static const String diamondPrice = 'Rs.17200/-';
-  static const String makingCharg = 'Making Charg';
-  static const String chargFirst = 'Rs.10500/-';
+  static const String makingCharge = 'Making Charge';
+  static const String chargeFirst = 'Rs.10500/-';
   static const String gst = 'GST';
   static const String gstPrice = 'Rs.1728/-';
   static const String totalText = 'Total';
@@ -334,20 +329,20 @@ class LocalStrings {
   static const String sgl = 'SGL ';
   static const String and = 'and ';
   static const String igl = 'IGL.';
-  static const String chatWithUs = 'CHAT WITH US';
+  static const String buyNow = 'BUY NOW';
 
   ///<<<---------------------------- My Account screen String ---------------------------->>>
   static const String welcome = 'Welcome!';
   static const String login = 'LOGIN';
   static const String loginDiscover =
-      'Login to discover xCLusive points, offers & more';
+      'Login to discover Exclusive points, offers & more';
   static const String orders = 'Orders';
   static const String viewStatus =
       'To view the status of your order,please log in ';
   static const String addCart = 'Add to cart';
   static const String viewCart = 'To view cart list';
-  static const String videoCall = 'Video call history';
-  static const String viewCallHistory = 'To view video call history';
+  static const String coins = 'Coins';
+  static const String comingSoon = 'COMING SOON...';
   static const String viewWishlist = 'To view wishlist items';
   static const String yourOffers = 'Your Offers';
   static const String viewOffers = 'To view your offers, ';
@@ -364,30 +359,30 @@ class LocalStrings {
   static const String appVersion = 'APP VERSION';
   static const String hi = 'Hi';
   static const String completeProfile =
-      'Complete your profile and get 250 xClusive points';
-  static const String completePercentaze = '60%';
+      'Complete your profile and get 250 Exclusive points';
+  static const String completePercentage = '60%';
   static const String complete = 'COMPLETE';
   static const String viewAll = 'VIEW ALL';
   static const String offFirst = '5% OFF';
   static const String buyProducts = 'Buy 2 or more Shaya products, get free';
-  static const String rafralCodeFirst = 'SHAYASPL5';
+  static const String referralCodeFirst = 'SHAYASPL5';
   static const String validDateOffer = 'Valid until August 09 2024';
   static const String flatProducts = 'Flat 5% Off on Solitaire Mount SKU';
-  static const String rafralCodeSecond = 'MOUNT5';
+  static const String referralCodeSecond = 'MOUNT5';
   static const String logout = 'LOGOUT';
 
   ///<<<---------------------------- Login Screen screen String ---------------------------->>>
   static const String welcomeBack = 'Welcome back!';
   static const String loginUnlock =
       'Login to unlock best prices and become an insider for our exclusive launches offers.';
-  static const String enterNumber = 'Enter Mobile Number or Email';
+  // static const String enterNumber = 'Enter Mobile Number or Email';
   static const String continueLogin = 'CONTINUE TO LOGIN';
   static const String orText = 'OR';
   static const String loginWhatsapp = 'LOGIN WITH WHATSAPP';
-  static const String newSolatnGleeks = 'New to solatn gleeks?  ';
+  static const String newSaltAndGlitz = 'New to Salt and Glitz?  ';
   static const String createAccount = 'Create Account';
   static const String continuingAgree =
-      'By continuing you agree to Solatn Gleeks ';
+      'By continuing you agree to Salt and Glitz ';
   static const String termsConditions = 'Terms and Conditions';
   static const String andText = ' & ';
   static const String privacyPolicy = 'Privacy Policy';
@@ -410,9 +405,9 @@ class LocalStrings {
   static const String notSpecify = "i don't want to specify";
   static const String optWhatsapp = 'Opt for whatsapp support';
   static const String sharingDelivery =
-      'We will be sharing delivery & precious order related communication & certification.Also provide you with an interactive whtsapp support';
+      'We will be sharing delivery & precious order related communication & certification.Also provide you with an interactive whatsapp support';
   static const String signMe = 'SIGN ME UP';
-  static const String alreadyAccount = 'Already have an acccount? ';
+  static const String alreadyAccount = 'Already have an account? ';
   static const String loginLowercase = 'Login';
   static const String enterMobileNumber = 'Please enter mobile number';
   static const String enterValidNumber = 'Please enter valid mobile number';
@@ -472,4 +467,32 @@ class LocalStrings {
   static const String selectGender = 'Please select your gender';
   static const String enterBirthday = 'Please enter birthday';
   static const String saveChangesMessage = 'Successfully save changes';
+
+  ///<<<---------------------------- SetPassword screen String ---------------------------->>>
+  static const String passwordToLogin = 'Enter Password to login';
+  static const String xyzGmail = 'xyz@gmail.com';
+  static const String changeEmail = 'Change Email';
+  static const String phoneNumber = '+91 *****67890';
+  static const String logIn = 'Log In';
+  static const String forgotPassword = 'Forgot Password?';
+  static const String getOTP = 'GET OTP ON YOUR EMAIL';
+
+  ///<<<---------------------------- SetOTP screen String ---------------------------->>>
+  static const String enterOTP = 'Enter OTP';
+  static const String logInWithPassword = 'LOGIN WITH PASSWORD';
+  static const String resendOTP = 'RESEND OTP';
+
+  ///<<<---------------------------- ResetPassword screen String ---------------------------->>>
+  static const String checkYourEmail =
+      'Check your Email \n to reset your password';
+  static const String linkToResetPassword =
+      'A link to reset your password has been \n sent to your email';
+  static const String continueToLogin = 'CONTINUE TO LOGIN';
+  static const String ifNotArriveEmail =
+      'If it doesn’t arrive soon, check your spam folder or ';
+  static const String sendEmailAgain = 'Sent the email again';
+}
+
+class AppFonts {
+  static const String fontFamily = 'Segoe';
 }

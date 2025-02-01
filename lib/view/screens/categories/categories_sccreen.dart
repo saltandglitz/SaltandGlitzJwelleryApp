@@ -48,6 +48,7 @@ class _CategoriesScreenState extends State<CategoriesScreen>
           length: 2,
           initialIndex: 0,
           child: Scaffold(
+            backgroundColor: ColorResources.scaffoldBackgroundColor,
             appBar: AppBarBackground(
               additionalHeight: 48.0, // Height of TabBar
               isShowTabBar: true,

@@ -7,7 +7,7 @@ class AppBarBackground extends StatelessWidget implements PreferredSizeWidget {
   final bool isShowTabBar;
   final Widget? tabBarWidget;
 
-  AppBarBackground({
+  const AppBarBackground({
     super.key,
     required this.child,
     this.additionalHeight = 0,
@@ -19,7 +19,8 @@ class AppBarBackground extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     return PreferredSize(
       preferredSize: Size.fromHeight(
-          kToolbarHeight + (isShowTabBar ? additionalHeight : 0)),
+        kToolbarHeight + (isShowTabBar ? additionalHeight : 0),
+      ),
       child: Container(
         decoration: BoxDecoration(
           boxShadow: [
@@ -42,6 +43,7 @@ class AppBarBackground extends StatelessWidget implements PreferredSizeWidget {
   }
 
   @override
-  Size get preferredSize =>
-      Size.fromHeight(kToolbarHeight + (isShowTabBar ? additionalHeight : 0));
+  Size get preferredSize => Size.fromHeight(
+        kToolbarHeight + (isShowTabBar ? additionalHeight : 0),
+      );
 }

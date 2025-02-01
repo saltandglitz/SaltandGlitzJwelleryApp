@@ -11,17 +11,17 @@ class MyAccountController extends GetxController {
     LocalStrings.orders,
     LocalStrings.addCart,
     LocalStrings.wishlist,
-    LocalStrings.videoCall,
+    LocalStrings.coins,
   ];
   List accountServiceSubtitleLst = [
     LocalStrings.viewStatus,
     LocalStrings.viewCart,
-    LocalStrings.viewCallHistory,
     LocalStrings.viewWishlist,
+    LocalStrings.comingSoon,
   ];
   List<Color> accountServiceColorLst = [
     ColorResources.offerFirstColor.withOpacity(0.2),
-    ColorResources.accountSarviceColor.withOpacity(0.5),
+    ColorResources.accountServiceColor.withOpacity(0.5),
     ColorResources.helpNeedFirstColor.withOpacity(0.4),
     ColorResources.sortSelectedColor.withOpacity(0.2),
   ];
@@ -35,7 +35,7 @@ class MyAccountController extends GetxController {
     Icons.gif_box_outlined,
     Icons.add_shopping_cart,
     Icons.favorite_border_sharp,
-    Icons.video_call_sharp,
+    Icons.currency_rupee,
   ];
   List accountServiceLst = [
     LocalStrings.faqs,
@@ -54,8 +54,8 @@ class MyAccountController extends GetxController {
     LocalStrings.buyProducts,
   ];
   List offerCodeLst = [
-    LocalStrings.rafralCodeFirst,
-    LocalStrings.rafralCodeSecond,
-    LocalStrings.rafralCodeFirst,
+    LocalStrings.referralCodeFirst,
+    LocalStrings.referralCodeSecond,
+    LocalStrings.referralCodeFirst,
   ];
 }

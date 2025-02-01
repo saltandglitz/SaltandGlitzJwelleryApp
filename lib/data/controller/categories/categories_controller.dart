@@ -21,7 +21,7 @@ class CategoriesController extends GetxController {
 
   List womenTopCategoriesImage = [
     MyImages.ringsCategories,
-    MyImages.earingsCategories,
+    MyImages.earringsCategories,
     MyImages.braceletsCategories,
     MyImages.solitaireCategories,
     MyImages.necklacesCategories,
@@ -39,7 +39,7 @@ class CategoriesController extends GetxController {
   ];
   List womenTopCategoriesName = [
     LocalStrings.rings,
-    LocalStrings.earings,
+    LocalStrings.earrings,
     LocalStrings.bracelets,
     LocalStrings.solitaire,
     LocalStrings.necklaces,
@@ -51,18 +51,18 @@ class CategoriesController extends GetxController {
     LocalStrings.kada,
     LocalStrings.allDesigns,
     LocalStrings.shopPrice,
-    LocalStrings.giftHim
+    LocalStrings.giftHim,
   ];
   List mostBrowsedImage = [
     MyImages.moreJewelleryImage,
-    MyImages.shopGiftsImage
+    MyImages.shopGiftsImage,
   ];
   List mostBrowsedNamed = [LocalStrings.moreJewellery, LocalStrings.shopGifts];
   List mostMenBrowsedNamed = [LocalStrings.shopPrice, LocalStrings.giftHim];
   List silverJewelleryImage = [
     MyImages.jewelleryWeddingFirstImage,
     MyImages.jewelleryWeddingSecondImage,
-    MyImages.jewelleryWeddingThirdImage
+    MyImages.jewelleryWeddingThirdImage,
   ];
 
   List shopStyleImageLst = [
@@ -98,41 +98,42 @@ class CategoriesController extends GetxController {
   List moreJewelleryImageLst = [
     MyImages.pendantsImage,
     MyImages.chainsImage,
-    MyImages.nosePinsImage
+    MyImages.nosePinsImage,
   ];
   List moreJewelleryNameLst = [
     LocalStrings.pendants,
     LocalStrings.chain,
-    LocalStrings.nosePins
+    LocalStrings.nosePins,
   ];
   List menShopPriceNameLst = [
     LocalStrings.aboveMenFirstPrice,
     LocalStrings.aboveMenSecondPrice,
-    LocalStrings.aboveMenThirdPrice
+    LocalStrings.aboveMenThirdPrice,
   ];
   List shopGiftsImageLst = [
     MyImages.anniversaryGiftsImage,
     MyImages.birthdayGiftsImage,
-    MyImages.bestSellingGiftsImage
-  ];List menGiftsImageLst = [
+    MyImages.bestSellingGiftsImage,
+  ];
+  List menGiftsImageLst = [
     MyImages.menAnniversaryGiftImage,
     MyImages.menBirthdayGiftImage,
-    MyImages.menMilestoneGiftImage
+    MyImages.menMilestoneGiftImage,
   ];
   List shopMenGiftsImageLst = [
-    MyImages.menPandantsImage,
+    MyImages.menPendantsImage,
     MyImages.menRingsImage,
-    MyImages.menRingsSecondImage
+    MyImages.menRingsSecondImage,
   ];
   List shopGiftsNameLst = [
     LocalStrings.anniversaryGifts,
     LocalStrings.birthdayGifts,
-    LocalStrings.bestSelling
+    LocalStrings.bestSelling,
   ];
   List menGiftsNameLst = [
     LocalStrings.anniversaryGifts,
     LocalStrings.birthdayGifts,
-    LocalStrings.milestoneGifts
+    LocalStrings.milestoneGifts,
   ];
   List alsoLikeBrowsedNameLst = [
     LocalStrings.charms,
@@ -140,40 +141,40 @@ class CategoriesController extends GetxController {
     LocalStrings.platinum,
     LocalStrings.watchCharms,
     LocalStrings.kt,
-    LocalStrings.allCollection
-  ];List menShopByNameLst = [
+    LocalStrings.allCollection,
+  ];
+  List menShopByNameLst = [
     LocalStrings.menPlatinum,
     LocalStrings.menGold,
-    LocalStrings.menDiamond
+    LocalStrings.menDiamond,
   ];
-
   List needHelpImageLst = [
     MyImages.postCardImage,
-    MyImages.clTvImage,
+    // MyImages.clTvImage,
     MyImages.planPurchaseImage,
-    MyImages.goldExchangeImage,
-    MyImages.digitalGoldImage,
+    // MyImages.goldExchangeImage,
+    // MyImages.digitalGoldImage,
   ];
   List needHelpHeadingLst = [
-    LocalStrings.solatnPostcards,
-    LocalStrings.clTv,
+    LocalStrings.saltAndPostcards,
+    // LocalStrings.clTv,
     LocalStrings.pop,
-    LocalStrings.goldExchange,
-    LocalStrings.gold,
+    // LocalStrings.goldExchange,
+    // LocalStrings.gold,
   ];
   List needHelpTitleLst = [
     LocalStrings.embedVideo,
-    LocalStrings.watchBuy,
+    // LocalStrings.watchBuy,
     LocalStrings.planYour,
-    LocalStrings.yourPrecious,
-    LocalStrings.buySell,
+    // LocalStrings.yourPrecious,
+    // LocalStrings.buySell,
   ];
   List needHelpSubtitleLst = [
     LocalStrings.knowMore,
-    LocalStrings.playNow,
+    // LocalStrings.playNow,
     LocalStrings.learnMore,
-    LocalStrings.knowMore,
-    LocalStrings.learnMore,
+    // LocalStrings.knowMore,
+    // LocalStrings.learnMore,
   ];
 
   void setExpandedIndex(int index) {

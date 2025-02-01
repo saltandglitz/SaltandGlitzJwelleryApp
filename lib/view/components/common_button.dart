@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../../core/utils/color_resources.dart';
 import '../../core/utils/dimensions.dart';
 import '../../core/utils/local_strings.dart';
@@ -13,9 +12,10 @@ class CommonButton extends StatelessWidget {
   String? buttonName;
   Color? gradientFirstColor;
   Color? gradientSecondColor;
-  Color?buttonColor;
-  TextStyle?textStyle;
-  Widget?child;
+  Color? buttonColor;
+  TextStyle? textStyle;
+  Widget? child;
+  Color? borderColor;
 
   CommonButton({
     super.key,
@@ -28,6 +28,7 @@ class CommonButton extends StatelessWidget {
     this.buttonColor,
     this.textStyle,
     this.child,
+    this.borderColor,
   });
 
   @override
@@ -40,16 +41,20 @@ class CommonButton extends StatelessWidget {
         width: width ?? size.width * 0.43,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(Dimensions.offersCardRadius),
-          gradient:  LinearGradient(colors: [
-            gradientFirstColor??  ColorResources.offerColor,
-            gradientSecondColor??   ColorResources.buttonGradientColor
+          gradient: LinearGradient(colors: [
+            gradientFirstColor ?? ColorResources.offerColor,
+            gradientSecondColor ?? ColorResources.buttonGradientColor
           ], begin: Alignment.topLeft, end: Alignment.bottomRight),
+          border: Border.all(color: borderColor ?? Colors.transparent),
         ),
         child: Center(
-          child:child?? Text(
-            buttonName ?? LocalStrings.placeOrder,
-            style:textStyle?? mediumLarge.copyWith(color:buttonColor?? ColorResources.whiteColor),
-          ),
+          child: child ??
+              Text(
+                buttonName ?? LocalStrings.placeOrder,
+                style: textStyle ??
+                    mediumLarge.copyWith(
+                        color: buttonColor ?? ColorResources.whiteColor),
+              ),
         ),
       ),
     );

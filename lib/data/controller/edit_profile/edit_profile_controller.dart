@@ -47,11 +47,11 @@ class EditProfileController extends GetxController {
   void onInit() {
     // TODO: implement onInit
     super.onInit();
-    firstName.text="Xyz";
-    lastName.text="Kureshi";
+    firstName.text = "Xyz";
+    lastName.text = "Kureshi";
     mobileNumber.text = "1234657891";
     email.text = "xyz@gmail.com";
-    pinCode.text="394101";
+    pinCode.text = "394101";
   }
 
   selectionGender(value) {
@@ -59,7 +59,7 @@ class EditProfileController extends GetxController {
     update();
   }
 
-  // Date pick Birthday , Anniversary , Spous Birthday
+  // Date pick Birthday , Anniversary
   datePicker(String event) async {
     DateTime now = DateTime.now();
     DateTime? datePick = await showDatePicker(

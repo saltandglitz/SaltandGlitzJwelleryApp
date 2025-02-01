@@ -47,7 +47,8 @@ class DatabaseHelper {
     return await db.insert(
       table,
       row,
-      conflictAlgorithm: ConflictAlgorithm.replace, // Ensures duplicate names are replaced
+      conflictAlgorithm:
+          ConflictAlgorithm.replace, // Ensures duplicate names are replaced
     );
   }
 
@@ -76,15 +77,23 @@ class DatabaseHelper {
     return await db.query(table);
   }
 
-  Future<List<Map<String, dynamic>>> queryRowsByName( {required String image,
+  Future<List<Map<String, dynamic>>> queryRowsByName({
+    required String image,
     required String name,
     required String totalCost,
-    required String cutoffCost,}) async {
+    required String cutoffCost,
+  }) async {
     Database db = await instance.database;
     return await db.query(
       table,
-      where: '$columnImage = ? AND $columnName = ? AND $columnTotalCost = ? AND $columnCutoffCost = ?',
-      whereArgs: [image, name, totalCost, cutoffCost],
+      where:
+          '$columnImage = ? AND $columnName = ? AND $columnTotalCost = ? AND $columnCutoffCost = ?',
+      whereArgs: [
+        image,
+        name,
+        totalCost,
+        cutoffCost,
+      ],
     );
   }
 }

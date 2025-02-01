@@ -20,13 +20,13 @@ class AddToCartController extends GetxController {
   ];
   List productsName = [
     LocalStrings.rings,
-    LocalStrings.earings,
+    LocalStrings.earrings,
     LocalStrings.chain
   ];
   List productQuantity = [
-    LocalStrings.qauntityFirst,
-    LocalStrings.qauntitySecond,
-    LocalStrings.qauntityFirst,
+    LocalStrings.quantityFirst,
+    LocalStrings.quantitySecond,
+    LocalStrings.quantityFirst,
   ];
   List productsSize = [
     LocalStrings.sizeFirst,

@@ -1,7 +1,9 @@
-class CommonValidation{
+class CommonValidation {
   /// <<< To check email valid or not --------- >>>
+  ///
   bool emailValidator(String email) {
-    String p = r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
+    String p =
+        r'^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$';
     RegExp regExp = RegExp(p);
     if (regExp.hasMatch(email)) {
       return true;
@@ -31,7 +33,11 @@ class CommonValidation{
 
   /// <<< To check data, string, list, object are empty or not --------- >>>
   bool isValidationEmpty(String? val) {
-    if (val == null || val.isEmpty || val == "null" || val == "" || val == "NULL") {
+    if (val == null ||
+        val.isEmpty ||
+        val == "null" ||
+        val == "" ||
+        val == "NULL") {
       return true;
     } else {
       return false;

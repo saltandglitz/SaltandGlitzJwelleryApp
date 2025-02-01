@@ -60,14 +60,14 @@ class ProductController extends GetxController {
   List breakupItemLst = [
     LocalStrings.goldText,
     LocalStrings.diamond,
-    LocalStrings.makingCharg,
+    LocalStrings.makingCharge,
     LocalStrings.gst,
     LocalStrings.totalText,
   ];
   List breakupItemPriceLst = [
     LocalStrings.goldPrice,
     LocalStrings.diamondPrice,
-    LocalStrings.chargFirst,
+    LocalStrings.chargeFirst,
     LocalStrings.gstPrice,
     LocalStrings.totalPrice,
   ];
@@ -75,7 +75,7 @@ class ProductController extends GetxController {
     MyImages.buyBackImage,
     MyImages.exchangeImage,
     MyImages.returnImage,
-    MyImages.freeShipingImage,
+    MyImages.freeShippingImage,
     MyImages.hallmarkImage,
     MyImages.certifiedImage,
   ];
@@ -118,6 +118,4 @@ class ProductController extends GetxController {
   void applyDiscount() {
     originalPrice.value = discountedPrice.value;
   }
-
-
 }

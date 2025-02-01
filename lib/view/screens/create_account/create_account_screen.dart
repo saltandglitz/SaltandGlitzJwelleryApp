@@ -36,6 +36,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
               FocusManager.instance.primaryFocus?.unfocus();
             },
             child: Scaffold(
+              backgroundColor: ColorResources.scaffoldBackgroundColor,
               body: SafeArea(
                   top: false,
                   bottom: false,
@@ -63,21 +64,23 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                           width: size.width * 0.30,
                           padding: const EdgeInsets.all(10),
                           decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              gradient: LinearGradient(
-                                colors: [
-                                  ColorResources.offerColor,
-                                  ColorResources.deliveryColorColor
-                                      .withOpacity(0.5),
-                                ],
-                                begin: Alignment.centerLeft,
-                                end: Alignment.centerRight,
-                              )),
+                            shape: BoxShape.circle,
+                            gradient: LinearGradient(
+                              colors: [
+                                ColorResources.offerColor,
+                                ColorResources.deliveryColorColor
+                                    .withOpacity(0.5),
+                              ],
+                              begin: Alignment.centerLeft,
+                              end: Alignment.centerRight,
+                            ),
+                          ),
                           child: Center(
-                              child: Image.asset(
-                            MyImages.qualityImage,
-                            color: ColorResources.whiteColor,
-                          )),
+                            child: Image.asset(
+                              MyImages.qualityImage,
+                              color: ColorResources.whiteColor,
+                            ),
+                          ),
                         ),
                         const SizedBox(height: Dimensions.space30),
                         Text(
@@ -90,30 +93,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                           textAlign: TextAlign.center,
                           style: mediumLarge.copyWith(),
                         ),
-                        const SizedBox(height: Dimensions.space30),
-                        CommonButton(
-                          onTap: () {},
-                          height: size.height * 0.065,
-                          width: double.infinity,
-                          gradientFirstColor: ColorResources.moveCartColor,
-                          gradientSecondColor: ColorResources.whatsappColor,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Image.asset(
-                                MyImages.whatsappImage,
-                                height: size.height * 0.030,
-                                color: ColorResources.whiteColor,
-                              ),
-                              const SizedBox(width: Dimensions.space15),
-                              Text(
-                                LocalStrings.signupWhatsapp,
-                                style: mediumLarge.copyWith(
-                                    color: ColorResources.whiteColor),
-                              ),
-                            ],
-                          ),
-                        ),
+
                         const SizedBox(height: Dimensions.space25),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -218,11 +198,10 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
 
                         // Country code picker with text field
                         AppTextFieldWidget(
-                          controller:
-                              createAccountController.mobileController,
+                          controller: createAccountController.mobileController,
                           hintText: LocalStrings.mobile,
                           keyboardType: TextInputType.number,
-                          inputFormatters:  <TextInputFormatter>[
+                          inputFormatters: <TextInputFormatter>[
                             FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
                           ],
                         ),
@@ -360,7 +339,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                         ),
                         const SizedBox(height: Dimensions.space30),
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          // mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             // Create a Radio Female
                             Radio(
@@ -399,7 +378,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                               },
                             ),
                             Text(
-                              LocalStrings.notSpecify,
+                              LocalStrings.other,
                               style: mediumDefault.copyWith(
                                   color: ColorResources.conceptTextColor),
                             ),
@@ -408,7 +387,7 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
 
                         const SizedBox(height: Dimensions.space30),
                         Container(
-                          height: size.height * 0.14,
+                          height: size.height * 0.157,
                           width: double.infinity,
                           padding: const EdgeInsets.symmetric(
                               horizontal: 15, vertical: 15),

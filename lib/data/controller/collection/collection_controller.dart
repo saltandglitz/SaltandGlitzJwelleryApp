@@ -12,7 +12,6 @@ class CollectionController extends GetxController {
   // Sort collection data
   List sortProductsLst = [
     LocalStrings.latest,
-    LocalStrings.discount,
     LocalStrings.featured,
     LocalStrings.priceLow,
     LocalStrings.priceHigh,
@@ -129,11 +128,10 @@ class CollectionController extends GetxController {
     // Check if the product already exists
     List<Map<String, dynamic>> existingProducts =
         await dbHelper.queryRowsByName(
-      image: image,
-      name: name,
-      totalCost: totalCost,
-      cutoffCost: cutoffCost,
-    );
+            image: image,
+            name: name,
+            totalCost: totalCost,
+            cutoffCost: cutoffCost);
 
     if (existingProducts.isNotEmpty) {
       // Update the existing product

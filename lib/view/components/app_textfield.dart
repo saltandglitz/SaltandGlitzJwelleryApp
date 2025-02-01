@@ -33,7 +33,7 @@ class AppTextFieldWidget extends StatelessWidget {
   final double? textFieldHeight;
   final EdgeInsetsGeometry? contentPadding;
   final BoxConstraints? boxConstraints;
-  TextInputType?keyboardType;
+  TextInputType? keyboardType;
   List<TextInputFormatter>? inputFormatters;
   AppTextFieldWidget({
     this.formKey,
@@ -79,14 +79,16 @@ class AppTextFieldWidget extends StatelessWidget {
           decoration: InputDecoration(
             border: OutlineInputBorder(
               borderRadius: BorderRadius.all(
-                  Radius.circular(borderRadius ?? Dimensions.offersCardRadius)),
+                Radius.circular(borderRadius ?? Dimensions.offersCardRadius),
+              ),
               borderSide: BorderSide(
                   color: borderSideColor ?? ColorResources.borderColor,
                   width: borderWidth ?? 1.5),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.all(
-                  Radius.circular(borderRadius ?? Dimensions.offersCardRadius)),
+                Radius.circular(borderRadius ?? Dimensions.offersCardRadius),
+              ),
               borderSide: BorderSide(
                   color: borderSideColor ?? ColorResources.borderColor,
                   width: borderWidth ?? 1.5),
@@ -95,14 +97,16 @@ class AppTextFieldWidget extends StatelessWidget {
                 mediumDefault.copyWith(color: ColorResources.conceptTextColor),
             disabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.all(
-                  Radius.circular(borderRadius ?? Dimensions.offersCardRadius)),
+                Radius.circular(borderRadius ?? Dimensions.offersCardRadius),
+              ),
               borderSide: BorderSide(
                   color: borderSideColor ?? ColorResources.borderColor,
                   width: borderWidth ?? 1),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.all(
-                  Radius.circular(borderRadius ?? Dimensions.offersCardRadius)),
+                Radius.circular(borderRadius ?? Dimensions.offersCardRadius),
+              ),
               borderSide: BorderSide(
                   color: borderSideColor ?? ColorResources.borderColor,
                   width: borderWidth ?? 1),
@@ -163,10 +167,10 @@ class AppTextFieldWidget extends StatelessWidget {
                     horizontal: isShowCountryPicker == true ? 20 : 50,
                     vertical: verticalPadding ?? 20),
           ),
-          inputFormatters:inputFormatters,
+          inputFormatters: inputFormatters,
           textAlign: TextAlign.start,
           textAlignVertical: TextAlignVertical.bottom,
-          keyboardType:keyboardType ,
+          keyboardType: keyboardType,
           validator: numberValidator,
           onChanged: numberOnChanged,
           style: semiBoldLarge.copyWith(color: ColorResources.conceptTextColor),

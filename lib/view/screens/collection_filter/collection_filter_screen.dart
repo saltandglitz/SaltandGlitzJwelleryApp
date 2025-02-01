@@ -8,6 +8,7 @@ import '../../../core/utils/style.dart';
 import '../../../data/controller/collection_filter/collection_filter_controller.dart';
 import '../../components/app_bar_background.dart';
 import '../../components/common_button.dart';
+
 class CollectionFilterScreen extends StatefulWidget {
   const CollectionFilterScreen({super.key});
 
@@ -23,7 +24,7 @@ class _CollectionFilterScreenState extends State<CollectionFilterScreen> {
         init: CollectionFilterController(),
         builder: (controller) {
           return Scaffold(
-            backgroundColor: ColorResources.whiteColor,
+            backgroundColor: ColorResources.scaffoldBackgroundColor,
             appBar: AppBarBackground(
               child: AppBar(
                 automaticallyImplyLeading: false,

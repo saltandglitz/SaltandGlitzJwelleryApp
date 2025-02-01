@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:solatn_gleeks/core/utils/local_strings.dart';
 import 'package:solatn_gleeks/data/controller/bottom_bar/bottom_bar_controller.dart';
-
 import '../../../core/utils/images.dart';
 import '../../../local_storage/sqflite_local_storage.dart';
 
@@ -22,11 +21,16 @@ class DashboardController extends GetxController {
   final bottomBarController =
       Get.put<BottomBarController>(BottomBarController());
   bool isMenuOpen = false;
+  final List<String> giftsForText = [
+    LocalStrings.giftsGraduate,
+    LocalStrings.giftsHim,
+    LocalStrings.giftsHer,
+  ];
   final List<String> imageUrls = [
     MyImages.dashboardIntroFirstImage,
     MyImages.dashboardIntroSecondImage,
     MyImages.dashboardIntroThirdImage,
-    MyImages.dashboardIntroForeImage,
+    // MyImages.dashboardIntroForeImage,
     MyImages.dashboardIntroFiveImage,
   ];
   final List<String> imageUrlsSolitaire = [
@@ -35,11 +39,53 @@ class DashboardController extends GetxController {
     MyImages.solitaireThirdImage,
     MyImages.solitaireForeImage,
   ];
+
+  final List imageSolitaire = [
+    MyImages.ringOneImage,
+    MyImages.ringSecondImage,
+    MyImages.ringThirdImage,
+    MyImages.ringForImage,
+    MyImages.ringFiveImage,
+    MyImages.ringOneImage,
+    MyImages.ringThirdImage,
+    MyImages.ringSecondImage,
+  ];
+  final List imageSolitaireText = [
+    LocalStrings.goldenRing,
+    LocalStrings.diamondRingFirst,
+    LocalStrings.diamondRingSecond,
+    LocalStrings.stoneRing,
+    LocalStrings.stoneDiamondRing,
+    LocalStrings.goldenRing,
+    LocalStrings.diamondRingSecond,
+    LocalStrings.diamondRingFirst,
+  ];
+  final List solitairePriceText = [
+    LocalStrings.priceProductItemFirst,
+    LocalStrings.priceProductItemThird,
+    LocalStrings.priceProductItemFive,
+    LocalStrings.priceProductItemSeven,
+    LocalStrings.priceProductItemNine,
+    LocalStrings.priceProductItemEleven,
+    LocalStrings.priceProductItemThird,
+    LocalStrings.priceProductItemFirst,
+  ];
+  final List newArrivalPriceText = [
+    LocalStrings.priceProductItemFirst,
+    LocalStrings.priceProductItemThird,
+    LocalStrings.priceProductItemFive,
+    LocalStrings.priceProductItemSeven,
+    LocalStrings.priceProductItemNine,
+    LocalStrings.priceProductItemEleven,
+    LocalStrings.priceProductItemThird,
+    LocalStrings.priceProductItemFirst,
+  ];
+
   final List<String> imageShopCategoryImage = [
     MyImages.rings,
     MyImages.pendants,
     MyImages.goldChains,
-    MyImages.earings,
+    MyImages.earrings,
     MyImages.nosePins,
     MyImages.watches,
   ];
@@ -47,7 +93,7 @@ class DashboardController extends GetxController {
     LocalStrings.rings,
     LocalStrings.pendants,
     LocalStrings.goldChains,
-    LocalStrings.earings,
+    LocalStrings.earrings,
     LocalStrings.nosePins,
     LocalStrings.watches,
   ];
@@ -68,13 +114,13 @@ class DashboardController extends GetxController {
     Icons.gif_box_outlined,
   ];
   final List<String> servicesTitleText = [
-    LocalStrings.shipingReturns,
+    LocalStrings.shippingReturns,
     LocalStrings.yourService,
     LocalStrings.bookAppointment,
     LocalStrings.blueBox,
   ];
   final List<String> servicesSubTitleText = [
-    LocalStrings.complementryShiping,
+    LocalStrings.complementaryShipping,
     LocalStrings.ourClient,
     LocalStrings.inStoreVirtual,
     LocalStrings.purchaseComes,
@@ -91,13 +137,13 @@ class DashboardController extends GetxController {
     LocalStrings.bookAnAppointment,
     LocalStrings.askedQuestions,
     LocalStrings.shippingsReturns,
-    LocalStrings.prodcutsCare,
+    LocalStrings.productsCare,
     LocalStrings.giftCards,
     LocalStrings.accessibility,
   ];
 
   final List<String> ourCompanyList = [
-    LocalStrings.solatnGleeks,
+    LocalStrings.saltAndGlitz,
     LocalStrings.sustainability,
     LocalStrings.supplyChains,
     LocalStrings.californiaPrivacy,
@@ -105,13 +151,13 @@ class DashboardController extends GetxController {
     LocalStrings.policies,
     LocalStrings.transparency,
     LocalStrings.sharePersonal,
-    LocalStrings.tragetedAdvetising,
+    LocalStrings.targetedAdvertising,
   ];
 
-  final List<String> realtedSolatnGleeksSitesList = [
+  final List<String> relatedSaltAndGlitzSitesList = [
     LocalStrings.weddingsGift,
     LocalStrings.businessAccounts,
-    LocalStrings.solatnGleeksPress,
+    LocalStrings.saltAndGlitzPress,
     LocalStrings.foundation,
     LocalStrings.alertline,
     LocalStrings.siteIndex,
@@ -189,8 +235,8 @@ class DashboardController extends GetxController {
   }
 
   bottomSheetShowMethod() {
-    if(isShowBottomSheet==false){
-      isShowBottomSheet=true;
+    if (isShowBottomSheet == false) {
+      isShowBottomSheet = true;
     }
     update();
   }
