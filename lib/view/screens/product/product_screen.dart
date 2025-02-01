@@ -3,9 +3,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:solatn_gleeks/core/utils/dimensions.dart';
-import 'package:solatn_gleeks/core/utils/images.dart';
-import 'package:solatn_gleeks/data/product/product_controller.dart';
+import 'package:saltandGlitz/core/utils/dimensions.dart';
+import 'package:saltandGlitz/core/utils/images.dart';
+import 'package:saltandGlitz/data/product/product_controller.dart';
 
 import '../../../core/utils/color_resources.dart';
 import '../../../core/utils/local_strings.dart';

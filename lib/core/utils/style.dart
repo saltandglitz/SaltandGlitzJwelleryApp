@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:solatn_gleeks/core/utils/local_strings.dart';
+import 'package:saltandGlitz/core/utils/local_strings.dart';
 import 'dimensions.dart';
 
 const TextStyle lightOverSmall = TextStyle(

@@ -2,8 +2,8 @@ import 'package:carousel_slider/carousel_controller.dart';
 import 'package:carousel_slider/carousel_options.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'package:solatn_gleeks/core/utils/color_resources.dart';
-import 'package:solatn_gleeks/core/utils/local_strings.dart';
+import 'package:saltandGlitz/core/utils/color_resources.dart';
+import 'package:saltandGlitz/core/utils/local_strings.dart';
 
 import '../../core/utils/images.dart';
 

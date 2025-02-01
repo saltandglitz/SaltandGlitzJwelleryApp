@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:get/get.dart';
-import 'package:solatn_gleeks/core/utils/images.dart';
-import 'package:solatn_gleeks/core/utils/local_strings.dart';
+import 'package:saltandGlitz/core/utils/images.dart';
+import 'package:saltandGlitz/core/utils/local_strings.dart';
 
 class AddToCartController extends GetxController {
   int currentIndex = 0;

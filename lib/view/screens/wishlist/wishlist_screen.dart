@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:solatn_gleeks/core/utils/images.dart';
-import 'package:solatn_gleeks/data/controller/categories/categories_controller.dart';
-import 'package:solatn_gleeks/data/controller/wishlist/wishlist_controller.dart';
+import 'package:saltandGlitz/core/utils/images.dart';
+import 'package:saltandGlitz/data/controller/categories/categories_controller.dart';
+import 'package:saltandGlitz/data/controller/wishlist/wishlist_controller.dart';
 
 import '../../../core/utils/color_resources.dart';
 import '../../../core/utils/dimensions.dart';

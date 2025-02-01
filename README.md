@@ -1,4 +1,4 @@
-# solatn_gleeks
+# saltandGlitz
 
 A new Flutter project.
 

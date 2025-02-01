@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gradient_borders/box_borders/gradient_box_border.dart';
-import 'package:solatn_gleeks/core/utils/images.dart';
-import 'package:solatn_gleeks/core/utils/local_strings.dart';
-import 'package:solatn_gleeks/data/controller/add_to_cart/add_to_cart_controller.dart';
-import 'package:solatn_gleeks/view/components/common_button.dart';
+import 'package:saltandGlitz/core/utils/images.dart';
+import 'package:saltandGlitz/core/utils/local_strings.dart';
+import 'package:saltandGlitz/data/controller/add_to_cart/add_to_cart_controller.dart';
+import 'package:saltandGlitz/view/components/common_button.dart';
 import '../../../core/utils/color_resources.dart';
 import '../../../core/utils/dimensions.dart';
 import '../../../core/utils/style.dart';

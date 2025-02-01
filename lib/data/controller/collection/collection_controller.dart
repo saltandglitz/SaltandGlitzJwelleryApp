@@ -1,7 +1,7 @@
 import 'package:get/get.dart';
 import 'package:get/get_rx/get_rx.dart';
-import 'package:solatn_gleeks/core/utils/images.dart';
-import 'package:solatn_gleeks/core/utils/local_strings.dart';
+import 'package:saltandGlitz/core/utils/images.dart';
+import 'package:saltandGlitz/core/utils/local_strings.dart';
 
 import '../../../local_storage/sqflite_local_storage.dart';
 

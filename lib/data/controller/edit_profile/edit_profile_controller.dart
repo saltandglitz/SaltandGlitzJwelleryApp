@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:solatn_gleeks/view/components/common_message_show.dart';
+import 'package:saltandGlitz/view/components/common_message_show.dart';
 
 import '../../../core/utils/local_strings.dart';
 import '../../../core/utils/validation.dart';

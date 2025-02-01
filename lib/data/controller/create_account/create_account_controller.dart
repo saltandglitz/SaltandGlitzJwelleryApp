@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'package:solatn_gleeks/core/utils/color_resources.dart';
-import 'package:solatn_gleeks/core/utils/local_strings.dart';
-import 'package:solatn_gleeks/core/utils/validation.dart';
-import 'package:solatn_gleeks/view/components/common_message_show.dart';
+import 'package:saltandGlitz/core/utils/color_resources.dart';
+import 'package:saltandGlitz/core/utils/local_strings.dart';
+import 'package:saltandGlitz/core/utils/validation.dart';
+import 'package:saltandGlitz/view/components/common_message_show.dart';
 
 class CreateAccountController extends GetxController {
   TextEditingController mobileController = TextEditingController();

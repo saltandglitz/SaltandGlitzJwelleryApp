@@ -1,8 +1,8 @@
 import 'package:carousel_slider/carousel_options.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:solatn_gleeks/core/utils/images.dart';
-import 'package:solatn_gleeks/core/utils/local_strings.dart';
+import 'package:saltandGlitz/core/utils/images.dart';
+import 'package:saltandGlitz/core/utils/local_strings.dart';
 
 class CategoriesController extends GetxController {
   // late TabController _tabController;

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:solatn_gleeks/core/utils/color_resources.dart';
-import 'package:solatn_gleeks/core/utils/local_strings.dart';
+import 'package:saltandGlitz/core/utils/color_resources.dart';
+import 'package:saltandGlitz/core/utils/local_strings.dart';
 
 class MyAccountController extends GetxController {
   late AnimationController animationController;

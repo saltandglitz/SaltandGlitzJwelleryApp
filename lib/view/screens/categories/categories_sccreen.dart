@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:solatn_gleeks/data/controller/categories/categories_controller.dart';
-import 'package:solatn_gleeks/view/screens/categories/women_categories_screen.dart';
+import 'package:saltandGlitz/data/controller/categories/categories_controller.dart';
+import 'package:saltandGlitz/view/screens/categories/women_categories_screen.dart';
 import '../../../core/route/route.dart';
 import '../../../core/utils/color_resources.dart';
 import '../../../core/utils/style.dart';

@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import 'package:solatn_gleeks/core/utils/local_strings.dart';
+import 'package:saltandGlitz/core/utils/local_strings.dart';
 
 class CollectionFilterController extends GetxController {
   var selectedCategory = 0.obs;

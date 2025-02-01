@@ -1,8 +1,8 @@
 import 'package:country_code_picker/country_code_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:solatn_gleeks/core/utils/color_resources.dart';
-import 'package:solatn_gleeks/core/utils/images.dart';
+import 'package:saltandGlitz/core/utils/color_resources.dart';
+import 'package:saltandGlitz/core/utils/images.dart';
 
 import '../../core/utils/dimensions.dart';
 import '../../core/utils/style.dart';

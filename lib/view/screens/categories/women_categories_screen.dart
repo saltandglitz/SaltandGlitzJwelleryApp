@@ -1,12 +1,12 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:solatn_gleeks/core/route/route.dart';
-import 'package:solatn_gleeks/core/utils/color_resources.dart';
-import 'package:solatn_gleeks/core/utils/dimensions.dart';
-import 'package:solatn_gleeks/core/utils/images.dart';
-import 'package:solatn_gleeks/core/utils/local_strings.dart';
-import 'package:solatn_gleeks/data/controller/categories/categories_controller.dart';
+import 'package:saltandGlitz/core/route/route.dart';
+import 'package:saltandGlitz/core/utils/color_resources.dart';
+import 'package:saltandGlitz/core/utils/dimensions.dart';
+import 'package:saltandGlitz/core/utils/images.dart';
+import 'package:saltandGlitz/core/utils/local_strings.dart';
+import 'package:saltandGlitz/data/controller/categories/categories_controller.dart';
 import '../../../core/utils/style.dart';
 import '../../components/cached_image.dart';
 
