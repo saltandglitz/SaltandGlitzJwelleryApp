@@ -7,7 +7,7 @@ import 'package:saltandGlitz/core/utils/local_strings.dart';
 class AddToCartController extends GetxController {
   int currentIndex = 0;
   Timer? timer;
-
+  RxBool isEnableNetwork = false.obs;
   static const List<Map<String, String>> texts = [
     {"title": LocalStrings.pointsOrder, "subtitle": LocalStrings.nextOrder},
     {"title": LocalStrings.oderOnline, "subtitle": LocalStrings.sameDay},
@@ -40,5 +40,23 @@ class AddToCartController extends GetxController {
       currentIndex = (currentIndex + 1) % texts.length;
       update();
     });
+  }
+  /// Remove products
+  removeProduct(int index) {
+    productsImage.removeAt(index);
+    update();
+  }
+  enableNetworkHideLoader() {
+    if (isEnableNetwork.value == false) {
+      isEnableNetwork.value = true;
+    }
+    update();
+  }
+
+  disableNetworkLoaderByDefault() {
+    if (isEnableNetwork.value == true) {
+      isEnableNetwork.value = false;
+    }
+    update();
   }
 }

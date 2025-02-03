@@ -5,11 +5,14 @@ import 'package:saltandGlitz/core/utils/images.dart';
 import 'package:saltandGlitz/core/utils/local_strings.dart';
 import 'package:saltandGlitz/data/controller/add_to_cart/add_to_cart_controller.dart';
 import 'package:saltandGlitz/view/components/common_button.dart';
+import '../../../analytics/app_analytics.dart';
 import '../../../core/utils/color_resources.dart';
 import '../../../core/utils/dimensions.dart';
 import '../../../core/utils/style.dart';
+import '../../../main_controller.dart';
 import '../../components/app_bar_background.dart';
 import '../../components/cached_image.dart';
+import '../../components/network_connectivity_view.dart';
 
 class AddToCartScreen extends StatefulWidget {
   const AddToCartScreen({super.key});
@@ -20,10 +23,14 @@ class AddToCartScreen extends StatefulWidget {
 
 class _AddToCartScreenState extends State<AddToCartScreen> {
   final addCartController = Get.put<AddToCartController>(AddToCartController());
+  final mainController = Get.put<MainController>(MainController());
 
   @override
   void initState() {
+    mainController.checkToAssignNetworkConnections();
     addCartController.implementAnimationOffersMethod();
+    AppAnalytics()
+        .actionTriggerLogs(eventName: LocalStrings.logAddCartView, index: 4);
     // TODO: implement initState
     super.initState();
   }
@@ -52,6 +59,7 @@ class _AddToCartScreenState extends State<AddToCartScreen> {
           ),
           leading: IconButton(
             onPressed: () {
+              mainController.checkToAssignNetworkConnections();
               Get.back();
             },
             icon: const Icon(Icons.arrow_back_outlined),
@@ -105,398 +113,461 @@ class _AddToCartScreenState extends State<AddToCartScreen> {
       body: GetBuilder<AddToCartController>(
         init: AddToCartController(),
         builder: (controller) {
-          return SafeArea(
-            top: false,
-            bottom: false,
-            child: SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-              child: Column(
-                children: [
-                  const SizedBox(height: Dimensions.space10),
-                  Container(
-                    height: size.height * 0.065,
-                    width: double.infinity,
-                    padding: const EdgeInsets.only(left: 20),
-                    decoration: BoxDecoration(
-                      borderRadius:
-                          BorderRadius.circular(Dimensions.offersCardRadius),
-                      gradient: const LinearGradient(
-                        colors: [
-                          ColorResources.offerFirstColor,
-                          ColorResources.offerNineColor,
-                          ColorResources.offerSixColor,
-                        ],
-                        begin: Alignment.topLeft,
-                        end: Alignment.bottomRight,
-                      ),
-                    ),
-                    child: AnimatedSwitcher(
-                      duration: const Duration(milliseconds: 400),
-                      transitionBuilder:
-                          (Widget child, Animation<double> animation) {
-                        return FadeTransition(
-                          opacity: animation,
-                          child: SlideTransition(
-                            position: Tween<Offset>(
-                              begin: const Offset(0.0, 0.2),
-                              end: const Offset(0.0, 0.0),
-                            ).animate(animation),
-                            child: child,
+          return mainController.isNetworkConnection?.value == false
+              ? NetworkConnectivityView(
+                  onTap: () async {
+                    RxBool? isEnableNetwork =
+                        await mainController.checkToAssignNetworkConnections();
+
+                    if (isEnableNetwork!.value == true) {
+                      controller.enableNetworkHideLoader();
+                      Future.delayed(
+                        const Duration(seconds: 3),
+                        () {
+                          Get.put<AddToCartController>(AddToCartController());
+                          controller.disableNetworkLoaderByDefault();
+                        },
+                      );
+                      controller.update();
+                    }
+                  },
+                  isLoading: controller.isEnableNetwork,
+                )
+              : SafeArea(
+                  top: false,
+                  bottom: false,
+                  child: SingleChildScrollView(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 20, vertical: 10),
+                    child: Column(
+                      children: [
+                        const SizedBox(height: Dimensions.space10),
+                        Container(
+                          height: size.height * 0.065,
+                          width: double.infinity,
+                          padding: const EdgeInsets.only(left: 20),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(
+                                Dimensions.offersCardRadius),
+                            gradient: const LinearGradient(
+                              colors: [
+                                ColorResources.offerFirstColor,
+                                ColorResources.offerNineColor,
+                                ColorResources.offerSixColor,
+                              ],
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
+                            ),
                           ),
-                        );
-                      },
-                      child: Column(
-                        key: ValueKey<int>(controller.currentIndex),
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              AddToCartController.texts[controller.currentIndex]
-                                  ['title']!,
-                              style: mediumLarge.copyWith(
-                                color: ColorResources.conceptTextColor,
+                          child: AnimatedSwitcher(
+                            duration: const Duration(milliseconds: 400),
+                            transitionBuilder:
+                                (Widget child, Animation<double> animation) {
+                              return FadeTransition(
+                                opacity: animation,
+                                child: SlideTransition(
+                                  position: Tween<Offset>(
+                                    begin: const Offset(0.0, 0.2),
+                                    end: const Offset(0.0, 0.0),
+                                  ).animate(animation),
+                                  child: child,
+                                ),
+                              );
+                            },
+                            child: Column(
+                              key: ValueKey<int>(controller.currentIndex),
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Text(
+                                    AddToCartController
+                                            .texts[controller.currentIndex]
+                                        ['title']!,
+                                    style: mediumLarge.copyWith(
+                                      color: ColorResources.conceptTextColor,
+                                    ),
+                                  ),
+                                ),
+                                Text(
+                                  AddToCartController
+                                          .texts[controller.currentIndex]
+                                      ['subtitle']!,
+                                  style: dateTextStyle.copyWith(
+                                    color: ColorResources.conceptTextColor,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: Dimensions.space15),
+                        ListView.builder(
+                          itemCount: controller.productsImage.length,
+                          physics: const BouncingScrollPhysics(),
+                          shrinkWrap: true,
+                          itemBuilder: (context, index) {
+                            return Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 15,
+                                vertical: 15,
                               ),
-                            ),
-                          ),
-                          Text(
-                            AddToCartController.texts[controller.currentIndex]
-                                ['subtitle']!,
-                            style: dateTextStyle.copyWith(
-                              color: ColorResources.conceptTextColor,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: Dimensions.space15),
-                  ListView.builder(
-                    itemCount: controller.productsImage.length,
-                    physics: const BouncingScrollPhysics(),
-                    shrinkWrap: true,
-                    itemBuilder: (context, index) {
-                      return Container(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 15,
-                          vertical: 15,
-                        ),
-                        margin: const EdgeInsets.only(bottom: 17),
-                        decoration: BoxDecoration(
-                          color: ColorResources.cardBgColor,
-                          borderRadius: BorderRadius.circular(
-                            Dimensions.offersCardRadius,
-                          ),
-                          boxShadow: [
-                            BoxShadow(
-                              color:
-                                  ColorResources.borderColor.withOpacity(0.1),
-                              spreadRadius: 1,
-                              blurRadius: 2,
-                              offset: const Offset(0, 2),
-                            ),
-                          ],
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Container(
-                              height: size.height * 0.11,
-                              width: size.width * 0.22,
+                              margin: const EdgeInsets.only(bottom: 17),
                               decoration: BoxDecoration(
-                                border: Border.all(
-                                  color: ColorResources.offerSixColor,
-                                ),
+                                color: ColorResources.cardBgColor,
                                 borderRadius: BorderRadius.circular(
                                   Dimensions.offersCardRadius,
                                 ),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: ColorResources.borderColor
+                                        .withOpacity(0.1),
+                                    spreadRadius: 1,
+                                    blurRadius: 2,
+                                    offset: const Offset(0, 2),
+                                  ),
+                                ],
                               ),
-                              child: ClipRRect(
-                                borderRadius: BorderRadius.circular(
-                                  Dimensions.offersCardRadius,
-                                ),
-                                child: CachedCommonImage(
-                                  width: double.infinity,
-                                  networkImageUrl:
-                                      controller.productsImage[index],
-                                ),
-                              ),
-                            ),
-                            const SizedBox(width: Dimensions.space20),
-                            Expanded(
-                              child: Column(
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Row(
-                                    children: [
-                                      Expanded(
-                                        child: Text(
-                                          controller.productsName[index],
-                                          softWrap: true,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: mediumSmall.copyWith(),
-                                        ),
+                                  Container(
+                                    height: size.height * 0.11,
+                                    width: size.width * 0.22,
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                        color: ColorResources.offerSixColor,
                                       ),
-                                    ],
+                                      borderRadius: BorderRadius.circular(
+                                        Dimensions.offersCardRadius,
+                                      ),
+                                    ),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(
+                                        Dimensions.offersCardRadius,
+                                      ),
+                                      child: CachedCommonImage(
+                                        width: double.infinity,
+                                        networkImageUrl:
+                                            controller.productsImage[index],
+                                      ),
+                                    ),
                                   ),
-                                  Row(
-                                    children: [
-                                      Text(
-                                        LocalStrings.orderRupeesFirst,
-                                        style: boldSmall.copyWith(
-                                          color:
-                                              ColorResources.conceptTextColor,
+                                  const SizedBox(width: Dimensions.space20),
+                                  Expanded(
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Expanded(
+                                              child: Text(
+                                                controller.productsName[index],
+                                                softWrap: true,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: mediumSmall.copyWith(),
+                                              ),
+                                            ),
+                                          ],
                                         ),
-                                      ),
-                                      const SizedBox(width: Dimensions.space7),
-                                      Text(
-                                        LocalStrings.orderRupeesSecond,
-                                        style: boldSmall.copyWith(
-                                          color: ColorResources.borderColor,
-                                          decoration:
-                                              TextDecoration.lineThrough,
+                                        Row(
+                                          children: [
+                                            Text(
+                                              LocalStrings.orderRupeesFirst,
+                                              style: boldSmall.copyWith(
+                                                color: ColorResources
+                                                    .conceptTextColor,
+                                              ),
+                                            ),
+                                            const SizedBox(
+                                                width: Dimensions.space7),
+                                            Text(
+                                              LocalStrings.orderRupeesSecond,
+                                              style: boldSmall.copyWith(
+                                                color:
+                                                    ColorResources.borderColor,
+                                                decoration:
+                                                    TextDecoration.lineThrough,
+                                              ),
+                                            ),
+                                          ],
                                         ),
-                                      ),
-                                    ],
+                                        const SizedBox(
+                                            height: Dimensions.space15),
+                                        Row(
+                                          children: [
+                                            Text(
+                                              '${LocalStrings.quantity} ${LocalStrings.quantityFirst}',
+                                              style: boldSmall.copyWith(
+                                                color: ColorResources
+                                                    .conceptTextColor,
+                                              ),
+                                            ),
+                                            const SizedBox(
+                                                width: Dimensions.space20),
+                                            Text(
+                                              '${LocalStrings.size} ${LocalStrings.quantitySecond}',
+                                              style: boldSmall.copyWith(
+                                                color: ColorResources
+                                                    .conceptTextColor,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                        const SizedBox(
+                                            height: Dimensions.space5),
+                                        Text(
+                                          LocalStrings.deliveryDate,
+                                          style: boldSmall.copyWith(
+                                            color: ColorResources
+                                                .deliveryColorColor,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
                                   ),
-                                  const SizedBox(height: Dimensions.space15),
-                                  Row(
-                                    children: [
-                                      Text(
-                                        '${LocalStrings.quantity} ${LocalStrings.quantityFirst}',
-                                        style: boldSmall.copyWith(
+                                  GestureDetector(
+                                    onTap: () {
+                                      bottomSheetWidget(
+                                        controller.productsImage[index],
+                                        controller.productsName[index],
+                                        controller,
+                                        index,
+                                      );
+                                    },
+                                    child: Container(
+                                      height: 20,
+                                      width: 20,
+                                      decoration: const BoxDecoration(
+                                          shape: BoxShape.circle,
                                           color:
-                                              ColorResources.conceptTextColor,
-                                        ),
+                                              ColorResources.conceptTextColor),
+                                      child: const Icon(
+                                        Icons.close,
+                                        size: 15,
+                                        color: ColorResources.whiteColor,
                                       ),
-                                      const SizedBox(width: Dimensions.space20),
-                                      Text(
-                                        '${LocalStrings.size} ${LocalStrings.quantitySecond}',
-                                        style: boldSmall.copyWith(
-                                          color:
-                                              ColorResources.conceptTextColor,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                  const SizedBox(height: Dimensions.space5),
-                                  Text(
-                                    LocalStrings.deliveryDate,
-                                    style: boldSmall.copyWith(
-                                      color: ColorResources.deliveryColorColor,
                                     ),
                                   ),
                                 ],
                               ),
-                            ),
-                            GestureDetector(
-                              onTap: () {
-                                bottomSheetWidget(
-                                  controller.productsImage[index],
-                                );
-                              },
-                              child: Container(
-                                height: 20,
-                                width: 20,
-                                decoration: const BoxDecoration(
-                                    shape: BoxShape.circle,
-                                    color: ColorResources.conceptTextColor),
-                                child: const Icon(
-                                  Icons.close,
-                                  size: 15,
-                                  color: ColorResources.whiteColor,
+                            );
+                          },
+                        ),
+                        const SizedBox(height: Dimensions.space10),
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            LocalStrings.offersBenefits,
+                            style: semiBoldDefault.copyWith(),
+                          ),
+                        ),
+                        const SizedBox(height: Dimensions.space10),
+                        GestureDetector(
+                          onTap: () {
+                            AppAnalytics().actionTriggerLogs(
+                                eventName:
+                                LocalStrings.logAddCartApplyCouponClick,
+                                index: 4);
+                          },
+                          child: Container(
+                            height: size.height * 0.065,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(
+                                  Dimensions.offersCardRadius),
+                              color: ColorResources.offerThirdTextColor,
+                              boxShadow: [
+                                BoxShadow(
+                                  color:
+                                      ColorResources.borderColor.withOpacity(0.3),
+                                  offset: const Offset(0, 5),
+                                  blurRadius:
+                                      5, // Adjust the blur radius as needed
                                 ),
-                              ),
+                              ],
                             ),
-                          ],
-                        ),
-                      );
-                    },
-                  ),
-                  const SizedBox(height: Dimensions.space10),
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      LocalStrings.offersBenefits,
-                      style: semiBoldDefault.copyWith(),
-                    ),
-                  ),
-                  const SizedBox(height: Dimensions.space10),
-                  Container(
-                    height: size.height * 0.065,
-                    decoration: BoxDecoration(
-                      borderRadius:
-                          BorderRadius.circular(Dimensions.offersCardRadius),
-                      color: ColorResources.offerThirdTextColor,
-                      boxShadow: [
-                        BoxShadow(
-                          color: ColorResources.borderColor.withOpacity(0.3),
-                          offset: const Offset(0, 5),
-                          blurRadius: 5, // Adjust the blur radius as needed
-                        ),
-                      ],
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 15),
-                      child: Center(
-                        child: Row(
-                          children: [
-                            Image.asset(
-                              MyImages.discountImage,
-                              color: ColorResources.offerColor,
-                              height: 25,
-                              width: 25,
-                            ),
-                            const SizedBox(width: Dimensions.space10),
-                            Text(
-                              LocalStrings.applyCoupon,
-                              style: boldLarge.copyWith(
-                                color: ColorResources.conceptTextColor,
-                              ),
-                            ),
-                            const Spacer(),
-                            GestureDetector(
-                              onTap: () {},
-                              child: Container(
-                                height: 30,
-                                width: 30,
-                                decoration: const BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: ColorResources.offerThirdTextColor,
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: ColorResources.borderColor,
-                                      spreadRadius: 1,
-                                      blurRadius: 5,
-                                      offset: Offset(0, 3),
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 15),
+                              child: Center(
+                                child: Row(
+                                  children: [
+                                    Image.asset(
+                                      MyImages.discountImage,
+                                      color: ColorResources.offerColor,
+                                      height: 25,
+                                      width: 25,
+                                    ),
+                                    const SizedBox(width: Dimensions.space10),
+                                    Text(
+                                      LocalStrings.applyCoupon,
+                                      style: boldLarge.copyWith(
+                                        color: ColorResources.conceptTextColor,
+                                      ),
+                                    ),
+                                    const Spacer(),
+                                    GestureDetector(
+                                      onTap: () {},
+                                      child: Container(
+                                        height: 30,
+                                        width: 30,
+                                        decoration: const BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          color:
+                                              ColorResources.offerThirdTextColor,
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color: ColorResources.borderColor,
+                                              spreadRadius: 1,
+                                              blurRadius: 5,
+                                              offset: Offset(0, 3),
+                                            ),
+                                          ],
+                                        ),
+                                        child: const Center(
+                                          child:
+                                              Icon(Icons.arrow_forward_rounded),
+                                        ),
+                                      ),
                                     ),
                                   ],
                                 ),
-                                child: const Center(
-                                  child: Icon(Icons.arrow_forward_rounded),
-                                ),
                               ),
                             ),
-                          ],
+                          ),
                         ),
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: Dimensions.space23),
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      LocalStrings.oderSummary,
-                      style: semiBoldDefault.copyWith(),
-                    ),
-                  ),
-                  const SizedBox(height: Dimensions.space10),
-                  Container(
-                    padding: const EdgeInsets.symmetric(vertical: 15),
-                    decoration: BoxDecoration(
-                      color: ColorResources.cardBgColor,
-                      borderRadius:
-                          BorderRadius.circular(Dimensions.offersCardRadius),
-                      boxShadow: [
-                        BoxShadow(
-                          color: ColorResources.borderColor.withOpacity(0.1),
-                          spreadRadius: 1,
-                          blurRadius: 2,
-                          offset: const Offset(0, 2),
+                        const SizedBox(height: Dimensions.space23),
+                        Align(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            LocalStrings.oderSummary,
+                            style: semiBoldDefault.copyWith(),
+                          ),
                         ),
+                        const SizedBox(height: Dimensions.space10),
+                        Container(
+                          padding: const EdgeInsets.symmetric(vertical: 15),
+                          decoration: BoxDecoration(
+                            color: ColorResources.cardBgColor,
+                            borderRadius: BorderRadius.circular(
+                                Dimensions.offersCardRadius),
+                            boxShadow: [
+                              BoxShadow(
+                                color:
+                                    ColorResources.borderColor.withOpacity(0.1),
+                                spreadRadius: 1,
+                                blurRadius: 2,
+                                offset: const Offset(0, 2),
+                              ),
+                            ],
+                          ),
+                          child: Column(
+                            children: [
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 15),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      LocalStrings.subtotal,
+                                      style: boldSmall.copyWith(
+                                          color:
+                                              ColorResources.conceptTextColor),
+                                    ),
+                                    Text(
+                                      LocalStrings.orderRupeesFirst,
+                                      style: boldSmall.copyWith(
+                                          color:
+                                              ColorResources.conceptTextColor),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(height: Dimensions.space10),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 15),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      LocalStrings.shippingCharge,
+                                      style: boldSmall.copyWith(
+                                          color:
+                                              ColorResources.conceptTextColor),
+                                    ),
+                                    Text(
+                                      LocalStrings.free,
+                                      style: boldSmall.copyWith(
+                                          color: ColorResources
+                                              .deliveryColorColor),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(height: Dimensions.space10),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 15),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      LocalStrings.shippingInsurance,
+                                      style: boldSmall.copyWith(
+                                          color:
+                                              ColorResources.conceptTextColor),
+                                    ),
+                                    Text(
+                                      LocalStrings.free,
+                                      style: boldSmall.copyWith(
+                                          color: ColorResources
+                                              .deliveryColorColor),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(height: Dimensions.space10),
+                              const Divider(
+                                  color: ColorResources.whiteColor,
+                                  height: Dimensions.space10),
+                              const SizedBox(height: Dimensions.space10),
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 15),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      LocalStrings.grandTotal,
+                                      style: boldLarge.copyWith(
+                                          color:
+                                              ColorResources.conceptTextColor),
+                                    ),
+                                    Text(
+                                      LocalStrings.grandTotalPrice,
+                                      style: boldLarge.copyWith(
+                                          color:
+                                              ColorResources.conceptTextColor),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        SizedBox(height: size.height * 0.085),
                       ],
                     ),
-                    child: Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 15),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                LocalStrings.subtotal,
-                                style: boldSmall.copyWith(
-                                    color: ColorResources.conceptTextColor),
-                              ),
-                              Text(
-                                LocalStrings.orderRupeesFirst,
-                                style: boldSmall.copyWith(
-                                    color: ColorResources.conceptTextColor),
-                              ),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(height: Dimensions.space10),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 15),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                LocalStrings.shippingCharge,
-                                style: boldSmall.copyWith(
-                                    color: ColorResources.conceptTextColor),
-                              ),
-                              Text(
-                                LocalStrings.free,
-                                style: boldSmall.copyWith(
-                                    color: ColorResources.deliveryColorColor),
-                              ),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(height: Dimensions.space10),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 15),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                LocalStrings.shippingInsurance,
-                                style: boldSmall.copyWith(
-                                    color: ColorResources.conceptTextColor),
-                              ),
-                              Text(
-                                LocalStrings.free,
-                                style: boldSmall.copyWith(
-                                    color: ColorResources.deliveryColorColor),
-                              ),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(height: Dimensions.space10),
-                        const Divider(
-                            color: ColorResources.whiteColor,
-                            height: Dimensions.space10),
-                        const SizedBox(height: Dimensions.space10),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 15),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                LocalStrings.grandTotal,
-                                style: boldLarge.copyWith(
-                                    color: ColorResources.conceptTextColor),
-                              ),
-                              Text(
-                                LocalStrings.grandTotalPrice,
-                                style: boldLarge.copyWith(
-                                    color: ColorResources.conceptTextColor),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
                   ),
-                  SizedBox(height: size.height * 0.085),
-                ],
-              ),
-            ),
-          );
+                );
         },
       ),
     );
@@ -563,7 +634,8 @@ class _AddToCartScreenState extends State<AddToCartScreen> {
   }
 
   // Bottom sheet cancel cart items
-  bottomSheetWidget(String image) {
+  bottomSheetWidget(String image, String productName,
+      AddToCartController controller, int index) {
     final size = MediaQuery.of(context).size;
     return showModalBottomSheet(
       backgroundColor: ColorResources.cardBgColor,
@@ -629,7 +701,14 @@ class _AddToCartScreenState extends State<AddToCartScreen> {
                   Expanded(
                     child: GestureDetector(
                       onTap: () {
+                        controller.removeProduct(index);
                         Get.back();
+                        AppAnalytics().actionTriggerWithProductsLogs(
+                            eventName:
+                            LocalStrings.logAddCartReMoveProductClick,
+                            productName: productName,
+                            productImage: image,
+                            index: 4);
                       },
                       child: Container(
                         height: size.height * 0.055,

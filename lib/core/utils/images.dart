@@ -2,11 +2,18 @@ class MyImages {
   /// Asset image path
   static const String imagePath = 'assets/images/';
 
+  ///<<<---------------------------- Splash screen images ---------------------------->>>
+  static const String starsSplashBgImage = '${imagePath}stars_splash_bg.png';
+
   ///<<<---------------------------- Dashboard screen images ---------------------------->>>
   static const String dashboardIntroFirstImage =
       'https://images.pexels.com/photos/1395306/pexels-photo-1395306.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1';
   static const String dashboardIntroSecondImage =
       'https://images.pexels.com/photos/13325931/pexels-photo-13325931.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1';
+  static const String earingsCategories =
+      'https://shyamsundarco.com/images/online_jewellery/new/earring/2.jpg?v=29072024117';
+  static const String earings =
+      'https://i.pinimg.com/736x/50/dd/8b/50dd8b835c53aef3d0a1dbf972d22750.jpg';
   static const String dashboardIntroThirdImage =
       'https://images.pexels.com/photos/16030491/pexels-photo-16030491/free-photo-of-a-golden-dragon-pendant-with-a-silver-chain.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1';
   static const String dashboardIntroForeImage =
@@ -63,6 +70,8 @@ class MyImages {
       'https://encrypted-tbn0.gstatic.com/shopping?q=tbn:ANd9GcS4vVf0L_Weexyf3FMn-W2G1ZtIxl9dHmn-C3ggxdHOLMwU1bbfnu-dRQqw2outLOo0DuSDzpzUDDxft5gdWTrU82dQyVebsE-TlrgiiMklQskQc5iHgBUBAg';
 
   ///<<<---------------------------- Women categories screen images ---------------------------->>>
+  static const String forwordArrowImage =
+        '${imagePath}arrowios_forward_image.png';
   static const String ringsCategories =
       'https://upload.wikimedia.org/wikipedia/commons/b/b6/Ring_Ruby.jpg';
   static const String earringsCategories =
@@ -125,7 +134,8 @@ class MyImages {
   static const String digitalGoldImage = '${imagePath}digitel_gold_image.png';
 
   ///<<<---------------------------- Men categories screen images ---------------------------->>>
-
+  static const String menPandantsImage =
+      'https://www.jiomart.com/images/product/original/rv3icmjntl/fashion-frill-men-s-gold-necklace-triangle-arrow-head-pendant-mens-jewelry-gift-for-him-golden-chain-pendant-for-men-boys-product-images-rv3icmjntl-1-202206020629.jpg?im=Resize=(500,630)';
   static const String studsMenImage =
       'https://m.media-amazon.com/images/I/41Kn7fmKWxL._AC_UY1100_.jpg';
   static const String ringsMenImage =
@@ -174,6 +184,7 @@ class MyImages {
   static const String freeShippingImage = '${imagePath}free_shiping_image.png';
   static const String hallmarkImage = '${imagePath}hallmark_image.png';
   static const String certifiedImage = '${imagePath}certified_image.png';
+  static const String freeShipingImage = '${imagePath}free_shiping_image.png';
 
   ///<<<---------------------------- My Account screen images ---------------------------->>>
   static const String emailImage = '${imagePath}email_image.png';
@@ -187,4 +198,7 @@ class MyImages {
 
   ///<<<---------------------------- Reset Password screen images ---------------------------->>>
   static const String resetPasswordImage = '${imagePath}Reset password.png';
+
+  ///<<<---------------------------- Network Connectivity screen gif ---------------------------->>>
+  static const String noInternet = '${imagePath}no_internet.png';
 }

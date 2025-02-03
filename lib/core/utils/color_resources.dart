@@ -5,9 +5,14 @@ class ColorResources {
   static const Color scaffoldBackgroundColor = Color(0xFFffffff);
   static const Color activeTabColor = Color(0xff000000);
   static const Color blackColor = Color(0xff000000);
+  static const Color shimmerEffectHighlightColor = Color(0xFFF5F5F5);
+  static const Color shimmerEffectBaseColor = Color(0xFFE0E0E0);
   static const Color inactiveTabColor = Color(0xffaeaeae);
   static const Color iconColor = Color(0xFF3b3b3b);
+  static const Color splashFirstColor = Color(0xffE5733F);
+  static const Color splashSecondColor = Color(0xffF95D47);
   static const Color activeCardColor = Color(0xff27B8DA);
+  static const Color deliveryColor = Color(0xFF536DFE);
   static const Color inactiveCardColor = Color(0xFFF9F9F9);
   static const Color whiteColor = Color(0xFFFFFFFF);
   static const Color cardBgColor = Color(0xFFFAFAFA);

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:saltandGlitz/core/utils/local_strings.dart';
 import 'package:saltandGlitz/data/controller/bottom_bar/bottom_bar_controller.dart';
+import '../../../analytics/app_analytics.dart';
 import '../../../core/utils/images.dart';
 import '../../../local_storage/sqflite_local_storage.dart';
 
@@ -21,6 +22,8 @@ class DashboardController extends GetxController {
   final bottomBarController =
       Get.put<BottomBarController>(BottomBarController());
   bool isMenuOpen = false;
+  RxBool isEnableNetwork = false.obs;
+
   final List<String> giftsForText = [
     LocalStrings.giftsGraduate,
     LocalStrings.giftsHim,
@@ -162,9 +165,29 @@ class DashboardController extends GetxController {
     LocalStrings.alertline,
     LocalStrings.siteIndex,
   ];
+  enableNetworkHideLoader() {
+    if (isEnableNetwork.value == false) {
+      isEnableNetwork.value = true;
+    }
+    update();
+  }
 
+  disableNetworkLoaderByDefault() {
+    if (isEnableNetwork.value == true) {
+      isEnableNetwork.value = false;
+    }
+    update();
+  }
   void onPageChanged(int index, CarouselPageChangedReason changeReason) {
     currentIndex.value = index;
+    if (changeReason == CarouselPageChangedReason.manual) {
+      /// Analysis if users stay this product and show this products only this time workable this analysis
+      AppAnalytics().actionTriggerWithProductsLogs(
+          eventName: LocalStrings.logHomeBannerView,
+          productImage: imageUrls[index],
+          index: 0);
+    }
+    update();
   }
 
   void onPageChangedSolitaire(

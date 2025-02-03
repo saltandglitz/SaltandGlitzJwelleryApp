@@ -4,6 +4,7 @@ import '../../../core/utils/images.dart';
 import '../../../core/utils/local_strings.dart';
 
 class WishlistController extends GetxController {
+  RxBool isEnableNetwork = false.obs;
   List productsImage = [
     MyImages.ringsProductsImage,
     MyImages.earringsProductsImage,
@@ -39,6 +40,19 @@ class WishlistController extends GetxController {
     productsImage.removeAt(index);
     productsName.removeAt(index);
     productsPriceLst.removeAt(index);
+    update();
+  }
+  enableNetworkHideLoader() {
+    if (isEnableNetwork.value == false) {
+      isEnableNetwork.value = true;
+    }
+    update();
+  }
+
+  disableNetworkLoaderByDefault() {
+    if (isEnableNetwork.value == true) {
+      isEnableNetwork.value = false;
+    }
     update();
   }
 }

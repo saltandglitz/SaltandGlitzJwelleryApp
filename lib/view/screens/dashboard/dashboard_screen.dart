@@ -10,11 +10,14 @@ import 'package:saltandGlitz/data/controller/dashboard/dashboard_controller.dart
 import 'package:saltandGlitz/view/components/cached_image.dart';
 import 'package:saltandGlitz/view/components/common_button.dart';
 import 'package:saltandGlitz/view/components/common_textfield.dart';
-import 'package:video_player/video_player.dart';
-import 'package:visibility_detector/visibility_detector.dart';
+
+import '../../../analytics/app_analytics.dart';
 import '../../../core/utils/color_resources.dart';
 import '../../../data/controller/categories/categories_controller.dart';
+import '../../../main_controller.dart';
+import '../../../notification_services/notification_services.dart';
 import '../../components/app_bar_background.dart';
+import '../../components/network_connectivity_view.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -32,12 +35,21 @@ class _DashboardScreenState extends State<DashboardScreen>
   final categoriesController = Get.put<CategoriesController>(
     CategoriesController(),
   );
+  final mainController = Get.put<MainController>(MainController());
+
   /* *********************************************************************************************************** */
   // late VideoPlayerController _controller;
 
   @override
   void initState() {
     super.initState();
+    mainController.checkToAssignNetworkConnections();
+
+    /// Notification initialize
+    Get.putAsync(() => NotificationService().init());
+
+    AppAnalytics()
+        .actionTriggerLogs(eventName: LocalStrings.logHomeView, index: 0);
     dashboardController.byDefaultMenu();
     dashboardController.animationController = AnimationController(
       vsync: this,
@@ -153,7 +165,28 @@ class _DashboardScreenState extends State<DashboardScreen>
         child: GetBuilder(
           init: DashboardController(),
           builder: (controller) {
-            return GestureDetector(
+            return mainController.isNetworkConnection?.value == false
+                ? NetworkConnectivityView(
+              onTap: () async {
+                RxBool? isEnableNetwork = await mainController
+                    .checkToAssignNetworkConnections();
+
+                if (isEnableNetwork!.value == true) {
+                  controller.enableNetworkHideLoader();
+                  Future.delayed(
+                    const Duration(seconds: 3),
+                        () {
+                      Get.put<DashboardController>(
+                          DashboardController());
+                      controller.disableNetworkLoaderByDefault();
+                    },
+                  );
+                  controller.update();
+                }
+              },
+              isLoading: controller.isEnableNetwork,
+            )
+                :GestureDetector(
               onTap: () {
                 FocusManager.instance.primaryFocus!.unfocus();
               },
@@ -1067,6 +1100,8 @@ class _DashboardScreenState extends State<DashboardScreen>
 
   // Bottom sheet User product recently view
   bottomSheetWidget() {
+    AppAnalytics().actionTriggerLogs(
+        eventName: LocalStrings.logHomeRecentProductView, index: 0);
     WidgetsBinding.instance.addPostFrameCallback(
       (_) async {
         final size = MediaQuery.of(context).size;

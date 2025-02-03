@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:saltandGlitz/view/components/common_message_show.dart';
 
+import '../../../analytics/app_analytics.dart';
 import '../../../core/utils/local_strings.dart';
 import '../../../core/utils/validation.dart';
 
@@ -124,6 +125,25 @@ class EditProfileController extends GetxController {
     } else if (CommonValidation().isValidationEmpty(birthDay.text)) {
       showSnackBar(context: Get.context!, message: LocalStrings.enterBirthday);
     } else {
+      /// Analysis users edit profile
+      AppAnalytics().actionEditProfileAccount(
+        eventName: LocalStrings.editProfileSaveChanges,
+        firstName: firstName.text,
+        lastName: lastName.text,
+        mobileNo: mobileNumber.text,
+        email: email.text,
+        pinCode: pinCode.text,
+        genderSelection: selectedValue == 1
+            ? LocalStrings.female
+            : selectedValue == 2
+            ? LocalStrings.male
+            : LocalStrings.other,
+        birthday: birthDay.text,
+        anniversary: anniversary.text,
+        occupation: occupation.text,
+        spousBirthday: spouseBirthday.text,
+        index: 15,
+      );
       showToast(
           message: LocalStrings.saveChangesMessage, context: Get.context!);
     }

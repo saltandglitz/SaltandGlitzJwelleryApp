@@ -2,14 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:saltandGlitz/core/utils/dimensions.dart';
 import 'package:saltandGlitz/core/utils/images.dart';
+import '../../../analytics/app_analytics.dart';
 import '../../../core/route/route.dart';
 import '../../../core/utils/color_resources.dart';
 import '../../../core/utils/local_strings.dart';
 import '../../../core/utils/style.dart';
 import '../../../data/controller/categories/categories_controller.dart';
 import '../../../data/controller/collection/collection_controller.dart';
+import '../../../main_controller.dart';
 import '../../components/app_bar_background.dart';
 import '../../components/cached_image.dart';
+import '../../components/network_connectivity_view.dart';
 
 class CollectionScreen extends StatefulWidget {
   const CollectionScreen({super.key});
@@ -19,8 +22,20 @@ class CollectionScreen extends StatefulWidget {
 }
 
 class _CollectionScreenState extends State<CollectionScreen> {
+  final mainController = Get.put<MainController>(MainController());
+  final collectionController =
+      Get.put<CollectionController>(CollectionController());
   final categoriesController =
       Get.put<CategoriesController>(CategoriesController());
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    mainController.checkToAssignNetworkConnections();
+    AppAnalytics()
+        .actionTriggerLogs(eventName: LocalStrings.logCollectionView, index: 5);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -169,129 +184,196 @@ class _CollectionScreenState extends State<CollectionScreen> {
           ],
         ),
       ),
-      floatingActionButton: Container(
-        height: size.height * 0.070,
-        margin: const EdgeInsets.only(bottom: 70, left: 300),
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          boxShadow: [
-            BoxShadow(
-              color: ColorResources.borderColor.withOpacity(0.1),
-              spreadRadius: 1,
-              blurRadius: 2,
-              offset: const Offset(0, 2),
-            ),
-          ],
-          color: ColorResources.whatsappColor,
-        ),
-        child: const Center(
-          child: Image(
-            image: AssetImage(MyImages.whatsappImage),
-            height: 25,
-            color: ColorResources.whiteColor,
-          ),
-        ),
-      ),
-      body: Column(
-        children: [
-          CachedCommonImage(
-            height: size.height * 0.12,
-            width: double.infinity,
-            networkImageUrl: MyImages.rings,
-          ),
-          GetBuilder(
-            init: CollectionController(),
-            builder: (controller) {
-              // Calculate dynamic item width based on screen size
-              final double itemWidth =
-                  (size.width - Dimensions.space30) / 2; // Adjust for spacing
-              return Expanded(
-                child: ListView.builder(
-                  itemCount:
-                      (controller.collectionDataImageLst.length / 2).ceil(),
-                  physics: const BouncingScrollPhysics(),
-                  shrinkWrap: true,
-                  itemBuilder: (context, index) {
-                    final firstIndex = index * 2;
-                    final secondIndex = firstIndex + 1;
-                    return Column(
-                      children: [
-                        Row(
-                          children: [
-                            Expanded(
-                              child: SizedBox(
-                                width: itemWidth,
-                                child: Padding(
-                                  padding: const EdgeInsets.only(
-                                      right: 3, bottom: 10),
-                                  child: GestureDetector(
-                                    onTap: () {
-                                      // First index used stored data sqflite
-                                      controller.addProduct(
-                                        controller
-                                            .collectionDataImageLst[firstIndex],
-                                        controller
-                                            .collectionDataNameLst[firstIndex],
-                                        controller
-                                            .collectionCutOffPrice[firstIndex],
-                                        controller
-                                            .collectionTotalPrice[firstIndex],
-                                      );
-                                      Get.toNamed(RouteHelper.productScreen);
-                                    },
-                                    child: collectionItems(firstIndex),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            if (secondIndex <
-                                controller.collectionDataImageLst.length)
-                              Expanded(
-                                child: SizedBox(
-                                  width: itemWidth,
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(
-                                        left: 3, bottom: 10),
-                                    child: GestureDetector(
-                                      onTap: () {
-                                        // Second index used stored data sqflite
-                                        controller.addProduct(
-                                          controller.collectionDataImageLst[
-                                              secondIndex],
-                                          controller.collectionDataNameLst[
-                                              secondIndex],
-                                          controller.collectionCutOffPrice[
-                                              secondIndex],
-                                          controller.collectionTotalPrice[
-                                              secondIndex],
-                                        );
-                                        Get.toNamed(RouteHelper.productScreen);
-                                      },
-                                      child: collectionItems(secondIndex),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            if (secondIndex >=
-                                controller.collectionDataImageLst.length)
-                              // Placeholder to maintain spacing if only one item is present
-                              Flexible(
-                                child: SizedBox(width: itemWidth),
-                              ),
-                          ],
-                        ),
-                      ],
-                    );
-                  },
+      floatingActionButton: GetBuilder(
+          init: MainController(),
+          builder: (mainController) {
+            return GestureDetector(
+              onTap:mainController.isNetworkConnection?.value == false ? null: () {
+                AppAnalytics().actionTriggerLogs(
+                    eventName: LocalStrings.logCollectionInquiryCall, index: 5);
+              },
+              child: Container(
+                height: size.height * 0.070,
+                margin: const EdgeInsets.only(bottom: 70, left: 300),
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  boxShadow: [
+                    BoxShadow(
+                      color: ColorResources.borderColor.withOpacity(0.1),
+                      spreadRadius: 1,
+                      blurRadius: 2,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
+                  color:mainController.isNetworkConnection?.value == false ?ColorResources.conceptTextColor.withOpacity(0.3) : ColorResources.conceptTextColor,
                 ),
-              );
-            },
-          ),
-          SizedBox(
-            height: size.height * 0.085,
-          ),
-        ],
+                child: const Center(
+                    child: Icon(
+                      Icons.call,
+                      color: ColorResources.whiteColor,
+                    )),
+              ),
+            );
+          }
       ),
+      body: GetBuilder(
+          init: MainController(),
+          builder: (mainController) {
+            return mainController.isNetworkConnection?.value == false
+                ? NetworkConnectivityView(
+                    onTap: () async {
+                      RxBool? isEnableNetwork = await mainController
+                          .checkToAssignNetworkConnections();
+
+                      if (isEnableNetwork!.value == true) {
+                        collectionController.enableNetworkHideLoader();
+                        Future.delayed(
+                          const Duration(seconds: 3),
+                          () {
+                            Get.put<CategoriesController>(
+                                CategoriesController());
+                            collectionController
+                                .disableNetworkLoaderByDefault();
+                          },
+                        );
+                        collectionController.update();
+                      }
+                    },
+                    isLoading: collectionController.isEnableNetwork,
+                  )
+                : Column(
+                    children: [
+                      CachedCommonImage(
+                        height: size.height * 0.12,
+                        width: double.infinity,
+                        networkImageUrl: MyImages.rings,
+                      ),
+                      GetBuilder(
+                        init: CollectionController(),
+                        builder: (controller) {
+                          // Calculate dynamic item width based on screen size
+                          final double itemWidth =
+                              (size.width - Dimensions.space30) /
+                                  2; // Adjust for spacing
+                          return Expanded(
+                            child: ListView.builder(
+                              itemCount:
+                                  (controller.collectionDataImageLst.length / 2)
+                                      .ceil(),
+                              physics: const BouncingScrollPhysics(),
+                              shrinkWrap: true,
+                              itemBuilder: (context, index) {
+                                final firstIndex = index * 2;
+                                final secondIndex = firstIndex + 1;
+                                return Column(
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Expanded(
+                                          child: SizedBox(
+                                            width: itemWidth,
+                                            child: Padding(
+                                              padding: const EdgeInsets.only(
+                                                  right: 3, bottom: 10),
+                                              child: GestureDetector(
+                                                onTap: () {
+                                                  // First index used stored data sqflite
+                                                  controller.addProduct(
+                                                    controller
+                                                            .collectionDataImageLst[
+                                                        firstIndex],
+                                                    controller
+                                                            .collectionDataNameLst[
+                                                        firstIndex],
+                                                    controller
+                                                            .collectionCutOffPrice[
+                                                        firstIndex],
+                                                    controller
+                                                            .collectionTotalPrice[
+                                                        firstIndex],
+                                                  );
+                                                  Get.toNamed(
+                                                      RouteHelper.productScreen,arguments: [controller
+                                                      .collectionDataImageLst[
+                                                  firstIndex]]);
+
+                                                  /// Product screen seen product analysis log
+                                                  AppAnalytics()
+                                                      .actionTriggerWithProductsLogs(
+                                                    eventName:
+                                                    LocalStrings.logProductDetailView,
+                                                    productName: controller
+                                                        .collectionDataNameLst[
+                                                    index],
+                                                    productImage: controller
+                                                        .collectionDataImageLst[
+                                                    index],
+                                                    index: 6,
+                                                  );
+                                                },
+                                                child:
+                                                    collectionItems(firstIndex),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                        if (secondIndex <
+                                            controller
+                                                .collectionDataImageLst.length)
+                                          Expanded(
+                                            child: SizedBox(
+                                              width: itemWidth,
+                                              child: Padding(
+                                                padding: const EdgeInsets.only(
+                                                    left: 3, bottom: 10),
+                                                child: GestureDetector(
+                                                  onTap: () {
+                                                    // Second index used stored data sqflite
+                                                    controller.addProduct(
+                                                      controller
+                                                              .collectionDataImageLst[
+                                                          secondIndex],
+                                                      controller
+                                                              .collectionDataNameLst[
+                                                          secondIndex],
+                                                      controller
+                                                              .collectionCutOffPrice[
+                                                          secondIndex],
+                                                      controller
+                                                              .collectionTotalPrice[
+                                                          secondIndex],
+                                                    );
+                                                    Get.toNamed(RouteHelper
+                                                        .productScreen);
+                                                  },
+                                                  child: collectionItems(
+                                                      secondIndex),
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        if (secondIndex >=
+                                            controller
+                                                .collectionDataImageLst.length)
+                                          // Placeholder to maintain spacing if only one item is present
+                                          Flexible(
+                                            child: SizedBox(width: itemWidth),
+                                          ),
+                                      ],
+                                    ),
+                                  ],
+                                );
+                              },
+                            ),
+                          );
+                        },
+                      ),
+                      SizedBox(
+                        height: size.height * 0.085,
+                      ),
+                    ],
+                  );
+          }),
     );
   }
 

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
@@ -39,4 +41,20 @@ void showToast({required String message, required BuildContext context}) {
     textColor: Colors.white,
     backgroundColor: Colors.black26,
   );
+}
+/// <<< Error Massage Red color --------- >>>
+void printError(String text) {
+  if (Platform.isAndroid) {
+    debugPrint('\x1B[91m$text\x1B[0m');
+  } else {
+    debugPrint(text);
+  }
+}
+/// <<< Action Massage Blue Color --------- >>>
+void printAction(String text) {
+  if (Platform.isAndroid) {
+    debugPrint('\x1B[94m$text\x1B[0m');
+  } else {
+    debugPrint(text);
+  }
 }

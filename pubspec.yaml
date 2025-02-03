@@ -46,6 +46,25 @@ dependencies:
   path: ^1.8.0
   video_player: any
   visibility_detector: any
+  firebase_core: ^3.3.0
+  firebase_auth: ^5.1.4
+  google_sign_in: ^6.2.1
+  shared_preferences: ^2.3.2
+  nuts_activity_indicator: ^1.0.0
+  flutter_facebook_auth: ^7.0.1
+  firebase_analytics: ^11.3.0
+  firebase_messaging: ^15.1.1
+  flutter_local_notifications: ^17.2.2
+  app_settings: ^5.1.1
+  path_provider:
+  dio: ^4.0.6
+  shimmer: ^3.0.0
+  dio_cookie_manager:
+  cookie_jar:
+  flutter_spinkit:
+  flutter_easyloading:
+  get_storage:
+  connectivity_plus: ^6.1.1
 
 dev_dependencies:
   flutter_test:

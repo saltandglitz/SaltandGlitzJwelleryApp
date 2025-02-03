@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:saltandGlitz/core/utils/dimensions.dart';
 import 'package:saltandGlitz/core/utils/local_strings.dart';
 
+import '../../../analytics/app_analytics.dart';
 import '../../../core/utils/color_resources.dart';
 import '../../../core/utils/style.dart';
 import '../../../data/controller/collection_filter/collection_filter_controller.dart';
@@ -17,6 +18,14 @@ class CollectionFilterScreen extends StatefulWidget {
 }
 
 class _CollectionFilterScreenState extends State<CollectionFilterScreen> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    AppAnalytics().actionTriggerLogs(
+        eventName: LocalStrings.logCollectionFilterView, index: 7);
+  }
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -185,6 +194,10 @@ class _CollectionFilterScreenState extends State<CollectionFilterScreen> {
                     child: CommonButton(
                       onTap: () {
                         Get.back();
+                        /// Analytics set clear all filter products log
+                        AppAnalytics().actionTriggerLogs(
+                            eventName: LocalStrings.logCollectionClearAllFilter,
+                            index: 7);
                       },
                       height: size.height * 0.050,
                       buttonName: LocalStrings.clearAll,
@@ -199,6 +212,8 @@ class _CollectionFilterScreenState extends State<CollectionFilterScreen> {
                     child: CommonButton(
                       onTap: () {
                         Get.back();
+                        /// Final data to send in api database like :  Discount Ranges: {15-20%, Below 10%}, Weight Ranges: {2-5 g}, Material: {Gemstone, Solitaire},
+                        controller.logSelectedFilters();
                       },
                       height: size.height * 0.050,
                       buttonName: LocalStrings.applyFilters,

@@ -1,11 +1,22 @@
 class LocalStrings {
   static const String appName = "Salt and Glitz";
-
+  static const String baseUrl = "";
+  static const String apiKey = "";
+  ///<<<------------------- API ------------------->>>
+  static const String getBannerApi =
+      "https://saltandglitz-api.vercel.app/v1/banner/bannerGet";
+  static const String registerApi =
+      "https://saltandglitzapi-rkm5g.kinsta.app/api/users/register";
+  static const String womenCategoriesApi =
+      "https://saltandglitz-api.vercel.app/v1/category/categoryData";
+  static const String menCategoriesApi =
+      "https://saltandglitz-api.vercel.app/v1/category/categoryData/Male";
   ///<<<------------------- Dashboard Screen ------------------->>>
   static const String solitaire = "Solitaire";
   static const String hardwareSalt = "HardWare By Salt and Glitz";
   static const String shopNow = "Shop Now >";
   static const String shopBy = "Shop by Category";
+  static const String earings = "Earings";
   static const String brilliantDesign =
       "Brilliant design and unparalleled craftsmanship.";
   static const String newArrival = "New Arrivals";
@@ -126,6 +137,7 @@ class LocalStrings {
   static const String mangalsutra = "Mangalsutra";
   static const String mostBrowsed = "Most Browsed";
   static const String moreJewellery = "More Jewellery";
+  static const String solatnPostcards = 'Saltand Glitz Postcards';
   static const String shopGifts = "Shop For Gifts";
   static const String silverJewellery = "Silver Jewellery | Wedding Edit";
   static const String needHelp = "Need Help In Buying";
@@ -268,6 +280,8 @@ class LocalStrings {
   static const String purity = 'PURITY';
   static const String ktFirst = '14Kt';
   static const String ktSecond = '18Kt';
+  static const String makingCharg = 'Making Charg';
+  static const String chargFirst = 'Rs.10500/-';
   static const String sizeInches = 'Size 6.5 inches (customisable)';
   static const String deliveryCancellation = 'DELIVERY & CANCELLATION';
   static const String estimatedTime = 'ESTIMATED DELIVERY BY 27TH AUG 2024';
@@ -420,6 +434,8 @@ class LocalStrings {
   static const String enterConfirmPassword = 'Please enter Confirm Password';
   static const String validConfirmPassword = 'Please enter Match Password';
   static const String signupSuccessfully = 'Signup Successfully!';
+  static const String loginSuccessfully = 'Login Successfully!';
+
 
   ///<<<---------------------------- Edit profile Screen screen String ---------------------------->>>
   static const String myAccount = 'My Account';
@@ -491,6 +507,182 @@ class LocalStrings {
   static const String ifNotArriveEmail =
       'If it doesn’t arrive soon, check your spam folder or ';
   static const String sendEmailAgain = 'Sent the email again';
+  ///<<<---------------------------- Analysis log string ---------------------------->>>
+
+  static const String logGuestUser = 'Guest';
+
+  ///<<<---------------------------- Analysis dashboard screen log string ---------------------------->>>
+  static const String logHomeView = 'Home_View';
+  static const String logHomeBannerView = 'Home_Banner_Products_View';
+  static const String logHomeSolitaireView = 'Home_Solitaire_Products_View';
+  static const String logHomeGiftView = 'Home_Gifts_Products_View';
+  static const String logHomeRecentProductView = 'Recent_Products_View';
+
+  ///<<<---------------------------- Analysis categories screen log string ---------------------------->>>
+  static const String logCategories = 'Categories_View';
+  static const String logCategoriesWomenView = 'Categories_Women_View';
+  static const String logCategoriesMenView = 'Categories_Men_View';
+
+  ///<<<---------------------------- Analysis women categories screen log string ---------------------------->>>
+  static const String logCategoriesWomenShopStyleView =
+      'Women_Shop_By_Style_View';
+  static const String logCategoriesWomenShopByPriceView =
+      'Women_Shop_By_Price_View';
+  static const String logCategoriesWomenMostBrowsedView =
+      'Women_Most_Browsed_View';
+  static const String logCategoriesWomenSilverJewelleryView =
+      'Women_Silver_Wedding_Jewellery_View';
+  static const String logCategoriesWomenPostCardsView = 'Women_PostCards_View';
+  static const String logCategoriesWomenClTvView = 'Women_CL_TV_View';
+  static const String logCategoriesWomenPopView = 'Women_Pop_View';
+  static const String logCategoriesWomenGoldExchangeView =
+      'Women_Gold_Exchange_Program_View';
+  static const String logCategoriesWomenDigitalGoldView =
+      'Women_Digital_Gold_View';
+
+  ///<<<---------------------------- Analysis men categories screen log string ---------------------------->>>
+  static const String logCategoriesMenShopStyleView = 'Men_Shop_By_Style_View';
+  static const String logCategoriesMenShopByPriceView =
+      'Men_Shop_By_Price_View';
+  static const String logCategoriesMenMostBrowsedView = 'Men_Most_Browsed_View';
+  static const String logCategoriesMenSilverJewelleryView =
+      'Men_Silver_Wedding_Jewellery_View';
+  static const String logCategoriesMenPostCardsView = 'Men_PostCards_View';
+  static const String logCategoriesMenClTvView = 'Men_CL_TV_View';
+  static const String logCategoriesMenPopView = 'Men_Pop_View';
+  static const String logCategoriesMenGoldExchangeView =
+      'Men_Gold_Exchange_Program_View';
+  static const String logCategoriesMenDigitalGoldView = 'Men_Digital_Gold_View';
+
+  ///<<<---------------------------- Analysis collections screen log string ---------------------------->>>
+  static const String logCollectionView = 'Collection_Products_View';
+  static const String logCollectionProductFavorite = 'Product_Favorite_Click';
+  static const String logCollectionProductUnFavorite =
+      'Product_UnFavorite_Click';
+  static const String logCollectionInquiryCall = 'Inquiry_Call_Click';
+  static const String logCollectionSortProduct = 'Sort_Products_Click';
+  static const String logCollectionAddCart = 'Product_Add_Cart_Click';
+
+  ///<<<---------------------------- Analysis wishlist screen log string ---------------------------->>>
+  static const String logWishList = 'Wishlist_View';
+  static const String logWishListWhatsappClick = 'Wishlist_Whatsapp_Click';
+  static const String logWishListCallClick = 'Wishlist_Call_Click';
+  static const String logWishListChatClick = 'Wishlist_Chat_Click';
+  static const String logWishListRemoveProduct = 'Wishlist_Remove_Product';
+  static const String logWishListMoveCartProduct = 'Wishlist_Move_Cart_Product';
+  static const String logWishListShareProduct = 'Wishlist_Share_Product';
+
+  ///<<<---------------------------- Analysis collection filter screen log string ---------------------------->>>
+  static const String logCollectionFilterView = 'Collection_Filter_View';
+  static const String logCollectionClearAllFilter = 'Clear_All_Filter';
+  static const String logCollectionProductFilter = 'Product_Filter';
+
+  ///<<<---------------------------- Analysis product screen log string ---------------------------->>>
+  static const String logProductDetailView = 'Product_Detail_View';
+  static const String logProductSearch = 'Search_Product';
+  static const String logProductAngleView = 'Product_Angle_View';
+  static const String logProductFavoriteClick = 'Product_Favorite_Click';
+  static const String logProductUnFavoriteClick = 'Product_UnFavorite_Click';
+  static const String logProductPriceBreakupClick =
+      'Product_Price_Breakup_View_Click';
+  static const String logProductSpecialOfferClick =
+      'Product_Special_Offer_View_Click';
+  static const String logProductCouponCodeApplyClick =
+      'Product_Coupon_Code_Apply_Click';
+  static const String logProductProductTypeSelection = 'Product_Type_Selection';
+  static const String logProductSliver = 'Silver';
+  static const String logProductGold = 'Gold';
+  static const String logProductDeliveryCancellationClick =
+      'Product_Delivery_Cancellation_Click';
+  static const String logProductFacebookShare = 'Product_Facebook_Share';
+  static const String logProductWhatsappShare = 'Product_Whatsapp_Share';
+  static const String logProductTelegramShare = 'Product_Telegram_Share';
+  static const String logProductClipboardCopy = 'Product_Clipboard_Copy';
+  static const String logProductChatWithUs = 'Product_Chat_With_Us_Click';
+
+  ///<<<---------------------------- Analysis add cart screen log string ---------------------------->>>
+  static const String logAddCartView = 'Add_To_Cart_View';
+  static const String logAddCartWhatsappClick = 'Add_To_Cart_Whatsapp_Click';
+  static const String logAddCartMoveWishlistProductClick =
+      'Add_To_Cart_Move_Wishlist_Product_Click';
+  static const String logAddCartReMoveProductClick =
+      'Add_To_Cart_RemoveMove_Product_Click';
+  static const String logAddCartApplyCouponClick =
+      'Add_To_Cart_Apply_Coupon_Click';
+  static const String logAddCartCallClick = 'Add_To_Cart_Call_Click';
+  static const String logAddCartChatClick = 'Add_To_Cart_Chat_Click';
+  static const String logAddCartPlaceOrderClick =
+      'Add_To_Cart_Place_Order_Click';
+
+  ///<<<---------------------------- Analysis my account screen log string ---------------------------->>>
+  static const String logMyAccountView = 'My_Account_View';
+  static const String logMyAccountLoginClick = 'My_Account_Login_Button_Click';
+  static const String logMyAccountLogoutClick =
+      'My_Account_Logout_Button_Click';
+  static const String logMyAccountLogoutFacebookClick =
+      'My_Account_Logout_Facebook_Button_Click';
+  static const String logMyAccountLogoutGoogleClick =
+      'My_Account_Logout_Google_Button_Click';
+  static const String logMyAccountButtonClick = 'Button_Click';
+  static const String logMyAccountOfferLoginClick =
+      'My_Account_Offers_Purpose_Login_Click';
+  static const String logMyAccountCallClick = 'My_Account_Call_Us_Button_Click';
+  static const String logMyAccountChatClick = 'My_Account_Chat_Button_Click';
+  static const String logMyAccountWhatsappClick =
+      'My_Account_Whatsapp_Button_Click';
+  static const String logMyAccountEmailClick = 'My_Account_Email_Button_Click';
+  static const String logMyAccountCompleteProfile =
+      'My_Account_Complete_Profile_Click';
+  static const String logMyAccountViewAllOffer =
+      'My_Account_ViewAll_Offers_Click';
+  static const String logMyAccountReferralCodeCopy = 'Referral_Code_Copy';
+
+  ///<<<---------------------------- Analysis login screen log string ---------------------------->>>
+  static const String logLogInView = 'Log_In_View';
+  static const String logLogInButtonClick = 'Continue_Login_Button_Click';
+  static const String logLogInGoogleButtonClick =
+      'Login_Screen_Google_Login_Button_Click';
+  static const String logLogInFacebookButtonClick =
+      'Login_Screen_Facebook_Login_Button_Click';
+  static const String logLogInCreateAccountClick =
+      'Login_Screen_Create_Account_Click';
+  static const String logLogInTermsView = 'Login_Screen_Terms_Conditions_View';
+  static const String logLogInPrivacyPolicyView =
+      'Login_Screen_Privacy_Policy_View';
+
+  ///<<<---------------------------- Analysis create account screen log string ---------------------------->>>
+  static const String createNewAccountView = 'Create_New_Account_View';
+  static const String createNewAccountTermsView =
+      'Create_New_Account_Terms_Conditions_View';
+  static const String createNewAccountPrivacyPolicyView =
+      'Create_New_Account_Privacy_Policy_View';
+  static const String createNewAccountGoogleButtonClick =
+      'Create_New_Account_Google_Login_Button_Click';
+  static const String createNewAccountFacebookButtonClick =
+      'Create_New_Account_Facebook_Login_Button_Click';
+  static const String createNewAccountButtonClick =
+      'Create_New_Account_Button_Click';
+  static const String createNewAccountLoginClick =
+      'Create_New_Account_Login_View_Click';
+
+  ///<<<---------------------------- Analysis create account screen log string ---------------------------->>>
+  static const String editProfileView = 'Edit_Profile_View';
+  static const String editProfileWhatsappClick = 'Edit_Profile_Whatsapp_Click';
+  static const String editProfileSaveChanges = 'Edit_Profile_Save_Changes';
+  static const String editProfileVerifyEmail =
+      'Edit_Profile_Verify_Email_Click';
+  static const String editProfileAddEventClick =
+      'Edit_Profile_Add_Events_Click';
+  static const String editProfileTermConditionView =
+      'Edit_Profile_Term_Condition_View';
+  static const String editProfilePrivacyPolicyView =
+      'Edit_Profile_Privacy_Policy_View';
+  ///<<<---------------------------- Network connectivity screen log string ---------------------------->>>
+  static const String noDetectInternet =
+      "Oops! You're offline.\nNo network detected! Make sure you're connected to the internet.";
+  static const String enableInternet =
+      "No network detected!\nMake sure you're Enable internet";
+  static const String retry = "Retry";
 }
 
 class AppFonts {

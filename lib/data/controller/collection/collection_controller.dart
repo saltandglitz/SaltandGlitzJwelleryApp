@@ -3,11 +3,13 @@ import 'package:get/get_rx/get_rx.dart';
 import 'package:saltandGlitz/core/utils/images.dart';
 import 'package:saltandGlitz/core/utils/local_strings.dart';
 
+import '../../../analytics/app_analytics.dart';
 import '../../../local_storage/sqflite_local_storage.dart';
 
 class CollectionController extends GetxController {
   var currentIndex = (-1).obs;
   var favoriteStatus = <bool>[];
+  RxBool isEnableNetwork = false.obs;
 
   // Sort collection data
   List sortProductsLst = [
@@ -97,9 +99,37 @@ class CollectionController extends GetxController {
     super.onInit();
     favoriteStatus = List.generate(collectionDataImageLst.length, (_) => false);
   }
+  enableNetworkHideLoader() {
+    if (isEnableNetwork.value == false) {
+      isEnableNetwork.value = true;
+    }
+    update();
+  }
 
+  disableNetworkLoaderByDefault() {
+    if (isEnableNetwork.value == true) {
+      isEnableNetwork.value = false;
+    }
+    update();
+  }
+  /// Products Favorites & UnFavorites set
   void toggleFavorite(int index) {
     favoriteStatus[index] = !favoriteStatus[index];
+    if (favoriteStatus[index] == false) {
+      /// If products users favorites set then work this analysis
+      AppAnalytics().actionTriggerWithProductsLogs(
+          eventName: LocalStrings.logCollectionProductUnFavorite,
+          productName: collectionDataNameLst[index],
+          productImage: collectionDataImageLst[index],
+          index: 5);
+    } else {
+      /// If products users UnFavorites set then work this analysis
+      AppAnalytics().actionTriggerWithProductsLogs(
+          eventName: LocalStrings.logCollectionProductFavorite,
+          productName: collectionDataNameLst[index],
+          productImage: collectionDataImageLst[index],
+          index: 5);
+    }
     update(); // Notify listeners
   }
 
@@ -110,10 +140,18 @@ class CollectionController extends GetxController {
   // Sort selecting item
   sortCurrentIndex(int index) {
     currentIndex.value = index;
+
+    if (currentIndex.value == index) {
+      // sortProductsLst[index];
+      AppAnalytics().actionTriggerWithProductsLogs(
+        eventName: LocalStrings.logCollectionSortProduct,
+        productFilter: sortProductsLst[index],
+      );
+    }
     update();
   }
 
-  // Sqflite database using recently stored products
+  /// Sqlite database using recently stored products
   void addProduct(
       String image, String name, String totalCost, String cutoffCost) async {
     Map<String, dynamic> row = {
@@ -127,16 +165,17 @@ class CollectionController extends GetxController {
 
     // Check if the product already exists
     List<Map<String, dynamic>> existingProducts =
-        await dbHelper.queryRowsByName(
-            image: image,
-            name: name,
-            totalCost: totalCost,
-            cutoffCost: cutoffCost);
+    await dbHelper.queryRowsByName(
+      image: image,
+      name: name,
+      totalCost: totalCost,
+      cutoffCost: cutoffCost,
+    );
 
     if (existingProducts.isNotEmpty) {
       // Update the existing product
       row[DatabaseHelper.columnId] =
-          existingProducts.first[DatabaseHelper.columnId];
+      existingProducts.first[DatabaseHelper.columnId];
       await dbHelper.update(row);
     } else {
       // Insert the new product

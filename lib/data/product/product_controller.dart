@@ -2,10 +2,11 @@ import 'package:carousel_slider/carousel_controller.dart';
 import 'package:carousel_slider/carousel_options.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
-import 'package:saltandGlitz/core/utils/color_resources.dart';
-import 'package:saltandGlitz/core/utils/local_strings.dart';
 
+import '../../analytics/app_analytics.dart';
+import '../../core/utils/color_resources.dart';
 import '../../core/utils/images.dart';
+import '../../core/utils/local_strings.dart';
 
 class ProductController extends GetxController {
   var currentIndex = 0.obs;
@@ -13,15 +14,12 @@ class ProductController extends GetxController {
   var ktCurrentIndex = (0).obs;
   bool isFavorites = false;
   final CarouselController carouselController =
-      CarouselController(); // Add CarouselController
+  CarouselController(); // Add CarouselController
 
   TextEditingController search = TextEditingController();
   TextEditingController pincode = TextEditingController();
-  final List<String> imageUrls = [
-    MyImages.ringOneImage,
-    MyImages.ringOneImage,
-    MyImages.ringOneImage,
-    MyImages.ringOneImage,
+  String productImage='';
+  List<String> imageUrls = [
   ];
   List<Color> colorLst = [
     ColorResources.offerNineColor,
@@ -60,14 +58,14 @@ class ProductController extends GetxController {
   List breakupItemLst = [
     LocalStrings.goldText,
     LocalStrings.diamond,
-    LocalStrings.makingCharge,
+    LocalStrings.makingCharg,
     LocalStrings.gst,
     LocalStrings.totalText,
   ];
   List breakupItemPriceLst = [
     LocalStrings.goldPrice,
     LocalStrings.diamondPrice,
-    LocalStrings.chargeFirst,
+    LocalStrings.chargFirst,
     LocalStrings.gstPrice,
     LocalStrings.totalPrice,
   ];
@@ -75,7 +73,7 @@ class ProductController extends GetxController {
     MyImages.buyBackImage,
     MyImages.exchangeImage,
     MyImages.returnImage,
-    MyImages.freeShippingImage,
+    MyImages.freeShipingImage,
     MyImages.hallmarkImage,
     MyImages.certifiedImage,
   ];
@@ -87,9 +85,49 @@ class ProductController extends GetxController {
     LocalStrings.hallmarked,
     LocalStrings.certified,
   ];
+  RxBool isEnableNetwork = false.obs;
 
+  @override
+  void onInit() {
+    // TODO: implement onInit
+    super.onInit();
+    if (Get.arguments != null) {
+      /// Previous screen to get image data
+      productImage=Get.arguments[0];
+      /// Stored get image
+      imageUrls=[
+        productImage,
+        productImage,
+        productImage,
+        productImage
+      ];
+    }
+  }
+  enableNetworkHideLoader() {
+    if (isEnableNetwork.value == false) {
+      isEnableNetwork.value = true;
+    }
+    update();
+  }
+
+  disableNetworkLoaderByDefault() {
+    if (isEnableNetwork.value == true) {
+      isEnableNetwork.value = false;
+    }
+    update();
+  }
   void onPageChanged(int index, CarouselPageChangedReason changeReason) {
     currentIndex.value = index;
+
+    /// Particular Product angle view analysis log
+    if (changeReason == CarouselPageChangedReason.manual) {
+      /// Product name now static but when integration dynamic data set product name dynamic
+      AppAnalytics().actionTriggerWithProductsLogs(
+          eventName: LocalStrings.logProductAngleView,
+          productImage: imageUrls[index],
+          productName: LocalStrings.goldenRing,
+          index: 6);
+    }
   }
 
   void goToPage(int index) {
@@ -98,16 +136,56 @@ class ProductController extends GetxController {
 
   void isFavoritesMethod() {
     isFavorites = !isFavorites;
+    if (isFavorites == false) {
+      /// Product name now static but when integration dynamic data set product name dynamic
+      AppAnalytics().actionTriggerWithProductsLogs(
+          eventName: LocalStrings.logProductUnFavoriteClick,
+          productName: LocalStrings.goldenRing,
+          productImage: imageUrls[0],
+          index: 6);
+    } else {
+      /// Product name now static but when integration dynamic data set product name dynamic
+      AppAnalytics().actionTriggerWithProductsLogs(
+          eventName: LocalStrings.logProductFavoriteClick,
+          productName: LocalStrings.goldenRing,
+          productImage: imageUrls[0],
+          index: 6);
+    }
     update();
   }
 
   void colorSelectionJewellery(int index) {
     colorCurrentIndex.value = index;
+    if (colorCurrentIndex.value == 1) {
+      /// Product name now static but when integration dynamic data set product name dynamic
+      AppAnalytics().actionTriggerWithProductsLogs(
+          eventName:
+          "${LocalStrings.logProductSliver}_${LocalStrings.logProductProductTypeSelection}",
+          productName: LocalStrings.goldenRing,
+          productImage: imageUrls[0],
+          index: 6);
+    } else if (colorCurrentIndex.value == 2) {
+      /// Product name now static but when integration dynamic data set product name dynamic
+      AppAnalytics().actionTriggerWithProductsLogs(
+          eventName:
+          "${LocalStrings.logProductGold}_${LocalStrings.logProductProductTypeSelection}",
+          productName: LocalStrings.goldenRing,
+          productImage: imageUrls[0],
+          index: 6);
+    }
     update();
   }
 
   void ktSelectionJewellery(int index) {
     ktCurrentIndex.value = index;
+
+    /// Product name now static but when integration dynamic data set product name dynamic
+    AppAnalytics().actionTriggerWithProductsLogs(
+        eventName:
+        "${ctLst[index] == '18Kt' ? 'Eighteen_Kt' : 'Fourteen_Kt'}_${LocalStrings.logProductProductTypeSelection}",
+        productName: LocalStrings.goldenRing,
+        productImage: imageUrls[0],
+        index: 6);
     update();
   }
 

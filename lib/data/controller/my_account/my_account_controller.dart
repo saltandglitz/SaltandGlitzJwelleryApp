@@ -3,10 +3,14 @@ import 'package:get/get.dart';
 import 'package:saltandGlitz/core/utils/color_resources.dart';
 import 'package:saltandGlitz/core/utils/local_strings.dart';
 
+import '../../../local_storage/pref_manager.dart';
+
 class MyAccountController extends GetxController {
   late AnimationController animationController;
   late Animation<Color?> borderColorAnimation;
   double profileCompleteProgress = 0.6;
+  String userLoginType = '';
+  RxBool isEnableNetwork = false.obs;
   List accountServiceTitleLst = [
     LocalStrings.orders,
     LocalStrings.addCart,
@@ -58,4 +62,21 @@ class MyAccountController extends GetxController {
     LocalStrings.referralCodeSecond,
     LocalStrings.referralCodeFirst,
   ];
+  showLogInType() {
+    userLoginType = PrefManager.getString('loginType') ?? '';
+    update();
+  }
+  enableNetworkHideLoader() {
+    if (isEnableNetwork.value == false) {
+      isEnableNetwork.value = true;
+    }
+    update();
+  }
+
+  disableNetworkLoaderByDefault() {
+    if (isEnableNetwork.value == true) {
+      isEnableNetwork.value = false;
+    }
+    update();
+  }
 }

@@ -1,6 +1,8 @@
 import 'package:get/get.dart';
 import 'package:saltandGlitz/core/utils/local_strings.dart';
 
+import '../../../analytics/app_analytics.dart';
+
 class CollectionFilterController extends GetxController {
   var selectedCategory = 0.obs;
   var selectedFilters = <String>[].obs;
@@ -19,7 +21,33 @@ class CollectionFilterController extends GetxController {
     }
     update();
   }
+  /// Get filter data key & value list of model type
+  String getFormattedFilters() {
+    var formattedFilters = <String, List<String>>{};
+    for (var category in categories) {
+      var filtersList = filters[category] ?? [];
+      var selected = filtersList
+          .where((filter) => selectedFilters.contains(filter))
+          .toList();
+      if (selected.isNotEmpty) {
+        formattedFilters[category] = selected;
+      }
+    }
+    return formattedFilters.entries.map((entry) {
+      var category = entry.key;
+      var values = entry.value.join(', ');
+      return '$category: {$values}';
+    }).join(', ');
+  }
+  void logSelectedFilters() {
+    print("Selected Filters: ${getFormattedFilters()}");
 
+    /// Whole filter product set analysis product
+    AppAnalytics().actionTriggerWithProductsLogs(
+        eventName: LocalStrings.logCollectionProductFilter,
+        productFilter: getFormattedFilters(),
+        index: 7);
+  }
 // Clear all selected filter
   void clearAllFilters() {
     selectedFilters.clear();

@@ -7,6 +7,7 @@ import 'package:saltandGlitz/core/utils/local_strings.dart';
 import 'package:saltandGlitz/data/controller/edit_profile/edit_profile_controller.dart';
 import 'package:saltandGlitz/view/components/app_textfield.dart';
 
+import '../../../analytics/app_analytics.dart';
 import '../../../core/utils/color_resources.dart';
 import '../../../core/utils/dimensions.dart';
 import '../../../core/utils/images.dart';
@@ -22,6 +23,15 @@ class EditProfileScreen extends StatefulWidget {
 
 class _EditProfileScreenState extends State<EditProfileScreen> {
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    /// Analysis log edit profile view
+    AppAnalytics()
+        .actionTriggerLogs(eventName: LocalStrings.editProfileView, index: 15);
+  }
+
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return GetBuilder(
@@ -53,7 +63,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                     Padding(
                       padding: const EdgeInsets.only(right: 15),
                       child: GestureDetector(
-                        onTap: () {},
+                        onTap: () {
+                          /// Analysis log whatsapp click
+                          AppAnalytics().actionTriggerLogs(
+                              eventName: LocalStrings.editProfileWhatsappClick,
+                              index: 15);
+                        },
                         child: Image.asset(
                           MyImages.whatsappImage,
                           height: size.height * 0.055,
@@ -483,12 +498,21 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           ),
                         ),
                         const SizedBox(height: Dimensions.space25),
-                        Align(
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            LocalStrings.addMore,
-                            style: regularDefault.copyWith(
-                                color: ColorResources.offerColor),
+                        GestureDetector(
+                          onTap: () {
+                            /// Analysis log edit profile add more events
+                            AppAnalytics().actionTriggerLogs(
+                                eventName:
+                                    LocalStrings.editProfileAddEventClick,
+                                index: 15);
+                          },
+                          child: Align(
+                            alignment: Alignment.centerLeft,
+                            child: Text(
+                              LocalStrings.addMore,
+                              style: regularDefault.copyWith(
+                                  color: ColorResources.offerColor),
+                            ),
                           ),
                         ),
                         const SizedBox(height: Dimensions.space25),
@@ -504,7 +528,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                 TextSpan(
                                   text: LocalStrings.tAndC,
                                   recognizer: TapGestureRecognizer()
-                                    ..onTap = () {},
+                                    ..onTap = () {
+                                      /// Analysis log edit profile Term & Condition
+                                      AppAnalytics().actionTriggerLogs(
+                                          eventName: LocalStrings
+                                              .editProfileTermConditionView,
+                                          index: 15);
+                                    },
                                   style: mediumDefault.copyWith(
                                       color: ColorResources.offerColor),
                                 ),
@@ -516,7 +546,13 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                 TextSpan(
                                   text: "${LocalStrings.privacyPolicy}.",
                                   recognizer: TapGestureRecognizer()
-                                    ..onTap = () {},
+                                    ..onTap = () {
+                                      /// Analysis log edit profile privacy policy.
+                                      AppAnalytics().actionTriggerLogs(
+                                          eventName: LocalStrings
+                                              .editProfilePrivacyPolicyView,
+                                          index: 15);
+                                    },
                                   style: mediumDefault.copyWith(
                                       color: ColorResources.offerColor),
                                 ),
@@ -696,7 +732,12 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       ),
                       const SizedBox(height: Dimensions.space60),
                       GestureDetector(
-                        onTap: () {},
+                        onTap: () {
+                          /// Analysis log edit profile verify email click
+                          AppAnalytics().actionTriggerLogs(
+                              eventName: LocalStrings.editProfileVerifyEmail,
+                              index: 15);
+                        },
                         child: Container(
                             height: size.height * 0.080,
                             decoration: const BoxDecoration(
