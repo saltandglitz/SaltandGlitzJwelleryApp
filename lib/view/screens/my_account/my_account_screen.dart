@@ -123,7 +123,7 @@ class _MyAccountScreenState extends State<MyAccountScreen>
                                                   CrossAxisAlignment.start,
                                               children: [
                                                 Text(
-                                                  "${LocalStrings.hi}, Pinakin",
+                                                  "${LocalStrings.hi}, ${PrefManager.getString('firstName') ?? ''} ${PrefManager.getString('lastName') ?? ''}",
                                                   style: mediumOverLarge.copyWith(
                                                       color: ColorResources
                                                           .inactiveCardColor),
@@ -718,11 +718,15 @@ class _MyAccountScreenState extends State<MyAccountScreen>
                                     // Whatsapp
                                     GestureDetector(
                                       onTap: () {
-                                        /// Analysis Whatsapp
-                                        AppAnalytics().actionTriggerLogs(
-                                            eventName: LocalStrings
-                                                .logMyAccountWhatsappClick,
-                                            index: 2);
+                                        //Todo : Only testing purpose set this method
+                                        PrefManager.setString(
+                                            'isLogin', '');
+                                        controller.update();
+                                        // /// Analysis Whatsapp
+                                        // AppAnalytics().actionTriggerLogs(
+                                        //     eventName: LocalStrings
+                                        //         .logMyAccountWhatsappClick,
+                                        //     index: 2);
                                       },
                                       child: Column(
                                         crossAxisAlignment:
@@ -818,8 +822,8 @@ class _MyAccountScreenState extends State<MyAccountScreen>
                                             if (PrefManager.getString(
                                                 'isLogin') ==
                                                 'yes') {
-                                              if (controller
-                                                  .userLoginType ==
+                                              if (PrefManager.getString(
+                                                  'loginType') ==
                                                   'Google') {
                                                 createAccountController
                                                     .signOutWithGoogle();
@@ -831,8 +835,8 @@ class _MyAccountScreenState extends State<MyAccountScreen>
                                                     index: 2);
 
                                                 print("Google");
-                                              } else if (controller
-                                                  .userLoginType ==
+                                              } else if (PrefManager.getString(
+                                                  'loginType') ==
                                                   'FaceBook') {
                                                 createAccountController
                                                     .signOutWithFacebook();

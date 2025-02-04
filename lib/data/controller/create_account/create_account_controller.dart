@@ -25,7 +25,7 @@ class CreateAccountController extends GetxController {
   TextEditingController passwordController = TextEditingController();
   TextEditingController confirmPasswordController = TextEditingController();
   final bottomBarController =
-  Get.put<BottomBarController>(BottomBarController());
+      Get.put<BottomBarController>(BottomBarController());
   final Color validColor = ColorResources.videoCallColor;
   final Color invalidColor = ColorResources.notValidateColor;
   bool hasEightChars = false;
@@ -111,12 +111,12 @@ class CreateAccountController extends GetxController {
 // Checked validation after move signup
   isValidation(
       {String? firstName,
-        String? lastName,
-        String? mobileNumber,
-        String? email,
-        String? password,
-        String? gender,
-        BuildContext? context}) {
+      String? lastName,
+      String? mobileNumber,
+      String? email,
+      String? password,
+      String? gender,
+      BuildContext? context}) {
     if (CommonValidation().isValidationEmpty(mobileController.text)) {
       showSnackBar(
           context: Get.context!, message: LocalStrings.enterMobileNumber);
@@ -192,7 +192,7 @@ class CreateAccountController extends GetxController {
     /// Check signIn account validate or not if valid continue process other wise closed this method
     if (googleSignInAccount != null) {
       final GoogleSignInAuthentication googleSignInAuthentication =
-      await googleSignInAccount.authentication;
+          await googleSignInAccount.authentication;
       final AuthCredential authCredential = GoogleAuthProvider.credential(
         idToken: googleSignInAuthentication.idToken,
         accessToken: googleSignInAuthentication.accessToken,
@@ -200,7 +200,7 @@ class CreateAccountController extends GetxController {
 
       try {
         final UserCredential userCredential =
-        await auth.signInWithCredential(authCredential);
+            await auth.signInWithCredential(authCredential);
         user = userCredential.user;
 
         if (user != null) {
@@ -230,14 +230,11 @@ class CreateAccountController extends GetxController {
           PrefManager.setString('phoneNumber', phoneNumber);
           PrefManager.setString('loginType', 'Google');
 
-          /// New account create time to back
-          if (screenType == "New Account") {
-            Get.back(result: true);
-            Get.back(result: true);
-          } else {
-            /// Login time back
-            Get.back(result: true);
-          }
+
+            //Todo : Off all navigation and move My account screen
+            Get.offAllNamed(RouteHelper.bottomBarScreen);
+            bottomBarController.selectedIndex = 2.obs;
+
 
           /// Show login message
           showToast(
@@ -272,9 +269,9 @@ class CreateAccountController extends GetxController {
     isLoading = true;
     update();
     final bottomBarController =
-    Get.put<BottomBarController>(BottomBarController());
+        Get.put<BottomBarController>(BottomBarController());
     final myAccountController =
-    Get.put<MyAccountController>(MyAccountController());
+        Get.put<MyAccountController>(MyAccountController());
     final GoogleSignIn googleSignIn = GoogleSignIn();
     try {
       /// Checked is web or not after sign Out google functionality
@@ -312,7 +309,7 @@ class CreateAccountController extends GetxController {
       if (result.status == LoginStatus.success) {
         final AccessToken accessToken = result.accessToken!;
         final OAuthCredential credential =
-        FacebookAuthProvider.credential(accessToken.tokenString);
+            FacebookAuthProvider.credential(accessToken.tokenString);
 
         await FirebaseAuth.instance.signInWithCredential(credential);
         final userData = await FacebookAuth.i.getUserData(
@@ -323,7 +320,7 @@ class CreateAccountController extends GetxController {
         List<String> nameParameter = userData['name'].toString().split(" ");
         String firstName = nameParameter.isNotEmpty ? nameParameter[0] : '';
         String lastName =
-        nameParameter.length > 1 ? nameParameter.sublist(1).join(' ') : '';
+            nameParameter.length > 1 ? nameParameter.sublist(1).join(' ') : '';
 
         /// Email data show
         String email = userData['email'];
@@ -343,14 +340,9 @@ class CreateAccountController extends GetxController {
         PrefManager.setString('loginType', 'FaceBook');
 
         /// New account create time to back
-        if (screenType == "New Account") {
-          Get.back(result: true);
-          Get.back(result: true);
-        } else {
-          /// Login time back
-          Get.back(result: true);
-        }
-
+        //Todo : Off all navigation and move My account screen
+        Get.offAllNamed(RouteHelper.bottomBarScreen);
+        bottomBarController.selectedIndex = 2.obs;
         /// Show login message
         showToast(
             message: LocalStrings.loginSuccessfully, context: Get.context!);
@@ -373,9 +365,9 @@ class CreateAccountController extends GetxController {
     isLoading = true;
     update();
     final bottomBarController =
-    Get.put<BottomBarController>(BottomBarController());
+        Get.put<BottomBarController>(BottomBarController());
     final myAccountController =
-    Get.put<MyAccountController>(MyAccountController());
+        Get.put<MyAccountController>(MyAccountController());
     try {
       // Sign out from Firebase
       await FirebaseAuth.instance.signOut();
@@ -406,15 +398,15 @@ class CreateAccountController extends GetxController {
 //Todo : Create new user account api method
   Future createNewUserAccountApiMethod(
       {String? firstName,
-        String? lastName,
-        String? mobileNumber,
-        String? email,
-        String? password,
-        String? gender,
-        BuildContext? context}) async {
+      String? lastName,
+      String? mobileNumber,
+      String? email,
+      String? password,
+      String? gender,
+      BuildContext? context}) async {
     try {
       final bottomBarController =
-      Get.put<BottomBarController>(BottomBarController());
+          Get.put<BottomBarController>(BottomBarController());
       isCreateUserAccount.value = true;
       Map<String, dynamic> params = {
         'firstName': firstName,
@@ -424,6 +416,7 @@ class CreateAccountController extends GetxController {
         'password': password,
         'gender': gender,
       };
+      print("Create_account : ${params}");
       Response response = await APIFunction().apiCall(
           apiName: LocalStrings.registerApi,
           context: context,
@@ -443,9 +436,6 @@ class CreateAccountController extends GetxController {
         Get.offAllNamed(RouteHelper.bottomBarScreen);
         bottomBarController.selectedIndex = 2.obs;
         showToast(context: Get.context!, message: response.data['message']);
-      } else if (response.statusCode == 400 && response.data['message'] == 'User already exists') {
-        // Handle the case where user already exists
-        showSnackBar(context: Get.context!, message: 'User already exists');
       } else {
         // Handle any other errors
         showSnackBar(context: Get.context!, message: response.data['message']);

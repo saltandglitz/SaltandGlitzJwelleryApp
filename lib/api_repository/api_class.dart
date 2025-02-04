@@ -103,7 +103,7 @@ class HttpUtil {
             switch (errCode) {
               case 400:
                 return ErrorEntity(
-                    code: errCode, message: "Request syntax error");
+                    code: errCode, message: "User already exists");
               case 401:
                 return ErrorEntity(code: errCode, message: "Permission denied");
               case 403:

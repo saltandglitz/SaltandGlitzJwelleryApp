@@ -9,7 +9,6 @@ class MyAccountController extends GetxController {
   late AnimationController animationController;
   late Animation<Color?> borderColorAnimation;
   double profileCompleteProgress = 0.6;
-  String userLoginType = '';
   RxBool isEnableNetwork = false.obs;
   List accountServiceTitleLst = [
     LocalStrings.orders,
@@ -62,10 +61,7 @@ class MyAccountController extends GetxController {
     LocalStrings.referralCodeSecond,
     LocalStrings.referralCodeFirst,
   ];
-  showLogInType() {
-    userLoginType = PrefManager.getString('loginType') ?? '';
-    update();
-  }
+
   enableNetworkHideLoader() {
     if (isEnableNetwork.value == false) {
       isEnableNetwork.value = true;

@@ -668,13 +668,45 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                                       )),
                                 ),
                                 const SizedBox(height: Dimensions.space25),
-                                CommonButton(
-                                  onTap: () {
-                                    createAccountController.isValidation();
+                                Obx(
+                                      () {
+                                    return CommonButton(
+                                      onTap: controller
+                                          .isCreateUserAccount.value ==
+                                          true
+                                          ? null
+                                          : () {
+                                        //Todo : First check all field fill after called users new account create api method
+                                        createAccountController.isValidation(
+                                            firstName: controller
+                                                .firstNameController.text,
+                                            lastName: controller
+                                                .lastNameController.text,
+                                            mobileNumber: controller
+                                                .mobileController.text,
+                                            email: controller
+                                                .emailController.text,
+                                            password: controller
+                                                .passwordController.text,
+                                            gender: controller
+                                                .genderSelectionName(),
+                                            context: context);
+                                      },
+                                      height: size.height * 0.065,
+                                      width: double.infinity,
+                                      child: controller
+                                          .isCreateUserAccount.value ==
+                                          true
+                                          ? const CircularProgressIndicator(
+                                          color: ColorResources.whiteColor)
+                                          : Text(
+                                        LocalStrings.signMe,
+                                        style: mediumLarge.copyWith(
+                                            color: ColorResources
+                                                .whiteColor),
+                                      ),
+                                    );
                                   },
-                                  height: size.height * 0.065,
-                                  width: double.infinity,
-                                  buttonName: LocalStrings.signMe,
                                 ),
                                 const SizedBox(height: Dimensions.space10),
                                 RichText(

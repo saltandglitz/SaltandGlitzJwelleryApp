@@ -6,7 +6,7 @@ class LocalStrings {
   static const String getBannerApi =
       "https://saltandglitz-api.vercel.app/v1/banner/bannerGet";
   static const String registerApi =
-      "https://saltandglitzapi-rkm5g.kinsta.app/api/users/register";
+      "https://saltandglitz-api.vercel.app/api/users/register";
   static const String womenCategoriesApi =
       "https://saltandglitz-api.vercel.app/v1/category/categoryData";
   static const String menCategoriesApi =
