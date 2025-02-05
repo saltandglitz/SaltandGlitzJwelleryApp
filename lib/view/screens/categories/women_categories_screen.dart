@@ -2,7 +2,6 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shimmer/shimmer.dart';
-
 import '../../../analytics/app_analytics.dart';
 import '../../../core/route/route.dart';
 import '../../../core/utils/color_resources.dart';
@@ -38,532 +37,472 @@ class _WomenCategoriesScreenState extends State<WomenCategoriesScreen> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return Scaffold(
+      backgroundColor: ColorResources.scaffoldBackgroundColor,
       body: GetBuilder(
-          init: MainController(),
-          builder: (mainController) {
-            return mainController.isNetworkConnection?.value == false
-                ? NetworkConnectivityView(
-                    onTap: () async {
-                      RxBool? isEnableNetwork = await mainController
-                          .checkToAssignNetworkConnections();
+        init: MainController(),
+        builder: (mainController) {
+          return mainController.isNetworkConnection?.value == false
+              ? NetworkConnectivityView(
+                  onTap: () async {
+                    RxBool? isEnableNetwork =
+                        await mainController.checkToAssignNetworkConnections();
 
-                      if (isEnableNetwork!.value == true) {
-                        categoryController.selectTab(1);
-                        categoryController.enableNetworkHideLoader();
-                        Future.delayed(
-                          const Duration(seconds: 3),
-                          () {
-                            Get.put<CategoriesController>(
-                                CategoriesController());
-                            categoryController.disableNetworkLoaderByDefault();
-                          },
-                        );
-                        categoryController.update();
-                      }
-                    },
-                    isLoading: categoryController.isEnableNetwork,
-                  )
-                : SingleChildScrollView(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 15, vertical: 15),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const SizedBox(height: Dimensions.space10),
-                        Align(
-                          alignment: Alignment.center,
-                          child: Text(LocalStrings.topCategories,
-                              style: semiBoldLarge.copyWith(
-                                  color: ColorResources.buttonColorDark
-                                      .withOpacity(0.7))),
+                    if (isEnableNetwork!.value == true) {
+                      categoryController.selectTab(1);
+                      categoryController.enableNetworkHideLoader();
+                      Future.delayed(
+                        const Duration(seconds: 3),
+                        () {
+                          Get.put<CategoriesController>(CategoriesController());
+                          categoryController.disableNetworkLoaderByDefault();
+                        },
+                      );
+                      categoryController.update();
+                    }
+                  },
+                  isLoading: categoryController.isEnableNetwork,
+                )
+              : SingleChildScrollView(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const SizedBox(height: Dimensions.space10),
+                      Align(
+                        alignment: Alignment.center,
+                        child: Text(
+                          LocalStrings.topCategories,
+                          style: semiBoldLarge.copyWith(
+                            color:
+                                ColorResources.buttonColorDark.withOpacity(0.7),
+                          ),
                         ),
-                        const SizedBox(height: Dimensions.space15),
-                        GetBuilder(
-                          init: CategoriesController(),
-                          builder: (controller) {
-                            // Calculate dynamic item width based on screen size
-                            final double itemWidth =
-                                (size.width - Dimensions.space30) /
-                                    2; // Adjust for spacing
+                      ),
+                      const SizedBox(height: Dimensions.space15),
+                      GetBuilder(
+                        init: CategoriesController(),
+                        builder: (controller) {
+                          // Calculate dynamic item width based on screen size
+                          final double itemWidth =
+                              (size.width - Dimensions.space30) /
+                                  2; // Adjust for spacing
 
-                            return ListView.builder(
-                              itemCount: controller.getCategoryList.isEmpty
-                                  ? (6 / 2).ceil()
-                                  : (controller.getCategoryList.length / 2)
-                                      .ceil(),
-                              physics: const NeverScrollableScrollPhysics(),
-                              shrinkWrap: true,
-                              itemBuilder: (context, rowIndex) {
-                                final firstIndex = rowIndex * 2;
-                                final secondIndex = firstIndex + 1;
+                          return ListView.builder(
+                            itemCount: controller.getCategoryList.isEmpty
+                                ? (6 / 2).ceil()
+                                : (controller.getCategoryList.length / 2)
+                                    .ceil(),
+                            physics: const NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            itemBuilder: (context, rowIndex) {
+                              final firstIndex = rowIndex * 2;
+                              final secondIndex = firstIndex + 1;
 
-                                return controller.getCategoryList.isEmpty
-                                    ? Row(
-                                        children: [
-                                          // First item
-                                          SizedBox(
-                                            width: itemWidth,
-                                            child: Padding(
-                                              padding: const EdgeInsets.only(
-                                                  right: 10),
-                                              child: buildCategoryItemShimmer(
-                                                  controller, firstIndex, size),
-                                            ),
+                              return controller.getCategoryList.isEmpty
+                                  ? Row(
+                                      children: [
+                                        // First item
+                                        SizedBox(
+                                          width: itemWidth,
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(
+                                                right: 10),
+                                            child: buildCategoryItemShimmer(
+                                                controller, firstIndex, size),
                                           ),
+                                        ),
 
-                                          SizedBox(
-                                            width: itemWidth,
-                                            child: Padding(
-                                              padding: const EdgeInsets.only(
-                                                  left: 10),
-                                              child: buildCategoryItemShimmer(
-                                                  controller,
-                                                  secondIndex,
-                                                  size),
-                                            ),
+                                        SizedBox(
+                                          width: itemWidth,
+                                          child: Padding(
+                                            padding:
+                                                const EdgeInsets.only(left: 10),
+                                            child: buildCategoryItemShimmer(
+                                                controller, secondIndex, size),
                                           ),
-                                        ],
-                                      )
-                                    : Column(
-                                        children: [
-                                          Row(
-                                            children: [
-                                              // First item
+                                        ),
+                                      ],
+                                    )
+                                  : Column(
+                                      children: [
+                                        Row(
+                                          children: [
+                                            // First item
+                                            SizedBox(
+                                              width: itemWidth,
+                                              child: Padding(
+                                                padding: const EdgeInsets.only(
+                                                    right: 10),
+                                                child: buildCategoryItem(
+                                                    controller,
+                                                    firstIndex,
+                                                    size),
+                                              ),
+                                            ),
+                                            if (secondIndex <
+                                                controller
+                                                    .getCategoryList.length)
                                               SizedBox(
                                                 width: itemWidth,
                                                 child: Padding(
                                                   padding:
                                                       const EdgeInsets.only(
-                                                          right: 10),
+                                                          left: 10),
                                                   child: buildCategoryItem(
                                                       controller,
-                                                      firstIndex,
+                                                      secondIndex,
                                                       size),
                                                 ),
                                               ),
-                                              if (secondIndex <
-                                                  controller
-                                                      .getCategoryList.length)
-                                                SizedBox(
-                                                  width: itemWidth,
-                                                  child: Padding(
-                                                    padding:
-                                                        const EdgeInsets.only(
-                                                            left: 10),
-                                                    child: buildCategoryItem(
-                                                        controller,
-                                                        secondIndex,
-                                                        size),
-                                                  ),
-                                                ),
-                                              if (secondIndex >=
-                                                  controller
-                                                      .getCategoryList.length)
-                                                // Placeholder to maintain spacing if only one item is present
-                                                Flexible(
-                                                  child: SizedBox(
-                                                      width: itemWidth),
-                                                ),
-                                            ],
-                                          ),
-                                          //Todo : If selected index value & expandedIndex value match this time show subitem view.
-                                          if (controller.expandedIndex.value ==
-                                                  firstIndex ||
-                                              controller.expandedIndex.value ==
-                                                  secondIndex)
-                                            buildExpandedContent(
-                                                controller,
-                                                controller.expandedIndex.value,
-                                                size),
-                                        ],
-                                      );
-                              },
-                            );
-                          },
+                                            if (secondIndex >=
+                                                controller
+                                                    .getCategoryList.length)
+                                              // Placeholder to maintain spacing if only one item is present
+                                              Flexible(
+                                                child:
+                                                    SizedBox(width: itemWidth),
+                                              ),
+                                          ],
+                                        ),
+                                        //Todo : If selected index value & expandedIndex value match this time show subitem view.
+                                        if (controller.expandedIndex.value ==
+                                                firstIndex ||
+                                            controller.expandedIndex.value ==
+                                                secondIndex)
+                                          buildExpandedContent(
+                                              controller,
+                                              controller.expandedIndex.value,
+                                              size),
+                                      ],
+                                    );
+                            },
+                          );
+                        },
+                      ),
+                      const SizedBox(height: Dimensions.space15),
+                      Align(
+                        alignment: Alignment.center,
+                        child: Text(
+                          LocalStrings.mostBrowsed,
+                          style: semiBoldLarge.copyWith(
+                            color:
+                                ColorResources.buttonColorDark.withOpacity(0.7),
+                          ),
                         ),
-                        const SizedBox(height: Dimensions.space15),
-                        Align(
-                          alignment: Alignment.center,
-                          child: Text(LocalStrings.mostBrowsed,
-                              style: semiBoldLarge.copyWith(
-                                  color: ColorResources.buttonColorDark
-                                      .withOpacity(0.7))),
-                        ),
-                        const SizedBox(height: Dimensions.space10),
-                        GetBuilder(
-                          init: CategoriesController(),
-                          builder: (controller) {
-                            // Calculate dynamic item width based on screen size
-                            final double itemWidth =
-                                (size.width - Dimensions.space30) /
-                                    2; // Adjust for spacing
-                            return ListView.builder(
-                              itemCount:
-                                  (controller.mostBrowsedImage.length / 2)
-                                      .ceil(),
-                              physics: const NeverScrollableScrollPhysics(),
-                              shrinkWrap: true,
-                              itemBuilder: (context, rowIndex) {
-                                final firstIndex = rowIndex * 2;
-                                final secondIndex = firstIndex + 1;
+                      ),
+                      const SizedBox(height: Dimensions.space10),
+                      GetBuilder(
+                        init: CategoriesController(),
+                        builder: (controller) {
+                          // Calculate dynamic item width based on screen size
+                          final double itemWidth =
+                              (size.width - Dimensions.space30) /
+                                  2; // Adjust for spacing
+                          return ListView.builder(
+                            itemCount:
+                                (controller.mostBrowsedImage.length / 2).ceil(),
+                            physics: const NeverScrollableScrollPhysics(),
+                            shrinkWrap: true,
+                            itemBuilder: (context, rowIndex) {
+                              final firstIndex = rowIndex * 2;
+                              final secondIndex = firstIndex + 1;
 
-                                return Column(
-                                  children: [
-                                    Row(
-                                      children: [
+                              return Column(
+                                children: [
+                                  Row(
+                                    children: [
+                                      // First item
+                                      Flexible(
+                                        child: SizedBox(
+                                          width: itemWidth,
+                                          child: mostBrowsedItem(
+                                              controller, firstIndex, size),
+                                        ),
+                                      ),
+                                      const SizedBox(width: Dimensions.space10),
+                                      if (secondIndex <
+                                          controller.mostBrowsedNamed.length)
+
                                         // First item
                                         Flexible(
                                           child: SizedBox(
                                             width: itemWidth,
                                             child: mostBrowsedItem(
-                                                controller, firstIndex, size),
+                                                controller, secondIndex, size),
                                           ),
                                         ),
-                                        const SizedBox(
-                                            width: Dimensions.space10),
-                                        if (secondIndex <
-                                            controller.mostBrowsedNamed.length)
-
-                                          // First item
-                                          Flexible(
-                                            child: SizedBox(
-                                              width: itemWidth,
-                                              child: mostBrowsedItem(controller,
-                                                  secondIndex, size),
-                                            ),
-                                          ),
-                                        if (secondIndex >=
-                                            controller.mostBrowsedImage.length)
-                                          // Placeholder to maintain spacing if only one item is present
-                                          Flexible(
-                                            child: SizedBox(width: itemWidth),
-                                          ),
-                                      ],
-                                    ),
-                                    if (controller.browsedIndex.value ==
-                                            firstIndex ||
-                                        controller.browsedIndex.value ==
-                                            secondIndex)
-                                      mostBrowsedExpandedContent(
-                                          controller,
-                                          controller.browsedIndex.value,
-                                          size,
-                                          controller.browsedIndex.value ==
-                                                  secondIndex
-                                              ? LocalStrings.shopGifts
-                                              : ''),
-                                  ],
-                                );
-                              },
-                            );
-                          },
-                        ),
-                        const SizedBox(height: Dimensions.space5),
-                        Align(
-                          alignment: Alignment.center,
-                          child: Text(LocalStrings.silverJewellery,
-                              style: semiBoldLarge.copyWith(
-                                  color: ColorResources.buttonColorDark
-                                      .withOpacity(0.7))),
-                        ),
-                        const SizedBox(height: Dimensions.space10),
-                        GetBuilder(
-                            init: CategoriesController(),
-                            builder: (controller) {
-                              return Stack(
-                                alignment: AlignmentDirectional.bottomCenter,
-                                children: [
-                                  CarouselSlider.builder(
-                                    key: const PageStorageKey(
-                                        'carousel_slider_key'),
-                                    // Add PageStorageKey
-                                    itemCount:
-                                        controller.silverJewelleryImage.length,
-                                    options: CarouselOptions(
-                                      onPageChanged:
-                                          controller.onPageChangedWomenProducts,
-                                      autoPlay: true,
-                                      enlargeCenterPage: true,
-                                      aspectRatio: 4 / 1.30,
-                                      viewportFraction: 1,
-                                    ),
-                                    itemBuilder: (BuildContext context,
-                                        int index, int realIndex) {
-                                      return ClipRRect(
-                                        borderRadius: BorderRadius.circular(
-                                            Dimensions.bottomSheetRadius),
-                                        child: CachedCommonImage(
-                                          networkImageUrl: controller
-                                              .silverJewelleryImage[index],
-                                          width: double.infinity,
+                                      if (secondIndex >=
+                                          controller.mostBrowsedImage.length)
+                                        // Placeholder to maintain spacing if only one item is present
+                                        Flexible(
+                                          child: SizedBox(width: itemWidth),
                                         ),
-                                      );
-                                    },
+                                    ],
                                   ),
-                                  Obx(() => Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: List.generate(
-                                          controller
-                                              .silverJewelleryImage.length,
-                                          (i) => Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 7, vertical: 15),
-                                            child: CircleAvatar(
-                                              radius: 5,
-                                              backgroundColor: ColorResources
-                                                  .inactiveCardColor,
-                                              child: CircleAvatar(
-                                                radius: 4,
-                                                backgroundColor: controller
-                                                            .currentWomenIndex
-                                                            .value ==
-                                                        i
-                                                    ? ColorResources
-                                                        .buttonGradientColor
-                                                    : ColorResources
-                                                        .inactiveCardColor,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      )),
+                                  if (controller.browsedIndex.value ==
+                                          firstIndex ||
+                                      controller.browsedIndex.value ==
+                                          secondIndex)
+                                    mostBrowsedExpandedContent(
+                                        controller,
+                                        controller.browsedIndex.value,
+                                        size,
+                                        controller.browsedIndex.value ==
+                                                secondIndex
+                                            ? LocalStrings.shopGifts
+                                            : ''),
                                 ],
                               );
-                            }),
-                        const SizedBox(height: Dimensions.space25),
-                        Align(
-                          alignment: Alignment.center,
-                          child: Text(LocalStrings.needHelp,
-                              style: semiBoldLarge.copyWith(
-                                  color: ColorResources.buttonColorDark
-                                      .withOpacity(0.7))),
+                            },
+                          );
+                        },
+                      ),
+                      const SizedBox(height: Dimensions.space5),
+                      Align(
+                        alignment: Alignment.center,
+                        child: Text(
+                          LocalStrings.silverJewellery,
+                          style: semiBoldLarge.copyWith(
+                            color:
+                                ColorResources.buttonColorDark.withOpacity(0.7),
+                          ),
                         ),
-                        const SizedBox(height: Dimensions.space10),
-                        GetBuilder(
-                            init: CategoriesController(),
-                            builder: (controller) {
-                              return ListView.builder(
-                                itemCount: controller.needHelpImageLst.length,
-                                physics: const BouncingScrollPhysics(),
-                                shrinkWrap: true,
-                                padding: EdgeInsets.zero,
-                                itemBuilder: (context, index) {
-                                  return GestureDetector(
-                                    onTap: () {
-                                      if (index == 0) {
-                                        AppAnalytics().actionTriggerLogs(
-                                            eventName: LocalStrings
-                                                .logCategoriesWomenPostCardsView,
-                                            index: 10);
-                                      } else if (index == 1) {
-                                        AppAnalytics().actionTriggerLogs(
-                                            eventName: LocalStrings
-                                                .logCategoriesWomenClTvView,
-                                            index: 11);
-                                      } else if (index == 2) {
-                                        AppAnalytics().actionTriggerLogs(
-                                            eventName: LocalStrings
-                                                .logCategoriesWomenPopView,
-                                            index: 12);
-                                      } else if (index == 3) {
-                                        AppAnalytics().actionTriggerLogs(
-                                            eventName: LocalStrings
-                                                .logCategoriesWomenGoldExchangeView,
-                                            index: 13);
-                                      } else if (index == 4) {
-                                        AppAnalytics().actionTriggerLogs(
-                                            eventName: LocalStrings
-                                                .logCategoriesWomenDigitalGoldView,
-                                            index: 14);
-                                      }
-                                    },
-                                    child: Container(
-                                      height: size.height * 0.11,
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 15, vertical: 10),
-                                      margin: EdgeInsets.only(
-                                          bottom: index == 4 ? 10 : 35),
-                                      decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(
-                                              Dimensions.bottomSheetRadius),
-                                          gradient: index == 4
-                                              ? LinearGradient(
-                                                  colors: [
-                                                    ColorResources
-                                                        .helpNeedFirstColor
-                                                        .withOpacity(0.3),
-                                                    ColorResources
-                                                        .helpNeedFirstColor
-                                                        .withOpacity(0.3),
-                                                  ],
-                                                  begin: Alignment.centerLeft,
-                                                  end: Alignment.centerRight,
-                                                  stops: const [0.1, 0.5],
-                                                )
-                                              : index == 3
-                                                  ? LinearGradient(
-                                                      colors: [
-                                                        ColorResources
-                                                            .helpNeedSecondColor,
-                                                        ColorResources
-                                                            .helpNeedThirdColor
-                                                            .withOpacity(0.3),
-                                                      ],
-                                                      begin:
-                                                          Alignment.centerLeft,
-                                                      end:
-                                                          Alignment.centerRight,
-                                                      stops: const [0.1, 0.5],
-                                                    )
-                                                  : index == 2
-                                                      ? LinearGradient(
-                                                          colors: [
-                                                            ColorResources
-                                                                .offerNineColor
-                                                                .withOpacity(
-                                                                    0.1),
-                                                            ColorResources
-                                                                .offerNineColor
-                                                                .withOpacity(
-                                                                    0.4),
-                                                          ],
-                                                          begin: Alignment
-                                                              .centerLeft,
-                                                          end: Alignment
-                                                              .centerRight,
-                                                          stops: const [
-                                                            0.1,
-                                                            0.5
-                                                          ],
-                                                        )
-                                                      : index == 1
-                                                          ? LinearGradient(
-                                                              colors: [
-                                                                ColorResources
-                                                                    .helpNeedFirstColor
-                                                                    .withOpacity(
-                                                                        0.1),
-                                                                ColorResources
-                                                                    .helpNeedFirstColor
-                                                                    .withOpacity(
-                                                                        0.4),
-                                                              ],
-                                                              begin: Alignment
-                                                                  .centerLeft,
-                                                              end: Alignment
-                                                                  .centerRight,
-                                                              stops: const [
-                                                                0.1,
-                                                                0.5
-                                                              ],
-                                                            )
-                                                          : LinearGradient(
-                                                              colors: [
-                                                                ColorResources
-                                                                    .offerFirstColor
-                                                                    .withOpacity(
-                                                                        0.5),
-                                                                ColorResources
-                                                                    .offerFirstColor,
-                                                              ],
-                                                              begin: Alignment
-                                                                  .centerLeft,
-                                                              end: Alignment
-                                                                  .centerRight,
-                                                              stops: const [
-                                                                0.1,
-                                                                0.5
-                                                              ],
-                                                            )),
-                                      child: Row(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Container(
-                                            height: size.height * 0.080,
-                                            width: size.width * 0.17,
-                                            padding: const EdgeInsets.all(10),
-                                            decoration: BoxDecoration(
-                                              color: ColorResources.whiteColor,
-                                              borderRadius:
-                                                  BorderRadius.circular(
-                                                      Dimensions
-                                                          .offersCardRadius),
-                                            ),
-                                            child: ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(
-                                                      Dimensions
-                                                          .offersCardRadius),
-                                              child: Image.asset(controller
-                                                  .needHelpImageLst[index]),
-                                            ),
-                                          ),
-                                          const SizedBox(
-                                              width: Dimensions.space15),
-                                          Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                  controller.needHelpHeadingLst[
-                                                      index],
-                                                  style: semiBoldDefault.copyWith(
-                                                      color: ColorResources
-                                                          .conceptTextColor)),
-                                              const SizedBox(
-                                                  height: Dimensions.space5),
-                                              Text(
-                                                  controller
-                                                      .needHelpTitleLst[index],
-                                                  style: semiBoldSmall.copyWith(
-                                                      color: ColorResources
-                                                          .conceptTextColor
-                                                          .withOpacity(0.5))),
-                                              Text(
-                                                  controller
-                                                          .needHelpSubtitleLst[
-                                                      index],
-                                                  style: semiBoldSmall.copyWith(
-                                                      color: ColorResources
-                                                          .offerColor)),
-                                            ],
-                                          ),
-                                          const Spacer(),
-                                          Container(
-                                            height: size.height * 0.50,
-                                            width: size.width * 0.090,
-                                            decoration: BoxDecoration(
-                                              boxShadow: [
-                                                BoxShadow(
-                                                  color: ColorResources
-                                                      .borderColor
-                                                      .withOpacity(0.1),
-                                                  spreadRadius: 3,
-                                                  blurRadius: 2,
-                                                  offset: const Offset(0, 2),
-                                                ),
-                                              ],
-                                              shape: BoxShape.circle,
-                                              color: ColorResources.whiteColor,
-                                            ),
-                                            child: const Icon(
-                                                Icons.arrow_forward_rounded,
-                                                color: ColorResources
-                                                    .conceptTextColor),
-                                          ),
-                                        ],
-                                      ),
+                      ),
+                      const SizedBox(height: Dimensions.space10),
+                      GetBuilder(
+                        init: CategoriesController(),
+                        builder: (controller) {
+                          return Stack(
+                            alignment: AlignmentDirectional.bottomCenter,
+                            children: [
+                              CarouselSlider.builder(
+                                key:
+                                    const PageStorageKey('carousel_slider_key'),
+                                // Add PageStorageKey
+                                itemCount:
+                                    controller.silverJewelleryImage.length,
+                                options: CarouselOptions(
+                                  onPageChanged:
+                                      controller.onPageChangedWomenProducts,
+                                  autoPlay: true,
+                                  enlargeCenterPage: true,
+                                  aspectRatio: 4 / 1.4,
+                                  viewportFraction: 1,
+                                ),
+                                itemBuilder: (BuildContext context, int index,
+                                    int realIndex) {
+                                  return ClipRRect(
+                                    borderRadius: BorderRadius.circular(
+                                        Dimensions.bottomSheetRadius),
+                                    child: CachedCommonImage(
+                                      networkImageUrl: controller
+                                          .silverJewelleryImage[index],
+                                      width: double.infinity,
                                     ),
                                   );
                                 },
+                              ),
+                              Obx(
+                                () => Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: List.generate(
+                                    controller.silverJewelleryImage.length,
+                                    (i) => Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 7, vertical: 15),
+                                      child: CircleAvatar(
+                                        radius: 5,
+                                        backgroundColor:
+                                            ColorResources.inactiveCardColor,
+                                        child: CircleAvatar(
+                                          radius: 4,
+                                          backgroundColor: controller
+                                                      .currentWomenIndex
+                                                      .value ==
+                                                  i
+                                              ? ColorResources
+                                                  .buttonGradientColor
+                                              : ColorResources
+                                                  .inactiveCardColor,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          );
+                        },
+                      ),
+                      const SizedBox(height: Dimensions.space25),
+                      Align(
+                        alignment: Alignment.center,
+                        child: Text(
+                          LocalStrings.needHelp,
+                          style: semiBoldLarge.copyWith(
+                            color:
+                                ColorResources.buttonColorDark.withOpacity(0.7),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: Dimensions.space10),
+                      GetBuilder(
+                        init: CategoriesController(),
+                        builder: (controller) {
+                          return ListView.builder(
+                            itemCount: controller.needHelpImageLst.length,
+                            physics: const BouncingScrollPhysics(),
+                            shrinkWrap: true,
+                            padding: EdgeInsets.zero,
+                            itemBuilder: (context, index) {
+                              return GestureDetector(
+                                onTap: () {
+                                  if (index == 0) {
+                                    AppAnalytics().actionTriggerLogs(
+                                        eventName: LocalStrings
+                                            .logCategoriesWomenPostCardsView,
+                                        index: 10);
+                                  } else if (index == 1) {
+                                    AppAnalytics().actionTriggerLogs(
+                                        eventName: LocalStrings
+                                            .logCategoriesWomenClTvView,
+                                        index: 11);
+                                  } else if (index == 2) {
+                                    AppAnalytics().actionTriggerLogs(
+                                        eventName: LocalStrings
+                                            .logCategoriesWomenPopView,
+                                        index: 12);
+                                  } else if (index == 3) {
+                                    AppAnalytics().actionTriggerLogs(
+                                        eventName: LocalStrings
+                                            .logCategoriesWomenGoldExchangeView,
+                                        index: 13);
+                                  } else if (index == 4) {
+                                    AppAnalytics().actionTriggerLogs(
+                                        eventName: LocalStrings
+                                            .logCategoriesWomenDigitalGoldView,
+                                        index: 14);
+                                  }
+                                },
+                                child: Container(
+                                  height: size.height * 0.11,
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 15, vertical: 10),
+                                  margin: EdgeInsets.only(
+                                      bottom: index == 4 ? 10 : 35),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(
+                                        Dimensions.bottomSheetRadius),
+                                    gradient: index == 1
+                                        ? LinearGradient(
+                                            colors: [
+                                              ColorResources.helpNeedFirstColor
+                                                  .withOpacity(0.1),
+                                              ColorResources.helpNeedFirstColor
+                                                  .withOpacity(0.4),
+                                            ],
+                                            begin: Alignment.centerLeft,
+                                            end: Alignment.centerRight,
+                                            stops: const [0.1, 0.5],
+                                          )
+                                        : LinearGradient(
+                                            colors: [
+                                              ColorResources.offerFirstColor
+                                                  .withOpacity(0.5),
+                                              ColorResources.offerFirstColor,
+                                            ],
+                                            begin: Alignment.centerLeft,
+                                            end: Alignment.centerRight,
+                                            stops: const [0.1, 0.5],
+                                          ),
+                                  ),
+                                  child: Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Container(
+                                        height: size.height * 0.080,
+                                        width: size.width * 0.17,
+                                        padding: const EdgeInsets.all(10),
+                                        decoration: BoxDecoration(
+                                          color: ColorResources.whiteColor,
+                                          borderRadius: BorderRadius.circular(
+                                              Dimensions.offersCardRadius),
+                                        ),
+                                        child: ClipRRect(
+                                          borderRadius: BorderRadius.circular(
+                                              Dimensions.offersCardRadius),
+                                          child: Image.asset(controller
+                                              .needHelpImageLst[index]),
+                                        ),
+                                      ),
+                                      const SizedBox(width: Dimensions.space15),
+                                      Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            controller
+                                                .needHelpHeadingLst[index],
+                                            style: semiBoldDefault.copyWith(
+                                                color: ColorResources
+                                                    .conceptTextColor),
+                                          ),
+                                          const SizedBox(
+                                              height: Dimensions.space5),
+                                          Text(
+                                            controller.needHelpTitleLst[index],
+                                            style: semiBoldSmall.copyWith(
+                                              color: ColorResources
+                                                  .conceptTextColor
+                                                  .withOpacity(0.5),
+                                            ),
+                                          ),
+                                          Text(
+                                            controller
+                                                .needHelpSubtitleLst[index],
+                                            style: semiBoldSmall.copyWith(
+                                                color:
+                                                    ColorResources.offerColor),
+                                          ),
+                                        ],
+                                      ),
+                                      const Spacer(),
+                                      Container(
+                                        height: size.height * 0.50,
+                                        width: size.width * 0.090,
+                                        decoration: BoxDecoration(
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color: ColorResources.borderColor
+                                                  .withOpacity(0.1),
+                                              spreadRadius: 3,
+                                              blurRadius: 2,
+                                              offset: const Offset(0, 2),
+                                            ),
+                                          ],
+                                          shape: BoxShape.circle,
+                                          color: ColorResources.whiteColor,
+                                        ),
+                                        child: const Icon(
+                                            Icons.arrow_forward_rounded,
+                                            color: ColorResources
+                                                .conceptTextColor),
+                                      ),
+                                    ],
+                                  ),
+                                ),
                               );
-                            }),
-                      ],
-                    ),
-                  );
-          }),
+                            },
+                          );
+                        },
+                      ),
+                    ],
+                  ),
+                );
+        },
+      ),
     );
   }
 
@@ -633,7 +572,7 @@ class _WomenCategoriesScreenState extends State<WomenCategoriesScreen> {
                     child: CachedCommonImage(
                       width: double.infinity,
                       networkImageUrl:
-                      controller.getCategoryList[index].categoryImage,
+                          controller.getCategoryList[index].categoryImage,
                     ),
                   ),
                 ),
@@ -692,7 +631,8 @@ class _WomenCategoriesScreenState extends State<WomenCategoriesScreen> {
             children: [
               Shimmer.fromColors(
                 baseColor: ColorResources.baseColor,
-                highlightColor: ColorResources.highlightColor, child: Container(
+                highlightColor: ColorResources.highlightColor,
+                child: Container(
                   height: size.height * 0.080,
                   width: size.width * 0.17,
                   decoration: BoxDecoration(
@@ -705,7 +645,8 @@ class _WomenCategoriesScreenState extends State<WomenCategoriesScreen> {
               Expanded(
                 child: Shimmer.fromColors(
                   baseColor: ColorResources.baseColor,
-                  highlightColor: ColorResources.highlightColor, child: Container(
+                  highlightColor: ColorResources.highlightColor,
+                  child: Container(
                     height: size.height * 0.015,
                     decoration: BoxDecoration(
                         color: ColorResources.whiteColor,
@@ -715,7 +656,8 @@ class _WomenCategoriesScreenState extends State<WomenCategoriesScreen> {
               ),
               Shimmer.fromColors(
                 baseColor: ColorResources.baseColor,
-                highlightColor: ColorResources.highlightColor, child: Image.asset(MyImages.forwordArrowImage,
+                highlightColor: ColorResources.highlightColor,
+                child: Image.asset(MyImages.forwordArrowImage,
                     height: 20,
                     width: 20,
                     color: ColorResources.conceptTextColor),

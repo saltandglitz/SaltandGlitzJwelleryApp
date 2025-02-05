@@ -11,7 +11,6 @@ import '../../../core/utils/images.dart';
 import '../../../core/utils/local_strings.dart';
 import '../../model/get_categories_view_model.dart';
 
-
 class CategoriesController extends GetxController {
   // late TabController _tabController;
   var expandedIndex = (-1).obs;
@@ -162,29 +161,17 @@ class CategoriesController extends GetxController {
 
   List needHelpImageLst = [
     MyImages.postCardImage,
-    MyImages.clTvImage,
     MyImages.planPurchaseImage,
-    MyImages.goldExchangeImage,
-    MyImages.digitalGoldImage,
   ];
   List needHelpHeadingLst = [
     LocalStrings.solatnPostcards,
-    LocalStrings.clTv,
     LocalStrings.pop,
-    LocalStrings.goldExchange,
-    LocalStrings.gold,
   ];
   List needHelpTitleLst = [
     LocalStrings.embedVideo,
-    LocalStrings.watchBuy,
     LocalStrings.planYour,
-    LocalStrings.yourPrecious,
-    LocalStrings.buySell,
   ];
   List needHelpSubtitleLst = [
-    LocalStrings.knowMore,
-    LocalStrings.playNow,
-    LocalStrings.learnMore,
     LocalStrings.knowMore,
     LocalStrings.learnMore,
   ];
@@ -287,13 +274,12 @@ class CategoriesController extends GetxController {
         getCategoryList = (response.data['categories'] as List)
             .map((categoryJson) => Category.fromJson(categoryJson))
             .toList();
-
       } else {
         print("Something went wrong");
       }
     } catch (e) {
       print("Get Categories Error : $e");
-    }finally{
+    } finally {
       update();
     }
   }

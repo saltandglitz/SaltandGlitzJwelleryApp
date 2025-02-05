@@ -9,7 +9,7 @@ class APIFunction {
     required String apiName,
     required BuildContext? context,
     dynamic params,
-    String? token,
+    String? token = '',
     bool isLoading = true,
     bool isGet = false,
   }) async {
