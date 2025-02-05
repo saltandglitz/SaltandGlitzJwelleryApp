@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:get/get.dart' hide Response;
 import 'package:saltandGlitz/core/utils/color_resources.dart';
 import 'package:saltandGlitz/core/utils/local_strings.dart';
-
-import '../../../local_storage/pref_manager.dart';
 
 class MyAccountController extends GetxController {
   late AnimationController animationController;
@@ -74,5 +72,10 @@ class MyAccountController extends GetxController {
       isEnableNetwork.value = false;
     }
     update();
+  }
+
+  //Todo : Logout user api method
+  logoutApiMethod() {
+
   }
 }

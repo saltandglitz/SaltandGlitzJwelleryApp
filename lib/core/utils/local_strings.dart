@@ -2,6 +2,7 @@ class LocalStrings {
   static const String appName = "Salt and Glitz";
   static const String baseUrl = "";
   static const String apiKey = "";
+
   ///<<<------------------- API ------------------->>>
   static const String getBannerApi =
       "https://saltandglitz-api.vercel.app/v1/banner/bannerGet";
@@ -11,6 +12,9 @@ class LocalStrings {
       "https://saltandglitz-api.vercel.app/v1/category/categoryData";
   static const String menCategoriesApi =
       "https://saltandglitz-api.vercel.app/v1/category/categoryData/Male";
+  static const String logoutApi =
+      "https://saltandglitz-api.vercel.app/api/users/logout";
+
   ///<<<------------------- Dashboard Screen ------------------->>>
   static const String solitaire = "Solitaire";
   static const String hardwareSalt = "HardWare By Salt and Glitz";
@@ -389,6 +393,7 @@ class LocalStrings {
   static const String welcomeBack = 'Welcome back!';
   static const String loginUnlock =
       'Login to unlock best prices and become an insider for our exclusive launches offers.';
+
   // static const String enterNumber = 'Enter Mobile Number or Email';
   static const String continueLogin = 'CONTINUE TO LOGIN';
   static const String orText = 'OR';
@@ -435,7 +440,6 @@ class LocalStrings {
   static const String validConfirmPassword = 'Please enter Match Password';
   static const String signupSuccessfully = 'Signup Successfully!';
   static const String loginSuccessfully = 'Login Successfully!';
-
 
   ///<<<---------------------------- Edit profile Screen screen String ---------------------------->>>
   static const String myAccount = 'My Account';
@@ -507,6 +511,7 @@ class LocalStrings {
   static const String ifNotArriveEmail =
       'If it doesn’t arrive soon, check your spam folder or ';
   static const String sendEmailAgain = 'Sent the email again';
+
   ///<<<---------------------------- Analysis log string ---------------------------->>>
 
   static const String logGuestUser = 'Guest';
@@ -677,6 +682,7 @@ class LocalStrings {
       'Edit_Profile_Term_Condition_View';
   static const String editProfilePrivacyPolicyView =
       'Edit_Profile_Privacy_Policy_View';
+
   ///<<<---------------------------- Network connectivity screen log string ---------------------------->>>
   static const String noDetectInternet =
       "Oops! You're offline.\nNo network detected! Make sure you're connected to the internet.";

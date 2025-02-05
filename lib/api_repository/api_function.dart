@@ -9,7 +9,7 @@ class APIFunction {
     required String apiName,
     required BuildContext? context,
     dynamic params,
-    String? token = "",
+    String? token,
     bool isLoading = true,
     bool isGet = false,
   }) async {
@@ -32,7 +32,9 @@ class APIFunction {
             data: params, // Send the Map directly as JSON
             options: Options(
               headers: {
-                'Content-Type': 'application/json', // Explicitly setting the content type for JSON
+                'Content-Type': 'application/json',
+                // Explicitly setting the content type for JSON
+                'authorization': token.isNotEmpty ? token : '',
               },
             ),
           );
@@ -43,7 +45,8 @@ class APIFunction {
             data: params, // Send FormData as multipart
             options: Options(
               headers: {
-                'Content-Type': 'multipart/form-data', // Explicitly setting the content type for multipart
+                'Content-Type': 'multipart/form-data',
+                // Explicitly setting the content type for multipart
               },
             ),
           );

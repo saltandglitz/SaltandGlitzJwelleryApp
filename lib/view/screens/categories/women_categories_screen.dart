@@ -620,6 +620,12 @@ class _WomenCategoriesScreenState extends State<WomenCategoriesScreen> {
                   decoration: BoxDecoration(
                     borderRadius:
                         BorderRadius.circular(Dimensions.offersCardRadius),
+                    boxShadow: const [
+                      BoxShadow(
+                        color: ColorResources.shimmerEffectBaseColor,
+                        blurRadius: 5.0,
+                      ),
+                    ],
                   ),
                   child: ClipRRect(
                     borderRadius:
@@ -627,13 +633,13 @@ class _WomenCategoriesScreenState extends State<WomenCategoriesScreen> {
                     child: CachedCommonImage(
                       width: double.infinity,
                       networkImageUrl:
-                          controller.womenTopCategoriesImage[index],
+                      controller.getCategoryList[index].categoryImage,
                     ),
                   ),
                 ),
                 const SizedBox(width: Dimensions.space10),
                 Expanded(
-                  child: Text(controller.womenTopCategoriesName[index],
+                  child: Text(controller.getCategoryList[index].category,
                       softWrap: true,
                       maxLines: 2,
                       style: semiBoldDefault.copyWith(
@@ -685,11 +691,8 @@ class _WomenCategoriesScreenState extends State<WomenCategoriesScreen> {
           Row(
             children: [
               Shimmer.fromColors(
-                baseColor:
-                    ColorResources.shimmerEffectBaseColor.withOpacity(0.4),
-                highlightColor:
-                    ColorResources.shimmerEffectHighlightColor.withOpacity(0.4),
-                child: Container(
+                baseColor: ColorResources.baseColor,
+                highlightColor: ColorResources.highlightColor, child: Container(
                   height: size.height * 0.080,
                   width: size.width * 0.17,
                   decoration: BoxDecoration(
@@ -701,11 +704,8 @@ class _WomenCategoriesScreenState extends State<WomenCategoriesScreen> {
               const SizedBox(width: Dimensions.space10),
               Expanded(
                 child: Shimmer.fromColors(
-                  baseColor:
-                      ColorResources.shimmerEffectBaseColor.withOpacity(0.4),
-                  highlightColor: ColorResources.shimmerEffectHighlightColor
-                      .withOpacity(0.4),
-                  child: Container(
+                  baseColor: ColorResources.baseColor,
+                  highlightColor: ColorResources.highlightColor, child: Container(
                     height: size.height * 0.015,
                     decoration: BoxDecoration(
                         color: ColorResources.whiteColor,
@@ -714,9 +714,8 @@ class _WomenCategoriesScreenState extends State<WomenCategoriesScreen> {
                 ),
               ),
               Shimmer.fromColors(
-                baseColor: ColorResources.shimmerEffectBaseColor,
-                highlightColor: ColorResources.shimmerEffectHighlightColor,
-                child: Image.asset(MyImages.forwordArrowImage,
+                baseColor: ColorResources.baseColor,
+                highlightColor: ColorResources.highlightColor, child: Image.asset(MyImages.forwordArrowImage,
                     height: 20,
                     width: 20,
                     color: ColorResources.conceptTextColor),

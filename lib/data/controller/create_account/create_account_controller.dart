@@ -432,6 +432,7 @@ class CreateAccountController extends GetxController {
         PrefManager.setString('email', email ?? '');
         PrefManager.setString('phoneNumber', mobileNumber ?? '');
         PrefManager.setString('gender', gender ?? '');
+        PrefManager.setString('token', response.data['user']['token'] ?? '');
         //Todo : Off all navigation and move My account screen
         Get.offAllNamed(RouteHelper.bottomBarScreen);
         bottomBarController.selectedIndex = 2.obs;

@@ -287,6 +287,7 @@ class CategoriesController extends GetxController {
         getCategoryList = (response.data['categories'] as List)
             .map((categoryJson) => Category.fromJson(categoryJson))
             .toList();
+
       } else {
         print("Something went wrong");
       }

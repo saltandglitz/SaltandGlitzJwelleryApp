@@ -127,19 +127,19 @@ class Abc {
   String id;
   String abcId;
   String title;
-  int price14Kt;
-  int price18Kt;
+  double price14Kt;
+  double price18Kt;
   String image01;
   String category;
   int diamondprice;
-  int makingCharge14Kt;
+  double makingCharge14Kt;
   double makingCharge18Kt;
   double grossWt;
   double netWeight14Kt;
   double netWeight18Kt;
-  int gst14Kt;
-  int gst18Kt;
-  int total14Kt;
+  double gst14Kt;
+  double gst18Kt;
+  final double total14Kt;
   int v;
   String gender;
   double total18Kt;
@@ -155,19 +155,19 @@ class Abc {
     this.id = '',
     this.abcId = '',
     this.title = '',
-    this.price14Kt = 0,
-    this.price18Kt = 0,
+    required this.price14Kt ,
+    required this.price18Kt ,
     this.image01 = '',
     this.category = '',
     this.diamondprice = 0,
-    this.makingCharge14Kt = 0,
-    this.makingCharge18Kt = 0.0,
+    required this.makingCharge14Kt ,
+    required this.makingCharge18Kt ,
     this.grossWt = 0.0,
-    this.netWeight14Kt = 0.0,
-    this.netWeight18Kt = 0.0,
-    this.gst14Kt = 0,
-    this.gst18Kt = 0,
-    this.total14Kt = 0,
+    required this.netWeight14Kt ,
+    required this.netWeight18Kt ,
+    required this.gst14Kt ,
+    required this.gst18Kt ,
+    required this.total14Kt,
     this.v = 0,
     this.gender = '',
     this.total18Kt = 0.0,
@@ -185,19 +185,19 @@ class Abc {
     id: json["_id"] ?? '',
     abcId: json["id"] ?? '',
     title: json["title"] ?? '',
-    price14Kt: json["price14KT"] ?? 0,
-    price18Kt: json["price18KT"] ?? 0,
+    price14Kt: (json["price14KT"] as num).toDouble(),
+    price18Kt: (json["price18KT"] as num).toDouble(),
     image01: json["image01"] ?? '',
     category: json["category"] ?? '',
     diamondprice: json["diamondprice"] ?? 0,
-    makingCharge14Kt: json["makingCharge14KT"] ?? 0,
-    makingCharge18Kt: (json["makingCharge18KT"] ?? 0.0).toDouble(),
+    makingCharge14Kt: (json["makingCharge14KT"] as num).toDouble(),
+    makingCharge18Kt: (json["makingCharge18KT"] as num).toDouble(),
     grossWt: (json["grossWt"] ?? 0.0).toDouble(),
-    netWeight14Kt: (json["netWeight14KT"] ?? 0.0).toDouble(),
-    netWeight18Kt: (json["netWeight18KT"] ?? 0.0).toDouble(),
-    gst14Kt: json["gst14KT"] ?? 0,
-    gst18Kt: json["gst18KT"] ?? 0,
-    total14Kt: json["total14KT"] ?? 0,
+    netWeight14Kt: (json["netWeight14KT"] as num).toDouble(),
+    netWeight18Kt: (json["netWeight18KT"]as num).toDouble(),
+    gst14Kt: (json["gst14KT"] as num).toDouble(),
+    gst18Kt: (json["gst18KT"] as num).toDouble(),
+    total14Kt: (json['total14KT'] as num).toDouble(),
     v: json["__v"] ?? 0,
     gender: json["gender"] ?? '',
     total18Kt: (json["total18KT"] ?? 0.0).toDouble(),
