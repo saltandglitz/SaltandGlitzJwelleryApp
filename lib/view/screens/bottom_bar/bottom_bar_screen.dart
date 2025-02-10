@@ -43,19 +43,20 @@ class _BottomBarScreenState extends State<BottomBarScreen> {
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return GetBuilder(
-        init: BottomBarController(),
-        builder: (controller) {
-          return Scaffold(
-            backgroundColor: ColorResources.scaffoldBackgroundColor,
-            body: pages[controller.selectedIndex.value],
-            bottomNavigationBar: CustomBottomNavigationBar(
-              size: size,
-              bottomBarController: controller,
-              icons: icons,
-              labels: labels,
-            ),
-          );
-        });
+      init: BottomBarController(),
+      builder: (controller) {
+        return Scaffold(
+          backgroundColor: ColorResources.scaffoldBackgroundColor,
+          body: pages[controller.selectedIndex.value],
+          bottomNavigationBar: CustomBottomNavigationBar(
+            size: size,
+            bottomBarController: controller,
+            icons: icons,
+            labels: labels,
+          ),
+        );
+      },
+    );
   }
 }
 

@@ -370,7 +370,7 @@ class _AddToCartScreenState extends State<AddToCartScreen> {
                           onTap: () {
                             AppAnalytics().actionTriggerLogs(
                                 eventName:
-                                LocalStrings.logAddCartApplyCouponClick,
+                                    LocalStrings.logAddCartApplyCouponClick,
                                 index: 4);
                           },
                           child: Container(
@@ -381,8 +381,8 @@ class _AddToCartScreenState extends State<AddToCartScreen> {
                               color: ColorResources.offerThirdTextColor,
                               boxShadow: [
                                 BoxShadow(
-                                  color:
-                                      ColorResources.borderColor.withOpacity(0.3),
+                                  color: ColorResources.borderColor
+                                      .withOpacity(0.3),
                                   offset: const Offset(0, 5),
                                   blurRadius:
                                       5, // Adjust the blur radius as needed
@@ -390,7 +390,8 @@ class _AddToCartScreenState extends State<AddToCartScreen> {
                               ],
                             ),
                             child: Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 15),
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 15),
                               child: Center(
                                 child: Row(
                                   children: [
@@ -415,8 +416,8 @@ class _AddToCartScreenState extends State<AddToCartScreen> {
                                         width: 30,
                                         decoration: const BoxDecoration(
                                           shape: BoxShape.circle,
-                                          color:
-                                              ColorResources.offerThirdTextColor,
+                                          color: ColorResources
+                                              .offerThirdTextColor,
                                           boxShadow: [
                                             BoxShadow(
                                               color: ColorResources.borderColor,
@@ -705,7 +706,7 @@ class _AddToCartScreenState extends State<AddToCartScreen> {
                         Get.back();
                         AppAnalytics().actionTriggerWithProductsLogs(
                             eventName:
-                            LocalStrings.logAddCartReMoveProductClick,
+                                LocalStrings.logAddCartReMoveProductClick,
                             productName: productName,
                             productImage: image,
                             index: 4);

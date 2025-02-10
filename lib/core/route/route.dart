@@ -8,6 +8,7 @@ import 'package:saltandGlitz/view/screens/forget_password/forget_password.dart';
 import 'package:saltandGlitz/view/screens/login/login_screen.dart';
 import 'package:saltandGlitz/view/screens/set_otp/set_otp.dart';
 import 'package:saltandGlitz/view/screens/set_password/set_password.dart';
+import 'package:saltandGlitz/view/screens/splash/splash_screen.dart';
 import '../../view/screens/categories/categories_sccreen.dart';
 import '../../view/screens/categories/men_categories_screen.dart';
 import '../../view/screens/categories/women_categories_screen.dart';
@@ -35,6 +36,7 @@ class RouteHelper {
   static const String setPasswordScreen = "/set_password_screen";
   static const String setOtpScreen = "/set_otp_screen";
   static const String forgetPasswordScreen = "/forget_password_screen";
+  static const String splashScreen = "/splash_screen";
 
   List<GetPage> routes = [
     GetPage(name: bottomBarScreen, page: () => BottomBarScreen()),
@@ -54,5 +56,6 @@ class RouteHelper {
     GetPage(name: setPasswordScreen, page: () => SetPassword()),
     GetPage(name: setOtpScreen, page: () => SetOtp()),
     GetPage(name: forgetPasswordScreen, page: () => ForgetPassword()),
+    GetPage(name: splashScreen, page: () => SplashScreen()),
   ];
 }

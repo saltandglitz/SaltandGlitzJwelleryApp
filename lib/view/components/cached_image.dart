@@ -24,8 +24,8 @@ class CachedCommonImage extends StatelessWidget {
       imageUrl: networkImageUrl ?? "",
       fit: BoxFit.cover,
       progressIndicatorBuilder: (context, url,
-          downloadProgress) => // Show shimmer effect while loading
-      Shimmer.fromColors(
+              downloadProgress) => // Show shimmer effect while loading
+          Shimmer.fromColors(
         baseColor: ColorResources.baseColor,
         highlightColor: ColorResources.highlightColor,
         child: Container(
@@ -38,8 +38,7 @@ class CachedCommonImage extends StatelessWidget {
       // progressIndicatorBuilder: (context, url, downloadProgress) => Center(
       //   child: CircularProgressIndicator(value: downloadProgress.progress),
       // ),
-      errorWidget: (context, url, error) =>
-      const Center(
+      errorWidget: (context, url, error) => const Center(
         child: Icon(Icons.error),
       ),
     );

@@ -17,7 +17,6 @@ class CollectionController extends GetxController {
     LocalStrings.featured,
     LocalStrings.priceLow,
     LocalStrings.priceHigh,
-    LocalStrings.customerRating
   ];
 
   // Collection image
@@ -99,6 +98,7 @@ class CollectionController extends GetxController {
     super.onInit();
     favoriteStatus = List.generate(collectionDataImageLst.length, (_) => false);
   }
+
   enableNetworkHideLoader() {
     if (isEnableNetwork.value == false) {
       isEnableNetwork.value = true;
@@ -112,6 +112,7 @@ class CollectionController extends GetxController {
     }
     update();
   }
+
   /// Products Favorites & UnFavorites set
   void toggleFavorite(int index) {
     favoriteStatus[index] = !favoriteStatus[index];
@@ -165,7 +166,7 @@ class CollectionController extends GetxController {
 
     // Check if the product already exists
     List<Map<String, dynamic>> existingProducts =
-    await dbHelper.queryRowsByName(
+        await dbHelper.queryRowsByName(
       image: image,
       name: name,
       totalCost: totalCost,
@@ -175,7 +176,7 @@ class CollectionController extends GetxController {
     if (existingProducts.isNotEmpty) {
       // Update the existing product
       row[DatabaseHelper.columnId] =
-      existingProducts.first[DatabaseHelper.columnId];
+          existingProducts.first[DatabaseHelper.columnId];
       await dbHelper.update(row);
     } else {
       // Insert the new product
