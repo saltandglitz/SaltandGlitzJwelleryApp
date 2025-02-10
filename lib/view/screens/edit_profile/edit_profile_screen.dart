@@ -6,7 +6,6 @@ import 'package:get/get.dart';
 import 'package:saltandGlitz/core/utils/local_strings.dart';
 import 'package:saltandGlitz/data/controller/edit_profile/edit_profile_controller.dart';
 import 'package:saltandGlitz/view/components/app_textfield.dart';
-
 import '../../../analytics/app_analytics.dart';
 import '../../../core/utils/color_resources.dart';
 import '../../../core/utils/dimensions.dart';
@@ -32,539 +31,515 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         .actionTriggerLogs(eventName: LocalStrings.editProfileView, index: 15);
   }
 
+  @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
     return GetBuilder(
-        init: EditProfileController(),
-        builder: (controller) {
-          return GestureDetector(
-            onTap: () {
-              FocusManager.instance.primaryFocus?.unfocus();
-            },
-            child: Scaffold(
-              backgroundColor: ColorResources.scaffoldBackgroundColor,
-              appBar: AppBarBackground(
-                child: AppBar(
-                  automaticallyImplyLeading: false,
-                  titleSpacing: 0,
-                  title: const Text(LocalStrings.myAccount),
-                  titleTextStyle: regularLarge.copyWith(
-                    fontWeight: FontWeight.w500,
-                    color: ColorResources.conceptTextColor,
-                  ),
-                  leading: IconButton(
-                    onPressed: () {
-                      Get.back();
-                    },
-                    icon: const Icon(Icons.arrow_back_outlined),
-                    color: ColorResources.conceptTextColor,
-                  ),
-                  actions: [
-                    Padding(
-                      padding: const EdgeInsets.only(right: 15),
-                      child: GestureDetector(
-                        onTap: () {
-                          /// Analysis log whatsapp click
-                          AppAnalytics().actionTriggerLogs(
-                              eventName: LocalStrings.editProfileWhatsappClick,
-                              index: 15);
-                        },
-                        child: Image.asset(
-                          MyImages.whatsappImage,
-                          height: size.height * 0.055,
-                          width: size.width * 0.055,
-                          color: ColorResources.conceptTextColor,
-                        ),
+      init: EditProfileController(),
+      builder: (controller) {
+        return GestureDetector(
+          onTap: () {
+            FocusManager.instance.primaryFocus?.unfocus();
+          },
+          child: Scaffold(
+            backgroundColor: ColorResources.scaffoldBackgroundColor,
+            appBar: AppBarBackground(
+              child: AppBar(
+                automaticallyImplyLeading: false,
+                titleSpacing: 0,
+                title: const Text(LocalStrings.myAccount),
+                titleTextStyle: regularLarge.copyWith(
+                  fontWeight: FontWeight.w500,
+                  color: ColorResources.conceptTextColor,
+                ),
+                leading: IconButton(
+                  onPressed: () {
+                    Get.back();
+                  },
+                  icon: const Icon(Icons.arrow_back_outlined),
+                  color: ColorResources.conceptTextColor,
+                ),
+                actions: [
+                  Padding(
+                    padding: const EdgeInsets.only(right: 15),
+                    child: GestureDetector(
+                      onTap: () {
+                        /// Analysis log whatsapp click
+                        AppAnalytics().actionTriggerLogs(
+                            eventName: LocalStrings.editProfileWhatsappClick,
+                            index: 15);
+                      },
+                      child: Image.asset(
+                        MyImages.whatsappImage,
+                        height: size.height * 0.055,
+                        width: size.width * 0.055,
+                        color: ColorResources.conceptTextColor,
                       ),
+                    ),
+                  ),
+                ],
+                backgroundColor: ColorResources.whiteColor,
+                // Set the background color of the AppBar
+                elevation: 0, // Remove default shadow
+              ),
+            ),
+            // Save changes
+            bottomSheet: GestureDetector(
+              onTap: () {
+                // Is Validation Check Save Changes
+                controller.isValidation();
+              },
+              child: Container(
+                height: size.height * 0.080,
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                decoration: const BoxDecoration(
+                  color: ColorResources.conceptTextColor,
+                  boxShadow: [
+                    BoxShadow(
+                      color: ColorResources.borderColor,
+                      offset: Offset(0, 1),
+                      // Position the shadow below the AppBar
+                      blurRadius: 2, // Adjust the blur radius as needed
                     ),
                   ],
-                  backgroundColor: ColorResources.whiteColor,
-                  // Set the background color of the AppBar
-                  elevation: 0, // Remove default shadow
+                ),
+                child: Center(
+                  child: Text(
+                    LocalStrings.saveChanges,
+                    style: mediumMediumLarge.copyWith(
+                      color: ColorResources.whiteColor,
+                    ),
+                  ),
                 ),
               ),
-              // Save changes
-              bottomSheet: GestureDetector(
-                onTap: () {
-                  // Is Validation Check Save Changes
-                  controller.isValidation();
-                },
-                child: Container(
-                    height: size.height * 0.080,
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    decoration: const BoxDecoration(
-                      color: ColorResources.conceptTextColor,
-                      boxShadow: [
-                        BoxShadow(
-                          color: ColorResources.borderColor,
-                          offset: Offset(0, 1),
-                          // Position the shadow below the AppBar
-                          blurRadius: 2, // Adjust the blur radius as needed
-                        ),
-                      ],
-                    ),
-                    child: Center(
-                      child: Text(
-                        LocalStrings.saveChanges,
-                        style: mediumMediumLarge.copyWith(
-                          color: ColorResources.whiteColor,
+            ),
+            body: SafeArea(
+              top: false,
+              bottom: false,
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.only(left: 15, right: 15, top: 20),
+                child: Column(
+                  children: [
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 15, vertical: 12),
+                      decoration: BoxDecoration(
+                        borderRadius:
+                            BorderRadius.circular(Dimensions.offersCardRadius),
+                        gradient: const LinearGradient(
+                          colors: [
+                            ColorResources.offerFirstColor,
+                            ColorResources.offerNineColor,
+                            ColorResources.offerSixColor,
+                          ],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
                         ),
                       ),
-                    )),
-              ),
-              body: SafeArea(
-                  top: false,
-                  bottom: false,
-                  child: SingleChildScrollView(
-                    padding:
-                        const EdgeInsets.only(left: 15, right: 15, top: 20),
-                    child: Column(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            LocalStrings.editProfile,
+                            style: regularLarge.copyWith(
+                              fontWeight: FontWeight.w500,
+                              color: ColorResources.conceptTextColor,
+                            ),
+                          ),
+                          const SizedBox(height: Dimensions.space5),
+                          Text(
+                            LocalStrings.specialOccasions,
+                            style: regularDefault.copyWith(
+                              color: ColorResources.conceptTextColor,
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: Dimensions.space30),
+                    AppTextFieldWidget(
+                      controller: controller.firstName,
+                      isShowCountryPicker: false,
+                      labelText: LocalStrings.firstNameStar,
+                      boxConstraints: const BoxConstraints(minWidth: 15),
+                    ),
+                    const SizedBox(height: Dimensions.space35),
+                    AppTextFieldWidget(
+                      controller: controller.lastName,
+                      isShowCountryPicker: false,
+                      labelText: LocalStrings.lastNameStar,
+                      boxConstraints: const BoxConstraints(minWidth: 15),
+                    ),
+                    const SizedBox(height: Dimensions.space35),
+                    AppTextFieldWidget(
+                      controller: controller.mobileNumber,
+                      isEnable: false,
+                      fillColor: ColorResources.offerSixColor.withOpacity(0.3),
+                      labelText: LocalStrings.mobileNumber,
+                      suffixIcon: const Icon(
+                        Icons.check_circle_rounded,
+                        color: ColorResources.videoCallColor,
+                        size: 25,
+                      ),
+                    ),
+                    const SizedBox(height: Dimensions.space35),
+                    // EmailId & verify
+                    Row(
                       children: [
-                        Container(
-                          width: double.infinity,
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 15, vertical: 12),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(
-                                Dimensions.offersCardRadius),
-                            gradient: const LinearGradient(
-                              colors: [
-                                ColorResources.offerFirstColor,
-                                ColorResources.offerNineColor,
-                                ColorResources.offerSixColor,
-                              ],
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                            ),
+                        Expanded(
+                          child: AppTextFieldWidget(
+                            controller: controller.email,
+                            isShowCountryPicker: false,
+                            isEnable: false,
+                            fillColor:
+                                ColorResources.offerSixColor.withOpacity(0.3),
+                            labelText: LocalStrings.emailId,
+                            boxConstraints: const BoxConstraints(minWidth: 15),
                           ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                LocalStrings.editProfile,
-                                style: regularLarge.copyWith(
-                                  fontWeight: FontWeight.w500,
+                        ),
+                        const SizedBox(width: Dimensions.space20),
+                        // Verify email
+                        GestureDetector(
+                          onTap: () {
+                            //Verify email bottom sheet
+                            verifyEmailBottomSheet();
+                            controller.startTimer();
+                          },
+                          child: Container(
+                            height: size.height * 0.065,
+                            width: size.width * 0.25,
+                            decoration: BoxDecoration(
+                              color:
+                                  ColorResources.offerSixColor.withOpacity(0.3),
+                              borderRadius: BorderRadius.circular(
+                                  Dimensions.offersCardRadius),
+                            ),
+                            child: Center(
+                              child: Text(
+                                LocalStrings.verify,
+                                style: mediumDefault.copyWith(
                                   color: ColorResources.conceptTextColor,
                                 ),
                               ),
-                              const SizedBox(height: Dimensions.space5),
-                              Text(
-                                LocalStrings.specialOccasions,
-                                style: regularDefault.copyWith(
-                                  color: ColorResources.conceptTextColor,
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                        const SizedBox(height: Dimensions.space30),
-                        AppTextFieldWidget(
-                          controller: controller.firstName,
-                          isShowCountryPicker: false,
-                          labelText: LocalStrings.firstNameStar,
-                          boxConstraints: const BoxConstraints(minWidth: 15),
-                        ),
-                        const SizedBox(height: Dimensions.space35),
-                        AppTextFieldWidget(
-                          controller: controller.lastName,
-                          isShowCountryPicker: false,
-                          labelText: LocalStrings.lastNameStar,
-                          boxConstraints: const BoxConstraints(minWidth: 15),
-                        ),
-                        const SizedBox(height: Dimensions.space35),
-                        AppTextFieldWidget(
-                          controller: controller.mobileNumber,
-                          isEnable: false,
-                          fillColor:
-                              ColorResources.offerSixColor.withOpacity(0.3),
-                          labelText: LocalStrings.mobileNumber,
-                          suffixIcon: const Icon(
-                            Icons.check_circle_rounded,
-                            color: ColorResources.videoCallColor,
-                            size: 25,
-                          ),
-                        ),
-                        const SizedBox(height: Dimensions.space35),
-                        // EmailId & verify
-                        Row(
-                          children: [
-                            Expanded(
-                              child: AppTextFieldWidget(
-                                controller: controller.email,
-                                isShowCountryPicker: false,
-                                isEnable: false,
-                                fillColor: ColorResources.offerSixColor
-                                    .withOpacity(0.3),
-                                labelText: LocalStrings.emailId,
-                                boxConstraints:
-                                    const BoxConstraints(minWidth: 15),
-                              ),
-                            ),
-                            const SizedBox(width: Dimensions.space20),
-                            // Verify email
-                            GestureDetector(
-                              onTap: () {
-                                //Verify email bottom sheet
-                                verifyEmailBottomSheet();
-                                controller.startTimer();
-                              },
-                              child: Container(
-                                height: size.height * 0.065,
-                                width: size.width * 0.25,
-                                decoration: BoxDecoration(
-                                  color: ColorResources.offerSixColor
-                                      .withOpacity(0.3),
-                                  borderRadius: BorderRadius.circular(
-                                      Dimensions.offersCardRadius),
-                                ),
-                                child: Center(
-                                  child: Text(
-                                    LocalStrings.verify,
-                                    style: mediumDefault.copyWith(
-                                      color: ColorResources.conceptTextColor,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: Dimensions.space35),
-                        AppTextFieldWidget(
-                          controller: controller.pinCode,
-                          isShowCountryPicker: false,
-                          labelText: LocalStrings.pinCode,
-                          boxConstraints: const BoxConstraints(minWidth: 15),
-                        ),
-                        const SizedBox(height: Dimensions.space30),
-                        // Gender selection radio button
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            // Create a Radio Male
-                            Flexible(
-                              child: Container(
-                                height: size.height * 0.065,
-                                width: size.width * 0.27,
-                                decoration: BoxDecoration(
-                                  color: ColorResources.cardTabColor
-                                      .withOpacity(0.1),
-                                  borderRadius: BorderRadius.circular(
-                                      Dimensions.offersCardRadius),
-                                ),
-                                child: Row(
-                                  children: [
-                                    Radio(
-                                      value: 1,
-                                      groupValue: controller.selectedValue,
-                                      onChanged: (value) {
-                                        controller.selectionGender(value);
-                                      },
-                                    ),
-                                    Text(
-                                      LocalStrings.male,
-                                      style: mediumDefault.copyWith(
-                                          color:
-                                              ColorResources.conceptTextColor),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            const SizedBox(width: Dimensions.space20),
-                            // Create a Radio Female
-                            Flexible(
-                              child: Container(
-                                height: size.height * 0.065,
-                                width: size.width * 0.27,
-                                decoration: BoxDecoration(
-                                  color: ColorResources.cardTabColor
-                                      .withOpacity(0.1),
-                                  borderRadius: BorderRadius.circular(
-                                      Dimensions.offersCardRadius),
-                                ),
-                                child: Row(
-                                  children: [
-                                    Radio(
-                                      value: 2,
-                                      groupValue: controller.selectedValue,
-                                      onChanged: (value) {
-                                        controller.selectionGender(value);
-                                      },
-                                    ),
-                                    Text(
-                                      LocalStrings.female,
-                                      style: mediumDefault.copyWith(
-                                          color:
-                                              ColorResources.conceptTextColor),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                            const SizedBox(width: Dimensions.space20),
-
-                            // Create a Radio Other
-                            Flexible(
-                              child: Container(
-                                height: size.height * 0.065,
-                                width: size.width * 0.27,
-                                decoration: BoxDecoration(
-                                  color: ColorResources.cardTabColor
-                                      .withOpacity(0.1),
-                                  borderRadius: BorderRadius.circular(
-                                      Dimensions.offersCardRadius),
-                                ),
-                                child: Row(
-                                  children: [
-                                    Radio(
-                                      value: 3,
-                                      groupValue: controller.selectedValue,
-                                      onChanged: (value) {
-                                        controller.selectionGender(value);
-                                      },
-                                    ),
-                                    Text(
-                                      LocalStrings.other,
-                                      style: mediumDefault.copyWith(
-                                          color:
-                                              ColorResources.conceptTextColor),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: Dimensions.space35),
-                        // Birthday
-                        GestureDetector(
-                          onTap: () {
-                            controller.datePicker(LocalStrings.birthday);
-                          },
-                          child: AppTextFieldWidget(
-                            controller: controller.birthDay,
-                            isShowCountryPicker: false,
-                            labelText: LocalStrings.birthday,
-                            isEnable: false,
-                            boxConstraints: const BoxConstraints(minWidth: 15),
-                            suffixIcon: Container(
-                              height: size.height * 0.10,
-                              width: size.width * 0.10,
-                              padding: EdgeInsets.zero,
-                              margin: const EdgeInsets.only(
-                                  top: 8, bottom: 8, right: 10),
-                              decoration: BoxDecoration(
-                                color: ColorResources.backgroundDatePickerColor,
-                                shape: BoxShape.circle,
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: ColorResources.borderColor
-                                        .withOpacity(0.3),
-                                    offset: const Offset(0.0, 1.0), //(x,y)
-                                    blurRadius: 1,
-                                    spreadRadius: 1,
-                                  ),
-                                ],
-                              ),
-                              child: const Icon(Icons.calendar_month_rounded,
-                                  size: 23,
-                                  color: ColorResources.conceptTextColor),
                             ),
                           ),
                         ),
-                        const SizedBox(height: Dimensions.space35),
-                        // Anniversary
-                        GestureDetector(
-                          onTap: () {
-                            controller.datePicker(LocalStrings.anniversary);
-                          },
-                          child: AppTextFieldWidget(
-                            controller: controller.anniversary,
-                            isShowCountryPicker: false,
-                            labelText: LocalStrings.anniversary,
-                            isEnable: false,
-                            boxConstraints: const BoxConstraints(minWidth: 15),
-                            suffixIcon: GestureDetector(
-                              onTap: () {},
-                              child: Container(
-                                height: size.height * 0.10,
-                                width: size.width * 0.10,
-                                padding: EdgeInsets.zero,
-                                margin: const EdgeInsets.only(
-                                    top: 8, bottom: 8, right: 10),
-                                decoration: BoxDecoration(
-                                  color:
-                                      ColorResources.backgroundDatePickerColor,
-                                  shape: BoxShape.circle,
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: ColorResources.borderColor
-                                          .withOpacity(0.3),
-                                      offset: const Offset(0.0, 1.0), //(x,y)
-                                      blurRadius: 1,
-                                      spreadRadius: 1,
-                                    ),
-                                  ],
-                                ),
-                                child: const Icon(Icons.calendar_month_rounded,
-                                    size: 23,
-                                    color: ColorResources.conceptTextColor),
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: Dimensions.space35),
-                        // Occupation
-                        GestureDetector(
-                          onTap: () {
-                            selectOccupationBottomSheet();
-                          },
-                          child: AppTextFieldWidget(
-                            controller: controller.occupation,
-                            isShowCountryPicker: false,
-                            labelText: LocalStrings.occupation,
-                            isEnable: false,
-                            boxConstraints: const BoxConstraints(minWidth: 15),
-                            suffixIcon: GestureDetector(
-                              onTap: () {},
-                              child: Container(
-                                height: size.height * 0.10,
-                                width: size.width * 0.10,
-                                padding: EdgeInsets.zero,
-                                margin: const EdgeInsets.only(
-                                    top: 8, bottom: 8, right: 10),
-                                decoration: BoxDecoration(
-                                  color:
-                                      ColorResources.backgroundDatePickerColor,
-                                  shape: BoxShape.circle,
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: ColorResources.borderColor
-                                          .withOpacity(0.3),
-                                      offset: const Offset(0.0, 1.0), //(x,y)
-                                      blurRadius: 1,
-                                      spreadRadius: 1,
-                                    ),
-                                  ],
-                                ),
-                                child: const Icon(
-                                    Icons.keyboard_arrow_down_rounded,
-                                    size: 30,
-                                    color: ColorResources.conceptTextColor),
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: Dimensions.space35),
-                        // Spouse Birthday
-                        GestureDetector(
-                          onTap: () {
-                            controller.datePicker(LocalStrings.spousBirthday);
-                          },
-                          child: AppTextFieldWidget(
-                            controller: controller.spouseBirthday,
-                            isShowCountryPicker: false,
-                            labelText: LocalStrings.spousBirthday,
-                            isEnable: false,
-                            boxConstraints: const BoxConstraints(minWidth: 15),
-                            suffixIcon: GestureDetector(
-                              onTap: () {},
-                              child: Container(
-                                height: size.height * 0.10,
-                                width: size.width * 0.10,
-                                padding: EdgeInsets.zero,
-                                margin: const EdgeInsets.only(
-                                    top: 8, bottom: 8, right: 10),
-                                decoration: BoxDecoration(
-                                  color:
-                                      ColorResources.backgroundDatePickerColor,
-                                  shape: BoxShape.circle,
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: ColorResources.borderColor
-                                          .withOpacity(0.3),
-                                      offset: const Offset(0.0, 1.0), //(x,y)
-                                      blurRadius: 1,
-                                      spreadRadius: 1,
-                                    ),
-                                  ],
-                                ),
-                                child: const Icon(Icons.calendar_month_rounded,
-                                    size: 23,
-                                    color: ColorResources.conceptTextColor),
-                              ),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: Dimensions.space25),
-                        GestureDetector(
-                          onTap: () {
-                            /// Analysis log edit profile add more events
-                            AppAnalytics().actionTriggerLogs(
-                                eventName:
-                                    LocalStrings.editProfileAddEventClick,
-                                index: 15);
-                          },
-                          child: Align(
-                            alignment: Alignment.centerLeft,
-                            child: Text(
-                              LocalStrings.addMore,
-                              style: regularDefault.copyWith(
-                                  color: ColorResources.offerColor),
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: Dimensions.space25),
-                        RichText(
-                            textAlign: TextAlign.center,
-                            text: TextSpan(
-                              children: [
-                                TextSpan(
-                                  text: LocalStrings.byClicking,
-                                  style: mediumDefault.copyWith(
-                                      color: ColorResources.conceptTextColor),
-                                ),
-                                TextSpan(
-                                  text: LocalStrings.tAndC,
-                                  recognizer: TapGestureRecognizer()
-                                    ..onTap = () {
-                                      /// Analysis log edit profile Term & Condition
-                                      AppAnalytics().actionTriggerLogs(
-                                          eventName: LocalStrings
-                                              .editProfileTermConditionView,
-                                          index: 15);
-                                    },
-                                  style: mediumDefault.copyWith(
-                                      color: ColorResources.offerColor),
-                                ),
-                                TextSpan(
-                                  text: " ${LocalStrings.and} ",
-                                  style: mediumDefault.copyWith(
-                                      color: ColorResources.conceptTextColor),
-                                ),
-                                TextSpan(
-                                  text: "${LocalStrings.privacyPolicy}.",
-                                  recognizer: TapGestureRecognizer()
-                                    ..onTap = () {
-                                      /// Analysis log edit profile privacy policy.
-                                      AppAnalytics().actionTriggerLogs(
-                                          eventName: LocalStrings
-                                              .editProfilePrivacyPolicyView,
-                                          index: 15);
-                                    },
-                                  style: mediumDefault.copyWith(
-                                      color: ColorResources.offerColor),
-                                ),
-                              ],
-                            )),
-                        SizedBox(height: size.height * 0.090),
                       ],
                     ),
-                  )),
+                    const SizedBox(height: Dimensions.space35),
+                    AppTextFieldWidget(
+                      controller: controller.pinCode,
+                      isShowCountryPicker: false,
+                      labelText: LocalStrings.pinCode,
+                      boxConstraints: const BoxConstraints(minWidth: 15),
+                    ),
+                    const SizedBox(height: Dimensions.space30),
+                    // Gender selection radio button
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        // Create a Radio Male
+                        Flexible(
+                          child: Container(
+                            height: size.height * 0.065,
+                            width: size.width * 0.27,
+                            decoration: BoxDecoration(
+                              color:
+                                  ColorResources.cardTabColor.withOpacity(0.1),
+                              borderRadius: BorderRadius.circular(
+                                  Dimensions.offersCardRadius),
+                            ),
+                            child: Row(
+                              children: [
+                                Radio(
+                                  value: 1,
+                                  groupValue: controller.selectedValue,
+                                  onChanged: (value) {
+                                    controller.selectionGender(value);
+                                  },
+                                ),
+                                Text(
+                                  LocalStrings.male,
+                                  style: mediumDefault.copyWith(
+                                      color: ColorResources.conceptTextColor),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: Dimensions.space20),
+                        // Create a Radio Female
+                        Flexible(
+                          child: Container(
+                            height: size.height * 0.065,
+                            width: size.width * 0.27,
+                            decoration: BoxDecoration(
+                              color:
+                                  ColorResources.cardTabColor.withOpacity(0.1),
+                              borderRadius: BorderRadius.circular(
+                                  Dimensions.offersCardRadius),
+                            ),
+                            child: Row(
+                              children: [
+                                Radio(
+                                  value: 2,
+                                  groupValue: controller.selectedValue,
+                                  onChanged: (value) {
+                                    controller.selectionGender(value);
+                                  },
+                                ),
+                                Text(
+                                  LocalStrings.female,
+                                  style: mediumDefault.copyWith(
+                                      color: ColorResources.conceptTextColor),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: Dimensions.space20),
+
+                        // Create a Radio Other
+                        Flexible(
+                          child: Container(
+                            height: size.height * 0.065,
+                            width: size.width * 0.27,
+                            decoration: BoxDecoration(
+                              color:
+                                  ColorResources.cardTabColor.withOpacity(0.1),
+                              borderRadius: BorderRadius.circular(
+                                  Dimensions.offersCardRadius),
+                            ),
+                            child: Row(
+                              children: [
+                                Radio(
+                                  value: 3,
+                                  groupValue: controller.selectedValue,
+                                  onChanged: (value) {
+                                    controller.selectionGender(value);
+                                  },
+                                ),
+                                Text(
+                                  LocalStrings.other,
+                                  style: mediumDefault.copyWith(
+                                      color: ColorResources.conceptTextColor),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: Dimensions.space35),
+                    // Birthday
+                    GestureDetector(
+                      onTap: () {
+                        controller.datePicker(LocalStrings.birthday);
+                      },
+                      child: AppTextFieldWidget(
+                        controller: controller.birthDay,
+                        isShowCountryPicker: false,
+                        labelText: LocalStrings.birthday,
+                        isEnable: false,
+                        boxConstraints: const BoxConstraints(minWidth: 15),
+                        suffixIcon: Container(
+                          height: size.height * 0.10,
+                          width: size.width * 0.10,
+                          padding: EdgeInsets.zero,
+                          margin: const EdgeInsets.only(
+                              top: 8, bottom: 8, right: 10),
+                          decoration: BoxDecoration(
+                            color: ColorResources.backgroundDatePickerColor,
+                            shape: BoxShape.circle,
+                            boxShadow: [
+                              BoxShadow(
+                                color:
+                                    ColorResources.borderColor.withOpacity(0.3),
+                                offset: const Offset(0.0, 1.0), //(x,y)
+                                blurRadius: 1,
+                                spreadRadius: 1,
+                              ),
+                            ],
+                          ),
+                          child: const Icon(Icons.calendar_month_rounded,
+                              size: 23, color: ColorResources.conceptTextColor),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: Dimensions.space35),
+                    // Anniversary
+                    GestureDetector(
+                      onTap: () {
+                        controller.datePicker(LocalStrings.anniversary);
+                      },
+                      child: AppTextFieldWidget(
+                        controller: controller.anniversary,
+                        isShowCountryPicker: false,
+                        labelText: LocalStrings.anniversary,
+                        isEnable: false,
+                        boxConstraints: const BoxConstraints(minWidth: 15),
+                        suffixIcon: GestureDetector(
+                          onTap: () {},
+                          child: Container(
+                            height: size.height * 0.10,
+                            width: size.width * 0.10,
+                            padding: EdgeInsets.zero,
+                            margin: const EdgeInsets.only(
+                                top: 8, bottom: 8, right: 10),
+                            decoration: BoxDecoration(
+                              color: ColorResources.backgroundDatePickerColor,
+                              shape: BoxShape.circle,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: ColorResources.borderColor
+                                      .withOpacity(0.3),
+                                  offset: const Offset(0.0, 1.0), //(x,y)
+                                  blurRadius: 1,
+                                  spreadRadius: 1,
+                                ),
+                              ],
+                            ),
+                            child: const Icon(Icons.calendar_month_rounded,
+                                size: 23,
+                                color: ColorResources.conceptTextColor),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: Dimensions.space35),
+                    // Occupation
+                    GestureDetector(
+                      onTap: () {
+                        selectOccupationBottomSheet();
+                      },
+                      child: AppTextFieldWidget(
+                        controller: controller.occupation,
+                        isShowCountryPicker: false,
+                        labelText: LocalStrings.occupation,
+                        isEnable: false,
+                        boxConstraints: const BoxConstraints(minWidth: 15),
+                        suffixIcon: GestureDetector(
+                          onTap: () {},
+                          child: Container(
+                            height: size.height * 0.10,
+                            width: size.width * 0.10,
+                            padding: EdgeInsets.zero,
+                            margin: const EdgeInsets.only(
+                                top: 8, bottom: 8, right: 10),
+                            decoration: BoxDecoration(
+                              color: ColorResources.backgroundDatePickerColor,
+                              shape: BoxShape.circle,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: ColorResources.borderColor
+                                      .withOpacity(0.3),
+                                  offset: const Offset(0.0, 1.0), //(x,y)
+                                  blurRadius: 1,
+                                  spreadRadius: 1,
+                                ),
+                              ],
+                            ),
+                            child: const Icon(Icons.keyboard_arrow_down_rounded,
+                                size: 30,
+                                color: ColorResources.conceptTextColor),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: Dimensions.space35),
+                    // Spouse Birthday
+                    GestureDetector(
+                      onTap: () {
+                        controller.datePicker(LocalStrings.spousBirthday);
+                      },
+                      child: AppTextFieldWidget(
+                        controller: controller.spouseBirthday,
+                        isShowCountryPicker: false,
+                        labelText: LocalStrings.spousBirthday,
+                        isEnable: false,
+                        boxConstraints: const BoxConstraints(minWidth: 15),
+                        suffixIcon: GestureDetector(
+                          onTap: () {},
+                          child: Container(
+                            height: size.height * 0.10,
+                            width: size.width * 0.10,
+                            padding: EdgeInsets.zero,
+                            margin: const EdgeInsets.only(
+                                top: 8, bottom: 8, right: 10),
+                            decoration: BoxDecoration(
+                              color: ColorResources.backgroundDatePickerColor,
+                              shape: BoxShape.circle,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: ColorResources.borderColor
+                                      .withOpacity(0.3),
+                                  offset: const Offset(0.0, 1.0), //(x,y)
+                                  blurRadius: 1,
+                                  spreadRadius: 1,
+                                ),
+                              ],
+                            ),
+                            child: const Icon(Icons.calendar_month_rounded,
+                                size: 23,
+                                color: ColorResources.conceptTextColor),
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: Dimensions.space25),
+                    RichText(
+                      textAlign: TextAlign.center,
+                      text: TextSpan(
+                        children: [
+                          TextSpan(
+                            text: LocalStrings.byClicking,
+                            style: mediumDefault.copyWith(
+                                color: ColorResources.conceptTextColor),
+                          ),
+                          TextSpan(
+                            text: LocalStrings.tAndC,
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () {
+                                /// Analysis log edit profile Term & Condition
+                                AppAnalytics().actionTriggerLogs(
+                                    eventName: LocalStrings
+                                        .editProfileTermConditionView,
+                                    index: 15);
+                              },
+                            style: mediumDefault.copyWith(
+                                color: ColorResources.offerColor),
+                          ),
+                          TextSpan(
+                            text: " ${LocalStrings.and} ",
+                            style: mediumDefault.copyWith(
+                                color: ColorResources.conceptTextColor),
+                          ),
+                          TextSpan(
+                            text: "${LocalStrings.privacyPolicy}.",
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () {
+                                /// Analysis log edit profile privacy policy.
+                                AppAnalytics().actionTriggerLogs(
+                                    eventName: LocalStrings
+                                        .editProfilePrivacyPolicyView,
+                                    index: 15);
+                              },
+                            style: mediumDefault.copyWith(
+                                color: ColorResources.offerColor),
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(height: size.height * 0.090),
+                  ],
+                ),
+              ),
             ),
-          );
-        });
+          ),
+        );
+      },
+    );
   }
 
 // Email id verify open bottomSheet

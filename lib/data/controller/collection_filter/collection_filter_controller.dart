@@ -21,6 +21,7 @@ class CollectionFilterController extends GetxController {
     }
     update();
   }
+
   /// Get filter data key & value list of model type
   String getFormattedFilters() {
     var formattedFilters = <String, List<String>>{};
@@ -39,6 +40,7 @@ class CollectionFilterController extends GetxController {
       return '$category: {$values}';
     }).join(', ');
   }
+
   void logSelectedFilters() {
     print("Selected Filters: ${getFormattedFilters()}");
 
@@ -48,6 +50,7 @@ class CollectionFilterController extends GetxController {
         productFilter: getFormattedFilters(),
         index: 7);
   }
+
 // Clear all selected filter
   void clearAllFilters() {
     selectedFilters.clear();
@@ -57,9 +60,7 @@ class CollectionFilterController extends GetxController {
   final List<String> categories = [
     LocalStrings.price,
     LocalStrings.productsType,
-    LocalStrings.weightRanges,
     LocalStrings.material,
-    LocalStrings.metal,
     LocalStrings.shopFor,
     LocalStrings.occasion,
     LocalStrings.gemstone,
@@ -101,30 +102,12 @@ class CollectionFilterController extends GetxController {
       'Charms Builders',
       'Tanmaniya'
     ],
-    LocalStrings.weightRanges: [
-      '0-2 g',
-      '2-5 g',
-      '5-10 g',
-      '10-20 g',
-      '20-30 g',
-    ],
     LocalStrings.material: [
       'Platinum',
       'Gold',
       'Diamond',
       'Gemstone',
       'Solitaire'
-    ],
-    LocalStrings.metal: [
-      '18 KT Yellow',
-      '18 KT White',
-      '18 KT Rose',
-      '18 KT Two Tone',
-      '14 KT Yellow',
-      '14 KT Rose',
-      '14 KT Two Tone',
-      '14 KT Three Tone',
-      'Platinum 950'
     ],
     LocalStrings.shopFor: ['Women', 'Men'],
     LocalStrings.occasion: ['Work Wear', 'Daily Wear', 'Evening', 'Party Wear'],

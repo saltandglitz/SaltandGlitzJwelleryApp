@@ -17,6 +17,7 @@ Future<void> main() async {
     const MyApp(),
   );
 }
+
 /// Initialize firebase information provide using this method
 Future<void> initializeDefaultFirebase() async {
   await Firebase.initializeApp(
@@ -28,6 +29,7 @@ Future<void> initializeDefaultFirebase() async {
     ),
   );
 }
+
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 

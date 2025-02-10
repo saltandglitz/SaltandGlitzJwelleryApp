@@ -167,7 +167,7 @@ class CategoriesController extends GetxController {
     MyImages.planPurchaseImage,
   ];
   List needHelpHeadingLst = [
-    LocalStrings.solatnPostcards,
+    LocalStrings.saltAndGlitzPostcards,
     LocalStrings.pop,
   ];
   List needHelpTitleLst = [

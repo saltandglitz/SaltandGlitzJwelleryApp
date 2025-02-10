@@ -4,8 +4,8 @@ class LocalStrings {
   static const String apiKey = "";
 
   ///<<<------------------- API ------------------->>>
-  static const String getBannerApi =
-      "https://saltandglitz-api.vercel.app/v1/banner/bannerGet";
+  static const String getHomeViewApi =
+      "https://saltandglitz-api.vercel.app/v1/homePage/home";
   static const String registerApi =
       "https://saltandglitz-api.vercel.app/api/users/register";
   static const String womenCategoriesApi =
@@ -147,7 +147,7 @@ class LocalStrings {
   static const String mangalsutra = "Mangalsutra";
   static const String mostBrowsed = "Most Browsed";
   static const String moreJewellery = "More Jewellery";
-  static const String solatnPostcards = 'Saltand Glitz Postcards';
+  static const String saltAndGlitzPostcards = 'Saltand Glitz Postcards';
   static const String shopGifts = "Shop For Gifts";
   static const String silverJewellery = "Silver Jewellery | Wedding Edit";
   static const String needHelp = "Need Help In Buying";
@@ -229,7 +229,7 @@ class LocalStrings {
   static const String featured = 'Featured';
   static const String priceLow = 'Price: Low to High';
   static const String priceHigh = 'Price: High to Low';
-  static const String customerRating = 'Customer Rating';
+  // static const String customerRating = 'Customer Rating';
   static const String latestText = 'LATEST';
   static const String bestSeller = 'BESTSELLER';
   static const String blankText = '';
@@ -262,9 +262,9 @@ class LocalStrings {
   static const String filters = 'Filters';
   static const String price = 'Price';
   static const String productsType = 'Product Type';
-  static const String weightRanges = 'Weight Ranges';
+  // static const String weightRanges = 'Weight Ranges';
   static const String material = 'Material';
-  static const String metal = 'Metal';
+  // static const String metal = 'Metal';
   static const String shopFor = 'Shop For';
   static const String occasion = 'Occasion';
   static const String gemstone = 'Gemstone';
@@ -463,7 +463,7 @@ class LocalStrings {
   static const String verify = 'VERIFY';
   static const String pinCode = 'PIN Code*';
   static const String other = 'Other';
-  static const String birthday = 'Birthday*';
+  static const String birthday = 'Birthday (Optional)';
   static const String anniversary = 'Anniversary (Optional)';
   static const String occupation = 'Occupation (Optional)';
   static const String spousBirthday = 'Spous Birthday (Optional)';
