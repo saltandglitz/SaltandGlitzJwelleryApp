@@ -14,6 +14,12 @@ class LocalStrings {
       "https://saltandglitz-api.vercel.app/v1/category/categoryData/Male";
   static const String logoutApi =
       "https://saltandglitz-api.vercel.app/api/users/logout";
+  static const String logInApi =
+      "https://saltandglitz-api.vercel.app/api/users/login";
+  static const String filterProductApi =
+      "https://saltandglitz-api.vercel.app/v1/upload/filterProduct";
+  static const String sendEmailOtpApi =
+      "https://saltandglitz-api.vercel.app/v1/otp/send-otp";
 
   ///<<<------------------- Dashboard Screen ------------------->>>
   static const String solitaire = "Solitaire";
@@ -388,6 +394,10 @@ class LocalStrings {
   static const String flatProducts = 'Flat 5% Off on Solitaire Mount SKU';
   static const String referralCodeSecond = 'MOUNT5';
   static const String logout = 'LOGOUT';
+  static const String logoutDialogText = 'Log Out';
+  static const String cancel = 'Cancel';
+  static const String askLogout =
+      'Are you sure you want to log out? You will need to log in again to continue.';
 
   ///<<<---------------------------- Login Screen screen String ---------------------------->>>
   static const String welcomeBack = 'Welcome back!';

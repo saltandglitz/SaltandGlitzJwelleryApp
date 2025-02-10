@@ -230,11 +230,9 @@ class CreateAccountController extends GetxController {
           PrefManager.setString('phoneNumber', phoneNumber);
           PrefManager.setString('loginType', 'Google');
 
-
-            //Todo : Off all navigation and move My account screen
-            Get.offAllNamed(RouteHelper.bottomBarScreen);
-            bottomBarController.selectedIndex = 2.obs;
-
+          //Todo : Off all navigation and move My account screen
+          Get.offAllNamed(RouteHelper.bottomBarScreen);
+          bottomBarController.selectedIndex = 2.obs;
 
           /// Show login message
           showToast(
@@ -343,6 +341,7 @@ class CreateAccountController extends GetxController {
         //Todo : Off all navigation and move My account screen
         Get.offAllNamed(RouteHelper.bottomBarScreen);
         bottomBarController.selectedIndex = 2.obs;
+
         /// Show login message
         showToast(
             message: LocalStrings.loginSuccessfully, context: Get.context!);
@@ -436,7 +435,10 @@ class CreateAccountController extends GetxController {
         //Todo : Off all navigation and move My account screen
         Get.offAllNamed(RouteHelper.bottomBarScreen);
         bottomBarController.selectedIndex = 2.obs;
+        print("TOKEN : ${PrefManager.getString("token")}");
         showToast(context: Get.context!, message: response.data['message']);
+      } else if (response.statusCode == 400) {
+        showSnackBar(context: Get.context!, message: "User already exists");
       } else {
         // Handle any other errors
         showSnackBar(context: Get.context!, message: response.data['message']);

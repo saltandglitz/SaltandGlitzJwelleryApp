@@ -530,8 +530,10 @@ class _MyAccountScreenState extends State<MyAccountScreen>
                                                                     onTap: () {
                                                                       /// Analysis Offer Referral code copy
                                                                       AppAnalytics().actionTriggerLogs(
-                                                                          eventName: "My_Account_${controller.offerCodeLst[index]}_${LocalStrings.logMyAccountReferralCodeCopy}",
-                                                                          index: 2);
+                                                                          eventName:
+                                                                              "My_Account_${controller.offerCodeLst[index]}_${LocalStrings.logMyAccountReferralCodeCopy}",
+                                                                          index:
+                                                                              2);
                                                                       Clipboard.setData(
                                                                           ClipboardData(
                                                                               text: controller.offerCodeLst[index]));
@@ -643,14 +645,18 @@ class _MyAccountScreenState extends State<MyAccountScreen>
                                                 ),
                                                 TextSpan(
                                                   text: LocalStrings.login,
-                                                  recognizer: TapGestureRecognizer ()..onTap =() {
-                                                    /// Analysis view offer purpose login
-                                                    AppAnalytics().actionTriggerLogs(
-                                                        eventName:
-                                                        LocalStrings
-                                                            .logMyAccountOfferLoginClick,
-                                                        index: 2);
-                                                  },
+                                                  recognizer:
+                                                      TapGestureRecognizer()
+                                                        ..onTap = () {
+                                                    Get.toNamed(RouteHelper.loginScreen);
+                                                          /// Analysis view offer purpose login
+                                                          AppAnalytics()
+                                                              .actionTriggerLogs(
+                                                                  eventName:
+                                                                      LocalStrings
+                                                                          .logMyAccountOfferLoginClick,
+                                                                  index: 2);
+                                                        },
                                                   style: mediumDefault.copyWith(
                                                       color: ColorResources
                                                           .offerColor),
@@ -675,14 +681,13 @@ class _MyAccountScreenState extends State<MyAccountScreen>
                                         const NeverScrollableScrollPhysics(),
                                     itemBuilder: (context, index) {
                                       return GestureDetector(
-                                       onTap: () {
-                                         /// Analysis Account Users Services Provide
-                                         AppAnalytics()
-                                             .actionTriggerLogs(
-                                             eventName:
-                                             "My_Account_${index == 5 ? 'Rate_Us' : index == 6 ? 'Share_App' : index == 7 ? 'Send_Feedback' : index == 8 ? 'Terms_Of_Use' : controller.accountServiceLst[index]}_${LocalStrings.logMyAccountButtonClick}",
-                                             index: 2);
-                                       },
+                                        onTap: () {
+                                          /// Analysis Account Users Services Provide
+                                          AppAnalytics().actionTriggerLogs(
+                                              eventName:
+                                                  "My_Account_${index == 5 ? 'Rate_Us' : index == 6 ? 'Share_App' : index == 7 ? 'Send_Feedback' : index == 8 ? 'Terms_Of_Use' : controller.accountServiceLst[index]}_${LocalStrings.logMyAccountButtonClick}",
+                                              index: 2);
+                                        },
                                         child: Column(
                                           crossAxisAlignment:
                                               CrossAxisAlignment.start,
@@ -690,7 +695,8 @@ class _MyAccountScreenState extends State<MyAccountScreen>
                                             const SizedBox(
                                                 height: Dimensions.space15),
                                             Text(
-                                              controller.accountServiceLst[index],
+                                              controller
+                                                  .accountServiceLst[index],
                                               style: mediumDefault.copyWith(
                                                   color: ColorResources
                                                       .conceptTextColor),
@@ -719,8 +725,7 @@ class _MyAccountScreenState extends State<MyAccountScreen>
                                     GestureDetector(
                                       onTap: () {
                                         //Todo : Only testing purpose set this method
-                                        PrefManager.setString(
-                                            'isLogin', '');
+                                        PrefManager.setString('isLogin', '');
                                         controller.update();
                                         // /// Analysis Whatsapp
                                         // AppAnalytics().actionTriggerLogs(
@@ -814,16 +819,15 @@ class _MyAccountScreenState extends State<MyAccountScreen>
                                   init: MyAccountController(),
                                   builder: (controller) {
                                     return AnimatedBuilder(
-                                      animation:
-                                      controller.animationController,
+                                      animation: controller.animationController,
                                       builder: (context, child) {
                                         return GestureDetector(
                                           onTap: () {
                                             if (PrefManager.getString(
-                                                'isLogin') ==
+                                                    'isLogin') ==
                                                 'yes') {
                                               if (PrefManager.getString(
-                                                  'loginType') ==
+                                                      'loginType') ==
                                                   'Google') {
                                                 createAccountController
                                                     .signOutWithGoogle();
@@ -836,7 +840,7 @@ class _MyAccountScreenState extends State<MyAccountScreen>
 
                                                 print("Google");
                                               } else if (PrefManager.getString(
-                                                  'loginType') ==
+                                                      'loginType') ==
                                                   'FaceBook') {
                                                 createAccountController
                                                     .signOutWithFacebook();
@@ -848,6 +852,9 @@ class _MyAccountScreenState extends State<MyAccountScreen>
                                                     index: 2);
                                                 print("Facebook");
                                               } else {
+                                                /// Ask to user logout confirmation dialog Box
+                                                controller.logoutConfirmationDialog(context);
+
                                                 /// Analysis logout
                                                 AppAnalytics().actionTriggerLogs(
                                                     eventName: LocalStrings
@@ -861,13 +868,12 @@ class _MyAccountScreenState extends State<MyAccountScreen>
                                                   eventName: LocalStrings
                                                       .logMyAccountLoginClick,
                                                   index: 2);
-                                              Get.toNamed(RouteHelper
-                                                  .loginScreen)!
+                                              Get.toNamed(
+                                                      RouteHelper.loginScreen)!
                                                   .then(
-                                                    (value) {
+                                                (value) {
                                                   if (value == true) {
-                                                    print(
-                                                        "Coming Data : 333");
+                                                    print("Coming Data : 333");
 
                                                     // Get string login to check already login or not
                                                     // controller.loginKey =
@@ -878,50 +884,47 @@ class _MyAccountScreenState extends State<MyAccountScreen>
                                                 },
                                               );
                                             }
-                                            PrefManager.getString(
-                                                'isLogin');
+                                            PrefManager.getString('isLogin');
                                             controller.update();
                                           },
                                           child: Container(
                                             height: size.height * 0.047,
                                             width: size.width * 0.40,
                                             decoration: BoxDecoration(
-                                              borderRadius: BorderRadius
-                                                  .circular(Dimensions
-                                                  .offersCardRadius),
+                                              borderRadius:
+                                                  BorderRadius.circular(
+                                                      Dimensions
+                                                          .offersCardRadius),
                                               border: Border.all(
                                                   color: controller
-                                                      .borderColorAnimation
-                                                      .value ??
+                                                          .borderColorAnimation
+                                                          .value ??
                                                       ColorResources
                                                           .offerTenColor,
                                                   width: 1.5),
                                             ),
                                             child: createAccountController
-                                                .isLoading ==
-                                                true
+                                                        .isLoading ==
+                                                    true
                                                 ? AppCircularLoader()
                                                 : Center(
-                                              child: Text(
-                                                PrefManager.getString(
-                                                    'isLogin') ==
-                                                    'yes'
-                                                    ?
+                                                    child: Text(
+                                                      PrefManager.getString(
+                                                                  'isLogin') ==
+                                                              'yes'
+                                                          ?
 
-                                                /// With login view text
-                                                LocalStrings
-                                                    .logout
-                                                    :
+                                                          /// With login view text
+                                                          LocalStrings.logout
+                                                          :
 
-                                                /// Without login view text
-                                                LocalStrings
-                                                    .login,
-                                                style: semiBoldDefault
-                                                    .copyWith(
-                                                    color: ColorResources
-                                                        .conceptTextColor),
-                                              ),
-                                            ),
+                                                          /// Without login view text
+                                                          LocalStrings.login,
+                                                      style: semiBoldDefault.copyWith(
+                                                          color: ColorResources
+                                                              .conceptTextColor),
+                                                    ),
+                                                  ),
                                           ),
                                         );
                                       },

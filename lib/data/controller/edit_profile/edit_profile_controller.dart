@@ -8,6 +8,7 @@ import 'package:saltandGlitz/view/components/common_message_show.dart';
 import '../../../analytics/app_analytics.dart';
 import '../../../core/utils/local_strings.dart';
 import '../../../core/utils/validation.dart';
+import '../../../local_storage/pref_manager.dart';
 
 class EditProfileController extends GetxController {
   TextEditingController firstName = TextEditingController();
@@ -48,11 +49,7 @@ class EditProfileController extends GetxController {
   void onInit() {
     // TODO: implement onInit
     super.onInit();
-    firstName.text = "Xyz";
-    lastName.text = "Kureshi";
-    mobileNumber.text = "1234657891";
-    email.text = "xyz@gmail.com";
-    pinCode.text = "394101";
+    showLoginDataTexTextField();
   }
 
   selectionGender(value) {
@@ -107,14 +104,7 @@ class EditProfileController extends GetxController {
     update();
   }
 
-  @override
-  void dispose() {
-    // TODO: implement dispose
-    timer?.cancel();
-    super.dispose();
-  }
-
-  // Is validation
+  /// Is validation
   isValidation() {
     if (CommonValidation().isValidationEmpty(firstName.text)) {
       showSnackBar(context: Get.context!, message: LocalStrings.enterFirstName);
@@ -136,8 +126,8 @@ class EditProfileController extends GetxController {
         genderSelection: selectedValue == 1
             ? LocalStrings.female
             : selectedValue == 2
-            ? LocalStrings.male
-            : LocalStrings.other,
+                ? LocalStrings.male
+                : LocalStrings.other,
         birthday: birthDay.text,
         anniversary: anniversary.text,
         occupation: occupation.text,
@@ -147,5 +137,33 @@ class EditProfileController extends GetxController {
       showToast(
           message: LocalStrings.saveChangesMessage, context: Get.context!);
     }
+  }
+
+  /// Local storage stored data show in textField
+  showLoginDataTexTextField() {
+    firstName.text = PrefManager.getString('firstName') ?? '';
+    lastName.text = PrefManager.getString('lastName') ?? '';
+    email.text = PrefManager.getString('email') ?? '';
+    mobileNumber.text = PrefManager.getString('phoneNumber') ?? '';
+    genderApiSelection();
+    update();
+  }
+
+  genderApiSelection() {
+    String gender = PrefManager.getString('gender') ?? '';
+    if (gender == "Female") {
+      selectionGender(1);
+    } else if (gender == "Male") {
+      selectionGender(2);
+    } else {
+      selectionGender(0);
+    }
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    timer?.cancel();
+    super.dispose();
   }
 }

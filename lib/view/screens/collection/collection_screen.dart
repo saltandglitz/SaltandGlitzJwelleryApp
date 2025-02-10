@@ -4,6 +4,7 @@ import 'package:saltandGlitz/core/utils/dimensions.dart';
 import 'package:saltandGlitz/core/utils/images.dart';
 import '../../../analytics/app_analytics.dart';
 import '../../../core/route/route.dart';
+import '../../../core/utils/app_const.dart';
 import '../../../core/utils/color_resources.dart';
 import '../../../core/utils/local_strings.dart';
 import '../../../core/utils/style.dart';
@@ -188,10 +189,13 @@ class _CollectionScreenState extends State<CollectionScreen> {
           init: MainController(),
           builder: (mainController) {
             return GestureDetector(
-              onTap:mainController.isNetworkConnection?.value == false ? null: () {
-                AppAnalytics().actionTriggerLogs(
-                    eventName: LocalStrings.logCollectionInquiryCall, index: 5);
-              },
+              onTap: mainController.isNetworkConnection?.value == false
+                  ? null
+                  : () {
+                      AppAnalytics().actionTriggerLogs(
+                          eventName: LocalStrings.logCollectionInquiryCall,
+                          index: 5);
+                    },
               child: Container(
                 height: size.height * 0.070,
                 margin: const EdgeInsets.only(bottom: 70, left: 300),
@@ -205,17 +209,18 @@ class _CollectionScreenState extends State<CollectionScreen> {
                       offset: const Offset(0, 2),
                     ),
                   ],
-                  color:mainController.isNetworkConnection?.value == false ?ColorResources.conceptTextColor.withOpacity(0.3) : ColorResources.conceptTextColor,
+                  color: mainController.isNetworkConnection?.value == false
+                      ? ColorResources.conceptTextColor.withOpacity(0.3)
+                      : ColorResources.conceptTextColor,
                 ),
                 child: const Center(
                     child: Icon(
-                      Icons.call,
-                      color: ColorResources.whiteColor,
-                    )),
+                  Icons.call,
+                  color: ColorResources.whiteColor,
+                )),
               ),
             );
-          }
-      ),
+          }),
       body: GetBuilder(
           init: MainController(),
           builder: (mainController) {
@@ -257,9 +262,7 @@ class _CollectionScreenState extends State<CollectionScreen> {
                                   2; // Adjust for spacing
                           return Expanded(
                             child: ListView.builder(
-                              itemCount:
-                                  (controller.collectionDataImageLst.length / 2)
-                                      .ceil(),
+                              itemCount: (filterProductData.length / 2).ceil(),
                               physics: const BouncingScrollPhysics(),
                               shrinkWrap: true,
                               itemBuilder: (context, index) {
@@ -293,21 +296,24 @@ class _CollectionScreenState extends State<CollectionScreen> {
                                                         firstIndex],
                                                   );
                                                   Get.toNamed(
-                                                      RouteHelper.productScreen,arguments: [controller
-                                                      .collectionDataImageLst[
-                                                  firstIndex]]);
+                                                      RouteHelper.productScreen,
+                                                      arguments: [
+                                                        controller
+                                                                .collectionDataImageLst[
+                                                            firstIndex]
+                                                      ]);
 
                                                   /// Product screen seen product analysis log
                                                   AppAnalytics()
                                                       .actionTriggerWithProductsLogs(
-                                                    eventName:
-                                                    LocalStrings.logProductDetailView,
+                                                    eventName: LocalStrings
+                                                        .logProductDetailView,
                                                     productName: controller
-                                                        .collectionDataNameLst[
-                                                    index],
+                                                            .collectionDataNameLst[
+                                                        index],
                                                     productImage: controller
-                                                        .collectionDataImageLst[
-                                                    index],
+                                                            .collectionDataImageLst[
+                                                        index],
                                                     index: 6,
                                                   );
                                                 },
@@ -394,8 +400,9 @@ class _CollectionScreenState extends State<CollectionScreen> {
                   height: size.height * 0.25,
                   color: ColorResources.borderColor.withOpacity(0.050),
                   child: Center(
-                    child: Image.asset(
-                      controller.collectionDataImageLst[index],
+                    child: CachedCommonImage(
+                      networkImageUrl:
+                          filterProductData[index].media![0].productAsset!,
                       height: size.height * 0.17,
                       width: double.infinity,
                     ),
@@ -458,7 +465,7 @@ class _CollectionScreenState extends State<CollectionScreen> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            controller.collectionRatingLst[index],
+                            "${filterProductData[index].rating}",
                             style: semiBoldSmall.copyWith(
                                 color: ColorResources.conceptTextColor),
                           ),

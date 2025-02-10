@@ -37,7 +37,7 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       title: LocalStrings.appName,
       debugShowCheckedModeBanner: false,
-      initialRoute: RouteHelper.bottomBarScreen,
+      initialRoute: RouteHelper.splashScreen,
       theme: ThemeData.light(),
       getPages: RouteHelper().routes,
     );

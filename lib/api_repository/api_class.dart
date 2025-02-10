@@ -101,9 +101,6 @@ class HttpUtil {
             int errCode =
                 error.response != null ? error.response!.statusCode! : 00;
             switch (errCode) {
-              case 400:
-                return ErrorEntity(
-                    code: errCode, message: "User already exists");
               case 401:
                 return ErrorEntity(code: errCode, message: "Permission denied");
               case 403:

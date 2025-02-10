@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:saltandGlitz/data/controller/set_password/set_password_controller.dart';
 
 import '../../../core/route/route.dart';
 import '../../../core/utils/color_resources.dart';
@@ -21,6 +22,16 @@ class SetPassword extends StatefulWidget {
 
 class _SetPasswordState extends State<SetPassword> {
   final createAccountController = Get.put(CreateAccountController());
+  final setPasswordController = Get.put(SetPasswordController());
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    if (Get.arguments != null) {
+      setPasswordController.email = Get.arguments;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -59,14 +70,16 @@ class _SetPasswordState extends State<SetPassword> {
                 ),
                 const SizedBox(height: Dimensions.space15),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
-                      LocalStrings.xyzGmail,
-                      textAlign: TextAlign.center,
-                      style: mediumLarge.copyWith(),
+                    Expanded(
+                      child: Text(
+                        setPasswordController.email ?? "",
+                        maxLines: 2,
+                        textAlign: TextAlign.center,
+                        style: mediumLarge.copyWith(),
+                      ),
                     ),
-                    const SizedBox(width: Dimensions.space8),
                     RichText(
                       text: TextSpan(
                         children: [
@@ -85,17 +98,17 @@ class _SetPasswordState extends State<SetPassword> {
                     ),
                   ],
                 ),
-                const SizedBox(height: Dimensions.space5),
-                Text(
-                  LocalStrings.phoneNumber,
-                  style: mediumLarge.copyWith(),
-                ),
+                // const SizedBox(height: Dimensions.space5),
+                // Text(
+                //   LocalStrings.phoneNumber,
+                //   style: mediumLarge.copyWith(),
+                // ),
                 const SizedBox(height: Dimensions.space35),
                 GetBuilder(
                   init: CreateAccountController(),
                   builder: (controller) {
                     return CommonTextField(
-                      controller: createAccountController.passwordController,
+                      controller: controller.passwordController,
                       textFieldHeight: size.height * 0.065,
                       obSecureText: controller.showPassword,
                       suffixIcon: GestureDetector(
@@ -121,8 +134,8 @@ class _SetPasswordState extends State<SetPassword> {
                 const SizedBox(height: Dimensions.space25),
                 CommonButton(
                   onTap: () {
-                    //Navigate to setPassword page
-                    Get.toNamed(RouteHelper.setPasswordScreen);
+                    /// Password empty or not checked & login api called
+                    setPasswordController.isValidatePasswordAndLogin();
                   },
                   height: size.height * 0.065,
                   width: double.infinity,

@@ -86,7 +86,8 @@ class _LoginScreenState extends State<LoginScreen> {
                               alignment: Alignment.centerLeft,
                               child: IconButton(
                                 onPressed: () {
-                                  mainController.checkToAssignNetworkConnections();
+                                  mainController
+                                      .checkToAssignNetworkConnections();
                                   Get.back();
                                 },
                                 icon: const Icon(
@@ -132,8 +133,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             ),
                             const SizedBox(height: Dimensions.space35),
                             CommonTextField(
-                              controller:
-                                  loginController.enterMobileNumberController,
+                              controller: loginController.emailController,
                               textFieldHeight: size.height * 0.065,
                               hintText: LocalStrings.enterEmail,
                               borderRadius: Dimensions.offersCardRadius,
@@ -146,14 +146,8 @@ class _LoginScreenState extends State<LoginScreen> {
                             const SizedBox(height: Dimensions.space30),
                             CommonButton(
                               onTap: () {
-                                /// Analysis log login click
-                                AppAnalytics().actionTriggerUserLogin(
-                                    eventName: LocalStrings.logLogInButtonClick,
-                                    userCredential:
-                                    loginController.enterMobileNumberController.text,
-                                    index: 8);
-                                //Navigate to setPassword page
-                                Get.toNamed(RouteHelper.setPasswordScreen);
+                                /// Checked first email empty ya validated after move next screen
+                                loginController.emailValidation();
                               },
                               height: size.height * 0.065,
                               width: double.infinity,
@@ -198,28 +192,32 @@ class _LoginScreenState extends State<LoginScreen> {
                                         onTap: () {
                                           /// Analysis log google click
                                           AppAnalytics().actionTriggerLogs(
-                                              eventName: LocalStrings.logLogInGoogleButtonClick,
+                                              eventName: LocalStrings
+                                                  .logLogInGoogleButtonClick,
                                               index: 8);
                                           // Google authentication
                                           controller
-                                              .signInWithGoogle(screenType: 'Login')
+                                              .signInWithGoogle(
+                                                  screenType: 'Login')
                                               .then(
-                                                (value) {
+                                            (value) {
                                               /// Process complete after hide loader
-                                              createAccountController.isLoaderOffMethod();
+                                              createAccountController
+                                                  .isLoaderOffMethod();
                                             },
                                           );
                                         },
-
                                         child: Container(
                                           height: size.height * 0.070,
                                           padding: const EdgeInsets.all(12),
                                           decoration: BoxDecoration(
-                                            color: ColorResources.helpNeedThirdColor,
+                                            color: ColorResources
+                                                .helpNeedThirdColor,
                                             shape: BoxShape.circle,
                                             boxShadow: [
                                               BoxShadow(
-                                                color: ColorResources.borderColor
+                                                color: ColorResources
+                                                    .borderColor
                                                     .withOpacity(0.1),
                                                 spreadRadius: 1,
                                                 blurRadius: 2,
@@ -227,9 +225,12 @@ class _LoginScreenState extends State<LoginScreen> {
                                               ),
                                             ],
                                           ),
-                                          child: createAccountController.isLoading == true
+                                          child: createAccountController
+                                                      .isLoading ==
+                                                  true
                                               ? AppCircularLoader()
-                                              : Image.asset(MyImages.googleImage),
+                                              : Image.asset(
+                                                  MyImages.googleImage),
                                         ),
                                       ),
                                       const SizedBox(width: Dimensions.space25),
@@ -239,12 +240,14 @@ class _LoginScreenState extends State<LoginScreen> {
                                         onTap: () {
                                           /// Analysis log google click
                                           AppAnalytics().actionTriggerLogs(
-                                              eventName: LocalStrings.logLogInFacebookButtonClick,
+                                              eventName: LocalStrings
+                                                  .logLogInFacebookButtonClick,
                                               index: 8);
                                           createAccountController
-                                              .signInWithFacebook(screenType: 'Login')
+                                              .signInWithFacebook(
+                                                  screenType: 'Login')
                                               .then(
-                                                (value) {
+                                            (value) {
                                               /// Process complete after hide loader
                                               createAccountController
                                                   .isLoaderOffFacebookMethod();
@@ -260,7 +263,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                             shape: BoxShape.circle,
                                             boxShadow: [
                                               BoxShadow(
-                                                color: ColorResources.borderColor
+                                                color: ColorResources
+                                                    .borderColor
                                                     .withOpacity(0.1),
                                                 spreadRadius: 1,
                                                 blurRadius: 2,
@@ -268,11 +272,12 @@ class _LoginScreenState extends State<LoginScreen> {
                                               ),
                                             ],
                                           ),
-                                          child:
-                                          createAccountController.isFacebookLoading ==
-                                              true
+                                          child: createAccountController
+                                                      .isFacebookLoading ==
+                                                  true
                                               ? AppCircularLoader()
-                                              : Image.asset(MyImages.facebookImage),
+                                              : Image.asset(
+                                                  MyImages.facebookImage),
                                         ),
                                       ),
                                     ],
@@ -293,7 +298,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                       ..onTap = () {
                                         /// Analysis log Create Account Click
                                         AppAnalytics().actionTriggerLogs(
-                                            eventName: LocalStrings.logLogInCreateAccountClick,
+                                            eventName: LocalStrings
+                                                .logLogInCreateAccountClick,
                                             index: 8);
                                         Get.toNamed(
                                             RouteHelper.createAccountScreen);
@@ -328,7 +334,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                           ..onTap = () {
                                             /// Analysis log Terms Conditions View
                                             AppAnalytics().actionTriggerLogs(
-                                                eventName: LocalStrings.logLogInTermsView,
+                                                eventName: LocalStrings
+                                                    .logLogInTermsView,
                                                 index: 8);
                                           },
                                         style: mediumDefault.copyWith(
@@ -346,7 +353,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                           ..onTap = () {
                                             /// Analysis log Privacy Policy View
                                             AppAnalytics().actionTriggerLogs(
-                                                eventName: LocalStrings.logLogInPrivacyPolicyView,
+                                                eventName: LocalStrings
+                                                    .logLogInPrivacyPolicyView,
                                                 index: 8);
                                           },
                                         style: mediumDefault.copyWith(

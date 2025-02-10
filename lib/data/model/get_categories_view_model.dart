@@ -1,314 +1,289 @@
-import 'dart:convert';
-
-GetCategoriesViewModel getCategoriesViewModelFromJson(String str) =>
-    GetCategoriesViewModel.fromJson(json.decode(str));
-
-String getCategoriesViewModelToJson(GetCategoriesViewModel data) =>
-    json.encode(data.toJson());
-
 class GetCategoriesViewModel {
-  String message;
-  List<Category> categories;
-  List<String> genders;
-  List<Banner> banners;
-  List<MergedProduct> mergedProducts;
+  final String? message;
+  final List<Categories>? categories;
+  final List<String>? genders;
+  final List<Banners>? banners;
+  final List<MergedProducts>? mergedProducts;
 
   GetCategoriesViewModel({
-    this.message = '',
-    this.categories = const [],
-    this.genders = const [],
-    this.banners = const [],
-    this.mergedProducts = const [],
+    this.message,
+    this.categories,
+    this.genders,
+    this.banners,
+    this.mergedProducts,
   });
 
-  factory GetCategoriesViewModel.fromJson(Map<String, dynamic> json) =>
-      GetCategoriesViewModel(
-        message: json["message"] ?? '',
-        categories: json["categories"] == null
-            ? []
-            : List<Category>.from(
-            json["categories"].map((x) => Category.fromJson(x))),
-        genders: json["genders"] == null
-            ? []
-            : List<String>.from(json["genders"].map((x) => x ?? '')),
-        banners: json["banners"] == null
-            ? []
-            : List<Banner>.from(json["banners"].map((x) => Banner.fromJson(x))),
-        mergedProducts: json["mergedProducts"] == null
-            ? []
-            : List<MergedProduct>.from(
-            json["mergedProducts"].map((x) => MergedProduct.fromJson(x))),
-      );
+  GetCategoriesViewModel.fromJson(Map<String, dynamic> json)
+      : message = json['message'] as String?,
+        categories = (json['categories'] as List?)
+            ?.map((dynamic e) => Categories.fromJson(e as Map<String, dynamic>))
+            .toList(),
+        genders = (json['genders'] as List?)
+            ?.map((dynamic e) => e as String)
+            .toList(),
+        banners = (json['banners'] as List?)
+            ?.map((dynamic e) => Banners.fromJson(e as Map<String, dynamic>))
+            .toList(),
+        mergedProducts = (json['mergedProducts'] as List?)
+            ?.map((dynamic e) =>
+                MergedProducts.fromJson(e as Map<String, dynamic>))
+            .toList();
 
   Map<String, dynamic> toJson() => {
-    "message": message,
-    "categories": categories.map((x) => x.toJson()).toList(),
-    "genders": genders.map((x) => x ?? '').toList(),
-    "banners": banners.map((x) => x.toJson()).toList(),
-    "mergedProducts": mergedProducts.map((x) => x.toJson()).toList(),
-  };
+        'message': message,
+        'categories': categories?.map((e) => e.toJson()).toList(),
+        'genders': genders,
+        'banners': banners?.map((e) => e.toJson()).toList(),
+        'mergedProducts': mergedProducts?.map((e) => e.toJson()).toList()
+      };
 }
 
-class Banner {
-  String bannerId;
-  String bannerImage;
-  DateTime createdAt;
-  int v;
+class Categories {
+  final String? category;
+  final String? categoryImage;
+  final List<SubCategory>? subCategory;
 
-  Banner({
-    this.bannerId = '',
-    this.bannerImage = '',
-    DateTime? createdAt,
-    this.v = 0,
-  }) : createdAt = createdAt ?? DateTime.now();
-
-  factory Banner.fromJson(Map<String, dynamic> json) => Banner(
-    bannerId: json["banner_id"] ?? '',
-    bannerImage: json["bannerImage"] ?? '',
-    createdAt: json["createdAt"] != null
-        ? DateTime.parse(json["createdAt"])
-        : DateTime.now(),
-    v: json["__v"] ?? 0,
-  );
-
-  Map<String, dynamic> toJson() => {
-    "banner_id": bannerId,
-    "bannerImage": bannerImage,
-    "createdAt": createdAt.toIso8601String(),
-    "__v": v,
-  };
-}
-
-class Category {
-  String category;
-  String categoryImage;
-  List<Abc> xyz;
-  List<Abc> mbk;
-  List<Abc> abc;
-  List<Abc> undefined;
-
-  Category({
-    this.category = '',
-    this.categoryImage = '',
-    this.xyz = const [],
-    this.mbk = const [],
-    this.abc = const [],
-    this.undefined = const [],
+  Categories({
+    this.category,
+    this.categoryImage,
+    this.subCategory,
   });
 
-  factory Category.fromJson(Map<String, dynamic> json) => Category(
-    category: json["category"] ?? '',
-    categoryImage: json["categoryImage"] ?? '',
-    xyz: json["xyz"] == null
-        ? []
-        : List<Abc>.from(json["xyz"].map((x) => Abc.fromJson(x))),
-    mbk: json["mbk"] == null
-        ? []
-        : List<Abc>.from(json["mbk"].map((x) => Abc.fromJson(x))),
-    abc: json["abc"] == null
-        ? []
-        : List<Abc>.from(json["abc"].map((x) => Abc.fromJson(x))),
-    undefined: json["undefined"] == null
-        ? []
-        : List<Abc>.from(json["undefined"].map((x) => Abc.fromJson(x))),
-  );
+  Categories.fromJson(Map<String, dynamic> json)
+      : category = json['category'] as String?,
+        categoryImage = json['categoryImage'] as String?,
+        subCategory = (json['subCategory'] as List?)
+            ?.map(
+                (dynamic e) => SubCategory.fromJson(e as Map<String, dynamic>))
+            .toList();
 
   Map<String, dynamic> toJson() => {
-    "category": category,
-    "categoryImage": categoryImage,
-    "xyz": xyz.map((x) => x.toJson()).toList(),
-    "mbk": mbk.map((x) => x.toJson()).toList(),
-    "abc": abc.map((x) => x.toJson()).toList(),
-    "undefined": undefined.map((x) => x.toJson()).toList(),
-  };
-}
-
-class Abc {
-  String id;
-  String abcId;
-  String title;
-  double price14Kt;
-  double price18Kt;
-  String image01;
-  String category;
-  int diamondprice;
-  double makingCharge14Kt;
-  double makingCharge18Kt;
-  double grossWt;
-  double netWeight14Kt;
-  double netWeight18Kt;
-  double gst14Kt;
-  double gst18Kt;
-  final double total14Kt;
-  int v;
-  String gender;
-  double total18Kt;
-  int discount;
-  String subCategory;
-  String image02;
-  String image03;
-  DateTime updatedAt;
-  String video;
-  DateTime createdAt;
-
-  Abc({
-    this.id = '',
-    this.abcId = '',
-    this.title = '',
-    required this.price14Kt ,
-    required this.price18Kt ,
-    this.image01 = '',
-    this.category = '',
-    this.diamondprice = 0,
-    required this.makingCharge14Kt ,
-    required this.makingCharge18Kt ,
-    this.grossWt = 0.0,
-    required this.netWeight14Kt ,
-    required this.netWeight18Kt ,
-    required this.gst14Kt ,
-    required this.gst18Kt ,
-    required this.total14Kt,
-    this.v = 0,
-    this.gender = '',
-    this.total18Kt = 0.0,
-    this.discount = 0,
-    this.subCategory = '',
-    this.image02 = '',
-    this.image03 = '',
-    required DateTime? updatedAt,
-    this.video = '',
-    required DateTime? createdAt,
-  }) : updatedAt = updatedAt ?? DateTime.now(),
-        createdAt = createdAt ?? DateTime.now();
-
-  factory Abc.fromJson(Map<String, dynamic> json) => Abc(
-    id: json["_id"] ?? '',
-    abcId: json["id"] ?? '',
-    title: json["title"] ?? '',
-    price14Kt: (json["price14KT"] as num).toDouble(),
-    price18Kt: (json["price18KT"] as num).toDouble(),
-    image01: json["image01"] ?? '',
-    category: json["category"] ?? '',
-    diamondprice: json["diamondprice"] ?? 0,
-    makingCharge14Kt: (json["makingCharge14KT"] as num).toDouble(),
-    makingCharge18Kt: (json["makingCharge18KT"] as num).toDouble(),
-    grossWt: (json["grossWt"] ?? 0.0).toDouble(),
-    netWeight14Kt: (json["netWeight14KT"] as num).toDouble(),
-    netWeight18Kt: (json["netWeight18KT"]as num).toDouble(),
-    gst14Kt: (json["gst14KT"] as num).toDouble(),
-    gst18Kt: (json["gst18KT"] as num).toDouble(),
-    total14Kt: (json['total14KT'] as num).toDouble(),
-    v: json["__v"] ?? 0,
-    gender: json["gender"] ?? '',
-    total18Kt: (json["total18KT"] ?? 0.0).toDouble(),
-    discount: json["discount"] ?? 0,
-    subCategory: json["subCategory"] ?? '',
-    image02: json["image02"] ?? '',
-    image03: json["image03"] ?? '',
-    updatedAt: json["updatedAt"] != null
-        ? DateTime.parse(json["updatedAt"])
-        : DateTime.now(),
-    video: json["video"] ?? '',
-    createdAt: json["createdAt"] != null
-        ? DateTime.parse(json["createdAt"])
-        : DateTime.now(),
-  );
-
-  Map<String, dynamic> toJson() => {
-    "_id": id,
-    "id": abcId,
-    "title": title,
-    "price14KT": price14Kt,
-    "price18KT": price18Kt,
-    "image01": image01,
-    "category": category,
-    "diamondprice": diamondprice,
-    "makingCharge14KT": makingCharge14Kt,
-    "makingCharge18KT": makingCharge18Kt,
-    "grossWt": grossWt,
-    "netWeight14KT": netWeight14Kt,
-    "netWeight18KT": netWeight18Kt,
-    "gst14KT": gst14Kt,
-    "gst18KT": gst18Kt,
-    "total14KT": total14Kt,
-    "__v": v,
-    "gender": gender,
-    "total18KT": total18Kt,
-    "discount": discount,
-    "subCategory": subCategory,
-    "image02": image02,
-    "image03": image03,
-    "updatedAt": updatedAt.toIso8601String(),
-    "video": video,
-    "createdAt": createdAt.toIso8601String(),
-  };
-}
-
-class MergedProduct {
-  String category;
-  String categoryImage;
-  Map<String, List<SubCategory>> subCategories;
-
-  MergedProduct({
-    this.category = '',
-    this.categoryImage = '',
-    this.subCategories = const {},
-  });
-
-  factory MergedProduct.fromJson(Map<String, dynamic> json) => MergedProduct(
-    category: json["category"] ?? '',
-    categoryImage: json["categoryImage"] ?? '',
-    subCategories: Map.from(json["subCategories"] ?? {}).map(
-          (k, v) => MapEntry<String, List<SubCategory>>(
-          k,
-          List<SubCategory>.from(v.map((x) => SubCategory.fromJson(x)))),
-    ),
-  );
-
-  Map<String, dynamic> toJson() => {
-    "category": category,
-    "categoryImage": categoryImage,
-    "subCategories": Map.from(subCategories).map(
-          (k, v) => MapEntry<String, dynamic>(
-        k,
-        List<dynamic>.from(v.map((x) => x.toJson())),
-      ),
-    ),
-  };
+        'category': category,
+        'categoryImage': categoryImage,
+        'subCategory': subCategory?.map((e) => e.toJson()).toList()
+      };
 }
 
 class SubCategory {
-  String productId;
-  String title;
-  int price14Kt;
-  String image01;
-  String category;
-  String subCategory;
+  final String? productId;
+  final String? id;
+  final String? title;
+  final double? price14KT;
+  final double? price18KT;
+  final String? image01;
+  final String? category;
+  final double? diamondprice;
+  final double? makingCharge14KT;
+  final double? makingCharge18KT;
+  final double? grossWt;
+  final double? netWeight14KT;
+  final double? netWeight18KT;
+  final double? gst14KT;
+  final double? gst18KT;
+  final double? total14KT;
+  final int? v;
+  final double? total18KT;
+  final double? discount;
+  final String? subCategory;
+  final String? image02;
+  final String? image03;
+  final String? updatedAt;
+  final String? video;
+  final String? gift;
+  final double? rating;
+  final String? gender;
 
   SubCategory({
-    this.productId = '',
-    this.title = '',
-    this.price14Kt = 0,
-    this.image01 = '',
-    this.category = '',
-    this.subCategory = '',
+    this.productId,
+    this.id,
+    this.title,
+    this.price14KT,
+    this.price18KT,
+    this.image01,
+    this.category,
+    this.diamondprice,
+    this.makingCharge14KT,
+    this.makingCharge18KT,
+    this.grossWt,
+    this.netWeight14KT,
+    this.netWeight18KT,
+    this.gst14KT,
+    this.gst18KT,
+    this.total14KT,
+    this.v,
+    this.total18KT,
+    this.discount,
+    this.subCategory,
+    this.image02,
+    this.image03,
+    this.updatedAt,
+    this.video,
+    this.gift,
+    this.rating,
+    this.gender,
   });
 
-  factory SubCategory.fromJson(Map<String, dynamic> json) => SubCategory(
-    productId: json["productId"] ?? '',
-    title: json["title"] ?? '',
-    price14Kt: json["price14KT"] ?? 0,
-    image01: json["image01"] ?? '',
-    category: json["category"] ?? '',
-    subCategory: json["subCategory"] ?? '',
-  );
+  SubCategory.fromJson(Map<String, dynamic> json)
+      : productId = json['productId'] as String?,
+        id = json['id'] as String?,
+        title = json['title'] as String?,
+        price14KT = (json['price14KT'] as num?)?.toDouble(),
+        price18KT = (json['price18KT'] as num?)?.toDouble(),
+        image01 = json['image01'] as String?,
+        category = json['category'] as String?,
+        diamondprice = (json['diamondprice'] as num?)?.toDouble(),
+        makingCharge14KT = (json['makingCharge14KT'] as num?)?.toDouble(),
+        makingCharge18KT = (json['makingCharge18KT'] as num?)?.toDouble(),
+        grossWt = (json['grossWt'] as num?)?.toDouble(),
+        netWeight14KT = (json['netWeight14KT'] as num?)?.toDouble(),
+        netWeight18KT = (json['netWeight18KT'] as num?)?.toDouble(),
+        gst14KT = (json['gst14KT'] as num?)?.toDouble(),
+        gst18KT = (json['gst18KT'] as num?)?.toDouble(),
+        total14KT = (json['total14KT'] as num?)?.toDouble(),
+        v = json['__v'] as int?,
+        total18KT = (json['total18KT'] as num?)?.toDouble(),
+        discount = (json['discount'] as num?)?.toDouble(),
+        subCategory = json['subCategory'] as String?,
+        image02 = json['image02'] as String?,
+        image03 = json['image03'] as String?,
+        updatedAt = json['updatedAt'] as String?,
+        video = json['video'] as String?,
+        gift = json['gift'] as String?,
+        rating = (json['rating'] as num?)?.toDouble(),
+        gender = json['gender'] as String?;
 
   Map<String, dynamic> toJson() => {
-    "productId": productId,
-    "title": title,
-    "price14KT": price14Kt,
-    "image01": image01,
-    "category": category,
-    "subCategory": subCategory,
-  };
+        '_id': productId,
+        'id': id,
+        'title': title,
+        'price14KT': price14KT,
+        'price18KT': price18KT,
+        'image01': image01,
+        'category': category,
+        'diamondprice': diamondprice,
+        'makingCharge14KT': makingCharge14KT,
+        'makingCharge18KT': makingCharge18KT,
+        'grossWt': grossWt,
+        'netWeight14KT': netWeight14KT,
+        'netWeight18KT': netWeight18KT,
+        'gst14KT': gst14KT,
+        'gst18KT': gst18KT,
+        'total14KT': total14KT,
+        '__v': v,
+        'total18KT': total18KT,
+        'discount': discount,
+        'subCategory': subCategory,
+        'image02': image02,
+        'image03': image03,
+        'updatedAt': updatedAt,
+        'video': video,
+        'gift': gift,
+        'rating': rating,
+        'gender': gender
+      };
+}
+
+class Banners {
+  final String? bannerId;
+  final String? bannerImage;
+  final String? createdAt;
+  final int? v;
+
+  Banners({
+    this.bannerId,
+    this.bannerImage,
+    this.createdAt,
+    this.v,
+  });
+
+  Banners.fromJson(Map<String, dynamic> json)
+      : bannerId = json['banner_id'] as String?,
+        bannerImage = json['bannerImage'] as String?,
+        createdAt = json['createdAt'] as String?,
+        v = json['__v'] as int?;
+
+  Map<String, dynamic> toJson() => {
+        'banner_id': bannerId,
+        'bannerImage': bannerImage,
+        'createdAt': createdAt,
+        '__v': v
+      };
+}
+
+class MergedProducts {
+  final String? category;
+  final String? categoryImage;
+  final SubCategories? subCategories;
+
+  MergedProducts({
+    this.category,
+    this.categoryImage,
+    this.subCategories,
+  });
+
+  MergedProducts.fromJson(Map<String, dynamic> json)
+      : category = json['category'] as String?,
+        categoryImage = json['categoryImage'] as String?,
+        subCategories = (json['subCategories'] as Map<String, dynamic>?) != null
+            ? SubCategories.fromJson(
+                json['subCategories'] as Map<String, dynamic>)
+            : null;
+
+  Map<String, dynamic> toJson() => {
+        'category': category,
+        'categoryImage': categoryImage,
+        'subCategories': subCategories?.toJson()
+      };
+}
+
+class SubCategories {
+  final List<EngagementRing>? engagementRing;
+
+  SubCategories({
+    this.engagementRing,
+  });
+
+  SubCategories.fromJson(Map<String, dynamic> json)
+      : engagementRing = (json['engagementRing'] as List?)
+            ?.map((dynamic e) =>
+                EngagementRing.fromJson(e as Map<String, dynamic>))
+            .toList();
+
+  Map<String, dynamic> toJson() =>
+      {'engagementRing': engagementRing?.map((e) => e.toJson()).toList()};
+}
+
+class EngagementRing {
+  final String? productId;
+  final String? title;
+  final double? price14KT;
+  final String? image01;
+  final String? category;
+  final String? subCategory;
+
+  EngagementRing({
+    this.productId,
+    this.title,
+    this.price14KT,
+    this.image01,
+    this.category,
+    this.subCategory,
+  });
+
+  EngagementRing.fromJson(Map<String, dynamic> json)
+      : productId = json['productId'] as String?,
+        title = json['title'] as String?,
+        price14KT = (json['price14KT'] as num?)?.toDouble(),
+        image01 = json['image01'] as String?,
+        category = json['category'] as String?,
+        subCategory = json['subCategory'] as String?;
+
+  Map<String, dynamic> toJson() => {
+        'productId': productId,
+        'title': title,
+        'price14KT': price14KT,
+        'image01': image01,
+        'category': category,
+        'subCategory': subCategory
+      };
 }

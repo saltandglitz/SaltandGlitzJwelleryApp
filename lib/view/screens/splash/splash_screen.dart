@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:saltandGlitz/data/controller/categories/categories_controller.dart';
 
 import '../../../core/utils/color_resources.dart';
 import '../../../core/utils/dimensions.dart';
@@ -17,6 +18,7 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   final mainController = Get.put<MainController>(MainController());
+  final categoriesController = Get.put<CategoriesController>(CategoriesController());
   @override
   void initState() {
     // TODO: implement initState
@@ -25,6 +27,8 @@ class _SplashScreenState extends State<SplashScreen> {
     WidgetsBinding.instance.addPostFrameCallback(
           (_) async {
         await mainController.getBannerApiMethod();
+        //Todo : Get by default women categories data api method
+        await categoriesController.getCategories(LocalStrings.womenCategoriesApi);
       },
     );
     mainController.splashScreenNavigation();

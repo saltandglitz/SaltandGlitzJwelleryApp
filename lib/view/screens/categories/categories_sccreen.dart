@@ -31,7 +31,7 @@ class _CategoriesScreenState extends State<CategoriesScreen>
   void initState() {
     super.initState();
     //Todo : Get by default women categories data api method
-    categoriesController.getCategories(LocalStrings.womenCategoriesApi);
+    // categoriesController.getCategories(LocalStrings.womenCategoriesApi);
     AppAnalytics()
         .actionTriggerLogs(eventName: LocalStrings.logCategories, index: 1);
     AppAnalytics().actionTriggerLogs(

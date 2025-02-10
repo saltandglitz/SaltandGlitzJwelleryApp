@@ -15,6 +15,7 @@ import '../../view/screens/collection/collection_screen.dart';
 import '../../view/screens/collection_filter/collection_filter_screen.dart';
 import '../../view/screens/my_account/my_account_screen.dart';
 import '../../view/screens/product/product_screen.dart';
+import '../../view/screens/splash/splash_screen.dart';
 import '../../view/screens/wishlist/wishlist_screen.dart';
 
 class RouteHelper {
@@ -35,24 +36,26 @@ class RouteHelper {
   static const String setPasswordScreen = "/set_password_screen";
   static const String setOtpScreen = "/set_otp_screen";
   static const String forgetPasswordScreen = "/forget_password_screen";
+  static const String splashScreen = "/splash_screen";
 
   List<GetPage> routes = [
-    GetPage(name: bottomBarScreen, page: () => BottomBarScreen()),
+    GetPage(name: bottomBarScreen, page: () => const BottomBarScreen()),
     GetPage(name: dashboardScreen, page: () => const DashboardScreen()),
-    GetPage(name: addCartScreen, page: () => AddToCartScreen()),
+    GetPage(name: addCartScreen, page: () => const AddToCartScreen()),
     GetPage(name: categoriesScreen, page: () => CategoriesScreen()),
-    GetPage(name: womenCategoriesScreen, page: () => WomenCategoriesScreen()),
-    GetPage(name: menCategoriesScreen, page: () => MenCategoriesScreen()),
-    GetPage(name: wishlistScreen, page: () => WishlistScreen()),
-    GetPage(name: collectionScreen, page: () => CollectionScreen()),
-    GetPage(name: collectionFilterScreen, page: () => CollectionFilterScreen()),
-    GetPage(name: productScreen, page: () => ProductScreen()),
-    GetPage(name: myAccountScreen, page: () => MyAccountScreen()),
-    GetPage(name: loginScreen, page: () => LoginScreen()),
-    GetPage(name: createAccountScreen, page: () => CreateAccountScreen()),
-    GetPage(name: editProfileScreen, page: () => EditProfileScreen()),
-    GetPage(name: setPasswordScreen, page: () => SetPassword()),
-    GetPage(name: setOtpScreen, page: () => SetOtp()),
-    GetPage(name: forgetPasswordScreen, page: () => ForgetPassword()),
+    GetPage(name: womenCategoriesScreen, page: () => const WomenCategoriesScreen()),
+    GetPage(name: menCategoriesScreen, page: () => const MenCategoriesScreen()),
+    GetPage(name: wishlistScreen, page: () => const WishlistScreen()),
+    GetPage(name: collectionScreen, page: () => const CollectionScreen()),
+    GetPage(name: collectionFilterScreen, page: () => const CollectionFilterScreen()),
+    GetPage(name: productScreen, page: () => const ProductScreen()),
+    GetPage(name: myAccountScreen, page: () => const MyAccountScreen()),
+    GetPage(name: loginScreen, page: () => const LoginScreen()),
+    GetPage(name: createAccountScreen, page: () => const CreateAccountScreen()),
+    GetPage(name: editProfileScreen, page: () => const EditProfileScreen()),
+    GetPage(name: setPasswordScreen, page: () => const SetPassword()),
+    GetPage(name: setOtpScreen, page: () => const SetOtp()),
+    GetPage(name: forgetPasswordScreen, page: () => const ForgetPassword()),
+    GetPage(name: splashScreen, page: () => const SplashScreen()),
   ];
 }

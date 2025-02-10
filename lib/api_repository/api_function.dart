@@ -9,7 +9,7 @@ class APIFunction {
     required String apiName,
     required BuildContext? context,
     dynamic params,
-    String? token = '',
+    String? token,
     bool isLoading = true,
     bool isGet = false,
   }) async {
@@ -22,31 +22,35 @@ class APIFunction {
       Response response; // This will hold the full Response object
 
       if (isGet) {
-        response = await HttpUtil(token!, isLoading, context).get(apiName);
+        response = await HttpUtil(token ?? '', isLoading, context).get(apiName);
       } else {
+          print("TOKEN 33: $token");
         // Determine the type of the parameters being sent
         if (params is Map) {
+          print("TOKEN 22: $token");
+
           // If params is a Map, we are sending JSON
-          response = await HttpUtil(token!, isLoading, context).post(
+          response = await HttpUtil(token ?? '', isLoading, context).post(
             apiName,
             data: params, // Send the Map directly as JSON
             options: Options(
               headers: {
-                'Content-Type': 'application/json',
-                // Explicitly setting the content type for JSON
-                'authorization': token.isNotEmpty ? token : '',
+                'Content-Type': 'application/json', // Explicitly setting the content type for JSON
+                'authorization': token,
               },
             ),
           );
         } else if (params is FormData) {
+          print("TOKEN 11: $token");
+
           // If params is FormData, we're sending multipart/form-data
-          response = await HttpUtil(token!, isLoading, context).post(
+          response = await HttpUtil(token ?? '', isLoading, context).post(
             apiName,
             data: params, // Send FormData as multipart
             options: Options(
               headers: {
-                'Content-Type': 'multipart/form-data',
-                // Explicitly setting the content type for multipart
+                'Content-Type': 'multipart/form-data', // Explicitly setting the content type for JSON
+                'authorization': token,
               },
             ),
           );

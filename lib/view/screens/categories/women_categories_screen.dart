@@ -2,8 +2,10 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shimmer/shimmer.dart';
+
 import '../../../analytics/app_analytics.dart';
 import '../../../core/route/route.dart';
+import '../../../core/utils/app_const.dart';
 import '../../../core/utils/color_resources.dart';
 import '../../../core/utils/dimensions.dart';
 import '../../../core/utils/images.dart';
@@ -89,17 +91,15 @@ class _WomenCategoriesScreenState extends State<WomenCategoriesScreen> {
                                   2; // Adjust for spacing
 
                           return ListView.builder(
-                            itemCount: controller.getCategoryList.isEmpty
+                            itemCount: getCategoryData.isEmpty
                                 ? (6 / 2).ceil()
-                                : (controller.getCategoryList.length / 2)
-                                    .ceil(),
+                                : (getCategoryData.length / 2).ceil(),
                             physics: const NeverScrollableScrollPhysics(),
                             shrinkWrap: true,
                             itemBuilder: (context, rowIndex) {
                               final firstIndex = rowIndex * 2;
                               final secondIndex = firstIndex + 1;
-
-                              return controller.getCategoryList.isEmpty
+                              return getCategoryData.isEmpty
                                   ? Row(
                                       children: [
                                         // First item
@@ -141,8 +141,7 @@ class _WomenCategoriesScreenState extends State<WomenCategoriesScreen> {
                                               ),
                                             ),
                                             if (secondIndex <
-                                                controller
-                                                    .getCategoryList.length)
+                                                getCategoryData.length)
                                               SizedBox(
                                                 width: itemWidth,
                                                 child: Padding(
@@ -156,8 +155,7 @@ class _WomenCategoriesScreenState extends State<WomenCategoriesScreen> {
                                                 ),
                                               ),
                                             if (secondIndex >=
-                                                controller
-                                                    .getCategoryList.length)
+                                                getCategoryData.length)
                                               // Placeholder to maintain spacing if only one item is present
                                               Flexible(
                                                 child:
@@ -201,8 +199,8 @@ class _WomenCategoriesScreenState extends State<WomenCategoriesScreen> {
                                   2; // Adjust for spacing
                           return ListView.builder(
                             itemCount:
-                                (controller.mostBrowsedImage.length / 2).ceil(),
-                            physics: const NeverScrollableScrollPhysics(),
+                                (getCategoryMostBrowsedData.length / 2).ceil(),
+                            physics: const BouncingScrollPhysics(),
                             shrinkWrap: true,
                             itemBuilder: (context, rowIndex) {
                               final firstIndex = rowIndex * 2;
@@ -222,7 +220,7 @@ class _WomenCategoriesScreenState extends State<WomenCategoriesScreen> {
                                       ),
                                       const SizedBox(width: Dimensions.space10),
                                       if (secondIndex <
-                                          controller.mostBrowsedNamed.length)
+                                          getCategoryMostBrowsedData.length)
 
                                         // First item
                                         Flexible(
@@ -233,7 +231,7 @@ class _WomenCategoriesScreenState extends State<WomenCategoriesScreen> {
                                           ),
                                         ),
                                       if (secondIndex >=
-                                          controller.mostBrowsedImage.length)
+                                          getCategoryMostBrowsedData.length)
                                         // Placeholder to maintain spacing if only one item is present
                                         Flexible(
                                           child: SizedBox(width: itemWidth),
@@ -280,8 +278,7 @@ class _WomenCategoriesScreenState extends State<WomenCategoriesScreen> {
                                 key:
                                     const PageStorageKey('carousel_slider_key'),
                                 // Add PageStorageKey
-                                itemCount:
-                                    controller.silverJewelleryImage.length,
+                                itemCount: getCategoryBannerData.length,
                                 options: CarouselOptions(
                                   onPageChanged:
                                       controller.onPageChangedWomenProducts,
@@ -296,8 +293,9 @@ class _WomenCategoriesScreenState extends State<WomenCategoriesScreen> {
                                     borderRadius: BorderRadius.circular(
                                         Dimensions.bottomSheetRadius),
                                     child: CachedCommonImage(
-                                      networkImageUrl: controller
-                                          .silverJewelleryImage[index],
+                                      networkImageUrl:
+                                          getCategoryBannerData[index]
+                                              .bannerImage,
                                       width: double.infinity,
                                     ),
                                   );
@@ -307,7 +305,7 @@ class _WomenCategoriesScreenState extends State<WomenCategoriesScreen> {
                                 () => Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: List.generate(
-                                    controller.silverJewelleryImage.length,
+                                    getCategoryBannerData.length,
                                     (i) => Padding(
                                       padding: const EdgeInsets.symmetric(
                                           horizontal: 7, vertical: 15),
@@ -520,9 +518,9 @@ class _WomenCategoriesScreenState extends State<WomenCategoriesScreen> {
 
           AppAnalytics().actionTriggerWithProductsLogs(
               eventName:
-                  "${controller.womenTopCategoriesName[index]}_${LocalStrings.logCategoriesWomenShopStyleView}",
-              productName: controller.womenTopCategoriesName[index],
-              productImage: controller.womenTopCategoriesImage[index],
+                  "${getCategoryData[index].category}_${LocalStrings.logCategoriesWomenShopStyleView}",
+              productName: getCategoryData[index].category,
+              productImage: getCategoryData[index].categoryImage,
               index: 1);
         }
         // By default open 0 index tab swift conditioned so 0=1 & 1=0 tab
@@ -571,14 +569,13 @@ class _WomenCategoriesScreenState extends State<WomenCategoriesScreen> {
                         BorderRadius.circular(Dimensions.offersCardRadius),
                     child: CachedCommonImage(
                       width: double.infinity,
-                      networkImageUrl:
-                          controller.getCategoryList[index].categoryImage,
+                      networkImageUrl: getCategoryData[index].categoryImage,
                     ),
                   ),
                 ),
                 const SizedBox(width: Dimensions.space10),
                 Expanded(
-                  child: Text(controller.getCategoryList[index].category,
+                  child: Text(getCategoryData[index].category ?? '',
                       softWrap: true,
                       maxLines: 2,
                       style: semiBoldDefault.copyWith(
@@ -682,9 +679,9 @@ class _WomenCategoriesScreenState extends State<WomenCategoriesScreen> {
           controller.setMostBrowsedIndex(index);
           AppAnalytics().actionTriggerWithProductsLogs(
               eventName:
-                  "${controller.mostBrowsedNamed[index]}_${LocalStrings.logCategoriesWomenMostBrowsedView}",
-              productName: controller.mostBrowsedNamed[index],
-              productImage: controller.mostBrowsedImage[index],
+                  "${getCategoryMostBrowsedData[index].category}_${LocalStrings.logCategoriesWomenMostBrowsedView}",
+              productName: getCategoryMostBrowsedData[index].category,
+              productImage: getCategoryMostBrowsedData[index].categoryImage,
               index: 1);
         }
       },
@@ -709,7 +706,8 @@ class _WomenCategoriesScreenState extends State<WomenCategoriesScreen> {
                     BorderRadius.circular(Dimensions.categoriesRadius),
                 child: CachedCommonImage(
                   width: double.infinity,
-                  networkImageUrl: controller.mostBrowsedImage[index],
+                  networkImageUrl:
+                      getCategoryMostBrowsedData[index].categoryImage,
                 ),
               ),
             ),
@@ -725,7 +723,7 @@ class _WomenCategoriesScreenState extends State<WomenCategoriesScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const SizedBox(width: Dimensions.space10),
-                  Text(controller.mostBrowsedNamed[index],
+                  Text(getCategoryMostBrowsedData[index].category ?? '',
                       style: semiBoldDefault.copyWith(
                           color: ColorResources.conceptTextColor)),
                   const SizedBox(width: Dimensions.space10),
@@ -861,7 +859,7 @@ class _WomenCategoriesScreenState extends State<WomenCategoriesScreen> {
                       if (controller.selectedTab.value == 1) ...[
                         // Content for Tab Shop By Style
                         GridView.builder(
-                          itemCount: controller.shopStyleImageLst.length,
+                          itemCount: getCategoryData[index].subCategory!.length,
                           shrinkWrap: true,
                           gridDelegate:
                               const SliverGridDelegateWithFixedCrossAxisCount(
@@ -871,7 +869,13 @@ class _WomenCategoriesScreenState extends State<WomenCategoriesScreen> {
                           itemBuilder: (context, index) {
                             return GestureDetector(
                               onTap: () {
-                                Get.toNamed(RouteHelper.collectionScreen);
+                                controller.filterCategoriesApiMethod(
+                                    occasionBy: getCategoryData[
+                                            controller.expandedIndex.value]
+                                        .subCategory![index]
+                                        .subCategory,
+                                    priceLimit: '');
+                                // Get.toNamed(RouteHelper.collectionScreen);
                               },
                               child: Column(
                                 children: [
@@ -887,15 +891,21 @@ class _WomenCategoriesScreenState extends State<WomenCategoriesScreen> {
                                           Dimensions.categoriesRadius),
                                       child: CachedCommonImage(
                                         width: double.infinity,
-                                        networkImageUrl:
-                                            controller.shopStyleImageLst[index],
+                                        networkImageUrl: getCategoryData[
+                                                controller.expandedIndex.value]
+                                            .subCategory![index]
+                                            .image01,
                                       ),
                                     ),
                                   ),
                                   const SizedBox(height: Dimensions.space5),
                                   Expanded(
                                     child: Text(
-                                        controller.shopStyleNameLst[index],
+                                        getCategoryData[controller
+                                                    .expandedIndex.value]
+                                                .subCategory![index]
+                                                .title ??
+                                            '',
                                         textAlign: TextAlign.center,
                                         softWrap: true,
                                         maxLines: 2,
