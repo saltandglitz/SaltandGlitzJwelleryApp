@@ -18,16 +18,17 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   final mainController = Get.put<MainController>(MainController());
-  final categoriesController = Get.put<CategoriesController>(CategoriesController());
+  final categoriesController =
+      Get.put<CategoriesController>(CategoriesController());
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     //Todo : Banner data show api method
-    WidgetsBinding.instance.addPostFrameCallback(
-          (_) async {
-        //Todo : Get by default women categories data api method
-        await categoriesController.getCategories(LocalStrings.womenCategoriesApi);
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      //Todo : Get by default women categories data api method
+      await categoriesController.getCategories(LocalStrings.womenCategoriesApi);
       (_) async {
         // await mainController.getBannerApiMethod();
         await mainController.getBannerData();
@@ -37,8 +38,8 @@ class _SplashScreenState extends State<SplashScreen> {
         await mainController.getGiftElementData();
         await mainController.getSolitaireData();
         await mainController.getBottomBannerData();
-      },
-    );
+      };
+    });
     mainController.splashScreenNavigation();
   }
 
