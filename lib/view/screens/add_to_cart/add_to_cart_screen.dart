@@ -118,7 +118,6 @@ class _AddToCartScreenState extends State<AddToCartScreen> {
                   onTap: () async {
                     RxBool? isEnableNetwork =
                         await mainController.checkToAssignNetworkConnections();
-
                     if (isEnableNetwork!.value == true) {
                       controller.enableNetworkHideLoader();
                       Future.delayed(

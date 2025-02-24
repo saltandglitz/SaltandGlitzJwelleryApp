@@ -211,7 +211,6 @@ class _DashboardScreenState extends State<DashboardScreen>
                           init: Get.find<MainController>(),
                           builder: (ctrl) {
                             bool isLoading = ctrl.categoryList.isEmpty;
-
                             return Container(
                               height: size.height * 0.10,
                               child: GridView.builder(
@@ -233,9 +232,10 @@ class _DashboardScreenState extends State<DashboardScreen>
                                     return ClipRRect(
                                       borderRadius: BorderRadius.circular(20),
                                       child: Shimmer.fromColors(
-                                        baseColor: ColorResources.baseColor,
-                                        highlightColor:
-                                            ColorResources.highlightColor,
+                                        baseColor: ColorResources
+                                            .shimmerEffectBaseColor,
+                                        highlightColor: ColorResources
+                                            .shimmerEffectHighlightColor,
                                         child: Container(
                                           height: size.height * 0.09,
                                           width: size.height * 0.11,
@@ -259,9 +259,10 @@ class _DashboardScreenState extends State<DashboardScreen>
                                         progressIndicatorBuilder:
                                             (context, url, downloadProgress) =>
                                                 Shimmer.fromColors(
-                                          baseColor: ColorResources.baseColor,
-                                          highlightColor:
-                                              ColorResources.highlightColor,
+                                          baseColor: ColorResources
+                                              .shimmerEffectBaseColor,
+                                          highlightColor: ColorResources
+                                              .shimmerEffectHighlightColor,
                                           child: Container(
                                             height: size.height * 0.09,
                                             width: size.height * 0.11,
@@ -297,7 +298,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                                         highlightColor: ColorResources
                                             .shimmerEffectHighlightColor,
                                         child: Container(
-                                          height: 200,
+                                          height: 356,
                                           width: double.infinity,
                                           color: ColorResources.whiteColor,
                                         ),
@@ -323,58 +324,58 @@ class _DashboardScreenState extends State<DashboardScreen>
                                           );
                                         },
                                       ),
-                                Obx(
-                                  () => ctrl.bannerList.isEmpty
-                                      ? Shimmer.fromColors(
-                                          baseColor: ColorResources
-                                              .shimmerEffectBaseColor,
-                                          highlightColor: ColorResources
-                                              .shimmerEffectHighlightColor,
-                                          child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: List.generate(
-                                              5, // Default shimmer dots count
-                                              (i) => const Padding(
-                                                padding: EdgeInsets.symmetric(
-                                                  horizontal: 7,
-                                                  vertical: 15,
-                                                ),
-                                                child: CircleAvatar(
-                                                  radius: 3.5,
-                                                  backgroundColor:
-                                                      ColorResources.whiteColor,
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                        )
-                                      : Row(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.center,
-                                          children: List.generate(
-                                            ctrl.bannerList.length,
-                                            (i) => Padding(
-                                              padding:
-                                                  const EdgeInsets.symmetric(
-                                                horizontal: 7,
-                                                vertical: 15,
-                                              ),
-                                              child: CircleAvatar(
-                                                radius: 3.5,
-                                                backgroundColor: controller
-                                                            .currentIndex
-                                                            .value ==
-                                                        i
-                                                    ? ColorResources
-                                                        .activeCardColor
-                                                    : ColorResources
-                                                        .inactiveCardColor,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                ),
+                                // Obx(
+                                //   () => ctrl.bannerList.isEmpty
+                                //       ? Shimmer.fromColors(
+                                //           baseColor: ColorResources
+                                //               .shimmerEffectBaseColor,
+                                //           highlightColor: ColorResources
+                                //               .shimmerEffectHighlightColor,
+                                //           child: Row(
+                                //             mainAxisAlignment:
+                                //                 MainAxisAlignment.center,
+                                //             children: List.generate(
+                                //               5, // Default shimmer dots count
+                                //               (i) => const Padding(
+                                //                 padding: EdgeInsets.symmetric(
+                                //                   horizontal: 7,
+                                //                   vertical: 15,
+                                //                 ),
+                                //                 child: CircleAvatar(
+                                //                   radius: 3.5,
+                                //                   backgroundColor:
+                                //                       ColorResources.whiteColor,
+                                //                 ),
+                                //               ),
+                                //             ),
+                                //           ),
+                                //         )
+                                //       : Row(
+                                //           mainAxisAlignment:
+                                //               MainAxisAlignment.center,
+                                //           children: List.generate(
+                                //             ctrl.bannerList.length,
+                                //             (i) => Padding(
+                                //               padding:
+                                //                   const EdgeInsets.symmetric(
+                                //                 horizontal: 7,
+                                //                 vertical: 15,
+                                //               ),
+                                //               child: CircleAvatar(
+                                //                 radius: 3.5,
+                                //                 backgroundColor: controller
+                                //                             .currentIndex
+                                //                             .value ==
+                                //                         i
+                                //                     ? ColorResources
+                                //                         .activeCardColor
+                                //                     : ColorResources
+                                //                         .inactiveCardColor,
+                                //               ),
+                                //             ),
+                                //           ),
+                                //         ),
+                                // ),
                               ],
                             );
                           },

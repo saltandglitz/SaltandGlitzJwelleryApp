@@ -2,11 +2,9 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:saltandGlitz/data/controller/set_password/set_password_controller.dart';
-
 import '../../../core/route/route.dart';
 import '../../../core/utils/color_resources.dart';
 import '../../../core/utils/dimensions.dart';
-import '../../../core/utils/images.dart';
 import '../../../core/utils/local_strings.dart';
 import '../../../core/utils/style.dart';
 import '../../../data/controller/create_account/create_account_controller.dart';
@@ -21,8 +19,13 @@ class SetPassword extends StatefulWidget {
 }
 
 class _SetPasswordState extends State<SetPassword> {
-  final createAccountController = Get.put(CreateAccountController());
-  final setPasswordController = Get.put(SetPasswordController());
+  final createAccountController = Get.put(
+    CreateAccountController(),
+  );
+  final setPasswordController = Get.put(
+    SetPasswordController(),
+  );
+  String? otp;
 
   @override
   void initState() {
@@ -142,78 +145,58 @@ class _SetPasswordState extends State<SetPassword> {
                   buttonName: LocalStrings.login,
                 ),
                 const SizedBox(height: Dimensions.space25),
-                RichText(
-                  text: TextSpan(
-                    children: [
-                      TextSpan(
-                        text: LocalStrings.forgotPassword,
-                        recognizer: TapGestureRecognizer()
-                          ..onTap = () {
-                            Get.toNamed(RouteHelper.forgetPasswordScreen);
-                          },
-                        style: mediumLarge.copyWith(
-                          color: ColorResources.offerColor,
-                        ),
+                GetBuilder(
+                  init: CreateAccountController(),
+                  builder: (controller) {
+                    return RichText(
+                      text: TextSpan(
+                        children: [
+                          TextSpan(
+                            text: LocalStrings.forgotPassword,
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () {
+                                Get.toNamed(RouteHelper.forgetPasswordScreen);
+                                controller.resetPasswordApiMethod(
+                                  newPassword:
+                                      controller.passwordController.text,
+                                  otp: otp,
+                                  email: setPasswordController.email,
+                                  context: context,
+                                );
+                              },
+                            style: mediumLarge.copyWith(
+                              color: ColorResources.offerColor,
+                            ),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
+                    );
+                  },
                 ),
                 const SizedBox(height: Dimensions.space100),
-                CommonButton(
-                  onTap: () {
-                    //Navigate to setPassword page
-                    Get.toNamed(RouteHelper.setOtpScreen);
+                GetBuilder(
+                  init: CreateAccountController(),
+                  builder: (ctrl) {
+                    return CommonButton(
+                      onTap: () {
+                        //Navigate to setPassword page
+                        Get.toNamed(RouteHelper.setOtpScreen);
+                        createAccountController.sendOtpApiMethod(
+                          email: setPasswordController.email,
+                          context: context,
+                        );
+                      },
+                      height: size.height * 0.065,
+                      width: double.infinity,
+                      buttonName: LocalStrings.getOTP,
+                      textStyle: mediumLarge.copyWith(
+                        color: ColorResources.blackColor,
+                      ),
+                      borderColor: ColorResources.borderColor,
+                      gradientFirstColor: ColorResources.whiteColor,
+                      gradientSecondColor: ColorResources.whiteColor,
+                    );
                   },
-                  height: size.height * 0.065,
-                  width: double.infinity,
-                  buttonName: LocalStrings.getOTP,
-                  textStyle: mediumLarge.copyWith(
-                    color: ColorResources.blackColor,
-                  ),
-                  borderColor: ColorResources.borderColor,
-                  gradientFirstColor: ColorResources.whiteColor,
-                  gradientSecondColor: ColorResources.whiteColor,
-                ),
-                const SizedBox(height: Dimensions.space25),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      height: size.height * 0.070,
-                      padding: const EdgeInsets.all(12),
-                      decoration: BoxDecoration(
-                        color: ColorResources.helpNeedThirdColor,
-                        shape: BoxShape.circle,
-                        boxShadow: [
-                          BoxShadow(
-                            color: ColorResources.borderColor.withOpacity(0.1),
-                            spreadRadius: 1,
-                            blurRadius: 2,
-                            offset: const Offset(0, 2),
-                          ),
-                        ],
-                      ),
-                      child: Image.asset(MyImages.googleImage),
-                    ),
-                    const SizedBox(width: Dimensions.space25),
-                    Container(
-                      height: size.height * 0.070,
-                      padding: const EdgeInsets.all(7),
-                      decoration: BoxDecoration(
-                        color: ColorResources.offerSixColor.withOpacity(0.2),
-                        shape: BoxShape.circle,
-                        boxShadow: [
-                          BoxShadow(
-                            color: ColorResources.borderColor.withOpacity(0.1),
-                            spreadRadius: 1,
-                            blurRadius: 2,
-                            offset: const Offset(0, 2),
-                          ),
-                        ],
-                      ),
-                      child: Image.asset(MyImages.facebookImage),
-                    ),
-                  ],
                 ),
               ],
             ),

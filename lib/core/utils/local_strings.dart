@@ -6,6 +6,14 @@ class LocalStrings {
   ///<<<------------------- API ------------------->>>
   static const String getHomeViewApi =
       "https://saltandglitz-api.vercel.app/v1/homePage/home";
+  static const String resetPasswordApi =
+      "https://saltandglitz-api.vercel.app/api/users/verifyOtpAndResetPassword/67a484dcc077e5fb34ec64f6";
+  static const String forgotPasswordApi =
+      "https://saltandglitz-api.vercel.app/api/users/forgotPassword/67a484dcc077e5fb34ec64f6";
+  static const String sendOtpApi =
+      "https://saltandglitz-api.vercel.app/v1/otp/send-otp";
+  static const String getOtpApi =
+      "https://saltandglitz-api.vercel.app/v1/otp/get-otp";
   static const String registerApi =
       "https://saltandglitz-api.vercel.app/api/users/register";
   static const String womenCategoriesApi =

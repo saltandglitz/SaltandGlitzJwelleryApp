@@ -9,7 +9,6 @@ import 'package:saltandGlitz/core/utils/local_strings.dart';
 import 'package:saltandGlitz/data/controller/login/login_controller.dart';
 import 'package:saltandGlitz/view/components/common_button.dart';
 import 'package:saltandGlitz/view/components/common_textfield.dart';
-
 import '../../../analytics/app_analytics.dart';
 import '../../../core/utils/style.dart';
 import '../../../data/controller/create_account/create_account_controller.dart';
@@ -54,255 +53,301 @@ class _LoginScreenState extends State<LoginScreen> {
           top: false,
           bottom: false,
           child: GetBuilder<MainController>(
-              init: MainController(),
-              builder: (mainController) {
-                return mainController.isNetworkConnection?.value == false
-                    ? NetworkConnectivityView(
-                        onTap: () async {
-                          RxBool? isEnableNetwork = await mainController
-                              .checkToAssignNetworkConnections();
+            init: MainController(),
+            builder: (mainController) {
+              return mainController.isNetworkConnection?.value == false
+                  ? NetworkConnectivityView(
+                      onTap: () async {
+                        RxBool? isEnableNetwork = await mainController
+                            .checkToAssignNetworkConnections();
 
-                          if (isEnableNetwork!.value == true) {
-                            loginController.enableNetworkHideLoader();
-                            Future.delayed(
-                              const Duration(seconds: 3),
-                              () {
-                                Get.put<LoginController>(LoginController());
-                                loginController.disableNetworkLoaderByDefault();
+                        if (isEnableNetwork!.value == true) {
+                          loginController.enableNetworkHideLoader();
+                          Future.delayed(
+                            const Duration(seconds: 3),
+                            () {
+                              Get.put<LoginController>(LoginController());
+                              loginController.disableNetworkLoaderByDefault();
+                            },
+                          );
+                          loginController.update();
+                        }
+                      },
+                      isLoading: loginController.isEnableNetwork,
+                    )
+                  : SingleChildScrollView(
+                      padding:
+                          const EdgeInsets.only(left: 15, right: 15, top: 40),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Align(
+                            alignment: Alignment.centerLeft,
+                            child: IconButton(
+                              onPressed: () {
+                                mainController
+                                    .checkToAssignNetworkConnections();
+                                Get.back();
                               },
-                            );
-                            loginController.update();
-                          }
-                        },
-                        isLoading: loginController.isEnableNetwork,
-                      )
-                    : SingleChildScrollView(
-                        padding:
-                            const EdgeInsets.only(left: 15, right: 15, top: 40),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Align(
-                              alignment: Alignment.centerLeft,
-                              child: IconButton(
-                                onPressed: () {
-                                  mainController
-                                      .checkToAssignNetworkConnections();
-                                  Get.back();
-                                },
-                                icon: const Icon(
-                                  Icons.arrow_back_rounded,
-                                  size: 25,
+                              icon: const Icon(
+                                Icons.arrow_back_rounded,
+                                size: 25,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: Dimensions.space20),
+                          Container(
+                            height: size.height * 0.090,
+                            width: size.width * 0.30,
+                            padding: const EdgeInsets.all(10),
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              gradient: LinearGradient(
+                                colors: [
+                                  ColorResources.offerColor,
+                                  ColorResources.deliveryColorColor
+                                      .withOpacity(0.5),
+                                ],
+                                begin: Alignment.centerLeft,
+                                end: Alignment.centerRight,
+                              ),
+                            ),
+                            child: Center(
+                              child: Image.asset(
+                                MyImages.qualityImage,
+                                color: ColorResources.whiteColor,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: Dimensions.space30),
+                          Text(
+                            LocalStrings.welcomeBack,
+                            style: semiBoldMediumLarge.copyWith(),
+                          ),
+                          const SizedBox(height: Dimensions.space20),
+                          Text(
+                            LocalStrings.loginUnlock,
+                            textAlign: TextAlign.center,
+                            style: mediumLarge.copyWith(),
+                          ),
+                          const SizedBox(height: Dimensions.space35),
+                          CommonTextField(
+                            controller: loginController.emailController,
+                            textFieldHeight: size.height * 0.065,
+                            hintText: LocalStrings.enterEmail,
+                            borderRadius: Dimensions.offersCardRadius,
+                            hintTexStyle: semiBoldDefault.copyWith(
+                              color: ColorResources.hintTextColor,
+                            ),
+                            fillColor: Colors.transparent,
+                            textInputType: TextInputType.emailAddress,
+                          ),
+                          const SizedBox(height: Dimensions.space30),
+                          CommonButton(
+                            onTap: () {
+                              /// Checked first email empty ya validated after move next screen
+                              loginController.emailValidation();
+                            },
+                            height: size.height * 0.065,
+                            width: double.infinity,
+                            buttonName: LocalStrings.continueLogin,
+                          ),
+                          const SizedBox(height: Dimensions.space30),
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Divider(
+                                  color: ColorResources.cardTabColor
+                                      .withOpacity(0.3),
                                 ),
                               ),
-                            ),
-                            const SizedBox(height: Dimensions.space20),
-                            Container(
-                              height: size.height * 0.090,
-                              width: size.width * 0.30,
-                              padding: const EdgeInsets.all(10),
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                gradient: LinearGradient(
-                                  colors: [
-                                    ColorResources.offerColor,
-                                    ColorResources.deliveryColorColor
-                                        .withOpacity(0.5),
-                                  ],
-                                  begin: Alignment.centerLeft,
-                                  end: Alignment.centerRight,
+                              Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 5),
+                                child: Text(
+                                  LocalStrings.orText,
+                                  textAlign: TextAlign.center,
+                                  style: mediumSmall.copyWith(),
                                 ),
                               ),
-                              child: Center(
-                                child: Image.asset(
-                                  MyImages.qualityImage,
-                                  color: ColorResources.whiteColor,
+                              Expanded(
+                                child: Divider(
+                                  color: ColorResources.cardTabColor
+                                      .withOpacity(0.3),
                                 ),
                               ),
-                            ),
-                            const SizedBox(height: Dimensions.space30),
-                            Text(
-                              LocalStrings.welcomeBack,
-                              style: semiBoldMediumLarge.copyWith(),
-                            ),
-                            const SizedBox(height: Dimensions.space20),
-                            Text(
-                              LocalStrings.loginUnlock,
-                              textAlign: TextAlign.center,
-                              style: mediumLarge.copyWith(),
-                            ),
-                            const SizedBox(height: Dimensions.space35),
-                            CommonTextField(
-                              controller: loginController.emailController,
-                              textFieldHeight: size.height * 0.065,
-                              hintText: LocalStrings.enterEmail,
-                              borderRadius: Dimensions.offersCardRadius,
-                              hintTexStyle: semiBoldDefault.copyWith(
-                                color: ColorResources.hintTextColor,
-                              ),
-                              fillColor: Colors.transparent,
-                              textInputType: TextInputType.emailAddress,
-                            ),
-                            const SizedBox(height: Dimensions.space30),
-                            CommonButton(
-                              onTap: () {
-                                /// Checked first email empty ya validated after move next screen
-                                loginController.emailValidation();
-                              },
-                              height: size.height * 0.065,
-                              width: double.infinity,
-                              buttonName: LocalStrings.continueLogin,
-                            ),
-                            const SizedBox(height: Dimensions.space30),
-                            Row(
+                              const SizedBox(height: Dimensions.space30),
+                            ],
+                          ),
+                          const SizedBox(height: Dimensions.space20),
+                          GetBuilder(
+                            init: CreateAccountController(),
+                            builder: (controller) {
+                              return Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  /// Google button
+                                  GestureDetector(
+                                    onTap: () {
+                                      /// Analysis log google click
+                                      AppAnalytics().actionTriggerLogs(
+                                          eventName: LocalStrings
+                                              .logLogInGoogleButtonClick,
+                                          index: 8);
+                                      // Google authentication
+                                      controller
+                                          .signInWithGoogle(screenType: 'Login')
+                                          .then(
+                                        (value) {
+                                          /// Process complete after hide loader
+                                          createAccountController
+                                              .isLoaderOffMethod();
+                                        },
+                                      );
+                                    },
+                                    child: Container(
+                                      height: size.height * 0.070,
+                                      padding: const EdgeInsets.all(12),
+                                      decoration: BoxDecoration(
+                                        color:
+                                            ColorResources.helpNeedThirdColor,
+                                        shape: BoxShape.circle,
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: ColorResources.borderColor
+                                                .withOpacity(0.1),
+                                            spreadRadius: 1,
+                                            blurRadius: 2,
+                                            offset: const Offset(0, 2),
+                                          ),
+                                        ],
+                                      ),
+                                      child: createAccountController
+                                                  .isLoading ==
+                                              true
+                                          ? AppCircularLoader()
+                                          : Image.asset(MyImages.googleImage),
+                                    ),
+                                  ),
+                                  const SizedBox(width: Dimensions.space25),
+
+                                  /// Facebook button
+                                  GestureDetector(
+                                    onTap: () {
+                                      /// Analysis log google click
+                                      AppAnalytics().actionTriggerLogs(
+                                          eventName: LocalStrings
+                                              .logLogInFacebookButtonClick,
+                                          index: 8);
+                                      createAccountController
+                                          .signInWithFacebook(
+                                              screenType: 'Login')
+                                          .then(
+                                        (value) {
+                                          /// Process complete after hide loader
+                                          createAccountController
+                                              .isLoaderOffFacebookMethod();
+                                        },
+                                      );
+                                    },
+                                    child: Container(
+                                      height: size.height * 0.070,
+                                      padding: const EdgeInsets.all(7),
+                                      decoration: BoxDecoration(
+                                        color: ColorResources.offerSixColor
+                                            .withOpacity(0.2),
+                                        shape: BoxShape.circle,
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: ColorResources.borderColor
+                                                .withOpacity(0.1),
+                                            spreadRadius: 1,
+                                            blurRadius: 2,
+                                            offset: const Offset(0, 2),
+                                          ),
+                                        ],
+                                      ),
+                                      child: createAccountController
+                                                  .isFacebookLoading ==
+                                              true
+                                          ? AppCircularLoader()
+                                          : Image.asset(MyImages.facebookImage),
+                                    ),
+                                  ),
+                                ],
+                              );
+                            },
+                          ),
+                          const SizedBox(height: Dimensions.space30),
+                          RichText(
+                            text: TextSpan(
                               children: [
-                                Expanded(
-                                  child: Divider(
-                                    color: ColorResources.cardTabColor
-                                        .withOpacity(0.3),
-                                  ),
+                                TextSpan(
+                                  text: LocalStrings.newSaltAndGlitz,
+                                  style: mediumDefault.copyWith(
+                                      color: ColorResources.buttonColorDark),
                                 ),
-                                Padding(
-                                  padding:
-                                      const EdgeInsets.symmetric(horizontal: 5),
-                                  child: Text(
-                                    LocalStrings.orText,
-                                    textAlign: TextAlign.center,
-                                    style: mediumSmall.copyWith(),
-                                  ),
+                                TextSpan(
+                                  text: LocalStrings.createAccount,
+                                  recognizer: TapGestureRecognizer()
+                                    ..onTap = () {
+                                      /// Analysis log Create Account Click
+                                      AppAnalytics().actionTriggerLogs(
+                                          eventName: LocalStrings
+                                              .logLogInCreateAccountClick,
+                                          index: 8);
+                                      Get.toNamed(
+                                          RouteHelper.createAccountScreen);
+                                    },
+                                  style: mediumDefault.copyWith(
+                                      color: ColorResources.offerColor),
                                 ),
-                                Expanded(
-                                  child: Divider(
-                                    color: ColorResources.cardTabColor
-                                        .withOpacity(0.3),
-                                  ),
-                                ),
-                                const SizedBox(height: Dimensions.space30),
                               ],
                             ),
-                            const SizedBox(height: Dimensions.space20),
-                            GetBuilder(
-                                init: CreateAccountController(),
-                                builder: (controller) {
-                                  return Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      /// Google button
-                                      GestureDetector(
-                                        onTap: () {
-                                          /// Analysis log google click
-                                          AppAnalytics().actionTriggerLogs(
-                                              eventName: LocalStrings
-                                                  .logLogInGoogleButtonClick,
-                                              index: 8);
-                                          // Google authentication
-                                          controller
-                                              .signInWithGoogle(
-                                                  screenType: 'Login')
-                                              .then(
-                                            (value) {
-                                              /// Process complete after hide loader
-                                              createAccountController
-                                                  .isLoaderOffMethod();
-                                            },
-                                          );
-                                        },
-                                        child: Container(
-                                          height: size.height * 0.070,
-                                          padding: const EdgeInsets.all(12),
-                                          decoration: BoxDecoration(
-                                            color: ColorResources
-                                                .helpNeedThirdColor,
-                                            shape: BoxShape.circle,
-                                            boxShadow: [
-                                              BoxShadow(
-                                                color: ColorResources
-                                                    .borderColor
-                                                    .withOpacity(0.1),
-                                                spreadRadius: 1,
-                                                blurRadius: 2,
-                                                offset: const Offset(0, 2),
-                                              ),
-                                            ],
-                                          ),
-                                          child: createAccountController
-                                                      .isLoading ==
-                                                  true
-                                              ? AppCircularLoader()
-                                              : Image.asset(
-                                                  MyImages.googleImage),
-                                        ),
-                                      ),
-                                      const SizedBox(width: Dimensions.space25),
-
-                                      /// Facebook button
-                                      GestureDetector(
-                                        onTap: () {
-                                          /// Analysis log google click
-                                          AppAnalytics().actionTriggerLogs(
-                                              eventName: LocalStrings
-                                                  .logLogInFacebookButtonClick,
-                                              index: 8);
-                                          createAccountController
-                                              .signInWithFacebook(
-                                                  screenType: 'Login')
-                                              .then(
-                                            (value) {
-                                              /// Process complete after hide loader
-                                              createAccountController
-                                                  .isLoaderOffFacebookMethod();
-                                            },
-                                          );
-                                        },
-                                        child: Container(
-                                          height: size.height * 0.070,
-                                          padding: const EdgeInsets.all(7),
-                                          decoration: BoxDecoration(
-                                            color: ColorResources.offerSixColor
-                                                .withOpacity(0.2),
-                                            shape: BoxShape.circle,
-                                            boxShadow: [
-                                              BoxShadow(
-                                                color: ColorResources
-                                                    .borderColor
-                                                    .withOpacity(0.1),
-                                                spreadRadius: 1,
-                                                blurRadius: 2,
-                                                offset: const Offset(0, 2),
-                                              ),
-                                            ],
-                                          ),
-                                          child: createAccountController
-                                                      .isFacebookLoading ==
-                                                  true
-                                              ? AppCircularLoader()
-                                              : Image.asset(
-                                                  MyImages.facebookImage),
-                                        ),
-                                      ),
-                                    ],
-                                  );
-                                }),
-                            const SizedBox(height: Dimensions.space30),
-                            RichText(
+                          ),
+                          const SizedBox(height: Dimensions.space25),
+                          Divider(
+                              color:
+                                  ColorResources.cardTabColor.withOpacity(0.3)),
+                          const SizedBox(height: Dimensions.space25),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 45),
+                            child: RichText(
+                              textAlign: TextAlign.center,
                               text: TextSpan(
                                 children: [
                                   TextSpan(
-                                    text: LocalStrings.newSaltAndGlitz,
+                                    text: LocalStrings.continuingAgree,
                                     style: mediumDefault.copyWith(
                                         color: ColorResources.buttonColorDark),
                                   ),
                                   TextSpan(
-                                    text: LocalStrings.createAccount,
+                                    text: LocalStrings.termsConditions,
                                     recognizer: TapGestureRecognizer()
                                       ..onTap = () {
-                                        /// Analysis log Create Account Click
+                                        /// Analysis log Terms Conditions View
+                                        AppAnalytics().actionTriggerLogs(
+                                            eventName:
+                                                LocalStrings.logLogInTermsView,
+                                            index: 8);
+                                      },
+                                    style: mediumDefault.copyWith(
+                                        color: ColorResources.offerColor),
+                                  ),
+                                  TextSpan(
+                                    text: LocalStrings.andText,
+                                    style: mediumDefault.copyWith(
+                                        color: ColorResources.buttonColorDark),
+                                  ),
+                                  TextSpan(
+                                    text: LocalStrings.privacyPolicy,
+                                    recognizer: TapGestureRecognizer()
+                                      ..onTap = () {
+                                        /// Analysis log Privacy Policy View
                                         AppAnalytics().actionTriggerLogs(
                                             eventName: LocalStrings
-                                                .logLogInCreateAccountClick,
+                                                .logLogInPrivacyPolicyView,
                                             index: 8);
-                                        Get.toNamed(
-                                            RouteHelper.createAccountScreen);
                                       },
                                     style: mediumDefault.copyWith(
                                         color: ColorResources.offerColor),
@@ -310,64 +355,13 @@ class _LoginScreenState extends State<LoginScreen> {
                                 ],
                               ),
                             ),
-                            const SizedBox(height: Dimensions.space25),
-                            Divider(
-                                color: ColorResources.cardTabColor
-                                    .withOpacity(0.3)),
-                            const SizedBox(height: Dimensions.space25),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 45),
-                              child: RichText(
-                                  textAlign: TextAlign.center,
-                                  text: TextSpan(
-                                    children: [
-                                      TextSpan(
-                                        text: LocalStrings.continuingAgree,
-                                        style: mediumDefault.copyWith(
-                                            color:
-                                                ColorResources.buttonColorDark),
-                                      ),
-                                      TextSpan(
-                                        text: LocalStrings.termsConditions,
-                                        recognizer: TapGestureRecognizer()
-                                          ..onTap = () {
-                                            /// Analysis log Terms Conditions View
-                                            AppAnalytics().actionTriggerLogs(
-                                                eventName: LocalStrings
-                                                    .logLogInTermsView,
-                                                index: 8);
-                                          },
-                                        style: mediumDefault.copyWith(
-                                            color: ColorResources.offerColor),
-                                      ),
-                                      TextSpan(
-                                        text: LocalStrings.andText,
-                                        style: mediumDefault.copyWith(
-                                            color:
-                                                ColorResources.buttonColorDark),
-                                      ),
-                                      TextSpan(
-                                        text: LocalStrings.privacyPolicy,
-                                        recognizer: TapGestureRecognizer()
-                                          ..onTap = () {
-                                            /// Analysis log Privacy Policy View
-                                            AppAnalytics().actionTriggerLogs(
-                                                eventName: LocalStrings
-                                                    .logLogInPrivacyPolicyView,
-                                                index: 8);
-                                          },
-                                        style: mediumDefault.copyWith(
-                                            color: ColorResources.offerColor),
-                                      ),
-                                    ],
-                                  )),
-                            ),
-                            const SizedBox(height: Dimensions.space10),
-                          ],
-                        ),
-                      );
-              }),
+                          ),
+                          const SizedBox(height: Dimensions.space10),
+                        ],
+                      ),
+                    );
+            },
+          ),
         ),
       ),
     );
