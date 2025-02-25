@@ -1,12 +1,15 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../../core/route/route.dart';
 import '../../../core/utils/color_resources.dart';
 import '../../../core/utils/dimensions.dart';
 import '../../../core/utils/images.dart';
 import '../../../core/utils/local_strings.dart';
 import '../../../core/utils/style.dart';
+import '../../../data/controller/create_account/create_account_controller.dart';
 import '../../../data/controller/forget_password/forget_password_controller.dart';
+import '../../../data/controller/set_password/set_password_controller.dart';
 import '../../components/common_button.dart';
 
 class ForgetPassword extends StatefulWidget {
@@ -17,6 +20,18 @@ class ForgetPassword extends StatefulWidget {
 }
 
 class _ForgetPasswordState extends State<ForgetPassword> {
+  final createAccountController = Get.put(
+    CreateAccountController(),
+  );
+  final setPasswordController = Get.put(
+    SetPasswordController(),
+  );
+
+  @override
+  initState() {
+    super.initState();
+  }
+
   // bool isTextEnabled = true;
   // int remainingTime = 60;
   // Timer? timer;
@@ -51,14 +66,11 @@ class _ForgetPasswordState extends State<ForgetPassword> {
   //   timer?.cancel();
   //   super.dispose();
   // }
-
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-
     final ForgetPasswordController forgetPasswordController =
         Get.put(ForgetPasswordController());
-
     return Scaffold(
       backgroundColor: ColorResources.scaffoldBackgroundColor,
       body: SafeArea(
@@ -101,7 +113,8 @@ class _ForgetPasswordState extends State<ForgetPassword> {
               const SizedBox(height: Dimensions.space30),
               CommonButton(
                 onTap: () {
-                  Get.back();
+                  // Get.back();
+                  Get.toNamed(RouteHelper.setOtpScreen, arguments: "forgot");
                 },
                 height: size.height * 0.065,
                 width: double.infinity,

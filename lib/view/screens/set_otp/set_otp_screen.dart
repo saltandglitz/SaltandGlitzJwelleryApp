@@ -1,14 +1,16 @@
-import 'dart:async';
+import 'dart:developer';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:saltandGlitz/view/components/common_textfield.dart';
 import '../../../core/route/route.dart';
 import '../../../core/utils/color_resources.dart';
 import '../../../core/utils/dimensions.dart';
-import '../../../core/utils/images.dart';
 import '../../../core/utils/local_strings.dart';
 import '../../../core/utils/style.dart';
+import '../../../data/controller/create_account/create_account_controller.dart';
 import '../../../data/controller/resend_otp/resend_otp_controller.dart';
+import '../../../data/controller/set_password/set_password_controller.dart';
 import '../../components/common_button.dart';
 
 class SetOtp extends StatefulWidget {
@@ -19,6 +21,21 @@ class SetOtp extends StatefulWidget {
 }
 
 class _SetOtpState extends State<SetOtp> {
+  final createAccountController = Get.put(CreateAccountController());
+  final setPasswordController = Get.put(SetPasswordController());
+  List<TextEditingController> otpControllers =
+      List.generate(4, (index) => TextEditingController());
+  String isForgot = '';
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    if (Get.arguments != null) {
+      isForgot = Get.arguments;
+    }
+  }
+
   // bool isTextEnabled = true;
   // int remainingTime = 10;
   // Timer? timer;
@@ -53,7 +70,6 @@ class _SetOtpState extends State<SetOtp> {
   //   timer?.cancel();
   //   super.dispose();
   // }
-
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -87,7 +103,9 @@ class _SetOtpState extends State<SetOtp> {
                 ),
                 const SizedBox(height: Dimensions.space50),
                 Text(
-                  LocalStrings.enterOTP,
+                  isForgot == 'forgot'
+                      ? LocalStrings.forgotPassword
+                      : LocalStrings.enterOTP,
                   style: semiBoldMediumLarge.copyWith(),
                 ),
                 const SizedBox(height: Dimensions.space15),
@@ -138,82 +156,112 @@ class _SetOtpState extends State<SetOtp> {
                 //         borderRadius: BorderRadius.circular(10),
                 //       ),
                 //     ),
-                //     const SizedBox(width: Dimensions.space10),
-                //     Container(
-                //       height: size.height * 0.055,
-                //       width: size.width * 0.099,
-                //       decoration: BoxDecoration(
-                //         border: Border.all(
-                //           color: ColorResources.borderColor,
-                //         ),
-                //         borderRadius: BorderRadius.circular(10),
-                //       ),
-                //     ),
-                //     const SizedBox(width: Dimensions.space10),
-                //     Container(
-                //       height: size.height * 0.055,
-                //       width: size.width * 0.099,
-                //       decoration: BoxDecoration(
-                //         border: Border.all(
-                //           color: ColorResources.borderColor,
-                //         ),
-                //         borderRadius: BorderRadius.circular(10),
-                //       ),
-                //     ),
-                //     const SizedBox(width: Dimensions.space10),
-                //     Container(
-                //       height: size.height * 0.055,
-                //       width: size.width * 0.099,
-                //       decoration: BoxDecoration(
-                //         border: Border.all(
-                //           color: ColorResources.borderColor,
-                //         ),
-                //         borderRadius: BorderRadius.circular(10),
-                //       ),
-                //     ),
+                //      const SizedBox(height: Dimensions.space10),
                 //   ],
                 // ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
-                  children: List.generate(4, (index) {
-                    return Container(
-                      width: size.width * 0.1,
-                      margin: const EdgeInsets.symmetric(horizontal: 5),
-                      child: TextField(
-                        keyboardType: TextInputType.number,
-                        maxLength: 1,
-                        textAlign: TextAlign.center,
-                        decoration: const InputDecoration(
-                          counterText: '',
-                          border: OutlineInputBorder(),
+                  children: List.generate(
+                    4,
+                    (index) {
+                      return Container(
+                        width: size.width * 0.1,
+                        margin: const EdgeInsets.symmetric(horizontal: 5),
+                        child: TextField(
+                          controller: otpControllers[index],
+                          keyboardType: TextInputType.number,
+                          maxLength: 1,
+                          textAlign: TextAlign.center,
+                          decoration: const InputDecoration(
+                            counterText: '',
+                            border: OutlineInputBorder(),
+                          ),
+                          onChanged: (value) {
+                            if (value.isNotEmpty && index < 3) {
+                              FocusScope.of(context).nextFocus();
+                            } else if (value.isEmpty && index > 0) {
+                              FocusScope.of(context).previousFocus();
+                            }
+                          },
                         ),
-                        onChanged: (value) {
-                          if (value.isNotEmpty && index < 3) {
-                            FocusScope.of(context).nextFocus();
-                          } else if (value.isEmpty && index > 0) {
-                            FocusScope.of(context).previousFocus();
-                          }
-                        },
-                      ),
+                      );
+                    },
+                  ),
+                ),
+                const SizedBox(height: Dimensions.space25),
+                isForgot == 'forgot'
+                    ? Column(
+                        children: [
+                          GetBuilder(
+                            init: CreateAccountController(),
+                            builder: (controller) {
+                              return CommonTextField(
+                                controller: controller.passwordController,
+                                textFieldHeight: size.height * 0.065,
+                                obSecureText: controller.showPassword,
+                                suffixIcon: GestureDetector(
+                                  onTap: () {
+                                    controller.isShowPassword();
+                                  },
+                                  child: Icon(
+                                    controller.showPassword == true
+                                        ? Icons.visibility_off
+                                        : Icons.visibility,
+                                    color: ColorResources.blackColor,
+                                    size: 22,
+                                  ),
+                                ),
+                                hintText: LocalStrings.password,
+                                borderRadius: Dimensions.offersCardRadius,
+                                fillColor: Colors.transparent,
+                                textInputType: TextInputType.name,
+                                textInputAction: TextInputAction.next,
+                              );
+                            },
+                          ),
+                          const SizedBox(height: Dimensions.space25),
+                        ],
+                      )
+                    : const SizedBox(),
+                GetBuilder(
+                  init: CreateAccountController(),
+                  builder: (ctrl) {
+                    return CommonButton(
+                      onTap: () async {
+                        String otp = otpControllers
+                            .map((controller) => controller.text)
+                            .join();
+                        if (otp.length < 4) {
+                          Get.showSnackbar(
+                            const GetSnackBar(
+                              message: "Please enter a valid OTP",
+                              duration: Duration(seconds: 2),
+                            ),
+                          );
+                          return;
+                        }
+                        ctrl.getOtpApiMethod(
+                          email: setPasswordController.email ?? '',
+                          context: context,
+                          otp: otp,
+                        );
+                        log("isOtpValid: $ctrl.isLogin");
+                      },
+                      height: size.height * 0.065,
+                      width: double.infinity,
+                      child: ctrl.isCreateUserAccount.value == true
+                          ? const CircularProgressIndicator(
+                              color: ColorResources.whiteColor)
+                          : Text(
+                              LocalStrings.login,
+                              style: mediumLarge.copyWith(
+                                color: ColorResources.whiteColor,
+                              ),
+                            ),
                     );
-                  }),
-                ),
-                const SizedBox(height: Dimensions.space25),
-                CommonButton(
-                  onTap: () {
-                    //Navigate to setPassword page
-                    Get.toNamed(RouteHelper.setPasswordScreen);
                   },
-                  height: size.height * 0.065,
-                  width: double.infinity,
-                  buttonName: LocalStrings.login,
                 ),
                 const SizedBox(height: Dimensions.space25),
-                // Text(
-                //   LocalStrings.resendOTP,
-                //   style: mediumLarge.copyWith(),
-                // ),
-
                 Obx(
                   () => RichText(
                     text: TextSpan(
@@ -229,6 +277,10 @@ class _SetOtpState extends State<SetOtp> {
                               ? (TapGestureRecognizer()
                                 ..onTap = () {
                                   resendOtpController.startTimer();
+                                  createAccountController.sendOtpApiMethod(
+                                    email: setPasswordController.email,
+                                    context: context,
+                                  );
                                 })
                               : null,
                         ),
@@ -251,47 +303,6 @@ class _SetOtpState extends State<SetOtp> {
                   borderColor: ColorResources.borderColor,
                   gradientFirstColor: ColorResources.whiteColor,
                   gradientSecondColor: ColorResources.whiteColor,
-                ),
-                const SizedBox(height: Dimensions.space25),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Container(
-                      height: size.height * 0.070,
-                      padding: const EdgeInsets.all(12),
-                      decoration: BoxDecoration(
-                        color: ColorResources.helpNeedThirdColor,
-                        shape: BoxShape.circle,
-                        boxShadow: [
-                          BoxShadow(
-                            color: ColorResources.borderColor.withOpacity(0.1),
-                            spreadRadius: 1,
-                            blurRadius: 2,
-                            offset: const Offset(0, 2),
-                          ),
-                        ],
-                      ),
-                      child: Image.asset(MyImages.googleImage),
-                    ),
-                    const SizedBox(width: Dimensions.space25),
-                    Container(
-                      height: size.height * 0.070,
-                      padding: const EdgeInsets.all(7),
-                      decoration: BoxDecoration(
-                        color: ColorResources.offerSixColor.withOpacity(0.2),
-                        shape: BoxShape.circle,
-                        boxShadow: [
-                          BoxShadow(
-                            color: ColorResources.borderColor.withOpacity(0.1),
-                            spreadRadius: 1,
-                            blurRadius: 2,
-                            offset: const Offset(0, 2),
-                          ),
-                        ],
-                      ),
-                      child: Image.asset(MyImages.facebookImage),
-                    ),
-                  ],
                 ),
               ],
             ),

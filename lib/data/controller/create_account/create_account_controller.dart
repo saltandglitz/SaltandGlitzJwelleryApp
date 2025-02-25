@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -25,7 +27,7 @@ class CreateAccountController extends GetxController {
   TextEditingController passwordController = TextEditingController();
   TextEditingController confirmPasswordController = TextEditingController();
   final bottomBarController =
-      Get.put<BottomBarController>(BottomBarController());
+  Get.put<BottomBarController>(BottomBarController());
   final Color validColor = ColorResources.videoCallColor;
   final Color invalidColor = ColorResources.notValidateColor;
   bool hasEightChars = false;
@@ -43,10 +45,11 @@ class CreateAccountController extends GetxController {
   var user = Rx<User?>(null);
   RxBool isEnableNetwork = false.obs;
   RxBool isCreateUserAccount = false.obs;
+  RxBool isLogin = false.obs;
 
   @override
   void onInit() {
-    // TODO: implement onInit
+    // Todo: implement onInit
     super.onInit();
     user.bindStream(FirebaseAuth.instance.authStateChanges());
   }
@@ -109,14 +112,15 @@ class CreateAccountController extends GetxController {
   }
 
 // Checked validation after move signup
-  isValidation(
-      {String? firstName,
-      String? lastName,
-      String? mobileNumber,
-      String? email,
-      String? password,
-      String? gender,
-      BuildContext? context}) {
+  isValidation({
+    String? firstName,
+    String? lastName,
+    String? mobileNumber,
+    String? email,
+    String? password,
+    String? gender,
+    BuildContext? context,
+  }) {
     if (CommonValidation().isValidationEmpty(mobileController.text)) {
       showSnackBar(
           context: Get.context!, message: LocalStrings.enterMobileNumber);
@@ -180,7 +184,7 @@ class CreateAccountController extends GetxController {
     update();
   }
 
-  /// Google sign in method
+  //Todo : Google sign in method
   Future<User?> signInWithGoogle({String? screenType}) async {
     isLoading = true;
     update();
@@ -192,7 +196,7 @@ class CreateAccountController extends GetxController {
     /// Check signIn account validate or not if valid continue process other wise closed this method
     if (googleSignInAccount != null) {
       final GoogleSignInAuthentication googleSignInAuthentication =
-          await googleSignInAccount.authentication;
+      await googleSignInAccount.authentication;
       final AuthCredential authCredential = GoogleAuthProvider.credential(
         idToken: googleSignInAuthentication.idToken,
         accessToken: googleSignInAuthentication.accessToken,
@@ -200,7 +204,7 @@ class CreateAccountController extends GetxController {
 
       try {
         final UserCredential userCredential =
-            await auth.signInWithCredential(authCredential);
+        await auth.signInWithCredential(authCredential);
         user = userCredential.user;
 
         if (user != null) {
@@ -267,9 +271,9 @@ class CreateAccountController extends GetxController {
     isLoading = true;
     update();
     final bottomBarController =
-        Get.put<BottomBarController>(BottomBarController());
+    Get.put<BottomBarController>(BottomBarController());
     final myAccountController =
-        Get.put<MyAccountController>(MyAccountController());
+    Get.put<MyAccountController>(MyAccountController());
     final GoogleSignIn googleSignIn = GoogleSignIn();
     try {
       /// Checked is web or not after sign Out google functionality
@@ -307,7 +311,7 @@ class CreateAccountController extends GetxController {
       if (result.status == LoginStatus.success) {
         final AccessToken accessToken = result.accessToken!;
         final OAuthCredential credential =
-            FacebookAuthProvider.credential(accessToken.tokenString);
+        FacebookAuthProvider.credential(accessToken.tokenString);
 
         await FirebaseAuth.instance.signInWithCredential(credential);
         final userData = await FacebookAuth.i.getUserData(
@@ -318,7 +322,7 @@ class CreateAccountController extends GetxController {
         List<String> nameParameter = userData['name'].toString().split(" ");
         String firstName = nameParameter.isNotEmpty ? nameParameter[0] : '';
         String lastName =
-            nameParameter.length > 1 ? nameParameter.sublist(1).join(' ') : '';
+        nameParameter.length > 1 ? nameParameter.sublist(1).join(' ') : '';
 
         /// Email data show
         String email = userData['email'];
@@ -364,9 +368,9 @@ class CreateAccountController extends GetxController {
     isLoading = true;
     update();
     final bottomBarController =
-        Get.put<BottomBarController>(BottomBarController());
+    Get.put<BottomBarController>(BottomBarController());
     final myAccountController =
-        Get.put<MyAccountController>(MyAccountController());
+    Get.put<MyAccountController>(MyAccountController());
     try {
       // Sign out from Firebase
       await FirebaseAuth.instance.signOut();
@@ -394,18 +398,19 @@ class CreateAccountController extends GetxController {
     }
   }
 
-//Todo : Create new user account api method
-  Future createNewUserAccountApiMethod(
-      {String? firstName,
-      String? lastName,
-      String? mobileNumber,
-      String? email,
-      String? password,
-      String? gender,
-      BuildContext? context}) async {
+  //Todo : Create new user account api method
+  Future createNewUserAccountApiMethod({
+    String? firstName,
+    String? lastName,
+    String? mobileNumber,
+    String? email,
+    String? password,
+    String? gender,
+    BuildContext? context,
+  }) async {
     try {
       final bottomBarController =
-          Get.put<BottomBarController>(BottomBarController());
+      Get.put<BottomBarController>(BottomBarController());
       isCreateUserAccount.value = true;
       Map<String, dynamic> params = {
         'firstName': firstName,
@@ -415,12 +420,13 @@ class CreateAccountController extends GetxController {
         'password': password,
         'gender': gender,
       };
-      print("Create_account : ${params}");
+      print("Create_account : $params");
       Response response = await APIFunction().apiCall(
-          apiName: LocalStrings.registerApi,
-          context: context,
-          params: params,
-          isLoading: false);
+        apiName: LocalStrings.registerApi,
+        context: context,
+        params: params,
+        isLoading: false,
+      );
       if (response.statusCode == 201) {
         // showSnackBar(context: context, message: response.data);
 
@@ -440,6 +446,153 @@ class CreateAccountController extends GetxController {
         showToast(context: Get.context!, message: response.data['message']);
       } else if (response.statusCode == 400) {
         showSnackBar(context: Get.context!, message: "User already exists");
+      } else {
+        // Handle any other errors
+        showSnackBar(context: Get.context!, message: response.data['message']);
+      }
+      printAction("User_Create_Account : ${response.data['message']}");
+    } catch (e) {
+      printActionError("Create_User_Account_Error : $e");
+    } finally {
+      isCreateUserAccount.value = false;
+      update();
+    }
+  }
+
+  //Todo : Send otp api method
+  Future sendOtpApiMethod({
+    String? email,
+    BuildContext? context,
+  }) async {
+    try {
+      Map<String, dynamic> params = {
+        'email': email,
+      };
+      print("OTP_Sent : $params");
+      Response response = await APIFunction().apiCall(
+        apiName: LocalStrings.sendOtpApi,
+        context: context,
+        params: params,
+        isLoading: false,
+      );
+      if (response.statusCode == 200) {
+        showToast(context: Get.context!, message: response.data['message']);
+      } else {
+        // Handle any other errors
+        showSnackBar(context: Get.context!, message: response.data['message']);
+      }
+      printAction("OTP_Sent : ${response.data['message']}");
+    } catch (e) {
+      printActionError("OTP_Sent_Error : $e");
+    } finally {
+      isCreateUserAccount.value = false;
+      update();
+    }
+  }
+
+  //Todo : Get otp api method
+  Future getOtpApiMethod({
+    String? email,
+    String? otp,
+    BuildContext? context,
+  }) async {
+    try {
+      isLogin.value = true;
+      Map<String, dynamic> params = {
+        'email': email,
+        'otp': otp,
+      };
+      log("Params : $params");
+      print("OTP_Get : $params");
+      Response response = await APIFunction().apiCall(
+        apiName: LocalStrings.getOtpApi,
+        context: context,
+        params: params,
+        isLoading: false,
+      );
+      if (response.statusCode == 200) {
+        showToast(context: Get.context!, message: response.data['message']);
+        PrefManager.setString('isLogin', 'yes');
+        PrefManager.setString(
+            'firstName', response.data['user']['firstName'] ?? '');
+        PrefManager.setString(
+            'lastName', response.data['user']['lastName'] ?? '');
+        PrefManager.setString('email', response.data['user']['email'] ?? '');
+        PrefManager.setString(
+            'phoneNumber', response.data['user']['mobileNumber'] ?? '');
+        PrefManager.setString('gender', response.data['user']['gender'] ?? '');
+        PrefManager.setString('token', response.data['user']['token'] ?? '');
+        Get.offAllNamed(RouteHelper.bottomBarScreen);
+        bottomBarController.selectedIndex = 2.obs;
+      } else {
+        // Handle any other errors
+        showSnackBar(context: Get.context!, message: response.data['message']);
+      }
+      printAction("OTP_Get : ${response.data['message']}");
+    } catch (e) {
+      printActionError("OTP_Get_Error : $e");
+    } finally {
+      isLogin.value = false;
+      update();
+    }
+  }
+
+  //Todo : Forgot password api method
+  Future getNewPasswordApiMethod({
+    String? email,
+    BuildContext? context,
+  }) async {
+    try {
+      Map<String, dynamic> params = {
+        'email': email,
+      };
+      print("Create_account : $params");
+      Response response = await APIFunction().apiCall(
+        apiName: LocalStrings.forgotPasswordApi,
+        context: context,
+        params: params,
+        isLoading: false,
+      );
+      print("API Response: ${response.data}");
+
+      if (response.statusCode == 200) {
+        showToast(context: Get.context!, message: response.data['message']);
+      } else {
+        // Handle any other errors
+        showSnackBar(context: Get.context!, message: response.data['message']);
+      }
+      printAction("User_Create_Account : ${response.data['message']}");
+    } catch (e) {
+      printActionError("Create_User_Account_Error : $e");
+    } finally {
+      isCreateUserAccount.value = false;
+      update();
+    }
+  }
+
+  //Todo : Reset password api method
+  Future resetPasswordApiMethod({
+    String? email,
+    String? otp,
+    String? newPassword,
+    BuildContext? context,
+  }) async {
+    try {
+      Map<String, dynamic> params = {
+        'email': email,
+        'otp': otp,
+        'newPassword': newPassword
+      };
+      print("Create_account : $params");
+      Response response = await APIFunction().apiCall(
+        apiName: LocalStrings.resetPasswordApi,
+        context: context,
+        params: params,
+        isLoading: false,
+      );
+      print("API Response: ${response.data}");
+      if (response.statusCode == 200) {
+        showToast(context: Get.context!, message: response.data['message']);
       } else {
         // Handle any other errors
         showSnackBar(context: Get.context!, message: response.data['message']);
