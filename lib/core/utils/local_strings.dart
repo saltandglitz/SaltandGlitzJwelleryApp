@@ -725,6 +725,12 @@ class LocalStrings {
   static const String enableInternet =
       "No network detected!\nMake sure you're Enable internet";
   static const String retry = "Retry";
+
+  ///<<<---------------------------- Network connectivity screen log string ---------------------------->>>
+  static const String deliveryDetails = "Delivery Details";
+  static const String shippingAddress = "Shipping Address";
+  static const String billingAddress = "Billing Address";
+  static const String continuePlaceOrder = "continue";
 }
 
 class AppFonts {

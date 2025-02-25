@@ -14,6 +14,7 @@ import '../../view/screens/categories/women_categories_screen.dart';
 import '../../view/screens/collection/collection_screen.dart';
 import '../../view/screens/collection_filter/collection_filter_screen.dart';
 import '../../view/screens/my_account/my_account_screen.dart';
+import '../../view/screens/place_order/place_order_screen.dart';
 import '../../view/screens/product/product_screen.dart';
 import '../../view/screens/splash/splash_screen.dart';
 import '../../view/screens/wishlist/wishlist_screen.dart';
@@ -37,6 +38,7 @@ class RouteHelper {
   static const String setOtpScreen = "/set_otp_screen";
   static const String forgetPasswordScreen = "/forget_password_screen";
   static const String splashScreen = "/splash_screen";
+  static const String placeOrder = "/place_order";
 
   List<GetPage> routes = [
     GetPage(name: bottomBarScreen, page: () => const BottomBarScreen()),
@@ -60,5 +62,6 @@ class RouteHelper {
     GetPage(name: setOtpScreen, page: () => const SetOtp()),
     GetPage(name: forgetPasswordScreen, page: () => const ForgetPassword()),
     GetPage(name: splashScreen, page: () => const SplashScreen()),
+    GetPage(name: placeOrder, page: () => const PlaceOrderScreen()),
   ];
 }

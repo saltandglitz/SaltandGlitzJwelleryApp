@@ -6,6 +6,7 @@ import 'package:saltandGlitz/core/utils/local_strings.dart';
 import 'package:saltandGlitz/data/controller/add_to_cart/add_to_cart_controller.dart';
 import 'package:saltandGlitz/view/components/common_button.dart';
 import '../../../analytics/app_analytics.dart';
+import '../../../core/route/route.dart';
 import '../../../core/utils/color_resources.dart';
 import '../../../core/utils/dimensions.dart';
 import '../../../core/utils/style.dart';
@@ -105,7 +106,9 @@ class _AddToCartScreenState extends State<AddToCartScreen> {
             const Spacer(),
             // Common Place order button
             CommonButton(
-              onTap: () {},
+              onTap: () {
+                Get.toNamed(RouteHelper.placeOrder);
+              },
             ),
           ],
         ),
