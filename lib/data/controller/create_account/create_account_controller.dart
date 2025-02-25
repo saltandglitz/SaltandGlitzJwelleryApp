@@ -6,7 +6,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:get/get.dart' hide FormData, Response;
+import 'package:get_storage/get_storage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+
 import '../../../api_repository/api_function.dart';
 import '../../../core/route/route.dart';
 import '../../../core/utils/color_resources.dart';
@@ -24,10 +26,8 @@ class CreateAccountController extends GetxController {
   TextEditingController lastNameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController confirmPasswordController = TextEditingController();
-  final bottomBarController = Get.put<BottomBarController>(
-    BottomBarController(),
-  );
-
+  final bottomBarController =
+  Get.put<BottomBarController>(BottomBarController());
   final Color validColor = ColorResources.videoCallColor;
   final Color invalidColor = ColorResources.notValidateColor;
   bool hasEightChars = false;
@@ -196,7 +196,7 @@ class CreateAccountController extends GetxController {
     /// Check signIn account validate or not if valid continue process other wise closed this method
     if (googleSignInAccount != null) {
       final GoogleSignInAuthentication googleSignInAuthentication =
-          await googleSignInAccount.authentication;
+      await googleSignInAccount.authentication;
       final AuthCredential authCredential = GoogleAuthProvider.credential(
         idToken: googleSignInAuthentication.idToken,
         accessToken: googleSignInAuthentication.accessToken,
@@ -204,7 +204,7 @@ class CreateAccountController extends GetxController {
 
       try {
         final UserCredential userCredential =
-            await auth.signInWithCredential(authCredential);
+        await auth.signInWithCredential(authCredential);
         user = userCredential.user;
 
         if (user != null) {
@@ -266,14 +266,14 @@ class CreateAccountController extends GetxController {
     update();
   }
 
-  //Todo : Sign out google method
+  /// Sign out google method
   Future<void> signOutWithGoogle() async {
     isLoading = true;
     update();
     final bottomBarController =
-        Get.put<BottomBarController>(BottomBarController());
+    Get.put<BottomBarController>(BottomBarController());
     final myAccountController =
-        Get.put<MyAccountController>(MyAccountController());
+    Get.put<MyAccountController>(MyAccountController());
     final GoogleSignIn googleSignIn = GoogleSignIn();
     try {
       /// Checked is web or not after sign Out google functionality
@@ -311,7 +311,7 @@ class CreateAccountController extends GetxController {
       if (result.status == LoginStatus.success) {
         final AccessToken accessToken = result.accessToken!;
         final OAuthCredential credential =
-            FacebookAuthProvider.credential(accessToken.tokenString);
+        FacebookAuthProvider.credential(accessToken.tokenString);
 
         await FirebaseAuth.instance.signInWithCredential(credential);
         final userData = await FacebookAuth.i.getUserData(
@@ -322,7 +322,7 @@ class CreateAccountController extends GetxController {
         List<String> nameParameter = userData['name'].toString().split(" ");
         String firstName = nameParameter.isNotEmpty ? nameParameter[0] : '';
         String lastName =
-            nameParameter.length > 1 ? nameParameter.sublist(1).join(' ') : '';
+        nameParameter.length > 1 ? nameParameter.sublist(1).join(' ') : '';
 
         /// Email data show
         String email = userData['email'];
@@ -368,9 +368,9 @@ class CreateAccountController extends GetxController {
     isLoading = true;
     update();
     final bottomBarController =
-        Get.put<BottomBarController>(BottomBarController());
+    Get.put<BottomBarController>(BottomBarController());
     final myAccountController =
-        Get.put<MyAccountController>(MyAccountController());
+    Get.put<MyAccountController>(MyAccountController());
     try {
       // Sign out from Firebase
       await FirebaseAuth.instance.signOut();
@@ -410,7 +410,7 @@ class CreateAccountController extends GetxController {
   }) async {
     try {
       final bottomBarController =
-          Get.put<BottomBarController>(BottomBarController());
+      Get.put<BottomBarController>(BottomBarController());
       isCreateUserAccount.value = true;
       Map<String, dynamic> params = {
         'firstName': firstName,
@@ -438,6 +438,7 @@ class CreateAccountController extends GetxController {
         PrefManager.setString('phoneNumber', mobileNumber ?? '');
         PrefManager.setString('gender', gender ?? '');
         PrefManager.setString('token', response.data['user']['token'] ?? '');
+        PrefManager.setString('user_id', response.data['user']['_id'] ?? '');
         //Todo : Off all navigation and move My account screen
         Get.offAllNamed(RouteHelper.bottomBarScreen);
         bottomBarController.selectedIndex = 2.obs;
@@ -451,7 +452,7 @@ class CreateAccountController extends GetxController {
       }
       printAction("User_Create_Account : ${response.data['message']}");
     } catch (e) {
-      printError("Create_User_Account_Error : $e");
+      printActionError("Create_User_Account_Error : $e");
     } finally {
       isCreateUserAccount.value = false;
       update();
@@ -482,7 +483,7 @@ class CreateAccountController extends GetxController {
       }
       printAction("OTP_Sent : ${response.data['message']}");
     } catch (e) {
-      printError("OTP_Sent_Error : $e");
+      printActionError("OTP_Sent_Error : $e");
     } finally {
       isCreateUserAccount.value = false;
       update();
@@ -529,7 +530,7 @@ class CreateAccountController extends GetxController {
       }
       printAction("OTP_Get : ${response.data['message']}");
     } catch (e) {
-      printError("OTP_Get_Error : $e");
+      printActionError("OTP_Get_Error : $e");
     } finally {
       isLogin.value = false;
       update();
@@ -562,7 +563,7 @@ class CreateAccountController extends GetxController {
       }
       printAction("User_Create_Account : ${response.data['message']}");
     } catch (e) {
-      printError("Create_User_Account_Error : $e");
+      printActionError("Create_User_Account_Error : $e");
     } finally {
       isCreateUserAccount.value = false;
       update();
@@ -598,7 +599,7 @@ class CreateAccountController extends GetxController {
       }
       printAction("User_Create_Account : ${response.data['message']}");
     } catch (e) {
-      printError("Create_User_Account_Error : $e");
+      printActionError("Create_User_Account_Error : $e");
     } finally {
       isCreateUserAccount.value = false;
       update();

@@ -4,6 +4,7 @@ import 'package:carousel_slider/carousel_options.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart' hide Response;
+import 'package:saltandGlitz/data/controller/collection/collection_controller.dart';
 import 'package:saltandGlitz/view/components/common_message_show.dart';
 
 import '../../../analytics/app_analytics.dart';
@@ -106,6 +107,8 @@ class CategoriesController extends GetxController {
     LocalStrings.itemForPrice,
     LocalStrings.itemFivePrice,
     LocalStrings.itemSixPrice,
+    LocalStrings.itemSevenPrice,
+    LocalStrings.itemEightPrice,
   ];
 
   List moreJewelleryImageLst = [
@@ -206,7 +209,6 @@ class CategoriesController extends GetxController {
   void stopShimmerEffect() {
     Future.delayed(const Duration(seconds: 3), () {
       isShimmering.value = false;
-      print("SHIMER EFECT : ${isShimmering.value}");
       update();
     });
   }
@@ -242,8 +244,8 @@ class CategoriesController extends GetxController {
     update();
   }
 
-  void onPageChangedWomenProducts(
-      int index, CarouselPageChangedReason changeReason) {
+  void onPageChangedWomenProducts(int index,
+      CarouselPageChangedReason changeReason) {
     currentWomenIndex.value = index;
     if (changeReason == CarouselPageChangedReason.manual) {
       AppAnalytics().actionTriggerWithProductsLogs(
@@ -253,8 +255,8 @@ class CategoriesController extends GetxController {
     }
   }
 
-  void onPageChangedMenProducts(
-      int index, CarouselPageChangedReason changeReason) {
+  void onPageChangedMenProducts(int index,
+      CarouselPageChangedReason changeReason) {
     currentMenIndex.value = index;
     if (changeReason == CarouselPageChangedReason.manual) {
       AppAnalytics().actionTriggerWithProductsLogs(
@@ -264,16 +266,18 @@ class CategoriesController extends GetxController {
     }
   }
 
-  //Todo : Get categories data api method
-  Future getCategories(String categoriesApiName) async {
+  //Todo : Get Female categories data api method
+  Future getFemaleCategories() async {
     try {
-      getCategoryData.clear();
       Response response = await APIFunction().apiCall(
-          apiName: categoriesApiName,
+          apiName: LocalStrings.womenCategoriesApi,
           context: Get.context!,
           isGet: true,
           isLoading: false);
       if (response.statusCode == 200) {
+        getCategoryData.clear();
+        getCategoryMostBrowsedData.clear();
+        getCategoryBannerData.clear();
         log("Get Categories : ${response.data['categories']}");
         //Todo : add all jewellery style categories data
         getCategoryData = (response.data['categories'] as List)
@@ -298,15 +302,60 @@ class CategoriesController extends GetxController {
     }
   }
 
+  //Todo : Get Male categories data api method
+  Future getMaleCategories() async {
+    try {
+      Response response = await APIFunction().apiCall(
+          apiName: LocalStrings.menCategoriesApi,
+          context: Get.context!,
+          isGet: true,
+          isLoading: false);
+      if (response.statusCode == 200) {
+        getCategoryMaleData.clear();
+        getCategoryMostBrowsedMaleData.clear();
+        getCategoryBannerMaleData.clear();
+        //Todo : Male add all jewellery style categories data
+        getCategoryMaleData = (response.data['categories'] as List)
+            .map((categoryJson) => Categories.fromJson(categoryJson))
+            .toList();
+        //Todo : Male add all mostBrowsed categories data
+        getCategoryMostBrowsedMaleData =
+            (response.data['mergedProducts'] as List)
+                .map((categoryJson) => MergedProducts.fromJson(categoryJson))
+                .toList();
+
+        //Todo : Male add all jewellery banners categories data
+        getCategoryBannerMaleData = (response.data['banners'] as List)
+            .map((banners) => Banners.fromJson(banners))
+            .toList();
+      } else {
+        print("Something went wrong");
+      }
+    } catch (e) {
+      print("Get Categories Error : $e");
+    } finally {
+      update();
+    }
+  }
+
   //Todo : Filter categories & price wise product api method
   Future filterCategoriesApiMethod(
-      {String? occasionBy, String? priceLimit}) async {
+      {String? occasionBy, String? priceLimit, String? priceOrder}) async {
+    filterProductData.clear();
+    final collectionController =
+    Get.put<CollectionController>(CollectionController());
     try {
+      collectionController.isShowCategories.value = false;
       Map<String, dynamic> params = {
-        'occasionBy': occasionBy,
-        'priceLimit': priceLimit,
+        'occasionBy': occasionBy??'',
+        'priceLimit': priceLimit ?? '',
+        'priceOrder':priceOrder??'',
+
+        //Todo : Low to high / High to low
+        // 'priceOrder':priceOrder=="lowToHigh"||priceOrder=="highToLow"? priceOrder:'',
+        //Todo : Latest / Featured
+        // 'sortBy':priceOrder=="newestFirst"||priceOrder==LocalStrings.featured? priceOrder: '',
       };
-      printAction("Categories Filter 1 : $params");
       Response response = await APIFunction().apiCall(
         apiName: LocalStrings.filterProductApi,
         context: Get.context,
@@ -314,18 +363,19 @@ class CategoriesController extends GetxController {
         isLoading: false,
       );
       if (response.statusCode == 200) {
-        log("Categories Product : ${response.data['updatedProducts']}");
         filterProductData = (response.data['updatedProducts'] as List)
             .map((filterProduct) => UpdatedProducts.fromJson(filterProduct))
             .toList();
-        Get.toNamed(RouteHelper.collectionScreen);
-        log("Categories Product  111: ${filterProductData.length}");
+        update();
       } else {
         showSnackBar(
             context: Get.context!, message: "${response.data['message']}");
       }
     } catch (e) {
       print("Categories Filter : $e");
+    } finally {
+      collectionController.isShowCategories.value = true;
+      update();
     }
   }
 }

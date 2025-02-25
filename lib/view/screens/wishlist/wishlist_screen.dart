@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:saltandGlitz/core/utils/images.dart';
 import 'package:saltandGlitz/data/controller/wishlist/wishlist_controller.dart';
+import 'package:shimmer/shimmer.dart';
 
 import '../../../analytics/app_analytics.dart';
 import '../../../core/utils/color_resources.dart';
@@ -21,14 +23,21 @@ class WishlistScreen extends StatefulWidget {
 
 class _WishlistScreenState extends State<WishlistScreen> {
   final mainController = Get.put<MainController>(MainController());
+  final wishlistController = Get.put<WishlistController>(WishlistController());
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     mainController.checkToAssignNetworkConnections();
+    getWishlistApi();
     AppAnalytics()
         .actionTriggerLogs(eventName: LocalStrings.logWishList, index: 3);
+  }
+
+  getWishlistApi() async {
+    print("Enter to wishlist");
+    await wishlistController.getWishlistDataApiMethod();
   }
 
   @override
@@ -87,186 +96,396 @@ class _WishlistScreenState extends State<WishlistScreen> {
                         },
                         isLoading: controller.isEnableNetwork,
                       )
-                    : ListView.builder(
-                        itemCount: controller.productsImage.length,
-                        physics: const BouncingScrollPhysics(),
-                        padding:
-                            const EdgeInsets.only(top: 15, left: 15, right: 15),
-                        shrinkWrap: true,
-                        itemBuilder: (context, index) {
-                          return Container(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 15, vertical: 15),
-                            margin: const EdgeInsets.only(bottom: 17),
-                            decoration: BoxDecoration(
-                              color: ColorResources.cardBgColor,
-                              borderRadius: BorderRadius.circular(
-                                  Dimensions.offersCardRadius),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: ColorResources.borderColor
-                                      .withOpacity(0.1),
-                                  spreadRadius: 1,
-                                  blurRadius: 2,
-                                  offset: const Offset(0, 2),
-                                ),
-                              ],
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Container(
-                                  height: size.height * 0.15,
-                                  width: size.width * 0.30,
-                                  decoration: BoxDecoration(
-                                    border: Border.all(
-                                        color: ColorResources.offerSixColor),
-                                    borderRadius: BorderRadius.circular(
-                                        Dimensions.offersCardRadius),
-                                  ),
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(
-                                        Dimensions.offersCardRadius),
-                                    child: CachedCommonImage(
-                                      width: double.infinity,
-                                      networkImageUrl:
-                                          controller.productsImage[index],
+                    : controller.isWishlistProduct.value == true
+                        ? wishlistProductsShimmerEffect()
+                        : controller.wishlistProducts.isEmpty
+                            ? Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 10),
+                              child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Image.asset(
+                                      MyImages.noWishlistItemImage,
+                                      height: size.height * 0.25,
+                                      width: 200,
+                                      fit: BoxFit.fill
                                     ),
-                                  ),
+                                    const SizedBox(height: Dimensions.space20),
+                                    Center(
+                                      child: Text(
+                                        LocalStrings.wishlistEmpty,
+                                        textAlign: TextAlign.center,
+                                        style: semiBoldLarge.copyWith(
+                                            color:
+                                                ColorResources.conceptTextColor),
+                                      ),
+                                    ),
+                                    const SizedBox(height: Dimensions.space70),
+
+                                  ],
                                 ),
-                                const SizedBox(width: Dimensions.space20),
-                                Expanded(
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: [
-                                      Row(
-                                        children: [
-                                          Expanded(
-                                            child: Text(
-                                              controller.productsName[index],
-                                              softWrap: true,
-                                              overflow: TextOverflow.ellipsis,
-                                              style: mediumDefault.copyWith(),
+                            )
+                            : ListView.builder(
+                                itemCount: controller.wishlistProducts.length,
+                                physics: const BouncingScrollPhysics(),
+                                padding: const EdgeInsets.only(
+                                    top: 15, left: 15, right: 15),
+                                shrinkWrap: true,
+                                itemBuilder: (context, index) {
+                                  return Container(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 15, vertical: 15),
+                                    margin: const EdgeInsets.only(bottom: 17),
+                                    decoration: BoxDecoration(
+                                      color: ColorResources.cardBgColor,
+                                      borderRadius: BorderRadius.circular(
+                                          Dimensions.offersCardRadius),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: ColorResources.borderColor
+                                              .withOpacity(0.1),
+                                          spreadRadius: 1,
+                                          blurRadius: 2,
+                                          offset: const Offset(0, 2),
+                                        ),
+                                      ],
+                                    ),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Container(
+                                          height: size.height * 0.15,
+                                          width: size.width * 0.30,
+                                          decoration: BoxDecoration(
+                                            border: Border.all(
+                                                color: ColorResources
+                                                    .offerSixColor),
+                                            borderRadius: BorderRadius.circular(
+                                                Dimensions.offersCardRadius),
+                                          ),
+                                          child: ClipRRect(
+                                            borderRadius: BorderRadius.circular(
+                                                Dimensions.offersCardRadius),
+                                            child: CachedCommonImage(
+                                              width: double.infinity,
+                                              networkImageUrl: controller
+                                                  .wishlistProducts[index]
+                                                  .productId!
+                                                  .image01,
                                             ),
                                           ),
-                                        ],
-                                      ),
-                                      const SizedBox(height: Dimensions.space2),
-                                      Text(
-                                        controller.productsPriceLst[index],
-                                        style: boldSmall.copyWith(
-                                            color: ColorResources
-                                                .conceptTextColor),
-                                      ),
-                                      const SizedBox(
-                                          height: Dimensions.space40),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceBetween,
-                                        children: [
-                                          GestureDetector(
-                                           onTap: () {
-                                             /// Move to cart product clicked analysis
-                                             AppAnalytics()
-                                                 .actionTriggerWithProductsLogs(
-                                                 eventName: LocalStrings
-                                                     .logWishListMoveCartProduct,
-                                                 productName: controller
-                                                     .productsName[index],
-                                                 productImage: controller
-                                                     .productsImage[index],
-                                                 index: 3);
-                                           },
-                                            child: Container(
-                                              height: size.height * 0.045,
-                                              width: size.width * 0.30,
-                                              decoration: BoxDecoration(
-                                                color:
-                                                    ColorResources.moveCartColor,
-                                                borderRadius:
-                                                    BorderRadius.circular(
-                                                        Dimensions.defaultRadius),
+                                        ),
+                                        const SizedBox(
+                                            width: Dimensions.space20),
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Row(
+                                                children: [
+                                                  Expanded(
+                                                    child: Text(
+                                                      controller
+                                                              .wishlistProducts[
+                                                                  index]
+                                                              .productId!
+                                                              .title ??
+                                                          '',
+                                                      softWrap: true,
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                      style: mediumDefault
+                                                          .copyWith(),
+                                                    ),
+                                                  ),
+                                                ],
                                               ),
-                                              child: Center(
-                                                child: Text(
-                                                  LocalStrings.moveCart,
-                                                  style: boldSmall.copyWith(
-                                                      color: ColorResources
-                                                          .whiteColor),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                          const Spacer(),
-                                          GestureDetector(
-                                           onTap: () {
-                                             /// Share product clicked analysis
-                                             AppAnalytics()
-                                                 .actionTriggerWithProductsLogs(
-                                                 eventName: LocalStrings
-                                                     .logWishListShareProduct,
-                                                 productName: controller
-                                                     .productsImage[index],
-                                                 productImage: controller
-                                                     .productsName[index],
-                                                 index: 3);
-                                           },
-                                            child: Container(
-                                              height: size.height * 0.040,
-                                              width: size.width * 0.090,
-                                              decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(
-                                                        Dimensions.defaultRadius),
-                                                border: Border.all(
+                                              const SizedBox(
+                                                  height: Dimensions.space2),
+                                              Text(
+                                                "${controller.wishlistProducts[index].productId!.total14KT}",
+                                                style: boldSmall.copyWith(
                                                     color: ColorResources
-                                                        .conceptTextColor,
-                                                    width: 1.5),
+                                                        .conceptTextColor),
                                               ),
-                                              child: const Center(
-                                                child: Icon(Icons.share_rounded),
+                                              const SizedBox(
+                                                  height: Dimensions.space40),
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  GestureDetector(
+                                                    onTap: () {
+                                                      /// Move to cart product clicked analysis
+                                                      AppAnalytics().actionTriggerWithProductsLogs(
+                                                          eventName: LocalStrings
+                                                              .logWishListMoveCartProduct,
+                                                          productName: controller
+                                                              .wishlistProducts[
+                                                          index]
+                                                              .productId!
+                                                              .title,
+                                                          productImage: controller
+                                                              .wishlistProducts[index]
+                                                              .productId!
+                                                              .image01,
+                                                          index: 3);
+                                                    },
+                                                    child: Container(
+                                                      height:
+                                                          size.height * 0.045,
+                                                      width: size.width * 0.30,
+                                                      decoration: BoxDecoration(
+                                                        color: ColorResources
+                                                            .moveCartColor,
+                                                        borderRadius: BorderRadius
+                                                            .circular(Dimensions
+                                                                .defaultRadius),
+                                                      ),
+                                                      child: Center(
+                                                        child: Text(
+                                                          LocalStrings.moveCart,
+                                                          style: boldSmall.copyWith(
+                                                              color: ColorResources
+                                                                  .whiteColor),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  const Spacer(),
+                                                  GestureDetector(
+                                                    onTap: () {
+                                                      /// Share product clicked analysis
+                                                      AppAnalytics().actionTriggerWithProductsLogs(
+                                                          eventName: LocalStrings
+                                                              .logWishListShareProduct,
+                                                          productName: controller
+                                                              .wishlistProducts[
+                                                          index]
+                                                              .productId!
+                                                              .title,
+                                                          productImage: controller
+                                                              .wishlistProducts[index]
+                                                              .productId!
+                                                              .image01,
+                                                          index: 3);
+                                                    },
+                                                    child: Container(
+                                                      height:
+                                                          size.height * 0.040,
+                                                      width: size.width * 0.090,
+                                                      decoration: BoxDecoration(
+                                                        borderRadius: BorderRadius
+                                                            .circular(Dimensions
+                                                                .defaultRadius),
+                                                        border: Border.all(
+                                                            color: ColorResources
+                                                                .conceptTextColor,
+                                                            width: 1.5),
+                                                      ),
+                                                      child: const Center(
+                                                        child: Icon(Icons
+                                                            .share_rounded),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
                                               ),
+                                            ],
+                                          ),
+                                        ),
+                                        GestureDetector(
+                                          onTap: () {
+                                            /// Remove product clicked analysis
+                                            AppAnalytics()
+                                                .actionTriggerWithProductsLogs(
+                                                    eventName: LocalStrings
+                                                        .logWishListRemoveProduct,
+                                                    productName: controller
+                                                        .wishlistProducts[
+                                                    index]
+                                                        .productId!
+                                                        .title,
+                                                    productImage: controller
+                                                        .wishlistProducts[index]
+                                                        .productId!
+                                                        .image01,
+                                                    index: 3);
+                                            controller.removeLocally(index);
+                                          },
+                                          child: Container(
+                                            height: 20,
+                                            width: 20,
+                                            decoration: const BoxDecoration(
+                                                shape: BoxShape.circle,
+                                                color: ColorResources
+                                                    .conceptTextColor),
+                                            child: const Icon(
+                                              Icons.close,
+                                              size: 15,
+                                              color: ColorResources.whiteColor,
                                             ),
                                           ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                GestureDetector(
-                                  onTap: () {
-                                    /// Remove product clicked analysis
-                                    AppAnalytics().actionTriggerWithProductsLogs(
-                                        eventName:
-                                        LocalStrings.logWishListRemoveProduct,
-                                        productName:
-                                        controller.productsName[index],
-                                        productImage:
-                                        controller.productsImage[index],
-                                        index: 3);
-                                    controller.removeLocally(index);
-                                  },
-                                  child: Container(
-                                    height: 20,
-                                    width: 20,
-                                    decoration: const BoxDecoration(
-                                        shape: BoxShape.circle,
-                                        color: ColorResources.conceptTextColor),
-                                    child: const Icon(
-                                      Icons.close,
-                                      size: 15,
-                                      color: ColorResources.whiteColor,
+                                        ),
+                                      ],
                                     ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          );
-                        },
-                      );
+                                  );
+                                },
+                              );
               }),
+        );
+      },
+    );
+  }
+
+  wishlistProductsShimmerEffect() {
+    final size = MediaQuery.of(context).size;
+    return ListView.builder(
+      itemCount: 4,
+      physics: const BouncingScrollPhysics(),
+      padding: const EdgeInsets.only(top: 15, left: 15, right: 15),
+      shrinkWrap: true,
+      itemBuilder: (context, index) {
+        return Container(
+          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
+          margin: const EdgeInsets.only(bottom: 17),
+          decoration: BoxDecoration(
+            color: ColorResources.cardBgColor,
+            borderRadius: BorderRadius.circular(Dimensions.offersCardRadius),
+            boxShadow: [
+              BoxShadow(
+                color: ColorResources.borderColor.withOpacity(0.1),
+                spreadRadius: 1,
+                blurRadius: 2,
+                offset: const Offset(0, 2),
+              ),
+            ],
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Shimmer.fromColors(
+                baseColor: ColorResources.baseColor,
+                highlightColor: ColorResources.highlightColor,
+                child: Container(
+                  height: size.height * 0.15,
+                  width: size.width * 0.30,
+                  decoration: BoxDecoration(
+                    border: Border.all(
+                      color: ColorResources.offerSixColor,
+                    ),
+                    borderRadius:
+                        BorderRadius.circular(Dimensions.offersCardRadius),
+                  ),
+                  child: ClipRRect(
+                    borderRadius:
+                        BorderRadius.circular(Dimensions.offersCardRadius),
+                    child: Container(
+                      color: ColorResources
+                          .highlightColor, // Color to simulate a loading state.
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(width: Dimensions.space20),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const SizedBox(height: Dimensions.space10),
+                    Row(
+                      children: [
+                        Shimmer.fromColors(
+                            baseColor: ColorResources.baseColor,
+                            highlightColor: ColorResources.highlightColor,
+                            child: Container(
+                                height: 10,
+                                width: 100,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(
+                                      Dimensions.minimumRadius),
+                                  color: ColorResources.highlightColor,
+                                ))),
+                      ],
+                    ),
+                    const SizedBox(height: Dimensions.space2),
+                    Shimmer.fromColors(
+                        baseColor: ColorResources.baseColor,
+                        highlightColor: ColorResources.highlightColor,
+                        child: Container(
+                          height: 10,
+                          width: 50,
+                          decoration: BoxDecoration(
+                            borderRadius:
+                                BorderRadius.circular(Dimensions.minimumRadius),
+                            color: ColorResources.highlightColor,
+                          ),
+                        )),
+                    const SizedBox(height: Dimensions.space45),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Shimmer.fromColors(
+                          baseColor: ColorResources.baseColor,
+                          highlightColor: ColorResources.highlightColor,
+                          child: Container(
+                            height: size.height * 0.045,
+                            width: size.width * 0.30,
+                            decoration: BoxDecoration(
+                              color: ColorResources.moveCartColor,
+                              borderRadius: BorderRadius.circular(
+                                  Dimensions.defaultRadius),
+                            ),
+                          ),
+                        ),
+                        const Spacer(),
+                        Shimmer.fromColors(
+                          baseColor: ColorResources.baseColor,
+                          highlightColor: ColorResources.highlightColor,
+                          child: Container(
+                            height: size.height * 0.040,
+                            width: size.width * 0.090,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(
+                                  Dimensions.defaultRadius),
+                              border: Border.all(
+                                  color: ColorResources.conceptTextColor,
+                                  width: 1.5),
+                            ),
+                            child: const Center(
+                              child: Icon(Icons.share_rounded),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+              Container(
+                height: 20,
+                width: 20,
+                decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: ColorResources.highlightColor),
+                child: Shimmer.fromColors(
+                  baseColor: ColorResources.baseColor,
+                  highlightColor: ColorResources.highlightColor,
+                  child: const Icon(
+                    Icons.close,
+                    size: 15,
+                    color: ColorResources.whiteColor,
+                  ),
+                ),
+              ),
+            ],
+          ),
         );
       },
     );

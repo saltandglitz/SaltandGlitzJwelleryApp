@@ -4,6 +4,7 @@ import 'package:saltandGlitz/data/controller/categories/categories_controller.da
 import 'package:saltandGlitz/view/screens/categories/women_categories_screen.dart';
 import '../../../analytics/app_analytics.dart';
 import '../../../core/route/route.dart';
+import '../../../core/utils/app_const.dart';
 import '../../../core/utils/color_resources.dart';
 import '../../../core/utils/local_strings.dart';
 import '../../../core/utils/style.dart';
@@ -63,7 +64,7 @@ class _CategoriesScreenState extends State<CategoriesScreen>
               tabBarWidget: Container(
                 color: ColorResources.whiteColor,
                 child: TabBar(
-                  onTap: (value) {
+                  onTap: (value) async {
                     if (value == 0) {
                       /// Women categories analysis
                       AppAnalytics().actionTriggerLogs(
@@ -102,7 +103,9 @@ class _CategoriesScreenState extends State<CategoriesScreen>
                 ),
                 actions: [
                   IconButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Get.toNamed(RouteHelper.wishlistScreen);
+                    },
                     icon: const Icon(Icons.favorite_rounded),
                     color: ColorResources.conceptTextColor,
                   ),

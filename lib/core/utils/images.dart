@@ -71,7 +71,7 @@ class MyImages {
 
   ///<<<---------------------------- Women categories screen images ---------------------------->>>
   static const String forwordArrowImage =
-        '${imagePath}arrowios_forward_image.png';
+      '${imagePath}arrowios_forward_image.png';
   static const String ringsCategories =
       'https://upload.wikimedia.org/wikipedia/commons/b/b6/Ring_Ruby.jpg';
   static const String earringsCategories =
@@ -185,6 +185,9 @@ class MyImages {
   static const String hallmarkImage = '${imagePath}hallmark_image.png';
   static const String certifiedImage = '${imagePath}certified_image.png';
   static const String freeShipingImage = '${imagePath}free_shiping_image.png';
+
+  ///<<<---------------------------- Wishlist screen images ---------------------------->>>
+  static const String noWishlistItemImage = '${imagePath}no_wishlist_items.png';
 
   ///<<<---------------------------- My Account screen images ---------------------------->>>
   static const String emailImage = '${imagePath}email_image.png';

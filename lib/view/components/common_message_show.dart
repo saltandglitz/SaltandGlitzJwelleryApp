@@ -4,6 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
+import '../../core/utils/color_resources.dart';
+import '../../core/utils/style.dart';
+
 /// <<< To show snackBar massage  --------- >>>
 void showSnackBar({
   required BuildContext context,
@@ -13,6 +16,10 @@ void showSnackBar({
   Get.snackbar(
     "",
     message,
+    messageText: Text(
+      message,
+      style: semiBoldMediumLarge.copyWith(color: ColorResources.whiteColor),
+    ),
     snackPosition: SnackPosition.TOP,
     backgroundColor: const Color(0xFFD55959),
     titleText: const SizedBox(),
@@ -42,14 +49,16 @@ void showToast({required String message, required BuildContext context}) {
     backgroundColor: Colors.black26,
   );
 }
+
 /// <<< Error Massage Red color --------- >>>
-void printError(String text) {
+void printActionError(String text) {
   if (Platform.isAndroid) {
     debugPrint('\x1B[91m$text\x1B[0m');
   } else {
     debugPrint(text);
   }
 }
+
 /// <<< Action Massage Blue Color --------- >>>
 void printAction(String text) {
   if (Platform.isAndroid) {

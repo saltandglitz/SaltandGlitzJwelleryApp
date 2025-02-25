@@ -1,15 +1,20 @@
-import 'package:get/get.dart';
-import 'package:get/get_rx/get_rx.dart';
+import 'package:dio/dio.dart';
+import 'package:get/get.dart' hide Response;
+import 'package:saltandGlitz/api_repository/api_function.dart';
 import 'package:saltandGlitz/core/utils/images.dart';
 import 'package:saltandGlitz/core/utils/local_strings.dart';
+import 'package:saltandGlitz/view/components/common_message_show.dart';
 
 import '../../../analytics/app_analytics.dart';
+import '../../../core/utils/app_const.dart';
 import '../../../local_storage/sqflite_local_storage.dart';
 
 class CollectionController extends GetxController {
   var currentIndex = (-1).obs;
   var favoriteStatus = <bool>[];
   RxBool isEnableNetwork = false.obs;
+  RxBool isShowCategories = false.obs;
+  RxBool isShowSearchField = false.obs;
 
   // Sort collection data
   List sortProductsLst = [
@@ -96,7 +101,7 @@ class CollectionController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    favoriteStatus = List.generate(collectionDataImageLst.length, (_) => false);
+    favoriteStatus = List.generate(filterProductData.length, (_) => false);
   }
 
   enableNetworkHideLoader() {
@@ -110,6 +115,11 @@ class CollectionController extends GetxController {
     if (isEnableNetwork.value == true) {
       isEnableNetwork.value = false;
     }
+    update();
+  }
+//Todo : Hide search field to appbar search icon
+  hideSearchField() {
+    isShowSearchField.value = false;
     update();
   }
 
@@ -182,7 +192,30 @@ class CollectionController extends GetxController {
       // Insert the new product
       await dbHelper.insert(row);
     }
-
     update();
+  }
+
+  //Todo : Favorites products api method
+  Future favoritesProducts({String? userId, String? productId}) async {
+    try {
+      Map<String, dynamic> params = {
+        'userId': userId,
+        'productId': productId,
+      };
+      print("Wishlist Users : $params ");
+      Response response = await APIFunction().apiCall(
+        apiName: LocalStrings.wishlistProductApi,
+        context: Get.context!,
+        params: params,
+        isLoading: false,
+      );
+      if (response.statusCode == 201) {
+        print("Wishlist products  :${response.data['message']}");
+      } else {
+        showSnackBar(context: Get.context!, message: response.data['message']);
+      }
+    } catch (e) {
+      print("Favorites Products error  : $e");
+    }
   }
 }

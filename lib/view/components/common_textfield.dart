@@ -14,6 +14,8 @@ class CommonTextField extends StatelessWidget {
   Color? borderColor;
   TextInputType? textInputType;
   double? borderRadius;
+  EdgeInsetsGeometry? contentPadding;
+  TextAlignVertical? textAlignVertical;
   Widget? prefixWidget;
   TextInputAction? textInputAction;
   Widget? suffixIcon;
@@ -33,6 +35,8 @@ class CommonTextField extends StatelessWidget {
     this.borderColor,
     this.textInputType,
     this.borderRadius,
+    this.contentPadding,
+    this.textAlignVertical,
     this.prefixWidget,
     this.textInputAction,
     this.suffixIcon,
@@ -55,6 +59,7 @@ class CommonTextField extends StatelessWidget {
         style: mediumDefault.copyWith(color: ColorResources.conceptTextColor),
         onChanged: onChange,
         obscureText: obSecureText ?? false,
+        textAlignVertical: textAlignVertical,
         decoration: InputDecoration(
           prefixIcon: null,
           prefix: prefixWidget,
@@ -62,6 +67,7 @@ class CommonTextField extends StatelessWidget {
           fillColor: fillColor,
           filled: true,
           // contentPadding:
+          contentPadding: contentPadding,
           //     const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
           border: OutlineInputBorder(
             borderRadius:

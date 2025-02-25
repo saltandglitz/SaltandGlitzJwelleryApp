@@ -1,6 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:saltandGlitz/view/components/common_message_show.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../../../analytics/app_analytics.dart';
@@ -198,8 +199,10 @@ class _WomenCategoriesScreenState extends State<WomenCategoriesScreen> {
                               (size.width - Dimensions.space30) /
                                   2; // Adjust for spacing
                           return ListView.builder(
-                            itemCount:
-                                (getCategoryMostBrowsedData.length / 2).ceil(),
+                            itemCount: getCategoryMostBrowsedData.isEmpty
+                                ? (2 / 2).ceil()
+                                : (getCategoryMostBrowsedData.length / 2)
+                                    .ceil(),
                             physics: const BouncingScrollPhysics(),
                             shrinkWrap: true,
                             itemBuilder: (context, rowIndex) {
@@ -214,8 +217,12 @@ class _WomenCategoriesScreenState extends State<WomenCategoriesScreen> {
                                       Flexible(
                                         child: SizedBox(
                                           width: itemWidth,
-                                          child: mostBrowsedItem(
-                                              controller, firstIndex, size),
+                                          child: getCategoryMostBrowsedData
+                                                  .isEmpty
+                                              ? mostBrowsedItemShimmer(
+                                                  controller, firstIndex, size)
+                                              : mostBrowsedItem(
+                                                  controller, firstIndex, size),
                                         ),
                                       ),
                                       const SizedBox(width: Dimensions.space10),
@@ -226,8 +233,14 @@ class _WomenCategoriesScreenState extends State<WomenCategoriesScreen> {
                                         Flexible(
                                           child: SizedBox(
                                             width: itemWidth,
-                                            child: mostBrowsedItem(
-                                                controller, secondIndex, size),
+                                            child: getCategoryMostBrowsedData
+                                                    .isEmpty
+                                                ? mostBrowsedItemShimmer(
+                                                    controller,
+                                                    secondIndex,
+                                                    size)
+                                                : mostBrowsedItem(controller,
+                                                    secondIndex, size),
                                           ),
                                         ),
                                       if (secondIndex >=
@@ -274,61 +287,114 @@ class _WomenCategoriesScreenState extends State<WomenCategoriesScreen> {
                           return Stack(
                             alignment: AlignmentDirectional.bottomCenter,
                             children: [
-                              CarouselSlider.builder(
-                                key:
-                                    const PageStorageKey('carousel_slider_key'),
-                                // Add PageStorageKey
-                                itemCount: getCategoryBannerData.length,
-                                options: CarouselOptions(
-                                  onPageChanged:
-                                      controller.onPageChangedWomenProducts,
-                                  autoPlay: true,
-                                  enlargeCenterPage: true,
-                                  aspectRatio: 4 / 1.4,
-                                  viewportFraction: 1,
-                                ),
-                                itemBuilder: (BuildContext context, int index,
-                                    int realIndex) {
-                                  return ClipRRect(
-                                    borderRadius: BorderRadius.circular(
-                                        Dimensions.bottomSheetRadius),
-                                    child: CachedCommonImage(
-                                      networkImageUrl:
-                                          getCategoryBannerData[index]
-                                              .bannerImage,
-                                      width: double.infinity,
+                              getCategoryBannerData.isEmpty
+                                  ? CarouselSlider.builder(
+                                      key: const PageStorageKey(
+                                          'carousel_slider_key'),
+                                      // Add PageStorageKey
+                                      itemCount: 3,
+                                      options: CarouselOptions(
+                                        onPageChanged: controller
+                                            .onPageChangedWomenProducts,
+                                        autoPlay: true,
+                                        enlargeCenterPage: true,
+                                        aspectRatio: 4 / 1.4,
+                                        viewportFraction: 1,
+                                      ),
+                                      itemBuilder: (BuildContext context,
+                                          int index, int realIndex) {
+                                        return Shimmer.fromColors(
+                                          baseColor: ColorResources.baseColor,
+                                          highlightColor:
+                                              ColorResources.highlightColor,
+                                          child: ClipRRect(
+                                            borderRadius: BorderRadius.circular(
+                                                Dimensions.bottomSheetRadius),
+                                            child: Container(
+                                                color: ColorResources
+                                                    .highlightColor),
+                                          ),
+                                        );
+                                      },
+                                    )
+                                  : CarouselSlider.builder(
+                                      key: const PageStorageKey(
+                                          'carousel_slider_key'),
+                                      // Add PageStorageKey
+                                      itemCount: getCategoryBannerData.length,
+                                      options: CarouselOptions(
+                                        onPageChanged: controller
+                                            .onPageChangedWomenProducts,
+                                        autoPlay: true,
+                                        enlargeCenterPage: true,
+                                        aspectRatio: 4 / 1.4,
+                                        viewportFraction: 1,
+                                      ),
+                                      itemBuilder: (BuildContext context,
+                                          int index, int realIndex) {
+                                        return ClipRRect(
+                                          borderRadius: BorderRadius.circular(
+                                              Dimensions.bottomSheetRadius),
+                                          child: CachedCommonImage(
+                                            networkImageUrl:
+                                                getCategoryBannerData[index]
+                                                    .bannerImage,
+                                            width: double.infinity,
+                                          ),
+                                        );
+                                      },
                                     ),
-                                  );
-                                },
-                              ),
-                              Obx(
-                                () => Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: List.generate(
-                                    getCategoryBannerData.length,
-                                    (i) => Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 7, vertical: 15),
-                                      child: CircleAvatar(
-                                        radius: 5,
-                                        backgroundColor:
-                                            ColorResources.inactiveCardColor,
-                                        child: CircleAvatar(
-                                          radius: 4,
-                                          backgroundColor: controller
-                                                      .currentWomenIndex
-                                                      .value ==
-                                                  i
-                                              ? ColorResources
-                                                  .buttonGradientColor
-                                              : ColorResources
+                              getCategoryBannerData.isEmpty
+                                  ? Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: List.generate(
+                                        3,
+                                        (i) => const Padding(
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 7, vertical: 15),
+                                          child: CircleAvatar(
+                                            radius: 5,
+                                            backgroundColor: ColorResources
+                                                .inactiveCardColor,
+                                            child: CircleAvatar(
+                                              radius: 4,
+                                              backgroundColor: ColorResources
                                                   .inactiveCardColor,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    )
+                                  : Obx(
+                                      () => Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: List.generate(
+                                          getCategoryBannerData.length,
+                                          (i) => Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 7, vertical: 15),
+                                            child: CircleAvatar(
+                                              radius: 5,
+                                              backgroundColor: ColorResources
+                                                  .inactiveCardColor,
+                                              child: CircleAvatar(
+                                                radius: 4,
+                                                backgroundColor: controller
+                                                            .currentWomenIndex
+                                                            .value ==
+                                                        i
+                                                    ? ColorResources
+                                                        .buttonGradientColor
+                                                    : ColorResources
+                                                        .inactiveCardColor,
+                                              ),
+                                            ),
+                                          ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                ),
-                              ),
                             ],
                           );
                         },
@@ -743,6 +809,77 @@ class _WomenCategoriesScreenState extends State<WomenCategoriesScreen> {
     );
   }
 
+  // Most Browsed Shimmer
+  Widget mostBrowsedItemShimmer(
+      CategoriesController controller, int index, Size size) {
+    bool isSelected = controller.browsedIndex.value == index;
+
+    return Container(
+      padding: EdgeInsets.zero,
+      margin: const EdgeInsets.only(bottom: 17),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(Dimensions.categoriesRadius),
+      ),
+      child: Stack(
+        alignment: Alignment.bottomCenter,
+        children: [
+          Shimmer.fromColors(
+            baseColor: ColorResources.baseColor,
+            highlightColor: ColorResources.highlightColor,
+            child: Container(
+              height: size.height * 0.14,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                border: Border.all(color: ColorResources.offerSixColor),
+                color: ColorResources.highlightColor,
+                borderRadius:
+                    BorderRadius.circular(Dimensions.categoriesRadius),
+              ),
+              child: ClipRRect(
+                borderRadius:
+                    BorderRadius.circular(Dimensions.categoriesRadius),
+              ),
+            ),
+          ),
+          Container(
+            height: size.height * 0.040,
+            decoration: const BoxDecoration(
+              color: ColorResources.offerSixColor,
+              borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(Dimensions.categoriesRadius),
+                  bottomRight: Radius.circular(Dimensions.categoriesRadius)),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const SizedBox(width: Dimensions.space10),
+                Shimmer.fromColors(
+                  baseColor: ColorResources.baseColor,
+                  highlightColor: ColorResources.highlightColor,
+                  child: Container(
+                    height: size.height * 0.015,
+                    width: size.width * 0.200,
+                    decoration: BoxDecoration(
+                        color: ColorResources.whiteColor,
+                        borderRadius: BorderRadius.circular(3)),
+                  ),
+                ),
+                Shimmer.fromColors(
+                  baseColor: ColorResources.baseColor,
+                  highlightColor: ColorResources.highlightColor,
+                  child: Image.asset(MyImages.forwordArrowImage,
+                      height: 20,
+                      width: 20,
+                      color: ColorResources.conceptTextColor),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget buildExpandedContent(
       CategoriesController controller, int index, Size size) {
     bool isLeftChevron = index % 2 == 0;
@@ -875,7 +1012,7 @@ class _WomenCategoriesScreenState extends State<WomenCategoriesScreen> {
                                         .subCategory![index]
                                         .subCategory,
                                     priceLimit: '');
-                                // Get.toNamed(RouteHelper.collectionScreen);
+                                Get.toNamed(RouteHelper.collectionScreen);
                               },
                               child: Column(
                                 children: [
@@ -988,7 +1125,8 @@ class _WomenCategoriesScreenState extends State<WomenCategoriesScreen> {
 Widget mostBrowsedExpandedContent(CategoriesController controller, int index,
     Size size, String typeDataShow) {
   bool isLeftChevron = index % 2 == 0;
-
+  printAction(
+      "Check list : ${getCategoryMostBrowsedData[index].subCategory?.length}");
   return GetBuilder(
       init: CategoriesController(),
       builder: (controller) {
@@ -1014,83 +1152,99 @@ Widget mostBrowsedExpandedContent(CategoriesController controller, int index,
                     SizedBox(
                       height: size.height * 0.22,
                       child: ListView.builder(
-                        itemCount: typeDataShow == LocalStrings.shopGifts
-                            ? controller.shopGiftsImageLst.length
-                            : controller.moreJewelleryImageLst.length,
-                        padding: EdgeInsets.zero,
+                        itemCount: getCategoryMostBrowsedData[index]
+                            .subCategory
+                            ?.length,
+                        padding: const EdgeInsets.only(right: 10),
                         physics: const BouncingScrollPhysics(),
                         shrinkWrap: true,
                         scrollDirection: Axis.horizontal,
-                        itemBuilder: (context, index) {
+                        itemBuilder: (context, indexSubCategories) {
                           return Column(
                             children: [
                               GestureDetector(
                                 onTap: () {
+                                  controller.filterCategoriesApiMethod(
+                                      occasionBy:
+                                          getCategoryMostBrowsedData[index]
+                                              .subCategory?[indexSubCategories]
+                                              .subCategory,
+                                      priceLimit: '');
                                   Get.toNamed(RouteHelper.collectionScreen);
                                 },
-                                child: Stack(
-                                  alignment: Alignment.topCenter,
-                                  children: [
-                                    Container(
-                                      height: size.height * 0.22,
-                                      width: size.width * 0.40,
-                                      padding: const EdgeInsets.only(right: 10),
-                                      decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(
-                                            Dimensions.fullRadius),
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(
+                                        Dimensions.fullRadius),
+                                    boxShadow: const [
+                                      BoxShadow(
+                                        color: ColorResources.borderColor,
+                                        offset: Offset(0, 1),
+                                        blurRadius: 1,
                                       ),
-                                      child: ClipRRect(
-                                        borderRadius: BorderRadius.circular(
-                                            Dimensions.fullRadius),
-                                        child: CachedCommonImage(
-                                          width: double.infinity,
-                                          networkImageUrl: typeDataShow ==
-                                                  LocalStrings.shopGifts
-                                              ? controller
-                                                  .shopGiftsImageLst[index]
-                                              : controller
-                                                  .moreJewelleryImageLst[index],
-                                        ),
-                                      ),
-                                    ),
-                                    Positioned(
-                                      top: 20,
-                                      child: Container(
-                                        height: size.height * 0.050,
-                                        width: size.width * 0.27,
+                                    ],
+                                  ),
+                                  child: Stack(
+                                    alignment: Alignment.topCenter,
+                                    children: [
+                                      Container(
+                                        height: size.height * 0.22,
+                                        width: size.width * 0.40,
+                                        padding:  EdgeInsets.zero,
                                         decoration: BoxDecoration(
-                                          color: ColorResources.whiteColor,
                                           borderRadius: BorderRadius.circular(
-                                              Dimensions.offersCardRadius),
-                                          boxShadow: [
-                                            BoxShadow(
-                                              color: ColorResources.borderColor
-                                                  .withOpacity(0.1),
-                                              spreadRadius: 3,
-                                              blurRadius: 2,
-                                              offset: const Offset(0, 2),
-                                            ),
-                                          ],
+                                              Dimensions.fullRadius),
                                         ),
-                                        child: Center(
-                                          child: Text(
-                                              typeDataShow ==
-                                                      LocalStrings.shopGifts
-                                                  ? controller
-                                                      .shopGiftsNameLst[index]
-                                                  : controller
-                                                          .moreJewelleryNameLst[
-                                                      index],
-                                              textAlign: TextAlign.center,
-                                              softWrap: true,
-                                              maxLines: 2,
-                                              style: semiBoldDefault.copyWith(
-                                                  color: ColorResources
-                                                      .conceptTextColor)),
+                                        child: ClipRRect(
+                                          borderRadius: BorderRadius.circular(
+                                              Dimensions.fullRadius),
+                                          child: CachedCommonImage(
+                                            width: double.infinity,
+                                            networkImageUrl:
+                                                getCategoryMostBrowsedData[index]
+                                                    .subCategory?[
+                                                        indexSubCategories]
+                                                    .image01,
+                                          ),
                                         ),
                                       ),
-                                    ),
-                                  ],
+                                      Positioned(
+                                        top: 20,
+                                        child: Container(
+                                          height: size.height * 0.050,
+                                          width: size.width * 0.27,
+                                          decoration: BoxDecoration(
+                                            color: ColorResources.whiteColor,
+                                            borderRadius: BorderRadius.circular(
+                                                Dimensions.offersCardRadius),
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color: ColorResources.borderColor
+                                                    .withOpacity(0.1),
+                                                spreadRadius: 3,
+                                                blurRadius: 2,
+                                                offset: const Offset(0, 2),
+                                              ),
+                                            ],
+                                          ),
+                                          child: Center(
+                                            child: Text(
+                                                getCategoryMostBrowsedData[index]
+                                                        .subCategory?[
+                                                            indexSubCategories]
+                                                        .title ??
+                                                    '',
+                                                textAlign: TextAlign.center,
+                                                softWrap: true,
+                                                maxLines: 2,
+                                                style: semiBoldDefault.copyWith(
+                                                    color: ColorResources
+                                                        .conceptTextColor)),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ],
@@ -1098,58 +1252,58 @@ Widget mostBrowsedExpandedContent(CategoriesController controller, int index,
                         },
                       ),
                     ),
-                    const SizedBox(height: Dimensions.space20),
-                    Text(LocalStrings.youMay,
-                        textAlign: TextAlign.center,
-                        softWrap: true,
-                        maxLines: 2,
-                        style: semiBoldDefault.copyWith(
-                            color: ColorResources.buttonColorDark
-                                .withOpacity(0.7))),
-                    const SizedBox(height: Dimensions.space15),
-                    GridView.builder(
-                      itemCount: controller.alsoLikeBrowsedNameLst.length,
-                      shrinkWrap: true,
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 3,
-                              childAspectRatio: 7 / 5,
-                              crossAxisSpacing: 10),
-                      itemBuilder: (context, index) {
-                        return Column(
-                          children: [
-                            Container(
-                              height: size.height * 0.065,
-                              width: size.width * 0.25,
-                              decoration: BoxDecoration(
-                                color: ColorResources.whiteColor,
-                                borderRadius: BorderRadius.circular(
-                                    Dimensions.defaultRadius),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: ColorResources.borderColor
-                                        .withOpacity(0.1),
-                                    spreadRadius: 3,
-                                    blurRadius: 2,
-                                    offset: const Offset(0, 2),
-                                  ),
-                                ],
-                              ),
-                              child: Center(
-                                child: Text(
-                                    controller.alsoLikeBrowsedNameLst[index],
-                                    textAlign: TextAlign.center,
-                                    softWrap: true,
-                                    maxLines: 2,
-                                    style: mediumDefault.copyWith(
-                                        color:
-                                            ColorResources.conceptTextColor)),
-                              ),
-                            ),
-                          ],
-                        );
-                      },
-                    ),
+                    // const SizedBox(height: Dimensions.space20),
+                    // Text(LocalStrings.youMay,
+                    //     textAlign: TextAlign.center,
+                    //     softWrap: true,
+                    //     maxLines: 2,
+                    //     style: semiBoldDefault.copyWith(
+                    //         color: ColorResources.buttonColorDark
+                    //             .withOpacity(0.7))),
+                    // const SizedBox(height: Dimensions.space15),
+                    // GridView.builder(
+                    //   itemCount: controller.alsoLikeBrowsedNameLst.length,
+                    //   shrinkWrap: true,
+                    //   gridDelegate:
+                    //       const SliverGridDelegateWithFixedCrossAxisCount(
+                    //           crossAxisCount: 3,
+                    //           childAspectRatio: 7 / 5,
+                    //           crossAxisSpacing: 10),
+                    //   itemBuilder: (context, index) {
+                    //     return Column(
+                    //       children: [
+                    //         Container(
+                    //           height: size.height * 0.065,
+                    //           width: size.width * 0.25,
+                    //           decoration: BoxDecoration(
+                    //             color: ColorResources.whiteColor,
+                    //             borderRadius: BorderRadius.circular(
+                    //                 Dimensions.defaultRadius),
+                    //             boxShadow: [
+                    //               BoxShadow(
+                    //                 color: ColorResources.borderColor
+                    //                     .withOpacity(0.1),
+                    //                 spreadRadius: 3,
+                    //                 blurRadius: 2,
+                    //                 offset: const Offset(0, 2),
+                    //               ),
+                    //             ],
+                    //           ),
+                    //           child: Center(
+                    //             child: Text(
+                    //                 controller.alsoLikeBrowsedNameLst[index],
+                    //                 textAlign: TextAlign.center,
+                    //                 softWrap: true,
+                    //                 maxLines: 2,
+                    //                 style: mediumDefault.copyWith(
+                    //                     color:
+                    //                         ColorResources.conceptTextColor)),
+                    //           ),
+                    //         ),
+                    //       ],
+                    //     );
+                    //   },
+                    // ),
                   ],
                 ),
               ),

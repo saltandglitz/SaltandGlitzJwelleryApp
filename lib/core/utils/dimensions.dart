@@ -16,6 +16,7 @@ class Dimensions {
   static const double circularBorder = 100;
   static const double defaultRadius = 8;
   static const double smallRadius = 5;
+  static const double minimumRadius = 5;
   static const double offersCardRadius = 13;
   static const double checkBoxRadius = 10;
   static const double bottomSheetRadius = 20;

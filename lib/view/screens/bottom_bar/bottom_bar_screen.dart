@@ -20,6 +20,8 @@ class BottomBarScreen extends StatefulWidget {
 class _BottomBarScreenState extends State<BottomBarScreen> {
   final bottomBarController =
       Get.put<BottomBarController>(BottomBarController());
+  final categoriesController =
+      Get.put<CategoriesController>(CategoriesController());
 
   final List<Widget> pages = [
     const DashboardScreen(),
