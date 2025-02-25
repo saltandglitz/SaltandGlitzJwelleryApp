@@ -65,6 +65,7 @@ dependencies:
   flutter_easyloading:
   get_storage:
   connectivity_plus: ^6.1.1
+  like_button: ^2.0.5
 
 dev_dependencies:
   flutter_test:

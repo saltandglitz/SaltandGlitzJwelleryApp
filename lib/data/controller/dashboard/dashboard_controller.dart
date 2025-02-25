@@ -1,12 +1,18 @@
 import 'package:carousel_slider/carousel_controller.dart';
 import 'package:carousel_slider/carousel_options.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+import 'package:flutter/rendering.dart';
+import 'package:get/get.dart' hide Response;
+import 'package:saltandGlitz/api_repository/api_function.dart';
 import 'package:saltandGlitz/core/utils/local_strings.dart';
 import 'package:saltandGlitz/data/controller/bottom_bar/bottom_bar_controller.dart';
+import 'package:saltandGlitz/data/controller/collection/collection_controller.dart';
+import 'package:saltandGlitz/view/components/common_message_show.dart';
 import '../../../analytics/app_analytics.dart';
 import '../../../core/utils/images.dart';
 import '../../../local_storage/sqflite_local_storage.dart';
+import '../../model/search_product_view_model.dart';
 
 class DashboardController extends GetxController {
   var currentIndex = 0.obs;
@@ -18,7 +24,15 @@ class DashboardController extends GetxController {
   final CarouselController carouselGiftsController = CarouselController();
   late AnimationController animationController;
   List<Map<String, dynamic>> products = [];
+  var isDialogVisible = false.obs;
+  var searchQuery = ''.obs;
+  final ScrollController scrollController = ScrollController();
+  List<SearchProductsViewModel> searchProducts = [];
+
+  // TextEditingController for the search field
+  final TextEditingController searchTextController = TextEditingController();
   bool isShowBottomSheet = false;
+  RxBool isSearchShimmer = false.obs;
   final bottomBarController =
       Get.put<BottomBarController>(BottomBarController());
   bool isMenuOpen = false;
@@ -165,6 +179,7 @@ class DashboardController extends GetxController {
     LocalStrings.alertline,
     LocalStrings.siteIndex,
   ];
+
   enableNetworkHideLoader() {
     if (isEnableNetwork.value == false) {
       isEnableNetwork.value = true;
@@ -178,6 +193,7 @@ class DashboardController extends GetxController {
     }
     update();
   }
+
   void onPageChanged(int index, CarouselPageChangedReason changeReason) {
     currentIndex.value = index;
     if (changeReason == CarouselPageChangedReason.manual) {
@@ -276,6 +292,92 @@ class DashboardController extends GetxController {
       print('Error fetching products: $e');
     } finally {
       update();
+    }
+  }
+
+  //Todo : Search Product
+  Future searchProductApiMethod({String? query}) async {
+    searchProducts.clear();
+    try {
+      isSearchShimmer.value = true;
+      Map<String, dynamic> params = {
+        'query': query,
+      };
+
+      Response response = await APIFunction().apiCall(
+          apiName: LocalStrings.searchProductApi,
+          context: Get.context!,
+          params: params,
+          isLoading: false);
+      await Future.delayed(const Duration(seconds: 1));
+      if (response.statusCode == 200) {
+        searchProducts = (response.data as List)
+            .map((searchProducts) =>
+                SearchProductsViewModel.fromJson(searchProducts))
+            .toList();
+        print('Search Product : ${response.data}');
+        print('Search Product length : ${searchProducts.length}');
+      }
+      else {
+        showSnackBar(context: Get.context!, message: 'Something went wrong');
+      }
+    } catch (e) {
+      printActionError('Search Dashboard Error : $e');
+    } finally {
+      isSearchShimmer.value = false;
+      update();
+    }
+  }
+
+  // Hide dialog when scrolling
+  void setupScrollListener() {
+    scrollController.addListener(() {
+      if (scrollController.position.userScrollDirection ==
+          ScrollDirection.reverse) {
+        if (isDialogVisible.value) {
+          isDialogVisible.value = false;
+          searchTextController.clear();
+          FocusManager.instance.primaryFocus!.unfocus();
+        }
+      }
+    });
+    update();
+  }
+
+  // Handle search field changes
+  void onSearchChanged(String value) {
+    searchQuery.value = value;
+    if (value.isNotEmpty) {
+      isDialogVisible.value = true;
+      searchProductApiMethod(query: value);
+    } else {
+      isDialogVisible.value = false;
+    }
+    update();
+  }
+
+  //Todo : clear search value & keyboard closed and search item view closed method
+  hideSearchMethod() {
+    final collectionController =
+        Get.put<CollectionController>(CollectionController());
+    FocusManager.instance.primaryFocus!.unfocus();
+    searchTextController.clear();
+    isDialogVisible.value = false;
+    //Todo : Collection Screen when clicked search icons show search text field
+    if (collectionController.isShowSearchField.value == false) {
+      collectionController.isShowSearchField.value = true;
+    } else if (collectionController.isShowSearchField.value == true) {
+      collectionController.isShowSearchField.value = false;
+    }
+    update();
+  }
+
+  //Todo  : Particular Products wishlist add
+  Future wishlistAddApiMethod() async {
+    try {
+
+    } catch (e) {
+      print("Products wishlist add error : $e");
     }
   }
 }

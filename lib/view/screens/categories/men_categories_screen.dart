@@ -1,9 +1,11 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shimmer/shimmer.dart';
 
 import '../../../analytics/app_analytics.dart';
 import '../../../core/route/route.dart';
+import '../../../core/utils/app_const.dart';
 import '../../../core/utils/color_resources.dart';
 import '../../../core/utils/dimensions.dart';
 import '../../../core/utils/images.dart';
@@ -87,56 +89,85 @@ class _MenCategoriesScreenState extends State<MenCategoriesScreen> {
                                   2; // Adjust for spacing
 
                           return ListView.builder(
-                            itemCount:
-                                (controller.menTopCategoriesImage.length / 2)
-                                    .ceil(),
+                            itemCount: getCategoryMaleData.isEmpty
+                                ? (6 / 2).ceil()
+                                : (getCategoryMaleData.length / 2).ceil(),
                             physics: const NeverScrollableScrollPhysics(),
                             shrinkWrap: true,
                             itemBuilder: (context, rowIndex) {
                               final firstIndex = rowIndex * 2;
                               final secondIndex = firstIndex + 1;
 
-                              return Column(
-                                children: [
-                                  Row(
-                                    children: [
-                                      Flexible(
-                                        child: SizedBox(
+                              return getCategoryMaleData.isEmpty
+                                  ? Row(
+                                      children: [
+                                        // First item
+                                        SizedBox(
                                           width: itemWidth,
-                                          child: buildCategoryItem(
-                                              controller, firstIndex, size),
+                                          child: Padding(
+                                            padding: const EdgeInsets.only(
+                                                right: 10),
+                                            child: buildCategoryItemShimmer(
+                                                controller, firstIndex, size),
+                                          ),
                                         ),
-                                      ),
-                                      const SizedBox(width: Dimensions.space20),
-                                      if (secondIndex <
-                                          controller
-                                              .menTopCategoriesImage.length)
-                                        Flexible(
-                                          child: SizedBox(
-                                            width: itemWidth,
-                                            child: buildCategoryItem(
+
+                                        SizedBox(
+                                          width: itemWidth,
+                                          child: Padding(
+                                            padding:
+                                                const EdgeInsets.only(left: 10),
+                                            child: buildCategoryItemShimmer(
                                                 controller, secondIndex, size),
                                           ),
                                         ),
-                                      if (secondIndex >=
-                                          controller
-                                              .menTopCategoriesImage.length)
-                                        // Placeholder to maintain spacing if only one item is present
-                                        Flexible(
-                                          child: SizedBox(width: itemWidth),
+                                      ],
+                                    )
+                                  : Column(
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Flexible(
+                                              child: SizedBox(
+                                                width: itemWidth,
+                                                child: buildCategoryItem(
+                                                    controller,
+                                                    firstIndex,
+                                                    size),
+                                              ),
+                                            ),
+                                            const SizedBox(
+                                                width: Dimensions.space20),
+                                            if (secondIndex <
+                                                getCategoryMaleData.length)
+                                              Flexible(
+                                                child: SizedBox(
+                                                  width: itemWidth,
+                                                  child: buildCategoryItem(
+                                                      controller,
+                                                      secondIndex,
+                                                      size),
+                                                ),
+                                              ),
+                                            if (secondIndex >=
+                                                getCategoryMaleData.length)
+                                              // Placeholder to maintain spacing if only one item is present
+                                              Flexible(
+                                                child:
+                                                    SizedBox(width: itemWidth),
+                                              ),
+                                          ],
                                         ),
-                                    ],
-                                  ),
-                                  if (controller.menExpandedIndex.value ==
-                                          firstIndex ||
-                                      controller.menExpandedIndex.value ==
-                                          secondIndex)
-                                    buildExpandedContent(
-                                        controller,
-                                        controller.menExpandedIndex.value,
-                                        size),
-                                ],
-                              );
+                                        if (controller.menExpandedIndex.value ==
+                                                firstIndex ||
+                                            controller.menExpandedIndex.value ==
+                                                secondIndex)
+                                          buildExpandedContent(
+                                              controller,
+                                              controller.menExpandedIndex.value,
+                                              size),
+                                      ],
+                                    );
                             },
                           );
                         },
@@ -159,8 +190,10 @@ class _MenCategoriesScreenState extends State<MenCategoriesScreen> {
                                   2; // Adjust for spacing
 
                           return ListView.builder(
-                            itemCount:
-                                (controller.mostBrowsedImage.length / 2).ceil(),
+                            itemCount: getCategoryMostBrowsedMaleData.isEmpty
+                                ? (2 / 2).ceil()
+                                : (getCategoryMostBrowsedMaleData.length / 2)
+                                    .ceil(),
                             physics: const NeverScrollableScrollPhysics(),
                             shrinkWrap: true,
                             itemBuilder: (context, rowIndex) {
@@ -174,22 +207,35 @@ class _MenCategoriesScreenState extends State<MenCategoriesScreen> {
                                       Flexible(
                                         child: SizedBox(
                                           width: itemWidth,
-                                          child: mostBrowsedItem(
-                                              controller, firstIndex, size),
+                                          child: getCategoryMostBrowsedMaleData
+                                                  .isEmpty
+                                              ? mostBrowsedItemShimmer(
+                                                  controller, firstIndex, size)
+                                              : mostBrowsedItem(
+                                                  controller, firstIndex, size),
                                         ),
                                       ),
                                       const SizedBox(width: Dimensions.space10),
                                       if (secondIndex <
-                                          controller.mostBrowsedNamed.length)
+                                          getCategoryMostBrowsedMaleData.length)
                                         Flexible(
                                           child: SizedBox(
                                             width: itemWidth,
-                                            child: mostBrowsedItem(
-                                                controller, secondIndex, size),
+                                            child:
+                                                getCategoryMostBrowsedMaleData
+                                                        .isEmpty
+                                                    ? mostBrowsedItemShimmer(
+                                                        controller,
+                                                        secondIndex,
+                                                        size)
+                                                    : mostBrowsedItem(
+                                                        controller,
+                                                        secondIndex,
+                                                        size),
                                           ),
                                         ),
                                       if (secondIndex >=
-                                          controller.mostBrowsedImage.length)
+                                          getCategoryMostBrowsedMaleData.length)
                                         // Placeholder to maintain spacing if only one item is present
                                         Flexible(
                                           child: SizedBox(width: itemWidth),
@@ -233,60 +279,115 @@ class _MenCategoriesScreenState extends State<MenCategoriesScreen> {
                           return Stack(
                             alignment: AlignmentDirectional.bottomCenter,
                             children: [
-                              CarouselSlider.builder(
-                                key:
-                                    const PageStorageKey('carousel_slider_key'),
-                                // Add PageStorageKey
-                                itemCount:
-                                    controller.silverJewelleryImage.length,
-                                options: CarouselOptions(
-                                  onPageChanged:
-                                      controller.onPageChangedMenProducts,
-                                  autoPlay: true,
-                                  enlargeCenterPage: true,
-                                  aspectRatio: 4 / 1.30,
-                                  viewportFraction: 1,
-                                ),
-                                itemBuilder: (BuildContext context, int index,
-                                    int realIndex) {
-                                  return ClipRRect(
-                                    borderRadius: BorderRadius.circular(
-                                        Dimensions.bottomSheetRadius),
-                                    child: CachedCommonImage(
-                                      networkImageUrl: controller
-                                          .silverJewelleryImage[index],
-                                      width: double.infinity,
+                              getCategoryBannerMaleData.isEmpty
+                                  ? CarouselSlider.builder(
+                                      key: const PageStorageKey(
+                                          'carousel_slider_key'),
+                                      // Add PageStorageKey
+                                      itemCount: 3,
+                                      options: CarouselOptions(
+                                        onPageChanged: controller
+                                            .onPageChangedWomenProducts,
+                                        autoPlay: true,
+                                        enlargeCenterPage: true,
+                                        aspectRatio: 4 / 1.4,
+                                        viewportFraction: 1,
+                                      ),
+                                      itemBuilder: (BuildContext context,
+                                          int index, int realIndex) {
+                                        return Shimmer.fromColors(
+                                          baseColor: ColorResources.baseColor,
+                                          highlightColor:
+                                              ColorResources.highlightColor,
+                                          child: ClipRRect(
+                                            borderRadius: BorderRadius.circular(
+                                                Dimensions.bottomSheetRadius),
+                                            child: Container(
+                                                color: ColorResources
+                                                    .highlightColor),
+                                          ),
+                                        );
+                                      },
+                                    )
+                                  : CarouselSlider.builder(
+                                      key: const PageStorageKey(
+                                          'carousel_slider_key'),
+                                      // Add PageStorageKey
+                                      itemCount:
+                                          getCategoryBannerMaleData.length,
+                                      options: CarouselOptions(
+                                        onPageChanged:
+                                            controller.onPageChangedMenProducts,
+                                        autoPlay: true,
+                                        enlargeCenterPage: true,
+                                        aspectRatio: 4 / 1.30,
+                                        viewportFraction: 1,
+                                      ),
+                                      itemBuilder: (BuildContext context,
+                                          int index, int realIndex) {
+                                        return ClipRRect(
+                                          borderRadius: BorderRadius.circular(
+                                              Dimensions.bottomSheetRadius),
+                                          child: CachedCommonImage(
+                                            networkImageUrl:
+                                                getCategoryBannerMaleData[index]
+                                                    .bannerImage,
+                                            width: double.infinity,
+                                          ),
+                                        );
+                                      },
                                     ),
-                                  );
-                                },
-                              ),
-                              Obx(
-                                () => Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: List.generate(
-                                    controller.silverJewelleryImage.length,
-                                    (i) => Padding(
-                                      padding: const EdgeInsets.symmetric(
-                                          horizontal: 7, vertical: 15),
-                                      child: CircleAvatar(
-                                        radius: 5,
-                                        backgroundColor:
-                                            ColorResources.inactiveCardColor,
-                                        child: CircleAvatar(
-                                          radius: 4,
-                                          backgroundColor: controller
-                                                      .currentMenIndex.value ==
-                                                  i
-                                              ? ColorResources
-                                                  .buttonGradientColor
-                                              : ColorResources
+                              getCategoryBannerMaleData.isEmpty
+                                  ? Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: List.generate(
+                                        3,
+                                        (i) => const Padding(
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 7, vertical: 15),
+                                          child: CircleAvatar(
+                                            radius: 5,
+                                            backgroundColor: ColorResources
+                                                .inactiveCardColor,
+                                            child: CircleAvatar(
+                                              radius: 4,
+                                              backgroundColor: ColorResources
                                                   .inactiveCardColor,
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    )
+                                  : Obx(
+                                      () => Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: List.generate(
+                                          getCategoryBannerMaleData.length,
+                                          (i) => Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 7, vertical: 15),
+                                            child: CircleAvatar(
+                                              radius: 5,
+                                              backgroundColor: ColorResources
+                                                  .inactiveCardColor,
+                                              child: CircleAvatar(
+                                                radius: 4,
+                                                backgroundColor: controller
+                                                            .currentMenIndex
+                                                            .value ==
+                                                        i
+                                                    ? ColorResources
+                                                        .buttonGradientColor
+                                                    : ColorResources
+                                                        .inactiveCardColor,
+                                              ),
+                                            ),
+                                          ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                ),
-                              ),
                             ],
                           );
                         },
@@ -522,9 +623,9 @@ class _MenCategoriesScreenState extends State<MenCategoriesScreen> {
           controller.setMenExpandedIndex(index);
           AppAnalytics().actionTriggerWithProductsLogs(
               eventName:
-                  "${controller.menTopCategoriesName[index]}_${LocalStrings.logCategoriesMenShopStyleView}",
-              productName: controller.menTopCategoriesName[index],
-              productImage: controller.menTopCategoriesImage[index],
+                  "${getCategoryMaleData[index].category}_${LocalStrings.logCategoriesMenShopStyleView}",
+              productName: getCategoryMaleData[index].category,
+              productImage: getCategoryMaleData[index].categoryImage,
               index: 1);
         }
         // By default open 0 index tab swift conditioned so 0=1 & 1=0 tab
@@ -567,13 +668,13 @@ class _MenCategoriesScreenState extends State<MenCategoriesScreen> {
                         BorderRadius.circular(Dimensions.offersCardRadius),
                     child: CachedCommonImage(
                       width: double.infinity,
-                      networkImageUrl: controller.menTopCategoriesImage[index],
+                      networkImageUrl: getCategoryMaleData[index].categoryImage,
                     ),
                   ),
                 ),
                 const SizedBox(width: Dimensions.space10),
                 Expanded(
-                  child: Text(controller.menTopCategoriesName[index],
+                  child: Text(getCategoryMaleData[index].category ?? '',
                       softWrap: true,
                       maxLines: 2,
                       style: semiBoldDefault.copyWith(
@@ -594,6 +695,76 @@ class _MenCategoriesScreenState extends State<MenCategoriesScreen> {
     );
   }
 
+//Todo : Shimmer Effect show top categories
+  Widget buildCategoryItemShimmer(
+      CategoriesController controller, int index, Size size) {
+    bool isSelected = controller.expandedIndex.value == index;
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      margin: const EdgeInsets.only(bottom: 17),
+      decoration: BoxDecoration(
+        color: isSelected
+            ? ColorResources.conceptTextColor.withOpacity(0.01)
+            : ColorResources.cardBgColor,
+        borderRadius: BorderRadius.circular(Dimensions.bottomSheetRadius),
+        border: Border.all(
+            color: isSelected
+                ? ColorResources.conceptTextColor
+                : Colors.transparent),
+        boxShadow: [
+          BoxShadow(
+            color: ColorResources.borderColor.withOpacity(0.1),
+            spreadRadius: 3,
+            blurRadius: 2,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          Row(
+            children: [
+              Shimmer.fromColors(
+                baseColor: ColorResources.baseColor,
+                highlightColor: ColorResources.highlightColor,
+                child: Container(
+                  height: size.height * 0.080,
+                  width: size.width * 0.17,
+                  decoration: BoxDecoration(
+                      borderRadius:
+                          BorderRadius.circular(Dimensions.offersCardRadius),
+                      color: ColorResources.whiteColor),
+                ),
+              ),
+              const SizedBox(width: Dimensions.space10),
+              Expanded(
+                child: Shimmer.fromColors(
+                  baseColor: ColorResources.baseColor,
+                  highlightColor: ColorResources.highlightColor,
+                  child: Container(
+                    height: size.height * 0.015,
+                    decoration: BoxDecoration(
+                        color: ColorResources.whiteColor,
+                        borderRadius: BorderRadius.circular(3)),
+                  ),
+                ),
+              ),
+              Shimmer.fromColors(
+                baseColor: ColorResources.baseColor,
+                highlightColor: ColorResources.highlightColor,
+                child: Image.asset(MyImages.forwordArrowImage,
+                    height: 20,
+                    width: 20,
+                    color: ColorResources.conceptTextColor),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
   // Most Browsed
   Widget mostBrowsedItem(
       CategoriesController controller, int index, Size size) {
@@ -607,9 +778,9 @@ class _MenCategoriesScreenState extends State<MenCategoriesScreen> {
           controller.setMenBrowsedIndex(index);
           AppAnalytics().actionTriggerWithProductsLogs(
               eventName:
-                  "${controller.mostMenBrowsedNamed[index]}_${LocalStrings.logCategoriesMenMostBrowsedView}",
-              productName: controller.mostMenBrowsedNamed[index],
-              productImage: controller.mostBrowsedImage[index],
+                  "${getCategoryMostBrowsedMaleData[index].category}_${LocalStrings.logCategoriesMenMostBrowsedView}",
+              productName: getCategoryMostBrowsedMaleData[index].category,
+              productImage: getCategoryMostBrowsedMaleData[index].categoryImage,
               index: 1);
         }
       },
@@ -634,7 +805,8 @@ class _MenCategoriesScreenState extends State<MenCategoriesScreen> {
                     BorderRadius.circular(Dimensions.categoriesRadius),
                 child: CachedCommonImage(
                   width: double.infinity,
-                  networkImageUrl: controller.mostBrowsedImage[index],
+                  networkImageUrl:
+                      getCategoryMostBrowsedMaleData[index].categoryImage,
                 ),
               ),
             ),
@@ -650,7 +822,7 @@ class _MenCategoriesScreenState extends State<MenCategoriesScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const SizedBox(width: Dimensions.space10),
-                  Text(controller.mostMenBrowsedNamed[index],
+                  Text(getCategoryMostBrowsedData[index].category ?? '',
                       style: semiBoldDefault.copyWith(
                           color: ColorResources.conceptTextColor)),
                   const SizedBox(width: Dimensions.space10),
@@ -666,6 +838,77 @@ class _MenCategoriesScreenState extends State<MenCategoriesScreen> {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  // Most Browsed Shimmer
+  Widget mostBrowsedItemShimmer(
+      CategoriesController controller, int index, Size size) {
+    bool isSelected = controller.browsedIndex.value == index;
+
+    return Container(
+      padding: EdgeInsets.zero,
+      margin: const EdgeInsets.only(bottom: 17),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(Dimensions.categoriesRadius),
+      ),
+      child: Stack(
+        alignment: Alignment.bottomCenter,
+        children: [
+          Shimmer.fromColors(
+            baseColor: ColorResources.baseColor,
+            highlightColor: ColorResources.highlightColor,
+            child: Container(
+              height: size.height * 0.14,
+              width: double.infinity,
+              decoration: BoxDecoration(
+                border: Border.all(color: ColorResources.offerSixColor),
+                color: ColorResources.highlightColor,
+                borderRadius:
+                    BorderRadius.circular(Dimensions.categoriesRadius),
+              ),
+              child: ClipRRect(
+                borderRadius:
+                    BorderRadius.circular(Dimensions.categoriesRadius),
+              ),
+            ),
+          ),
+          Container(
+            height: size.height * 0.040,
+            decoration: const BoxDecoration(
+              color: ColorResources.offerSixColor,
+              borderRadius: BorderRadius.only(
+                  bottomLeft: Radius.circular(Dimensions.categoriesRadius),
+                  bottomRight: Radius.circular(Dimensions.categoriesRadius)),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const SizedBox(width: Dimensions.space10),
+                Shimmer.fromColors(
+                  baseColor: ColorResources.baseColor,
+                  highlightColor: ColorResources.highlightColor,
+                  child: Container(
+                    height: size.height * 0.015,
+                    width: size.width * 0.200,
+                    decoration: BoxDecoration(
+                        color: ColorResources.whiteColor,
+                        borderRadius: BorderRadius.circular(3)),
+                  ),
+                ),
+                Shimmer.fromColors(
+                  baseColor: ColorResources.baseColor,
+                  highlightColor: ColorResources.highlightColor,
+                  child: Image.asset(MyImages.forwordArrowImage,
+                      height: 20,
+                      width: 20,
+                      color: ColorResources.conceptTextColor),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -788,7 +1031,8 @@ class _MenCategoriesScreenState extends State<MenCategoriesScreen> {
                       if (controller.selectedTab.value == 1) ...[
                         // Content for Tab Shop By Style
                         GridView.builder(
-                          itemCount: controller.shopStyleImageLst.length,
+                          itemCount:
+                              getCategoryMaleData[index].subCategory!.length,
                           shrinkWrap: true,
                           gridDelegate:
                               const SliverGridDelegateWithFixedCrossAxisCount(
@@ -798,6 +1042,12 @@ class _MenCategoriesScreenState extends State<MenCategoriesScreen> {
                           itemBuilder: (context, index) {
                             return GestureDetector(
                               onTap: () {
+                                controller.filterCategoriesApiMethod(
+                                    occasionBy: getCategoryMaleData[
+                                            controller.menExpandedIndex.value]
+                                        .subCategory![index]
+                                        .subCategory,
+                                    priceLimit: '');
                                 Get.toNamed(RouteHelper.collectionScreen);
                               },
                               child: Column(
@@ -814,15 +1064,22 @@ class _MenCategoriesScreenState extends State<MenCategoriesScreen> {
                                           Dimensions.categoriesRadius),
                                       child: CachedCommonImage(
                                         width: double.infinity,
-                                        networkImageUrl:
-                                            controller.shopStyleImageLst[index],
+                                        networkImageUrl: getCategoryMaleData[
+                                                controller
+                                                    .menExpandedIndex.value]
+                                            .subCategory![index]
+                                            .image01,
                                       ),
                                     ),
                                   ),
                                   const SizedBox(height: Dimensions.space5),
                                   Expanded(
                                     child: Text(
-                                        controller.shopStyleNameLst[index],
+                                        getCategoryMaleData[controller
+                                                    .menExpandedIndex.value]
+                                                .subCategory![index]
+                                                .title ??
+                                            '',
                                         textAlign: TextAlign.center,
                                         softWrap: true,
                                         maxLines: 2,
@@ -931,18 +1188,24 @@ Widget mostBrowsedExpandedContent(CategoriesController controller, int index,
                   SizedBox(
                     height: size.height * 0.22,
                     child: ListView.builder(
-                      itemCount: typeDataShow == LocalStrings.shopGifts
-                          ? controller.shopGiftsImageLst.length
-                          : controller.shopMenGiftsImageLst.length,
+                      itemCount: getCategoryMostBrowsedMaleData[index]
+                          .subCategory
+                          ?.length,
                       padding: EdgeInsets.zero,
                       physics: const BouncingScrollPhysics(),
                       shrinkWrap: true,
                       scrollDirection: Axis.horizontal,
-                      itemBuilder: (context, index) {
+                      itemBuilder: (context, indexSubCategories) {
                         return Column(
                           children: [
                             GestureDetector(
                               onTap: () {
+                                controller.filterCategoriesApiMethod(
+                                    occasionBy:
+                                        getCategoryMostBrowsedMaleData[index]
+                                            .subCategory?[indexSubCategories]
+                                            .subCategory,
+                                    priceLimit: '');
                                 Get.toNamed(RouteHelper.collectionScreen);
                               },
                               child: Stack(
@@ -961,11 +1224,12 @@ Widget mostBrowsedExpandedContent(CategoriesController controller, int index,
                                           Dimensions.fullRadius),
                                       child: CachedCommonImage(
                                         width: double.infinity,
-                                        networkImageUrl: typeDataShow ==
-                                                LocalStrings.giftsHim
-                                            ? controller.menGiftsImageLst[index]
-                                            : controller
-                                                .shopMenGiftsImageLst[index],
+                                        networkImageUrl:
+                                            getCategoryMostBrowsedMaleData[
+                                                    index]
+                                                .subCategory?[
+                                                    indexSubCategories]
+                                                .image01,
                                       ),
                                     ),
                                   ),
@@ -990,12 +1254,12 @@ Widget mostBrowsedExpandedContent(CategoriesController controller, int index,
                                       ),
                                       child: Center(
                                         child: Text(
-                                            typeDataShow ==
-                                                    LocalStrings.giftsHim
-                                                ? controller
-                                                    .menGiftsNameLst[index]
-                                                : controller
-                                                    .menShopPriceNameLst[index],
+                                            getCategoryMostBrowsedMaleData[
+                                                        index]
+                                                    .subCategory?[
+                                                        indexSubCategories]
+                                                    .title ??
+                                                '',
                                             textAlign: TextAlign.center,
                                             softWrap: true,
                                             maxLines: 2,
@@ -1013,56 +1277,56 @@ Widget mostBrowsedExpandedContent(CategoriesController controller, int index,
                       },
                     ),
                   ),
-                  const SizedBox(height: Dimensions.space20),
-                  Text(LocalStrings.shopPrice,
-                      textAlign: TextAlign.center,
-                      softWrap: true,
-                      maxLines: 2,
-                      style: semiBoldDefault.copyWith(
-                          color:
-                              ColorResources.buttonColorDark.withOpacity(0.7))),
-                  const SizedBox(height: Dimensions.space15),
-                  GridView.builder(
-                    itemCount: controller.menShopByNameLst.length,
-                    shrinkWrap: true,
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 3,
-                            childAspectRatio: 7 / 4,
-                            crossAxisSpacing: 10),
-                    itemBuilder: (context, index) {
-                      return Column(
-                        children: [
-                          Container(
-                            height: size.height * 0.065,
-                            width: size.width * 0.25,
-                            decoration: BoxDecoration(
-                              color: ColorResources.whiteColor,
-                              borderRadius: BorderRadius.circular(
-                                  Dimensions.defaultRadius),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: ColorResources.borderColor
-                                      .withOpacity(0.1),
-                                  spreadRadius: 3,
-                                  blurRadius: 2,
-                                  offset: const Offset(0, 2),
-                                ),
-                              ],
-                            ),
-                            child: Center(
-                              child: Text(controller.menShopByNameLst[index],
-                                  textAlign: TextAlign.center,
-                                  softWrap: true,
-                                  maxLines: 2,
-                                  style: mediumDefault.copyWith(
-                                      color: ColorResources.conceptTextColor)),
-                            ),
-                          ),
-                        ],
-                      );
-                    },
-                  ),
+                  // const SizedBox(height: Dimensions.space20),
+                  // Text(LocalStrings.shopPrice,
+                  //     textAlign: TextAlign.center,
+                  //     softWrap: true,
+                  //     maxLines: 2,
+                  //     style: semiBoldDefault.copyWith(
+                  //         color:
+                  //             ColorResources.buttonColorDark.withOpacity(0.7))),
+                  // const SizedBox(height: Dimensions.space15),
+                  // GridView.builder(
+                  //   itemCount: controller.menShopByNameLst.length,
+                  //   shrinkWrap: true,
+                  //   gridDelegate:
+                  //       const SliverGridDelegateWithFixedCrossAxisCount(
+                  //           crossAxisCount: 3,
+                  //           childAspectRatio: 7 / 4,
+                  //           crossAxisSpacing: 10),
+                  //   itemBuilder: (context, index) {
+                  //     return Column(
+                  //       children: [
+                  //         Container(
+                  //           height: size.height * 0.065,
+                  //           width: size.width * 0.25,
+                  //           decoration: BoxDecoration(
+                  //             color: ColorResources.whiteColor,
+                  //             borderRadius: BorderRadius.circular(
+                  //                 Dimensions.defaultRadius),
+                  //             boxShadow: [
+                  //               BoxShadow(
+                  //                 color: ColorResources.borderColor
+                  //                     .withOpacity(0.1),
+                  //                 spreadRadius: 3,
+                  //                 blurRadius: 2,
+                  //                 offset: const Offset(0, 2),
+                  //               ),
+                  //             ],
+                  //           ),
+                  //           child: Center(
+                  //             child: Text(controller.menShopByNameLst[index],
+                  //                 textAlign: TextAlign.center,
+                  //                 softWrap: true,
+                  //                 maxLines: 2,
+                  //                 style: mediumDefault.copyWith(
+                  //                     color: ColorResources.conceptTextColor)),
+                  //           ),
+                  //         ),
+                  //       ],
+                  //     );
+                  //   },
+                  // ),
                 ],
               ),
             ),

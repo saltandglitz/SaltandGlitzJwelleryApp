@@ -27,18 +27,18 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
     //Todo : Banner data show api method
     WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await mainController.getDashboardJewelleryData();
+      // await mainController.getBannerData();
+      // await mainController.getCategoryData();
+      // await mainController.getNewArrivalData();
+      // await mainController.getFilterCategoryData();
+      // await mainController.getGiftElementData();
+      // await mainController.getSolitaireData();
+      // await mainController.getBottomBannerData();
       //Todo : Get by default women categories data api method
-      await categoriesController.getCategories(LocalStrings.womenCategoriesApi);
-      (_) async {
-        // await mainController.getBannerApiMethod();
-        await mainController.getBannerData();
-        await mainController.getCategoryData();
-        await mainController.getNewArrivalData();
-        await mainController.getFilterCategoryData();
-        await mainController.getGiftElementData();
-        await mainController.getSolitaireData();
-        await mainController.getBottomBannerData();
-      };
+      await categoriesController.getFemaleCategories();
+      //Todo : Get men  categories data api method
+      await categoriesController.getMaleCategories();
     });
     mainController.splashScreenNavigation();
   }

@@ -213,47 +213,27 @@ class Banners {
 class MergedProducts {
   final String? category;
   final String? categoryImage;
-  final SubCategories? subCategories;
+  final List<SubCategoryBrowsed>? subCategory;
 
   MergedProducts({
     this.category,
     this.categoryImage,
-    this.subCategories,
+    this.subCategory,
   });
 
   MergedProducts.fromJson(Map<String, dynamic> json)
       : category = json['category'] as String?,
         categoryImage = json['categoryImage'] as String?,
-        subCategories = (json['subCategories'] as Map<String, dynamic>?) != null
-            ? SubCategories.fromJson(
-                json['subCategories'] as Map<String, dynamic>)
-            : null;
+        subCategory = (json['subCategory'] as List?)?.map((dynamic e) => SubCategoryBrowsed.fromJson(e as Map<String,dynamic>)).toList();
 
   Map<String, dynamic> toJson() => {
-        'category': category,
-        'categoryImage': categoryImage,
-        'subCategories': subCategories?.toJson()
-      };
+    'category' : category,
+    'categoryImage' : categoryImage,
+    'subCategory' : subCategory?.map((e) => e.toJson()).toList()
+  };
 }
 
-class SubCategories {
-  final List<EngagementRing>? engagementRing;
-
-  SubCategories({
-    this.engagementRing,
-  });
-
-  SubCategories.fromJson(Map<String, dynamic> json)
-      : engagementRing = (json['engagementRing'] as List?)
-            ?.map((dynamic e) =>
-                EngagementRing.fromJson(e as Map<String, dynamic>))
-            .toList();
-
-  Map<String, dynamic> toJson() =>
-      {'engagementRing': engagementRing?.map((e) => e.toJson()).toList()};
-}
-
-class EngagementRing {
+class SubCategoryBrowsed {
   final String? productId;
   final String? title;
   final double? price14KT;
@@ -261,7 +241,7 @@ class EngagementRing {
   final String? category;
   final String? subCategory;
 
-  EngagementRing({
+  SubCategoryBrowsed({
     this.productId,
     this.title,
     this.price14KT,
@@ -270,7 +250,7 @@ class EngagementRing {
     this.subCategory,
   });
 
-  EngagementRing.fromJson(Map<String, dynamic> json)
+  SubCategoryBrowsed.fromJson(Map<String, dynamic> json)
       : productId = json['productId'] as String?,
         title = json['title'] as String?,
         price14KT = (json['price14KT'] as num?)?.toDouble(),
@@ -279,11 +259,11 @@ class EngagementRing {
         subCategory = json['subCategory'] as String?;
 
   Map<String, dynamic> toJson() => {
-        'productId': productId,
-        'title': title,
-        'price14KT': price14KT,
-        'image01': image01,
-        'category': category,
-        'subCategory': subCategory
-      };
+    'productId' : productId,
+    'title' : title,
+    'price14KT' : price14KT,
+    'image01' : image01,
+    'category' : category,
+    'subCategory' : subCategory
+  };
 }

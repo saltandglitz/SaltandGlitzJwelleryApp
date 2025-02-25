@@ -432,6 +432,7 @@ class CreateAccountController extends GetxController {
         PrefManager.setString('phoneNumber', mobileNumber ?? '');
         PrefManager.setString('gender', gender ?? '');
         PrefManager.setString('token', response.data['user']['token'] ?? '');
+        PrefManager.setString('user_id', response.data['user']['_id'] ?? '');
         //Todo : Off all navigation and move My account screen
         Get.offAllNamed(RouteHelper.bottomBarScreen);
         bottomBarController.selectedIndex = 2.obs;
@@ -445,7 +446,7 @@ class CreateAccountController extends GetxController {
       }
       printAction("User_Create_Account : ${response.data['message']}");
     } catch (e) {
-      printError("Create_User_Account_Error : $e");
+      printActionError("Create_User_Account_Error : $e");
     } finally {
       isCreateUserAccount.value = false;
       update();

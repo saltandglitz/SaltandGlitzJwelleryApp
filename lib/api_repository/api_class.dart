@@ -75,7 +75,7 @@ class HttpUtil {
 
 // On Error....
   void onError(ErrorEntity eInfo, BuildContext context) {
-    printError(
+    printActionError(
         "error.code -> ${eInfo.code}, error.message -> ${eInfo.message}");
     if (eInfo.message.isNotEmpty) {
       showSnackBar(message: eInfo.message, context: context);
@@ -85,49 +85,45 @@ class HttpUtil {
   ErrorEntity createErrorEntity(DioError error) {
     switch (error.type) {
       case DioErrorType.cancel:
-        return ErrorEntity(
-            code: -1, message: "Request to server was cancelled");
+        return ErrorEntity(code: -1, message: "Request to server was cancelled");
       case DioErrorType.connectTimeout:
         return ErrorEntity(code: -2, message: "Connection timeout with server");
       case DioErrorType.sendTimeout:
-        return ErrorEntity(
-            code: -3, message: "Send timeout in connection with server");
+        return ErrorEntity(code: -3, message: "Send timeout in connection with server");
       case DioErrorType.receiveTimeout:
-        return ErrorEntity(
-            code: -4, message: "Receive timeout in connection with server");
+        return ErrorEntity(code: -4, message: "Receive timeout in connection with server");
       case DioErrorType.response:
         {
           try {
-            int errCode =
-                error.response != null ? error.response!.statusCode! : 00;
+            int errCode = error.response != null ? error.response!.statusCode! : 00;
+
+            // Now handle the response body correctly if it's a Map
+            String errorMessage = '';
+            if (error.response != null && error.response!.data != null) {
+              var data = error.response!.data;
+              if (data is Map<String, dynamic>) {
+                // Extract a meaningful error message from the Map if it exists
+                errorMessage = data['message'] ?? 'Unknown error occurred'; // Adjust this to match your API's response format
+              } else if (data is String) {
+                errorMessage = data;
+              }
+            }
+
             switch (errCode) {
               case 401:
                 return ErrorEntity(code: errCode, message: "Permission denied");
               case 403:
-                return ErrorEntity(
-                    code: errCode, message: "Server refuses to execute");
-              case 404:
-                return ErrorEntity(
-                    code: errCode, message: "Can not reach server");
+                return ErrorEntity(code: errCode, message: "Server refuses to execute");
               case 405:
-                return ErrorEntity(
-                    code: errCode, message: "Request method is forbidden");
-              case 500:
-                return ErrorEntity(
-                    code: errCode, message: "Internal server error");
+                return ErrorEntity(code: errCode, message: "Request method is forbidden");
               case 502:
                 return ErrorEntity(code: errCode, message: "Invalid request");
               case 503:
                 return ErrorEntity(code: errCode, message: "Server hangs");
               case 505:
-                return ErrorEntity(
-                    code: errCode,
-                    message: "HTTP protocol requests are not supported");
+                return ErrorEntity(code: errCode, message: "HTTP protocol requests are not supported");
               default:
-                return ErrorEntity(
-                    code: errCode,
-                    message:
-                        error.response != null ? error.response!.data! : "");
+                return ErrorEntity(code: errCode, message: '');
             }
           } on Exception catch (_) {
             return ErrorEntity(code: 00, message: "Unknown mistake");
@@ -135,15 +131,9 @@ class HttpUtil {
         }
       case DioErrorType.other:
         if (error.message.contains("SocketException")) {
-          return ErrorEntity(
-              code: -5,
-              message:
-                  "Your internet is not available, please try again later");
+          return ErrorEntity(code: -5, message: "Your internet is not available, please try again later");
         } else if (error.message.contains("Software caused connection abort")) {
-          return ErrorEntity(
-              code: -6,
-              message:
-                  "Your internet is not available, please try again later");
+          return ErrorEntity(code: -6, message: "Your internet is not available, please try again later");
         }
         return ErrorEntity(code: -7, message: "Oops something went wrong");
       default:

@@ -14,7 +14,7 @@ class APIFunction {
     bool isGet = false,
   }) async {
     if (context == null) {
-      printError("Context is null");
+      printActionError("Context is null");
       return Future.error('Context is null');
     }
 
@@ -62,7 +62,7 @@ class APIFunction {
 
       return response; // This is the full Response object
     } catch (e) {
-      printError('Error in API Call: $e');
+      printActionError('Error in API Call: $e');
       rethrow; // Propagate the error
     }
   }

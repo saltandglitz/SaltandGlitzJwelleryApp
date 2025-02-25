@@ -54,7 +54,7 @@ class SetPasswordController extends GetxController {
         showSnackBar(context: Get.context!, message: response.data['message']);
       }
     } catch (e) {
-      printError("Get otp error : $e");
+      printActionError("Get otp error : $e");
     }
   }
 }

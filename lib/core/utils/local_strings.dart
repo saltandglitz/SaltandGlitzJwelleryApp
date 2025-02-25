@@ -1,7 +1,5 @@
 class LocalStrings {
   static const String appName = "Salt and Glitz";
-  static const String baseUrl = "";
-  static const String apiKey = "";
 
   ///<<<------------------- API ------------------->>>
   static const String getHomeViewApi =
@@ -20,9 +18,19 @@ class LocalStrings {
       "https://saltandglitz-api.vercel.app/v1/upload/filterProduct";
   static const String sendEmailOtpApi =
       "https://saltandglitz-api.vercel.app/v1/otp/send-otp";
+  static const String searchProductApi =
+      "https://saltandglitz-api.vercel.app/v1/search/searchProduct";
+  static const String wishlistProductApi =
+      "https://saltandglitz-api.vercel.app/v1/wishlist/create_wishlist";
+  static const String removeWishlistProductApi =
+      "https://saltandglitz-api.vercel.app/v1/wishlist/remove_wishlist/";
+  static const String getWishlistProductApi =
+      "https://saltandglitz-api.vercel.app/v1/wishlist/get_wishlist/";
 
   ///<<<------------------- Dashboard Screen ------------------->>>
   static const String solitaire = "Solitaire";
+  static const String searchNotAvailable =
+      "Search products items not available!";
   static const String hardwareSalt = "HardWare By Salt and Glitz";
   static const String shopNow = "Shop Now >";
   static const String shopBy = "Shop by Category";
@@ -160,12 +168,14 @@ class LocalStrings {
   static const String bands = "Bands";
   static const String cocktail = "Cocktail";
   static const String coupleRings = "Couple Rings";
-  static const String itemFirstPrice = "Under 10k";
-  static const String itemSecondPrice = "10k - 20k";
-  static const String itemThirdPrice = "20k - 30k";
-  static const String itemForPrice = "30k - 50k";
-  static const String itemFivePrice = "50k - 75k";
-  static const String itemSixPrice = "Above 75k";
+  static const String itemFirstPrice = "below20k";
+  static const String itemSecondPrice = "20kTo30k";
+  static const String itemThirdPrice = "30kTo50k";
+  static const String itemForPrice = "50kTo100k";
+  static const String itemFivePrice = "100kTo200k";
+  static const String itemSixPrice = "200kTo300k";
+  static const String itemSevenPrice = "300kTo500k";
+  static const String itemEightPrice = "above500k";
   static const String charms = "Charms";
   static const String noseRings = "Nose Rings";
   static const String platinum = "Platinum";
@@ -210,6 +220,8 @@ class LocalStrings {
 
   ///<<<---------------------------- Wishlist screen String ---------------------------->>>
   static const String wishlist = 'Wishlist';
+  static const String wishlistEmpty =
+      'Your wishlist is empty. Add some products to your wishlist and come back later!';
   static const String moveCart = 'Move to Cart';
   static const String wishlistPriceFirst = '₹50,000';
   static const String wishlistPriceSecond = '₹30,657';
@@ -222,13 +234,17 @@ class LocalStrings {
 
   ///<<<---------------------------- Collection screen String ---------------------------->>>
   static const String sort = 'Sort';
+  static const String collectionEmpty =
+      'Looks like there are no products in this collection right now. Check back later or explore other collections!';
   static const String filter = 'Filter';
   static const String sortBy = 'Sort Designs By';
   static const String latest = 'Latest';
+  static const String loginLikeItem = 'Please log in to like items!';
 
   static const String featured = 'Featured';
   static const String priceLow = 'Price: Low to High';
   static const String priceHigh = 'Price: High to Low';
+
   // static const String customerRating = 'Customer Rating';
   static const String latestText = 'LATEST';
   static const String bestSeller = 'BESTSELLER';
@@ -262,8 +278,10 @@ class LocalStrings {
   static const String filters = 'Filters';
   static const String price = 'Price';
   static const String productsType = 'Product Type';
+
   // static const String weightRanges = 'Weight Ranges';
   static const String material = 'Material';
+
   // static const String metal = 'Metal';
   static const String shopFor = 'Shop For';
   static const String occasion = 'Occasion';
