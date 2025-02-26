@@ -731,6 +731,29 @@ class LocalStrings {
   static const String shippingAddress = "Shipping Address";
   static const String billingAddress = "Billing Address";
   static const String continuePlaceOrder = "continue";
+  static const String orderSummary = "Order Summary";
+  static const String earring = "Earring";
+  static const String earliestDelivery =
+      "Earliest Delivery dates selected for your pincode";
+  static const String homeDelivery = "Home Delivery";
+  static const String changeYourDeliveryDate = "+ Change your delivery date";
+  static const String sku = "SKU: JS02322-1YP900";
+  static const String couponDiscount = "COUPON DISCOUNT";
+  static const String subTotal2 = "SUBTOTAL";
+  static const String shippingCharges = "SHIPPING CHARGES";
+  static const String totalCost = "TOTAL COST";
+  static const String needHelp2 = "Need Help?";
+  static const String weAreAvailable =
+      "We're available by phone +91 -44-66075200 (Toll Free) \n every day, 9 AM to 1 AM IST (Mon - Sun)";
+  static const String contactUs2 = "Contact Us: ";
+  static const String contactNumber = "+91 -44-66075200 (Helpline) |";
+  static const String inStorePickUp = "In-Store Pick Up";
+  static const String buyNowPickUp =
+      "Buy now, Pick up from our store at your convenience";
+  static const String addANewAddress = "Add a New Address";
+  static const String sameAsShippingAddress = "Same as Shipping Address";
+  static const String useADifferentBillingAddress =
+      "Use a Different Billing Address";
 }
 
 class AppFonts {

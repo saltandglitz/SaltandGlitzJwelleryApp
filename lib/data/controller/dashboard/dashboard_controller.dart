@@ -317,8 +317,7 @@ class DashboardController extends GetxController {
             .toList();
         print('Search Product : ${response.data}');
         print('Search Product length : ${searchProducts.length}');
-      }
-      else {
+      } else {
         showSnackBar(context: Get.context!, message: 'Something went wrong');
       }
     } catch (e) {
@@ -374,9 +373,7 @@ class DashboardController extends GetxController {
 
   //Todo  : Particular Products wishlist add
   Future wishlistAddApiMethod() async {
-    try {
-
-    } catch (e) {
+    try {} catch (e) {
       print("Products wishlist add error : $e");
     }
   }
