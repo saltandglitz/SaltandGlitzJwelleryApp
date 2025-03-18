@@ -163,9 +163,9 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                                         // Google authentication
                                         controller
                                             .signInWithGoogle(
-                                            screenType: 'New Account')
+                                                screenType: 'New Account')
                                             .then(
-                                              (value) {
+                                          (value) {
                                             /// Process complete after hide loader
                                             createAccountController
                                                 .isLoaderOffMethod();
@@ -189,12 +189,11 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                                             ),
                                           ],
                                         ),
-                                        child:  createAccountController
-                                            .isLoading ==
-                                            true
+                                        child: createAccountController
+                                                    .isLoading ==
+                                                true
                                             ? AppCircularLoader()
-                                            : Image.asset(
-                                            MyImages.googleImage),
+                                            : Image.asset(MyImages.googleImage),
                                       ),
                                     ),
                                     const SizedBox(width: Dimensions.space25),
@@ -208,9 +207,9 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                                         // Facebook authentication
                                         controller
                                             .signInWithFacebook(
-                                            screenType: 'New Account')
+                                                screenType: 'New Account')
                                             .then(
-                                              (value) {
+                                          (value) {
                                             /// Process complete after hide loader
                                             createAccountController
                                                 .isLoaderOffFacebookMethod();
@@ -234,13 +233,12 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                                             ),
                                           ],
                                         ),
-                                        child:
-                                        createAccountController
-                                            .isFacebookLoading ==
-                                            true
+                                        child: createAccountController
+                                                    .isFacebookLoading ==
+                                                true
                                             ? AppCircularLoader()
                                             : Image.asset(
-                                            MyImages.facebookImage),
+                                                MyImages.facebookImage),
                                       ),
                                     ),
                                   ],
@@ -453,10 +451,12 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                                         controller.validColor,
                                         controller.invalidColor),
 
-                                    Text(LocalStrings.number,
-                                        style: mediumSmall.copyWith(
-                                            color: ColorResources
-                                                .conceptTextColor)),
+                                    Text(
+                                      LocalStrings.number,
+                                      style: mediumSmall.copyWith(
+                                          color:
+                                              ColorResources.conceptTextColor),
+                                    ),
                                   ],
                                 ),
                                 const SizedBox(height: Dimensions.space35),
@@ -466,16 +466,17 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                                   textFieldHeight: size.height * 0.065,
                                   obSecureText: controller.showConfirmPassword,
                                   suffixIcon: GestureDetector(
-                                      onTap: () {
-                                        controller.isShoConfirmPassword();
-                                      },
-                                      child: Icon(
-                                        controller.showConfirmPassword == true
-                                            ? Icons.visibility_off_outlined
-                                            : Icons.visibility_outlined,
-                                        color: ColorResources.conceptTextColor,
-                                        size: 22,
-                                      )),
+                                    onTap: () {
+                                      controller.isShoConfirmPassword();
+                                    },
+                                    child: Icon(
+                                      controller.showConfirmPassword == true
+                                          ? Icons.visibility_off_outlined
+                                          : Icons.visibility_outlined,
+                                      color: ColorResources.conceptTextColor,
+                                      size: 22,
+                                    ),
+                                  ),
                                   hintText: LocalStrings.confirmPassword,
                                   borderRadius: Dimensions.offersCardRadius,
                                   fillColor: Colors.transparent,
@@ -669,42 +670,42 @@ class _CreateAccountScreenState extends State<CreateAccountScreen> {
                                 ),
                                 const SizedBox(height: Dimensions.space25),
                                 Obx(
-                                      () {
+                                  () {
                                     return CommonButton(
                                       onTap: controller
-                                          .isCreateUserAccount.value ==
-                                          true
+                                                  .isCreateUserAccount.value ==
+                                              true
                                           ? null
                                           : () {
-                                        //Todo : First check all field fill after called users new account create api method
-                                        createAccountController.isValidation(
-                                            firstName: controller
-                                                .firstNameController.text,
-                                            lastName: controller
-                                                .lastNameController.text,
-                                            mobileNumber: controller
-                                                .mobileController.text,
-                                            email: controller
-                                                .emailController.text,
-                                            password: controller
-                                                .passwordController.text,
-                                            gender: controller
-                                                .genderSelectionName(),
-                                            context: context);
-                                      },
+                                              //Todo : First check all field fill after called users new account create api method
+                                              createAccountController.isValidation(
+                                                  firstName: controller
+                                                      .firstNameController.text,
+                                                  lastName: controller
+                                                      .lastNameController.text,
+                                                  mobileNumber: controller
+                                                      .mobileController.text,
+                                                  email: controller
+                                                      .emailController.text,
+                                                  password: controller
+                                                      .passwordController.text,
+                                                  gender: controller
+                                                      .genderSelectionName(),
+                                                  context: context);
+                                            },
                                       height: size.height * 0.065,
                                       width: double.infinity,
                                       child: controller
-                                          .isCreateUserAccount.value ==
-                                          true
+                                                  .isCreateUserAccount.value ==
+                                              true
                                           ? const CircularProgressIndicator(
-                                          color: ColorResources.whiteColor)
+                                              color: ColorResources.whiteColor)
                                           : Text(
-                                        LocalStrings.signMe,
-                                        style: mediumLarge.copyWith(
-                                            color: ColorResources
-                                                .whiteColor),
-                                      ),
+                                              LocalStrings.signMe,
+                                              style: mediumLarge.copyWith(
+                                                  color: ColorResources
+                                                      .whiteColor),
+                                            ),
                                     );
                                   },
                                 ),

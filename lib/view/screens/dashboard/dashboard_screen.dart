@@ -8,6 +8,7 @@ import 'package:saltandGlitz/core/utils/images.dart';
 import 'package:saltandGlitz/core/utils/local_strings.dart';
 import 'package:saltandGlitz/core/utils/style.dart';
 import 'package:saltandGlitz/data/controller/dashboard/dashboard_controller.dart';
+import 'package:saltandGlitz/local_storage/pref_manager.dart';
 import 'package:saltandGlitz/view/components/cached_image.dart';
 import 'package:saltandGlitz/view/components/common_button.dart';
 import 'package:saltandGlitz/view/components/common_textfield.dart';
@@ -196,7 +197,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                       children: [
                         ListView(
                           controller: controller.scrollController,
-                          physics: const BouncingScrollPhysics(),
+                          physics: const ClampingScrollPhysics(),
                           children: [
                             Padding(
                               padding: const EdgeInsets.all(9.0),
@@ -260,32 +261,44 @@ class _DashboardScreenState extends State<DashboardScreen>
                                         return ClipRRect(
                                           borderRadius:
                                               BorderRadius.circular(20),
-                                          child: CachedNetworkImage(
-                                            height: size.height * 0.09,
-                                            width: size.height * 0.11,
-                                            imageUrl:
-                                                categoryList[index].images,
-                                            fit: BoxFit.cover,
-                                            progressIndicatorBuilder: (context,
-                                                    url, downloadProgress) =>
-                                                Shimmer.fromColors(
-                                              baseColor:
-                                                  ColorResources.baseColor,
-                                              highlightColor:
-                                                  ColorResources.highlightColor,
-                                              child: Container(
-                                                height: size.height * 0.09,
-                                                width: size.height * 0.11,
-                                                decoration: BoxDecoration(
-                                                  color: Colors.grey,
-                                                  borderRadius:
-                                                      BorderRadius.circular(20),
+                                          child: GestureDetector(
+                                            onTap: () {
+                                              categoriesController
+                                                  .filterCategoriesApiMethod(
+                                                      title: categoryList[index]
+                                                          .categoryName);
+                                              Get.toNamed(
+                                                  RouteHelper.collectionScreen);
+                                            },
+                                            child: CachedNetworkImage(
+                                              height: size.height * 0.09,
+                                              width: size.height * 0.11,
+                                              imageUrl: categoryList[index]
+                                                  .categoryImage!,
+                                              fit: BoxFit.cover,
+                                              progressIndicatorBuilder:
+                                                  (context, url,
+                                                          downloadProgress) =>
+                                                      Shimmer.fromColors(
+                                                baseColor:
+                                                    ColorResources.baseColor,
+                                                highlightColor: ColorResources
+                                                    .highlightColor,
+                                                child: Container(
+                                                  height: size.height * 0.09,
+                                                  width: size.height * 0.11,
+                                                  decoration: BoxDecoration(
+                                                    color: Colors.grey,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            20),
+                                                  ),
                                                 ),
                                               ),
+                                              errorWidget:
+                                                  (context, url, error) =>
+                                                      const Icon(Icons.error),
                                             ),
-                                            errorWidget:
-                                                (context, url, error) =>
-                                                    const Icon(Icons.error),
                                           ),
                                         );
                                       }
@@ -312,14 +325,17 @@ class _DashboardScreenState extends State<DashboardScreen>
                                               aspectRatio: 1 / 0.99,
                                               child: Container(
                                                 width: double.infinity,
-                                                color: ColorResources.whiteColor,
+                                                color:
+                                                    ColorResources.whiteColor,
                                               ),
                                             ),
                                           )
                                         : CarouselSlider.builder(
                                             key: const PageStorageKey(
                                                 'carousel_slider_key'),
-                                            itemCount: bannerList.length,
+                                            itemCount: bannerList.length > 3
+                                                ? 3
+                                                : bannerList.length,
                                             options: CarouselOptions(
                                               onPageChanged:
                                                   controller.onPageChanged,
@@ -340,37 +356,38 @@ class _DashboardScreenState extends State<DashboardScreen>
                                           ),
                                     bannerList.isEmpty
                                         ? Shimmer.fromColors(
-                                      baseColor: ColorResources
-                                          .shimmerEffectBaseColor,
-                                      highlightColor: ColorResources
-                                          .shimmerEffectHighlightColor,
-                                      child: Row(
-                                        mainAxisAlignment:
-                                        MainAxisAlignment.center,
-                                        children: List.generate(
-                                          5, // Default shimmer dots count
-                                              (i) => const Padding(
-                                            padding:
-                                            EdgeInsets.symmetric(
-                                              horizontal: 7,
-                                              vertical: 15,
-                                            ),
-                                            child: CircleAvatar(
-                                              radius: 3.5,
-                                              backgroundColor:
-                                              ColorResources
-                                                  .whiteColor,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    )
-                                        :   Obx(
-                                      () => Row(
+                                            baseColor: ColorResources
+                                                .shimmerEffectBaseColor,
+                                            highlightColor: ColorResources
+                                                .shimmerEffectHighlightColor,
+                                            child: Row(
                                               mainAxisAlignment:
                                                   MainAxisAlignment.center,
                                               children: List.generate(
-                                                bannerList.length,
+                                                5, // Default shimmer dots count
+                                                (i) => const Padding(
+                                                  padding: EdgeInsets.symmetric(
+                                                    horizontal: 7,
+                                                    vertical: 15,
+                                                  ),
+                                                  child: CircleAvatar(
+                                                    radius: 3.5,
+                                                    backgroundColor:
+                                                        ColorResources
+                                                            .whiteColor,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          )
+                                        : Obx(
+                                            () => Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: List.generate(
+                                                bannerList.length > 3
+                                                    ? 3
+                                                    : bannerList.length,
                                                 (i) => Padding(
                                                   padding: const EdgeInsets
                                                       .symmetric(
@@ -391,7 +408,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                                                 ),
                                               ),
                                             ),
-                                    ),
+                                          ),
                                   ],
                                 );
                               },
@@ -423,14 +440,19 @@ class _DashboardScreenState extends State<DashboardScreen>
                             // ),
                             // const SizedBox(height: Dimensions.space30),
                             /* Solitaire Products */
-                            Text(
-                              LocalStrings.solitaire,
-                              textAlign: TextAlign.center,
-                              style: regularOverLarge.copyWith(
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            const SizedBox(height: Dimensions.space5),
+                            solitaireList.isEmpty
+                                ? const SizedBox()
+                                : Text(
+                                    LocalStrings.solitaire,
+                                    textAlign: TextAlign.center,
+                                    style: regularOverLarge.copyWith(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                            SizedBox(
+                                height: solitaireList.isEmpty
+                                    ? 0
+                                    : Dimensions.space5),
                             // CarouselSlider.builder(
                             //   key: const PageStorageKey('carousel_slider_key_second'),
                             //   // Add PageStorageKey
@@ -511,7 +533,9 @@ class _DashboardScreenState extends State<DashboardScreen>
                               builder: (ctrl) {
                                 bool isLoading = solitaireList.isEmpty;
                                 return Container(
-                                  height: size.height * 0.30,
+                                  height: solitaireList.isEmpty
+                                      ? 0
+                                      : size.height * 0.30,
                                   child: Padding(
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 10.0),
@@ -526,7 +550,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                                       scrollDirection: Axis.horizontal,
                                       physics: const BouncingScrollPhysics(),
                                       itemCount:
-                                          isLoading ? 6 : solitaireList.length,
+                                          isLoading ? 0 : solitaireList.length,
                                       itemBuilder: (context, index) {
                                         if (isLoading) {
                                           return Padding(
@@ -599,7 +623,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                                                   CrossAxisAlignment.start,
                                               mainAxisSize: MainAxisSize.min,
                                               children: [
-                                                ClipRRect(
+                                                /*ClipRRect(
                                                   borderRadius:
                                                       BorderRadius.circular(10),
                                                   child: CachedNetworkImage(
@@ -632,17 +656,17 @@ class _DashboardScreenState extends State<DashboardScreen>
                                                             error) =>
                                                         const Icon(Icons.error),
                                                   ),
-                                                ),
+                                                ),*/
                                                 const SizedBox(
                                                     height: Dimensions.space5),
-                                                Text(
+                                                /* Text(
                                                   solitaireList[index].category,
                                                   textAlign: TextAlign.center,
                                                   style:
                                                       regularDefault.copyWith(
                                                           fontWeight:
                                                               FontWeight.bold),
-                                                ),
+                                                ),*/
                                                 Text(
                                                   "₹${solitaireList[index].price14KT}",
                                                   textAlign: TextAlign.center,
@@ -661,27 +685,40 @@ class _DashboardScreenState extends State<DashboardScreen>
                                 );
                               },
                             ),
-                            const SizedBox(height: Dimensions.space5),
+                            SizedBox(
+                                height: solitaireList.isEmpty
+                                    ? 0
+                                    : Dimensions.space5),
                             /* View All Button */
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 120.0),
-                              child: CommonButton(
-                                onTap: () {
-                                  Get.toNamed(RouteHelper.collectionScreen);
-                                },
-                                gradientFirstColor: ColorResources.whiteColor,
-                                gradientSecondColor: ColorResources.whiteColor,
-                                borderColor: ColorResources.conceptTextColor,
-                                height: size.height * 0.05,
-                                child: Text(
-                                  LocalStrings.viewAll,
-                                  style: mediumDefault.copyWith(
-                                    color: ColorResources.conceptTextColor,
+                            solitaireList.isEmpty
+                                ? const SizedBox()
+                                : Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 120.0),
+                                    child: CommonButton(
+                                      onTap: () {
+                                        categoriesController
+                                            .filterCategoriesApiMethod(
+                                                materialBy: 'Solitaire');
+                                        Get.toNamed(
+                                            RouteHelper.collectionScreen);
+                                      },
+                                      gradientFirstColor:
+                                          ColorResources.whiteColor,
+                                      gradientSecondColor:
+                                          ColorResources.whiteColor,
+                                      borderColor:
+                                          ColorResources.conceptTextColor,
+                                      height: size.height * 0.05,
+                                      child: Text(
+                                        LocalStrings.viewAll,
+                                        style: mediumDefault.copyWith(
+                                          color:
+                                              ColorResources.conceptTextColor,
+                                        ),
+                                      ),
+                                    ),
                                   ),
-                                ),
-                              ),
-                            ),
                             const SizedBox(height: Dimensions.space40),
                             /*shop by category*/
                             Text(
@@ -790,55 +827,75 @@ class _DashboardScreenState extends State<DashboardScreen>
                                                     filterCategoryList.length) {
                                                   return const SizedBox(); // Prevents crashes
                                                 }
-                                                return Column(
-                                                  mainAxisSize:
-                                                      MainAxisSize.min,
-                                                  children: [
-                                                    Transform.translate(
-                                                      offset:
-                                                          Offset(0, offsetY),
-                                                      child: Container(
-                                                        height: 140,
-                                                        width: 100,
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(15),
-                                                          color: Colors.grey
-                                                              .withOpacity(0.1),
-                                                          image:
-                                                              DecorationImage(
-                                                            image: NetworkImage(
-                                                              filterCategoryList[
-                                                                      imageIndex]
-                                                                  .filterCategoryImage,
+                                                return GestureDetector(
+                                                  onTap: () {
+                                                    categoriesController
+                                                        .filterCategoriesApiMethod(
+                                                            wrappedBy: filterCategoryList[
+                                                                    imageIndex]
+                                                                .filterCategoryName);
+                                                    Get.toNamed(RouteHelper
+                                                        .collectionScreen);
+                                                  },
+                                                  child: Column(
+                                                    mainAxisSize:
+                                                        MainAxisSize.min,
+                                                    children: [
+                                                      Transform.translate(
+                                                        offset:
+                                                            Offset(0, offsetY),
+                                                        child: Container(
+                                                          height: 140,
+                                                          width: 100,
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        15),
+                                                            color: Colors.grey
+                                                                .withOpacity(
+                                                                    0.1),
+                                                          ),
+                                                          child: ClipRRect(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        15),
+                                                            child:
+                                                                CachedCommonImage(
+                                                              networkImageUrl:
+                                                                  filterCategoryList[
+                                                                          imageIndex]
+                                                                      .filterCategoryImage!,
+                                                              width: double
+                                                                  .infinity,
                                                             ),
-                                                            fit: BoxFit.cover,
                                                           ),
                                                         ),
                                                       ),
-                                                    ),
-                                                    const SizedBox(
-                                                        height:
-                                                            Dimensions.space5),
-                                                    Transform.translate(
-                                                      offset:
-                                                          Offset(0, offsetY),
-                                                      child: Text(
-                                                        filterCategoryList[
-                                                                imageIndex]
-                                                            .filterCategoryName,
-                                                        style: regularDefault
-                                                            .copyWith(
-                                                          fontWeight:
-                                                              FontWeight.bold,
+                                                      const SizedBox(
+                                                          height: Dimensions
+                                                              .space5),
+                                                      Transform.translate(
+                                                        offset:
+                                                            Offset(0, offsetY),
+                                                        child: Text(
+                                                          filterCategoryList[
+                                                                      imageIndex]
+                                                                  .filterCategoryName ??
+                                                              '',
+                                                          style: regularDefault
+                                                              .copyWith(
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                          ),
+                                                          textAlign:
+                                                              TextAlign.center,
                                                         ),
-                                                        textAlign:
-                                                            TextAlign.center,
                                                       ),
-                                                    ),
-                                                  ],
+                                                    ],
+                                                  ),
                                                 );
                                               },
                                             ),
@@ -852,18 +909,23 @@ class _DashboardScreenState extends State<DashboardScreen>
                             ),
                             const SizedBox(height: Dimensions.space40),
                             /* New Arrival */
-                            Text(
-                              LocalStrings.newArrival,
-                              textAlign: TextAlign.center,
-                              style: regularOverLarge.copyWith(
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            const SizedBox(height: Dimensions.space5),
+                            newArrivalList.isNotEmpty
+                                ? Text(
+                                    LocalStrings.newArrival,
+                                    textAlign: TextAlign.center,
+                                    style: regularOverLarge.copyWith(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  )
+                                : SizedBox(),
+                            SizedBox(
+                                height: newArrivalList.isNotEmpty
+                                    ? Dimensions.space10
+                                    : 0),
                             GetBuilder(
                               init: MainController(),
                               builder: (ctrl) {
-                                bool isLoading = newArrivalList.isEmpty;
+                                // bool isLoading = newArrivalList.isEmpty;
                                 return Container(
                                   height: size.height * 0.30,
                                   child: Padding(
@@ -879,10 +941,11 @@ class _DashboardScreenState extends State<DashboardScreen>
                                       ),
                                       scrollDirection: Axis.horizontal,
                                       physics: const BouncingScrollPhysics(),
-                                      itemCount:
-                                          isLoading ? 6 : newArrivalList.length,
+                                      itemCount: newArrivalList.isEmpty
+                                          ? 6
+                                          : newArrivalList.length,
                                       itemBuilder: (context, index) {
-                                        if (isLoading) {
+                                        if (newArrivalList.isEmpty) {
                                           return Padding(
                                             padding: const EdgeInsets.symmetric(
                                                 horizontal: 5.0),
@@ -948,65 +1011,94 @@ class _DashboardScreenState extends State<DashboardScreen>
                                           return Padding(
                                             padding: const EdgeInsets.symmetric(
                                                 horizontal: 5.0),
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: [
-                                                ClipRRect(
-                                                  borderRadius:
-                                                      BorderRadius.circular(10),
-                                                  child: CachedNetworkImage(
-                                                    height: 180,
-                                                    width: double.infinity,
-                                                    imageUrl:
-                                                        newArrivalList[index]
-                                                            .image01,
-                                                    fit: BoxFit.cover,
-                                                    progressIndicatorBuilder:
-                                                        (context, url,
-                                                                downloadProgress) =>
-                                                            Shimmer.fromColors(
-                                                      baseColor: ColorResources
-                                                          .shimmerEffectBaseColor,
-                                                      highlightColor: ColorResources
-                                                          .shimmerEffectHighlightColor,
-                                                      child: Container(
+                                            child: GestureDetector(
+                                              onTap: () {
+                                                //Todo: Products details seen arrivals
+                                                Get.toNamed(
+                                                    RouteHelper.productScreen,
+                                                    arguments:
+                                                        newArrivalList[index]);
+                                              },
+                                              child: Container(
+                                                color: Colors.transparent,
+                                                child: Column(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.start,
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
+                                                  children: [
+                                                    ClipRRect(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10),
+                                                      child: CachedCommonImage(
+                                                        networkImageUrl:
+                                                            newArrivalList[
+                                                                    index]
+                                                                .media![0]
+                                                                .productAsset,
                                                         height: 180,
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          color: Colors.grey,
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(10),
-                                                        ),
+                                                        width: double.infinity,
                                                       ),
+                                                      // CachedNetworkImage(
+                                                      //   height: 180,
+                                                      //   width: double.infinity,
+                                                      //   imageUrl:
+                                                      //       newArrivalList[index]
+                                                      //           .image01,
+                                                      //   fit: BoxFit.cover,
+                                                      //   progressIndicatorBuilder:
+                                                      //       (context, url,
+                                                      //               downloadProgress) =>
+                                                      //           Shimmer.fromColors(
+                                                      //     baseColor: ColorResources
+                                                      //         .shimmerEffectBaseColor,
+                                                      //     highlightColor: ColorResources
+                                                      //         .shimmerEffectHighlightColor,
+                                                      //     child: Container(
+                                                      //       height: 180,
+                                                      //       decoration:
+                                                      //           BoxDecoration(
+                                                      //         color: Colors.grey,
+                                                      //         borderRadius:
+                                                      //             BorderRadius
+                                                      //                 .circular(10),
+                                                      //       ),
+                                                      //     ),
+                                                      //   ),
+                                                      //   errorWidget: (context, url,
+                                                      //           error) =>
+                                                      //       const Icon(Icons.error),
+                                                      // ),
                                                     ),
-                                                    errorWidget: (context, url,
-                                                            error) =>
-                                                        const Icon(Icons.error),
-                                                  ),
+                                                    const SizedBox(
+                                                        height:
+                                                            Dimensions.space5),
+                                                    Text(
+                                                      newArrivalList[index]
+                                                              .category ??
+                                                          '',
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      style:
+                                                          mediumLarge.copyWith(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold),
+                                                    ),
+                                                    Text(
+                                                      "₹${newArrivalList[index].price14KT?.round()}",
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      style:
+                                                          mediumLarge.copyWith(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold),
+                                                    ),
+                                                  ],
                                                 ),
-                                                const SizedBox(
-                                                    height: Dimensions.space5),
-                                                Text(
-                                                  newArrivalList[index]
-                                                      .category,
-                                                  textAlign: TextAlign.center,
-                                                  style:
-                                                      regularDefault.copyWith(
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                ),
-                                                Text(
-                                                  "₹${newArrivalList[index].price14Kt}",
-                                                  textAlign: TextAlign.center,
-                                                  style:
-                                                      regularDefault.copyWith(
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                ),
-                                              ],
+                                              ),
                                             ),
                                           );
                                         }
@@ -1023,6 +1115,9 @@ class _DashboardScreenState extends State<DashboardScreen>
                                   const EdgeInsets.symmetric(horizontal: 120.0),
                               child: CommonButton(
                                 onTap: () {
+                                  categoriesController
+                                      .filterCategoriesApiMethod(
+                                          priceOrder: 'newestFirst');
                                   Get.toNamed(RouteHelper.collectionScreen);
                                 },
                                 gradientFirstColor: ColorResources.whiteColor,
@@ -1042,14 +1137,14 @@ class _DashboardScreenState extends State<DashboardScreen>
                             GetBuilder(
                               init: MainController(),
                               builder: (ctrl) {
-                                bool isLoading = bottomBannerList.isEmpty;
+                                // bool isLoading = bottomBannerList.isEmpty;
                                 return Padding(
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 10),
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(
                                         Dimensions.defaultRadius),
-                                    child: isLoading
+                                    child: bannerList.isEmpty
                                         ? Shimmer.fromColors(
                                             baseColor: ColorResources
                                                 .shimmerEffectBaseColor,
@@ -1074,7 +1169,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                                             height: size.height * 0.33,
                                             width: double.infinity,
                                             networkImageUrl:
-                                                bottomBannerList[0].bannerImage,
+                                                bannerList[3].bannerImage,
                                           ),
                                   ),
                                 );
@@ -1084,15 +1179,15 @@ class _DashboardScreenState extends State<DashboardScreen>
                             GetBuilder(
                               init: MainController(),
                               builder: (ctrl) {
-                                bool isLoading = bottomBannerList.isEmpty ||
-                                    bottomBannerList.length < 2;
+                                // bool isLoading = bottomBannerList.isEmpty ||
+                                //     bottomBannerList.length < 2;
                                 return Padding(
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 10),
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(
                                         Dimensions.defaultRadius),
-                                    child: isLoading
+                                    child: bannerList.isEmpty
                                         ? Shimmer.fromColors(
                                             baseColor: ColorResources
                                                 .shimmerEffectBaseColor,
@@ -1117,7 +1212,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                                             height: size.height * 0.25,
                                             width: double.infinity,
                                             networkImageUrl:
-                                                bottomBannerList[1].bannerImage,
+                                                bannerList[4].bannerImage,
                                           ),
                                   ),
                                 );
@@ -1127,15 +1222,15 @@ class _DashboardScreenState extends State<DashboardScreen>
                             GetBuilder(
                               init: MainController(),
                               builder: (ctrl) {
-                                bool isLoading = bottomBannerList.isEmpty ||
-                                    bottomBannerList.length < 2;
+                                // bool isLoading = bottomBannerList.isEmpty ||
+                                //     bottomBannerList.length < 2;
                                 return Padding(
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 10),
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(
                                         Dimensions.defaultRadius),
-                                    child: isLoading
+                                    child: bannerList.isEmpty
                                         ? Shimmer.fromColors(
                                             baseColor: ColorResources
                                                 .shimmerEffectBaseColor,
@@ -1160,7 +1255,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                                             height: size.height * 0.25,
                                             width: double.infinity,
                                             networkImageUrl:
-                                                bottomBannerList[1].bannerImage,
+                                                bannerList[5].bannerImage,
                                           ),
                                   ),
                                 );
@@ -1173,7 +1268,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                               builder: (ctrl) {
                                 bool isLoading = giftElementList.isEmpty;
                                 return Container(
-                                  height: size.height * 0.45,
+                                  height: size.height * 0.35,
                                   child: Padding(
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 10.0),
@@ -1237,41 +1332,63 @@ class _DashboardScreenState extends State<DashboardScreen>
                                           return Padding(
                                             padding: const EdgeInsets.symmetric(
                                                 horizontal: 5.0),
-                                            child: Column(
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: [
-                                                ClipRRect(
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          10), // ✅ Rounded corners
-                                                  child: Container(
-                                                    height: 300,
-                                                    decoration: BoxDecoration(
-                                                      color: ColorResources
-                                                          .offerThirdTextColor
-                                                          .withOpacity(0.1),
-                                                      image: DecorationImage(
-                                                        image: NetworkImage(
+                                            child: GestureDetector(
+                                              onTap: () {
+                                                categoriesController
+                                                    .filterCategoriesApiMethod(
+                                                        giftFor:
                                                             giftElementList[
                                                                     index]
-                                                                .giftImage),
-                                                        fit: BoxFit.fill,
+                                                                .giftName);
+                                                Get.toNamed(RouteHelper
+                                                    .collectionScreen);
+                                              },
+                                              child: Column(
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: [
+                                                  ClipRRect(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            10), // ✅ Rounded corners
+                                                    child: Card(
+                                                      shape:
+                                                          RoundedRectangleBorder(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(10),
+                                                      ),
+                                                      child: ClipRRect(
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(10),
+                                                        child:
+                                                            CachedCommonImage(
+                                                          networkImageUrl:
+                                                              giftElementList[
+                                                                      index]
+                                                                  .giftImage,
+                                                          width:
+                                                              double.infinity,
+                                                        ),
                                                       ),
                                                     ),
                                                   ),
-                                                ),
-                                                const SizedBox(
-                                                    height: Dimensions.space5),
-                                                Text(
-                                                  giftElementList[index]
-                                                      .giftName,
-                                                  textAlign: TextAlign.center,
-                                                  style: mediumMediumLarge
-                                                      .copyWith(
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                ),
-                                              ],
+                                                  const SizedBox(
+                                                      height:
+                                                          Dimensions.space5),
+                                                  Text(
+                                                    giftElementList[index]
+                                                            .giftName ??
+                                                        '',
+                                                    textAlign: TextAlign.center,
+                                                    style: mediumMediumLarge
+                                                        .copyWith(
+                                                            fontWeight:
+                                                                FontWeight
+                                                                    .bold),
+                                                  ),
+                                                ],
+                                              ),
                                             ),
                                           );
                                         }
@@ -1960,7 +2077,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                               ),
                             ),
                             Text(
-                              "Xyz",
+                              "${PrefManager.getString("firstName")} ${PrefManager.getString("lastName")}",
                               style: semiBoldMediumLarge.copyWith(
                                 color: ColorResources.conceptTextColor,
                               ),
@@ -2009,8 +2126,9 @@ class _DashboardScreenState extends State<DashboardScreen>
                                     child: ClipRRect(
                                       borderRadius: BorderRadius.circular(
                                           Dimensions.offersCardRadius),
-                                      child: Image.asset(
-                                        controller.products[index]['image'],
+                                      child: CachedCommonImage(
+                                        networkImageUrl:
+                                            controller.products[index]['image'],
                                       ),
                                     ),
                                   ),
@@ -2021,24 +2139,11 @@ class _DashboardScreenState extends State<DashboardScreen>
                                         color: ColorResources.buttonColorDark),
                                   ),
                                   const SizedBox(height: Dimensions.space1),
-                                  Row(
-                                    children: [
-                                      Text(
-                                        "₹${controller.products[index]['totalCost']}",
-                                        style: mediumDefault.copyWith(
-                                          color: ColorResources.buttonColorDark,
-                                        ),
-                                      ),
-                                      const SizedBox(width: Dimensions.space2),
-                                      Text(
-                                        "₹${controller.products[index]['totalCost']}",
-                                        style: dateTextStyle.copyWith(
-                                          color: ColorResources.buttonColorDark,
-                                          decoration:
-                                              TextDecoration.lineThrough,
-                                        ),
-                                      ),
-                                    ],
+                                  Text(
+                                    "₹${controller.products[index]['totalCost']}",
+                                    style: mediumDefault.copyWith(
+                                      color: ColorResources.buttonColorDark,
+                                    ),
                                   ),
                                 ],
                               ),

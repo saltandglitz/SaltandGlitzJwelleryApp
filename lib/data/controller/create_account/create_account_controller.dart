@@ -27,7 +27,7 @@ class CreateAccountController extends GetxController {
   TextEditingController passwordController = TextEditingController();
   TextEditingController confirmPasswordController = TextEditingController();
   final bottomBarController =
-  Get.put<BottomBarController>(BottomBarController());
+      Get.put<BottomBarController>(BottomBarController());
   final Color validColor = ColorResources.videoCallColor;
   final Color invalidColor = ColorResources.notValidateColor;
   bool hasEightChars = false;
@@ -196,7 +196,7 @@ class CreateAccountController extends GetxController {
     /// Check signIn account validate or not if valid continue process other wise closed this method
     if (googleSignInAccount != null) {
       final GoogleSignInAuthentication googleSignInAuthentication =
-      await googleSignInAccount.authentication;
+          await googleSignInAccount.authentication;
       final AuthCredential authCredential = GoogleAuthProvider.credential(
         idToken: googleSignInAuthentication.idToken,
         accessToken: googleSignInAuthentication.accessToken,
@@ -204,7 +204,7 @@ class CreateAccountController extends GetxController {
 
       try {
         final UserCredential userCredential =
-        await auth.signInWithCredential(authCredential);
+            await auth.signInWithCredential(authCredential);
         user = userCredential.user;
 
         if (user != null) {
@@ -271,9 +271,9 @@ class CreateAccountController extends GetxController {
     isLoading = true;
     update();
     final bottomBarController =
-    Get.put<BottomBarController>(BottomBarController());
+        Get.put<BottomBarController>(BottomBarController());
     final myAccountController =
-    Get.put<MyAccountController>(MyAccountController());
+        Get.put<MyAccountController>(MyAccountController());
     final GoogleSignIn googleSignIn = GoogleSignIn();
     try {
       /// Checked is web or not after sign Out google functionality
@@ -311,7 +311,7 @@ class CreateAccountController extends GetxController {
       if (result.status == LoginStatus.success) {
         final AccessToken accessToken = result.accessToken!;
         final OAuthCredential credential =
-        FacebookAuthProvider.credential(accessToken.tokenString);
+            FacebookAuthProvider.credential(accessToken.tokenString);
 
         await FirebaseAuth.instance.signInWithCredential(credential);
         final userData = await FacebookAuth.i.getUserData(
@@ -322,7 +322,7 @@ class CreateAccountController extends GetxController {
         List<String> nameParameter = userData['name'].toString().split(" ");
         String firstName = nameParameter.isNotEmpty ? nameParameter[0] : '';
         String lastName =
-        nameParameter.length > 1 ? nameParameter.sublist(1).join(' ') : '';
+            nameParameter.length > 1 ? nameParameter.sublist(1).join(' ') : '';
 
         /// Email data show
         String email = userData['email'];
@@ -368,9 +368,9 @@ class CreateAccountController extends GetxController {
     isLoading = true;
     update();
     final bottomBarController =
-    Get.put<BottomBarController>(BottomBarController());
+        Get.put<BottomBarController>(BottomBarController());
     final myAccountController =
-    Get.put<MyAccountController>(MyAccountController());
+        Get.put<MyAccountController>(MyAccountController());
     try {
       // Sign out from Firebase
       await FirebaseAuth.instance.signOut();
@@ -410,7 +410,7 @@ class CreateAccountController extends GetxController {
   }) async {
     try {
       final bottomBarController =
-      Get.put<BottomBarController>(BottomBarController());
+          Get.put<BottomBarController>(BottomBarController());
       isCreateUserAccount.value = true;
       Map<String, dynamic> params = {
         'firstName': firstName,
@@ -590,6 +590,8 @@ class CreateAccountController extends GetxController {
         params: params,
         isLoading: false,
       );
+      print("API URL: ${LocalStrings.resetPasswordApi}");
+
       print("API Response: ${response.data}");
       if (response.statusCode == 200) {
         showToast(context: Get.context!, message: response.data['message']);

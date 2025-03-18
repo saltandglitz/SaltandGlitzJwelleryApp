@@ -10,8 +10,15 @@ import '../../../core/utils/validation.dart';
 class SetPasswordController extends GetxController {
   String? email;
   TextEditingController passwordController = TextEditingController();
+  bool showPassword = true;
+
+  isShowPassword() {
+    showPassword = !showPassword;
+    update();
+  }
 
   isValidatePasswordAndLogin({String? email, String? password}) {
+    print("Entered Password: ${passwordController.text = password ?? ""}");
     if (CommonValidation().isValidationEmpty(passwordController.text)) {
       showSnackBar(context: Get.context!, message: LocalStrings.enterPassword);
     } else {

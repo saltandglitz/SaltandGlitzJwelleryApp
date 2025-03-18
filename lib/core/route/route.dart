@@ -5,6 +5,7 @@ import 'package:saltandGlitz/view/screens/create_account/create_account_screen.d
 import 'package:saltandGlitz/view/screens/dashboard/dashboard_screen.dart';
 import 'package:saltandGlitz/view/screens/edit_profile/edit_profile_screen.dart';
 import 'package:saltandGlitz/view/screens/forget_password/forget_password.dart';
+
 import 'package:saltandGlitz/view/screens/login/login_screen.dart';
 import 'package:saltandGlitz/view/screens/set_otp/set_otp_screen.dart';
 import 'package:saltandGlitz/view/screens/set_password/set_password_screen.dart';
@@ -13,7 +14,9 @@ import '../../view/screens/categories/men_categories_screen.dart';
 import '../../view/screens/categories/women_categories_screen.dart';
 import '../../view/screens/collection/collection_screen.dart';
 import '../../view/screens/collection_filter/collection_filter_screen.dart';
+import '../../view/screens/gift/gift_screen.dart';
 import '../../view/screens/my_account/my_account_screen.dart';
+import '../../view/screens/payment/payment_screen.dart';
 import '../../view/screens/place_order/place_order_screen.dart';
 import '../../view/screens/product/product_screen.dart';
 import '../../view/screens/splash/splash_screen.dart';
@@ -39,6 +42,8 @@ class RouteHelper {
   static const String forgetPasswordScreen = "/forget_password_screen";
   static const String splashScreen = "/splash_screen";
   static const String placeOrder = "/place_order";
+  static const String giftScreen = "/gift_screen";
+  static const String paymentScreen = "/payment_screen";
 
   List<GetPage> routes = [
     GetPage(name: bottomBarScreen, page: () => const BottomBarScreen()),
@@ -63,5 +68,7 @@ class RouteHelper {
     GetPage(name: forgetPasswordScreen, page: () => const ForgetPassword()),
     GetPage(name: splashScreen, page: () => const SplashScreen()),
     GetPage(name: placeOrder, page: () => const PlaceOrderScreen()),
+    GetPage(name: giftScreen, page: () => const GiftScreen()),
+    GetPage(name: paymentScreen, page: () => const PaymentScreen()),
   ];
 }

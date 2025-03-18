@@ -3,45 +3,46 @@ class LocalStrings {
 
   ///<<<------------------- API ------------------->>>
   static const String getHomeViewApi =
-      "https://saltandglitz-api.vercel.app/v1/homePage/home";
+      "https://saltandglitz-api-131827005467.asia-south2.run.app//v1/homePage/home";
   static const String resetPasswordApi =
-      "https://saltandglitz-api.vercel.app/api/users/verifyOtpAndResetPassword/67a484dcc077e5fb34ec64f6";
+      "https://saltandglitz-api-131827005467.asia-south2.run.app//api/users/verifyOtpAndResetPassword/67a484dcc077e5fb34ec64f6";
   static const String forgotPasswordApi =
-      "https://saltandglitz-api.vercel.app/api/users/forgotPassword/67a484dcc077e5fb34ec64f6";
+      "https://saltandglitz-api-131827005467.asia-south2.run.app//api/users/forgotPassword/67a484dcc077e5fb34ec64f6";
   static const String sendOtpApi =
-      "https://saltandglitz-api.vercel.app/v1/otp/send-otp";
+      "https://saltandglitz-api-131827005467.asia-south2.run.app//v1/otp/send-otp";
   static const String getOtpApi =
-      "https://saltandglitz-api.vercel.app/v1/otp/get-otp";
+      "https://saltandglitz-api-131827005467.asia-south2.run.app//v1/otp/get-otp";
   static const String registerApi =
-      "https://saltandglitz-api.vercel.app/api/users/register";
+      "https://saltandglitz-api-131827005467.asia-south2.run.app//api/users/register";
   static const String womenCategoriesApi =
-      "https://saltandglitz-api.vercel.app/v1/category/categoryData";
+      "https://saltandglitz-api-131827005467.asia-south2.run.app//v1/category/categoryData";
   static const String menCategoriesApi =
-      "https://saltandglitz-api.vercel.app/v1/category/categoryData/Male";
+      "https://saltandglitz-api-131827005467.asia-south2.run.app//v1/category/categoryData/Male";
   static const String logoutApi =
-      "https://saltandglitz-api.vercel.app/api/users/logout";
+      "https://saltandglitz-api-131827005467.asia-south2.run.app//api/users/logout";
   static const String logInApi =
-      "https://saltandglitz-api.vercel.app/api/users/login";
+      "https://saltandglitz-api-131827005467.asia-south2.run.app//api/users/login";
   static const String filterProductApi =
-      "https://saltandglitz-api.vercel.app/v1/upload/filterProduct";
+      "https://saltandglitz-api-131827005467.asia-south2.run.app//v1/upload/filterProduct";
   static const String sendEmailOtpApi =
-      "https://saltandglitz-api.vercel.app/v1/otp/send-otp";
+      "https://saltandglitz-api-131827005467.asia-south2.run.app//v1/otp/send-otp";
   static const String searchProductApi =
-      "https://saltandglitz-api.vercel.app/v1/search/searchProduct";
+      "https://saltandglitz-api-131827005467.asia-south2.run.app//v1/search/searchProduct";
   static const String wishlistProductApi =
-      "https://saltandglitz-api.vercel.app/v1/wishlist/create_wishlist";
+      "https://saltandglitz-api-131827005467.asia-south2.run.app//v1/wishlist/create_wishlist";
   static const String removeWishlistProductApi =
-      "https://saltandglitz-api.vercel.app/v1/wishlist/remove_wishlist/";
+      "https://saltandglitz-api-131827005467.asia-south2.run.app//v1/wishlist/remove_wishlist/";
   static const String getWishlistProductApi =
-      "https://saltandglitz-api.vercel.app/v1/wishlist/get_wishlist/";
+      "https://saltandglitz-api-131827005467.asia-south2.run.app//v1/wishlist/get_wishlist/";
 
   ///<<<------------------- Dashboard Screen ------------------->>>
   static const String solitaire = "Solitaire";
+  static const String shopBy = "Shop by Category";
   static const String searchNotAvailable =
       "Search products items not available!";
   static const String hardwareSalt = "HardWare By Salt and Glitz";
   static const String shopNow = "Shop Now >";
-  static const String shopBy = "Shop by Category";
+  static const String wrappedWithLove = "Wrapped with Love !";
   static const String earings = "Earings";
   static const String brilliantDesign =
       "Brilliant design and unparalleled craftsmanship.";
@@ -726,7 +727,7 @@ class LocalStrings {
       "No network detected!\nMake sure you're Enable internet";
   static const String retry = "Retry";
 
-  ///<<<---------------------------- Network connectivity screen log string ---------------------------->>>
+  ///<<<---------------------------- Place Order screen log string ---------------------------->>>
   static const String deliveryDetails = "Delivery Details";
   static const String shippingAddress = "Shipping Address";
   static const String billingAddress = "Billing Address";
@@ -747,6 +748,7 @@ class LocalStrings {
       "We're available by phone +91 -44-66075200 (Toll Free) \n every day, 9 AM to 1 AM IST (Mon - Sun)";
   static const String contactUs2 = "Contact Us: ";
   static const String contactNumber = "+91 -44-66075200 (Helpline) |";
+  static const String contactUsAt = "contactus@saltandglitz.com";
   static const String inStorePickUp = "In-Store Pick Up";
   static const String buyNowPickUp =
       "Buy now, Pick up from our store at your convenience";
@@ -754,6 +756,54 @@ class LocalStrings {
   static const String sameAsShippingAddress = "Same as Shipping Address";
   static const String useADifferentBillingAddress =
       "Use a Different Billing Address";
+  static const String streetHouseNumber = "Street & House Number";
+  static const String additionalInformation = "Additional Information";
+  static const String city = "City";
+  static const String state = "State";
+  static const String country = "Country";
+  static const String selectAddressType = "Select Address Type";
+  static const String work = "Work";
+  static const String save = "Save";
+
+  ///<<<---------------------------- Gift screen log string ---------------------------->>>
+  static const String chooseAGiftWrap = "Choose a Gift Wrap";
+  static const String warmHugs = "Warm hugs";
+  static const String purpleAun = "Purple aun";
+  static const String fairyTales = "Fairy Tales";
+  static const String addAGiftMessage = "Add a gift message";
+  static const String optional = "Optional";
+  static const String whoIsThisGiftFor = "Who is the gift for?";
+  static const String youCanWriteAPersonalNote =
+      "You can write a personal note with this gift. We \n promise we'll send it to your loved one.";
+  static const String recipientsMobile = "Recipient's Mobile*";
+  static const String self = "Self";
+  static const String friend = "Friend";
+  static const String family = "Family";
+  static const String wife = "Wife";
+  static const String mother = "Mother";
+  static const String father = "Father";
+  static const String brother = "Brother";
+  static const String sister = "Sister";
+  static const String processToPayment = "Process To Payment";
+
+  ///<<<---------------------------- Payment screen log string ---------------------------->>>
+  static const String creditCard = "Credit Card";
+  static const String debitCard = "Debit Card";
+  static const String upi = "UPI";
+  static const String netBanking = "Net Banking";
+  static const String cashOnDelivery = "COD : Cash On Delivery";
+  static const String saveAndPayViaCreditCard = "Save & Pay via Credit Card";
+  static const String saveAndPayViaDebitCard = "Save & Pay via Debit Card";
+  static const String paytmGooglePay = "Paytm, Phonepe, Google Pay, & more";
+  static const String selectFromListOfBanks = "Select from a List of Banks";
+  static const String cod = "COD";
+  static const String add = "Add";
+  static const String payNow = "PAY NOW";
+  static const String preferredPayment = "Preferred Payment Options";
+  static const String giftCard = "Gift Card";
+  static const String haveAGiftCard = "Have a gift Card?";
+  static const String availableAdditionalDiscount =
+      "Available Additional Discount with gift cards";
 }
 
 class AppFonts {

@@ -20,7 +20,7 @@ class MainController extends GetxController {
   final dashboardController = Get.put(DashboardController());
   Image? splashStarImage;
   Image? splashRingImage;
-  
+
 //Todo : Check network connection available or not if not then return false
   Future<RxBool> networkConnectivityChecked() async {
     final List<ConnectivityResult> connectivityResult =
@@ -55,26 +55,20 @@ Future getDashboardJewelleryData() async{
       isLoading: false,
     );
     if (response.statusCode == 200) {
-      bannerList = (response.data['banner'] as List)
-          .map((banner) => Banner.fromJson(banner))
+      bannerList = (response.data['bottomBanner'] as List)
+          .map((banner) => BottomBanner.fromJson(banner))
           .toList();
-      categoryList = (response.data['category'] as List)
-          .map((category) => Category.fromJson(category))
-          .toList();
-      newArrivalList = (response.data['newArrivals'] as List)
-          .map((newArrivals) => NewArrival.fromJson(newArrivals))
-          .toList();
-      giftElementList = (response.data['gifts'] as List)
-          .map((gifts) => GiftElement.fromJson(gifts))
-          .toList();
-      solitaireList = (response.data['solitire'] as List)
-          .map((solitire) => Solitire.fromJson(solitire))
+      categoryList = (response.data['categoryImage'] as List)
+          .map((category) => CategoryImage.fromJson(category))
           .toList();
       filterCategoryList = (response.data['filterCategory'] as List)
           .map((filterCategory) => FilterCategory.fromJson(filterCategory))
           .toList();
-      bottomBannerList = (response.data['bottomBanner'] as List)
-          .map((bottomBanner) => BottomBanner.fromJson(bottomBanner))
+      newArrivalList = (response.data['newArrivals'] as List)
+          .map((newArrivals) => NewArrivals.fromJson(newArrivals))
+          .toList();
+      giftElementList = (response.data['gifts'] as List)
+          .map((gifts) => Gifts.fromJson(gifts))
           .toList();
     } else {
       print("Something went wrong Home : ${response.data['message']}");

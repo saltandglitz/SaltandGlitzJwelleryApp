@@ -101,11 +101,6 @@ class _SetPasswordState extends State<SetPassword> {
                     ),
                   ],
                 ),
-                // const SizedBox(height: Dimensions.space5),
-                // Text(
-                //   LocalStrings.phoneNumber,
-                //   style: mediumLarge.copyWith(),
-                // ),
                 const SizedBox(height: Dimensions.space35),
                 GetBuilder(
                   init: CreateAccountController(),
@@ -116,7 +111,7 @@ class _SetPasswordState extends State<SetPassword> {
                       obSecureText: controller.showPassword,
                       suffixIcon: GestureDetector(
                         onTap: () {
-                          controller.isShowPassword();
+                          setPasswordController.isShowPassword();
                         },
                         child: Icon(
                           controller.showPassword == true
@@ -131,6 +126,7 @@ class _SetPasswordState extends State<SetPassword> {
                       fillColor: Colors.transparent,
                       textInputType: TextInputType.name,
                       textInputAction: TextInputAction.next,
+                      onChange: (value) => print("Updated Password: $value"),
                     );
                   },
                 ),
