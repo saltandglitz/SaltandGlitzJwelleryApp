@@ -1,13 +1,19 @@
 import 'package:dio/dio.dart';
 import 'package:get/get.dart' hide Response;
+import 'package:get_storage/get_storage.dart';
 import 'package:saltandGlitz/api_repository/api_function.dart';
 import 'package:saltandGlitz/core/utils/images.dart';
 import 'package:saltandGlitz/core/utils/local_strings.dart';
+import 'package:saltandGlitz/data/controller/add_to_cart/add_to_cart_controller.dart';
+import 'package:saltandGlitz/data/controller/wishlist/wishlist_controller.dart';
+import 'package:saltandGlitz/data/product/product_controller.dart';
 import 'package:saltandGlitz/view/components/common_message_show.dart';
 
 import '../../../analytics/app_analytics.dart';
 import '../../../core/utils/app_const.dart';
+import '../../../local_storage/pref_manager.dart';
 import '../../../local_storage/sqflite_local_storage.dart';
+import '../../model/create_wishlist_view_model.dart';
 
 class CollectionController extends GetxController {
   var currentIndex = (-1).obs;
@@ -15,6 +21,8 @@ class CollectionController extends GetxController {
   RxBool isEnableNetwork = false.obs;
   RxBool isShowCategories = false.obs;
   RxBool isShowSearchField = false.obs;
+  RxBool isMoveWishlist = false.obs;
+  Wishlist? isWishlist;
 
   // Sort collection data
   List sortProductsLst = [
@@ -117,6 +125,7 @@ class CollectionController extends GetxController {
     }
     update();
   }
+
 //Todo : Hide search field to appbar search icon
   hideSearchField() {
     isShowSearchField.value = false;
@@ -164,12 +173,12 @@ class CollectionController extends GetxController {
 
   /// Sqlite database using recently stored products
   void addProduct(
-      String image, String name, String totalCost, String cutoffCost) async {
+      String image, String name, String totalCost, String productId) async {
     Map<String, dynamic> row = {
       DatabaseHelper.columnImage: image,
       DatabaseHelper.columnName: name,
       DatabaseHelper.columnTotalCost: totalCost,
-      DatabaseHelper.columnCutoffCost: cutoffCost,
+      DatabaseHelper.productId: productId,
     };
 
     final dbHelper = DatabaseHelper.instance;
@@ -180,7 +189,7 @@ class CollectionController extends GetxController {
       image: image,
       name: name,
       totalCost: totalCost,
-      cutoffCost: cutoffCost,
+      productIdData: productId,
     );
 
     if (existingProducts.isNotEmpty) {
@@ -196,26 +205,88 @@ class CollectionController extends GetxController {
   }
 
   //Todo : Favorites products api method
-  Future favoritesProducts({String? userId, String? productId}) async {
+  Future favoritesProducts(
+      {String? userId,
+      String? productId,
+      int? index,
+      String? isMoveWishlistText}) async {
     try {
-      Map<String, dynamic> params = {
-        'userId': userId,
-        'productId': productId,
-      };
-      print("Wishlist Users : $params ");
+      isMoveWishlist.value = true;
+      final addProductController =
+          Get.put<AddToCartController>(AddToCartController());
+      final wishlistController =
+          Get.put<WishlistController>(WishlistController());
+      final productController = Get.put<ProductController>(ProductController());
+      // Get userId from PrefManager
+      String currentUserId = PrefManager.getString('userId') ?? '';
+      // If the user is logged in, currentUserId will be a valid userId
+      // If the user is a guest, currentUserId will be an empty string.
+      Map<String, dynamic> params =
+          currentUserId == null || currentUserId.trim().isEmpty
+              ? {
+                  "productId": productId,
+                }
+              : {
+                  "userId": currentUserId, // Send the trimmed userId
+                  "productId": productId,
+                };
+      print("Wishlist params: '$params'");
       Response response = await APIFunction().apiCall(
         apiName: LocalStrings.wishlistProductApi,
         context: Get.context!,
         params: params,
         isLoading: false,
       );
+
       if (response.statusCode == 201) {
-        print("Wishlist products  :${response.data['message']}");
+        isWishlist = Wishlist.fromJson(response.data['wishlist']);
+        PrefManager.setString('userId', isWishlist?.userId ?? '');
+        PrefManager.addProductToList('wishlistProductId', '$productId');
+        List<String>? wishlistData =
+            PrefManager.getStringList('wishlistProductId');
+        print("Stored Data wishlist : ${wishlistData?.toList()}");
+        //Todo : isMoveWishlistText == LocalStrings.moveWishlist this time remove cart item and add wishlist
+        if (isMoveWishlistText == LocalStrings.moveWishlist) {
+          //Todo : Remove product to the cart api method & removeProduct remove locally
+          addProductController.removeCartApiMethod(itemId: productId);
+          addProductController.removeProduct(index!);
+          wishlistController.getWishlistDataApiMethod();
+          Get.back();
+        } else {
+          filterProductData[index!].isAlready = true;
+          productController.productData.isAlready = true;
+        }
       } else {
         showSnackBar(context: Get.context!, message: response.data['message']);
       }
     } catch (e) {
       print("Favorites Products error  : $e");
+    } finally {
+      isMoveWishlist.value = false;
+      update();
+    }
+  }
+
+//Todo : Remove wishlist particular product
+  Future removeWishlistApiMethod({String? productId}) async {
+    try {
+      String? userId = PrefManager.getString('userId');
+      String apiName =
+          "${LocalStrings.removeWishlistProductApi}$userId/$productId";
+      Response response = await APIFunction().delete(
+          apiName: apiName,
+          context: Get.context!,
+          token: PrefManager.getString('token') ?? '',
+          isLoading: false);
+
+      if (response.statusCode == 200) {
+        PrefManager.removeListItem('wishlistProductId', '$productId');
+        List<String>? wishlistData =
+            PrefManager.getStringList('wishlistProductId');
+        print("Stored Data wishlist remove: ${wishlistData?.toList()}");
+      }
+    } catch (e) {
+      print("Remove Wishlist : $e");
     }
   }
 }

@@ -96,7 +96,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
         children: List.generate(icons.length, (index) {
           final isSelected = bottomBarController.selectedIndex.value == index;
           final color = isSelected
-              ? ColorResources.activeTabColor
+              ? ColorResources.blackColor
               : ColorResources.inactiveTabColor;
           return GestureDetector(
             onTap: () {

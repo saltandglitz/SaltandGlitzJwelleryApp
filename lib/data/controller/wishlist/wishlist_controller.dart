@@ -4,6 +4,7 @@ import 'package:saltandGlitz/api_repository/api_function.dart';
 import 'package:saltandGlitz/data/model/get_wishlist_view_model.dart';
 import 'package:saltandGlitz/local_storage/pref_manager.dart';
 
+import '../../../core/utils/app_const.dart';
 import '../../../core/utils/images.dart';
 import '../../../core/utils/local_strings.dart';
 
@@ -41,11 +42,15 @@ class WishlistController extends GetxController {
     LocalStrings.wishlistPriceSeven,
     LocalStrings.wishlistPriceEight,
   ];
+  // Using Rx to make the selected number observable
+  Rx<int> selectedNumber = 6.obs; // Initial value is 6
 
-  removeLocally(int index) {
-    productsImage.removeAt(index);
-    productsName.removeAt(index);
-    productsPriceLst.removeAt(index);
+  // Update the selected number
+  void updateSelectedNumber(int number) {
+    selectedNumber.value = number;
+  }
+  removeLocallyWishlist(int index) {
+    wishlistProducts.removeAt(index);
     update();
   }
 
@@ -62,14 +67,24 @@ class WishlistController extends GetxController {
     }
     update();
   }
-
+  // Method to update the 'isAlready' status for products in 'filterProductData'
+  void updateProductStatus(String productId, bool isAlready) {
+    // Update the 'isAlready' status for the product with matching productId
+    for (var product in filterProductData) {
+      if (product.productId == productId) {
+        product.isAlready = isAlready;
+        break;
+      }
+    }
+    update(); // To reflect changes in UI
+  }
   //Todo : Wishlist products get data api method
   Future getWishlistDataApiMethod() async {
     try {
       isWishlistProduct.value = true;
       Response response = await APIFunction().apiCall(
           apiName:
-              "${LocalStrings.getWishlistProductApi}${PrefManager.getString('user_id')}",
+              "${LocalStrings.getWishlistProductApi}${PrefManager.getString('userId')}",
           context: Get.context,
           isGet: true,
           isLoading: false);
@@ -86,10 +101,5 @@ class WishlistController extends GetxController {
       isWishlistProduct.value = false;
       update();
     }
-  }
-
-//Todo : After wishlist add products remove to wishlist api method
-  Future deleteWishlistProductApiMethod() async {
-
   }
 }

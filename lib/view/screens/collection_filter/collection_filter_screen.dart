@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:saltandGlitz/core/utils/dimensions.dart';
 import 'package:saltandGlitz/core/utils/local_strings.dart';
+import 'package:saltandGlitz/data/controller/categories/categories_controller.dart';
 
 import '../../../analytics/app_analytics.dart';
 import '../../../core/utils/color_resources.dart';
 import '../../../core/utils/style.dart';
+import '../../../data/controller/collection/collection_controller.dart';
 import '../../../data/controller/collection_filter/collection_filter_controller.dart';
 import '../../components/app_bar_background.dart';
 import '../../components/common_button.dart';
@@ -18,6 +20,10 @@ class CollectionFilterScreen extends StatefulWidget {
 }
 
 class _CollectionFilterScreenState extends State<CollectionFilterScreen> {
+  final categoriesController =
+  Get.put<CategoriesController>(CategoriesController());  final collectionController =
+  Get.put<CollectionController>(CollectionController());
+
   @override
   void initState() {
     // TODO: implement initState
@@ -28,7 +34,9 @@ class _CollectionFilterScreenState extends State<CollectionFilterScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
+    final size = MediaQuery
+        .of(context)
+        .size;
     return GetBuilder(
         init: CollectionFilterController(),
         builder: (controller) {
@@ -69,10 +77,11 @@ class _CollectionFilterScreenState extends State<CollectionFilterScreen> {
                       var filters = controller.filters[category] ?? [];
                       var selectedCount = filters
                           .where((filter) =>
-                              controller.selectedFilters.contains(filter))
+                          controller.selectedFilters.contains(filter))
                           .length;
 
-                      return Obx(() => Column(
+                      return Obx(() =>
+                          Column(
                             children: [
                               const SizedBox(height: Dimensions.space5),
                               ListTile(
@@ -82,38 +91,38 @@ class _CollectionFilterScreenState extends State<CollectionFilterScreen> {
                                   controller.categories[index],
                                   style: semiBoldDefault.copyWith(
                                     color: controller.selectedCategory.value ==
-                                            index
+                                        index
                                         ? ColorResources.cardTabColor
                                         : ColorResources.buttonColorDark
-                                            .withOpacity(0.5),
+                                        .withOpacity(0.5),
                                     fontWeight:
-                                        controller.selectedCategory.value ==
-                                                index
-                                            ? FontWeight.w600
-                                            : FontWeight.w400,
+                                    controller.selectedCategory.value ==
+                                        index
+                                        ? FontWeight.w600
+                                        : FontWeight.w400,
                                   ),
                                 ),
                                 selected:
-                                    controller.selectedCategory.value == index,
+                                controller.selectedCategory.value == index,
                                 trailing: selectedCount > 0
                                     ? Container(
-                                        height: size.height * 0.027,
-                                        width: size.width * 0.055,
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(
-                                              Dimensions.smallRadius),
-                                          color: ColorResources.cardTabColor,
-                                        ),
-                                        child: Center(
-                                          child: Text(
-                                            selectedCount.toString(),
-                                            // You can customize the text here
-                                            style: boldDefault.copyWith(
-                                                color:
-                                                    ColorResources.whiteColor),
-                                          ),
-                                        ),
-                                      )
+                                  height: size.height * 0.027,
+                                  width: size.width * 0.055,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(
+                                        Dimensions.smallRadius),
+                                    color: ColorResources.cardTabColor,
+                                  ),
+                                  child: Center(
+                                    child: Text(
+                                      selectedCount.toString(),
+                                      // You can customize the text here
+                                      style: boldDefault.copyWith(
+                                          color:
+                                          ColorResources.whiteColor),
+                                    ),
+                                  ),
+                                )
                                     : null,
                                 // If no filter is selected, don't show the trailing widget
                                 onTap: () {
@@ -140,7 +149,8 @@ class _CollectionFilterScreenState extends State<CollectionFilterScreen> {
                       itemCount: selectedCategoryFilters.length,
                       itemBuilder: (context, index) {
                         var filter = selectedCategoryFilters[index];
-                        return Obx(() => Container(
+                        return Obx(() =>
+                            Container(
                               color: ColorResources.whiteColor,
                               padding: EdgeInsets.zero,
                               child: ListTile(
@@ -150,7 +160,7 @@ class _CollectionFilterScreenState extends State<CollectionFilterScreen> {
                                   maxLines: 2,
                                   style: semiBoldSmall.copyWith(
                                       color: controller.selectedFilters
-                                              .contains(filter)
+                                          .contains(filter)
                                           ? ColorResources.deliveryColorColor
                                           : ColorResources.conceptTextColor),
                                 ),
@@ -158,7 +168,7 @@ class _CollectionFilterScreenState extends State<CollectionFilterScreen> {
                                   Icons.check_rounded,
                                   size: 20,
                                   color: controller.selectedFilters
-                                          .contains(filter)
+                                      .contains(filter)
                                       ? ColorResources.deliveryColorColor
                                       : ColorResources.offerThirdTextColor,
                                 ),
@@ -194,6 +204,7 @@ class _CollectionFilterScreenState extends State<CollectionFilterScreen> {
                     child: CommonButton(
                       onTap: () {
                         Get.back();
+
                         /// Analytics set clear all filter products log
                         AppAnalytics().actionTriggerLogs(
                             eventName: LocalStrings.logCollectionClearAllFilter,
@@ -211,9 +222,29 @@ class _CollectionFilterScreenState extends State<CollectionFilterScreen> {
                   Expanded(
                     child: CommonButton(
                       onTap: () {
-                        Get.back();
+                        // Get.back();
                         /// Final data to send in api database like :  Discount Ranges: {15-20%, Below 10%}, Weight Ranges: {2-5 g}, Material: {Gemstone, Solitaire},
                         controller.logSelectedFilters();
+                        //Todo : Filter products using filter api method
+                        categoriesController.filterCategoriesApiMethod(
+                            isFilterScreen: "YES",
+                            priceLimitList: controller
+                                .getFormattedFilters()[LocalStrings.price],
+                            productTypeList:controller
+                                .getFormattedFilters()[LocalStrings.productsType],
+                            materialList:controller
+                                .getFormattedFilters()[LocalStrings.material],
+                            shopForList:controller
+                                .getFormattedFilters()[LocalStrings.shopFor],
+                            occasionByList:controller
+                                .getFormattedFilters()[LocalStrings.occasion],
+                            giftsList:controller
+                                .getFormattedFilters()[LocalStrings.gifts],
+                        );
+                        Get.put<CollectionController>(
+                            CollectionController());
+                        collectionController.hideSearchField();
+                        Get.back();
                       },
                       height: size.height * 0.050,
                       buttonName: LocalStrings.applyFilters,

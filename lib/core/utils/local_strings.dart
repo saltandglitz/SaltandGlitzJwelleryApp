@@ -3,37 +3,47 @@ class LocalStrings {
 
   ///<<<------------------- API ------------------->>>
   static const String getHomeViewApi =
-      "https://saltandglitz-api.vercel.app/v1/homePage/home";
+      "https://saltandglitz-api-131827005467.asia-south2.run.app/v1/homePage/home";
   static const String resetPasswordApi =
-      "https://saltandglitz-api.vercel.app/api/users/verifyOtpAndResetPassword/67a484dcc077e5fb34ec64f6";
+      "https://saltandglitz-api-131827005467.asia-south2.run.app/api/users/verifyOtpAndResetPassword";
   static const String forgotPasswordApi =
-      "https://saltandglitz-api.vercel.app/api/users/forgotPassword/67a484dcc077e5fb34ec64f6";
+      "https://saltandglitz-api-131827005467.asia-south2.run.app/api/users/forgotPassword";
   static const String sendOtpApi =
-      "https://saltandglitz-api.vercel.app/v1/otp/send-otp";
+      "https://saltandglitz-api-131827005467.asia-south2.run.app/v1/otp/send-otp";
   static const String getOtpApi =
-      "https://saltandglitz-api.vercel.app/v1/otp/get-otp";
+      "https://saltandglitz-api-131827005467.asia-south2.run.app/v1/otp/get-otp";
   static const String registerApi =
-      "https://saltandglitz-api.vercel.app/api/users/register";
+      "https://saltandglitz-api-131827005467.asia-south2.run.app/api/users/register";
   static const String womenCategoriesApi =
-      "https://saltandglitz-api.vercel.app/v1/category/categoryData";
+      "https://saltandglitz-api-131827005467.asia-south2.run.app/v1/category/categoryData";
   static const String menCategoriesApi =
-      "https://saltandglitz-api.vercel.app/v1/category/categoryData/Male";
+      "https://saltandglitz-api-131827005467.asia-south2.run.app/v1/category/categoryData/Male";
   static const String logoutApi =
-      "https://saltandglitz-api.vercel.app/api/users/logout";
+      "https://saltandglitz-api-131827005467.asia-south2.run.app/api/users/logout";
   static const String logInApi =
-      "https://saltandglitz-api.vercel.app/api/users/login";
+      "https://saltandglitz-api-131827005467.asia-south2.run.app/api/users/login";
   static const String filterProductApi =
-      "https://saltandglitz-api.vercel.app/v1/upload/filterProduct";
+      "https://saltandglitz-api-131827005467.asia-south2.run.app/v1/upload/filterProduct";
   static const String sendEmailOtpApi =
-      "https://saltandglitz-api.vercel.app/v1/otp/send-otp";
+      "https://saltandglitz-api-131827005467.asia-south2.run.app/v1/otp/send-otp";
   static const String searchProductApi =
-      "https://saltandglitz-api.vercel.app/v1/search/searchProduct";
+      "https://saltandglitz-api-131827005467.asia-south2.run.app/v1/search/searchProduct";
   static const String wishlistProductApi =
-      "https://saltandglitz-api.vercel.app/v1/wishlist/create_wishlist";
+      "https://saltandglitz-api-131827005467.asia-south2.run.app/v1/wishlist/create_wishlist";
   static const String removeWishlistProductApi =
-      "https://saltandglitz-api.vercel.app/v1/wishlist/remove_wishlist/";
+      "https://saltandglitz-api-131827005467.asia-south2.run.app/v1/wishlist/remove_wishlist/";
   static const String getWishlistProductApi =
-      "https://saltandglitz-api.vercel.app/v1/wishlist/get_wishlist/";
+      "https://saltandglitz-api-131827005467.asia-south2.run.app/v1/wishlist/get_wishlist/";
+  static const String addToCartApi =
+      "https://saltandglitz-api-131827005467.asia-south2.run.app/v1/cart/addCart";
+  static const String getCartApi =
+      "https://saltandglitz-api-131827005467.asia-south2.run.app/v1/cart/getCart/";
+  static const String removeCartApi =
+      "https://saltandglitz-api-131827005467.asia-south2.run.app/v1/cart/remove/";
+  static const String incrementCartItemQuantityApi =
+      "https://saltandglitz-api-131827005467.asia-south2.run.app/v1/cart/cartIncrement";
+  static const String decrementCartItemQuantityApi =
+      "https://saltandglitz-api-131827005467.asia-south2.run.app/v1/cart/cartDecrement";
 
   ///<<<------------------- Dashboard Screen ------------------->>>
   static const String solitaire = "Solitaire";
@@ -184,6 +194,23 @@ class LocalStrings {
   static const String itemSixPrice = "200kTo300k";
   static const String itemSevenPrice = "300kTo500k";
   static const String itemEightPrice = "above500k";
+  static const String ringFilter = "Ring";
+  static const String earringFilter = "Earring";
+  static const String ladiesBraceletFilter = "Ladies Bracelet";
+  static const String gemstoneFilter = "Gemstone";
+  static const String platinumFilter = "Platinum";
+  static const String solitaireFilter = "Solitaire";
+  static const String goldFilter = "Gold";
+  static const String chainOccasionFilter = "Chain Bracelet";
+  static const String jhumkasOccasionFilter = "Jhumkas Earring";
+  static const String ovalOccasionFilter = "Oval Bracelet";
+  static const String solitaireOccasionFilter = "Solitaire Rings";
+  static const String engagementOccasionFilter = "Engagement Rings";
+  static const String graduateGiftsFilter = "Gift for Graduate";
+  static const String birthdayGiftsFilter = "Gift for Birthday";
+  static const String weddingGiftsFilter = "Gift for Wedding";
+  static const String engagementGiftsFilter = "Gift for Engagement";
+  static const String herGiftsFilter = "Gift for Her";
   static const String charms = "Charms";
   static const String noseRings = "Nose Rings";
   static const String platinum = "Platinum";
@@ -275,7 +302,7 @@ class LocalStrings {
   static const String priceProductItemTen = '23,999';
   static const String priceProductItemEleven = '50,000';
   static const String priceProductItemTwelve = '60,000';
-  static const String addTpCart = 'ADD TO CART';
+  static const String addToCart = 'ADD TO CART';
   static const String goldenRing = 'Golden Ring';
   static const String diamondRingFirst = 'Diamond Ring';
   static const String diamondRingSecond = 'Diamond Ring';
@@ -312,6 +339,7 @@ class LocalStrings {
   static const String getOfferId = 'Get if for 57586  ';
   static const String useJb = 'Use JB10';
   static const String apply = 'Apply';
+  static const String ringSize = 'Ring Size';
   static const String color = 'COLOR';
   static const String purity = 'PURITY';
   static const String ktFirst = '14Kt';
@@ -334,10 +362,10 @@ class LocalStrings {
   static const String yellowGold = 'Yellow Gold';
   static const String productDetails = 'PRODUCT DETAILS';
   static const String weight = 'Weight';
-  static const String gross = 'Gross(Product) - 7.138 gram';
-  static const String net = 'NET(Gold) - 7.00 gram';
+  static const String gross = 'Gross(Product) - ';
+  static const String net = 'NET(Gold) - ';
   static const String purityText = 'Purity';
-  static const String ktGold = '14Kt Yellow Gold';
+  static const String ktGold = 'Kt Yellow Gold';
   static const String diamondGemstone = 'Diamond & Gemstones';
   static const String weightCt = 'Weight 0.688Ct';
   static const String diamondSecond = 'Diamond 25';
@@ -492,7 +520,7 @@ class LocalStrings {
   static const String birthday = 'Birthday (Optional)';
   static const String anniversary = 'Anniversary (Optional)';
   static const String occupation = 'Occupation (Optional)';
-  static const String spousBirthday = 'Spous Birthday (Optional)';
+  static const String spousBirthday = 'Spous Birthda y (Optional)';
   static const String addMore = '+ ADD MORE EVENTS';
   static const String byClicking =
       '*By clicking on Save Changes, you accept our ';
@@ -524,6 +552,11 @@ class LocalStrings {
   static const String enterBirthday = 'Please enter birthday';
   static const String saveChangesMessage = 'Successfully save changes';
 
+  ///<<<---------------------------- Add to Cart screen String ---------------------------->>>
+  static const String addToCartEmpty =
+      'Your cart is looking a little empty. Fill it up with your favorite items and enjoy a shopping spree!';
+  static const String pleaseLogin = 'To place your order, please log in first.';
+
   ///<<<---------------------------- SetPassword screen String ---------------------------->>>
   static const String passwordToLogin = 'Enter Password to login';
   static const String xyzGmail = 'xyz@gmail.com';
@@ -537,6 +570,7 @@ class LocalStrings {
   static const String enterOTP = 'Enter OTP';
   static const String logInWithPassword = 'LOGIN WITH PASSWORD';
   static const String resendOTP = 'RESEND OTP';
+  static const String reset = 'RESET';
 
   ///<<<---------------------------- ResetPassword screen String ---------------------------->>>
   static const String checkYourEmail =

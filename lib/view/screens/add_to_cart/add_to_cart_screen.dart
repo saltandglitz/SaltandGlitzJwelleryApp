@@ -1,15 +1,21 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gradient_borders/box_borders/gradient_box_border.dart';
 import 'package:saltandGlitz/core/utils/images.dart';
 import 'package:saltandGlitz/core/utils/local_strings.dart';
 import 'package:saltandGlitz/data/controller/add_to_cart/add_to_cart_controller.dart';
+import 'package:saltandGlitz/data/controller/collection/collection_controller.dart';
 import 'package:saltandGlitz/view/components/common_button.dart';
+import 'package:saltandGlitz/view/components/common_message_show.dart';
+import 'package:shimmer/shimmer.dart';
 import '../../../analytics/app_analytics.dart';
 import '../../../core/route/route.dart';
+import '../../../core/utils/app_const.dart';
 import '../../../core/utils/color_resources.dart';
 import '../../../core/utils/dimensions.dart';
 import '../../../core/utils/style.dart';
+import '../../../local_storage/pref_manager.dart';
 import '../../../main_controller.dart';
 import '../../components/app_bar_background.dart';
 import '../../components/cached_image.dart';
@@ -25,11 +31,13 @@ class AddToCartScreen extends StatefulWidget {
 class _AddToCartScreenState extends State<AddToCartScreen> {
   final addCartController = Get.put<AddToCartController>(AddToCartController());
   final mainController = Get.put<MainController>(MainController());
+  List<String>? wishlistData;
 
   @override
   void initState() {
     mainController.checkToAssignNetworkConnections();
     addCartController.implementAnimationOffersMethod();
+    addCartController.getCartDataApiMethod();
     AppAnalytics()
         .actionTriggerLogs(eventName: LocalStrings.logAddCartView, index: 4);
     // TODO: implement initState
@@ -92,11 +100,28 @@ class _AddToCartScreenState extends State<AddToCartScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  LocalStrings.grandTotalPrice,
-                  style: boldMediumLarge.copyWith(
-                      color: ColorResources.conceptTextColor),
-                ),
+                GetBuilder(
+                  init: AddToCartController(),
+                  builder: (controller) {
+                  return  controller.isGetCartData.value == true
+                      ? Shimmer.fromColors(
+                      baseColor: ColorResources.baseColor,
+                      highlightColor: ColorResources.highlightColor,
+                      child: Container(
+                        height: 13,
+                        width: 55,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(
+                              Dimensions.minimumRadius),
+                          color: ColorResources.highlightColor,
+                        ),
+                      ))
+                      : Text(
+                    "₹${controller.getAddCartData?.totalPrice != null ? controller.getAddCartData?.totalPrice?.round() : 0}",
+                    style: boldMediumLarge.copyWith(
+                        color: ColorResources.conceptTextColor),
+                  );
+                },),
                 Text(
                   LocalStrings.viewOrder,
                   style: boldSmall.copyWith(color: ColorResources.offerColor),
@@ -107,7 +132,13 @@ class _AddToCartScreenState extends State<AddToCartScreen> {
             // Common Place order button
             CommonButton(
               onTap: () {
-                Get.toNamed(RouteHelper.placeOrder);
+                //Todo : If users not login this time show this snackBar message
+                if (PrefManager.getString('isLogin') != "yes") {
+                  showSnackBar(
+                      context: context, message: LocalStrings.pleaseLogin);
+                } else {
+                  Get.toNamed(RouteHelper.placeOrder);
+                }
               },
             ),
           ],
@@ -205,162 +236,319 @@ class _AddToCartScreenState extends State<AddToCartScreen> {
                             ),
                           ),
                         ),
-                        const SizedBox(height: Dimensions.space15),
-                        ListView.builder(
-                          itemCount: controller.productsImage.length,
-                          physics: const BouncingScrollPhysics(),
-                          shrinkWrap: true,
-                          itemBuilder: (context, index) {
-                            return Container(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 15,
-                                vertical: 15,
-                              ),
-                              margin: const EdgeInsets.only(bottom: 17),
-                              decoration: BoxDecoration(
-                                color: ColorResources.cardBgColor,
-                                borderRadius: BorderRadius.circular(
-                                  Dimensions.offersCardRadius,
-                                ),
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: ColorResources.borderColor
-                                        .withOpacity(0.1),
-                                    spreadRadius: 1,
-                                    blurRadius: 2,
-                                    offset: const Offset(0, 2),
-                                  ),
-                                ],
-                              ),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Container(
-                                    height: size.height * 0.11,
-                                    width: size.width * 0.22,
-                                    decoration: BoxDecoration(
-                                      border: Border.all(
-                                        color: ColorResources.offerSixColor,
-                                      ),
-                                      borderRadius: BorderRadius.circular(
-                                        Dimensions.offersCardRadius,
-                                      ),
+                        SizedBox(
+                            height:
+                                (controller.getAddCartData?.cart!.quantity ==
+                                            null ||
+                                        controller.getAddCartData?.cart!
+                                                .quantity!.isEmpty ==
+                                            true)
+                                    ? Dimensions.space50
+                                    : Dimensions.space15),
+                        controller.isGetCartData.value == true
+                            ? wishlistProductsShimmerEffect(controller)
+                            : (controller.getAddCartData?.cart!.quantity ==
+                                        null ||
+                                    controller.getAddCartData?.cart!.quantity!
+                                            .isEmpty ==
+                                        true)
+                                ? Center(
+                                    child: Text(
+                                      LocalStrings.addToCartEmpty,
+                                      softWrap: true,
+                                      textAlign: TextAlign.center,
+                                      style: semiBoldLarge.copyWith(),
                                     ),
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(
-                                        Dimensions.offersCardRadius,
-                                      ),
-                                      child: CachedCommonImage(
-                                        width: double.infinity,
-                                        networkImageUrl:
-                                            controller.productsImage[index],
-                                      ),
-                                    ),
-                                  ),
-                                  const SizedBox(width: Dimensions.space20),
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Row(
-                                          children: [
-                                            Expanded(
-                                              child: Text(
-                                                controller.productsName[index],
-                                                softWrap: true,
-                                                overflow: TextOverflow.ellipsis,
-                                                style: mediumSmall.copyWith(),
-                                              ),
+                                  )
+                                : ListView.builder(
+                                    itemCount: controller
+                                        .getAddCartData?.cart?.quantity?.length,
+                                    physics: const BouncingScrollPhysics(),
+                                    shrinkWrap: true,
+                                    itemBuilder: (context, index) {
+                                      return Container(
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 15,
+                                          vertical: 15,
+                                        ),
+                                        margin:
+                                            const EdgeInsets.only(bottom: 17),
+                                        decoration: BoxDecoration(
+                                          color: ColorResources.cardBgColor,
+                                          borderRadius: BorderRadius.circular(
+                                            Dimensions.offersCardRadius,
+                                          ),
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color: ColorResources.borderColor
+                                                  .withOpacity(0.1),
+                                              spreadRadius: 1,
+                                              blurRadius: 2,
+                                              offset: const Offset(0, 2),
                                             ),
                                           ],
                                         ),
-                                        Row(
+                                        child: Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                           children: [
-                                            Text(
-                                              LocalStrings.orderRupeesFirst,
-                                              style: boldSmall.copyWith(
-                                                color: ColorResources
-                                                    .conceptTextColor,
+                                            Container(
+                                              height: size.height * 0.11,
+                                              width: size.width * 0.22,
+                                              decoration: BoxDecoration(
+                                                border: Border.all(
+                                                  color: ColorResources
+                                                      .offerSixColor,
+                                                ),
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                  Dimensions.offersCardRadius,
+                                                ),
                                               ),
-                                            ),
-                                            const SizedBox(
-                                                width: Dimensions.space7),
-                                            Text(
-                                              LocalStrings.orderRupeesSecond,
-                                              style: boldSmall.copyWith(
-                                                color:
-                                                    ColorResources.borderColor,
-                                                decoration:
-                                                    TextDecoration.lineThrough,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        const SizedBox(
-                                            height: Dimensions.space15),
-                                        Row(
-                                          children: [
-                                            Text(
-                                              '${LocalStrings.quantity} ${LocalStrings.quantityFirst}',
-                                              style: boldSmall.copyWith(
-                                                color: ColorResources
-                                                    .conceptTextColor,
+                                              child: ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                  Dimensions.offersCardRadius,
+                                                ),
+                                                child: CachedCommonImage(
+                                                  width: double.infinity,
+                                                  networkImageUrl: controller
+                                                      .getAddCartData
+                                                      ?.cart
+                                                      ?.quantity?[index]
+                                                      .productId
+                                                      ?.image01,
+                                                ),
                                               ),
                                             ),
                                             const SizedBox(
                                                 width: Dimensions.space20),
-                                            Text(
-                                              '${LocalStrings.size} ${LocalStrings.quantitySecond}',
-                                              style: boldSmall.copyWith(
-                                                color: ColorResources
-                                                    .conceptTextColor,
+                                            Expanded(
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Row(
+                                                    children: [
+                                                      Expanded(
+                                                        child: Text(
+                                                          controller
+                                                                  .getAddCartData
+                                                                  ?.cart
+                                                                  ?.quantity?[
+                                                                      index]
+                                                                  .productId
+                                                                  ?.title ??
+                                                              '',
+                                                          softWrap: true,
+                                                          overflow: TextOverflow
+                                                              .ellipsis,
+                                                          style: mediumSmall
+                                                              .copyWith(),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  Text(
+                                                    "₹${controller.getAddCartData?.cart?.quantity?[index].productId?.price14KT}",
+                                                    style: boldSmall.copyWith(
+                                                      color: ColorResources
+                                                          .conceptTextColor,
+                                                    ),
+                                                  ),
+                                                  const SizedBox(
+                                                      height:
+                                                          Dimensions.space15),
+                                                  // controller.isQuantity![index].value =   getAddCartData?.cart?.quantity?[index].quantity?.toInt()??0;
+
+                                                  Row(
+                                                    children: [
+                                                      Text(
+                                                        '${LocalStrings.quantity} ',
+                                                        style:
+                                                            boldSmall.copyWith(
+                                                          color: ColorResources
+                                                              .conceptTextColor,
+                                                        ),
+                                                      ),
+                                                      //Todo : + , - & quantity set and size set only ring & bracelet
+                                                      RichText(
+                                                        text: TextSpan(
+                                                            children: [
+                                                              TextSpan(
+                                                                  text: '+ ',
+                                                                  style: semiBoldLarge
+                                                                      .copyWith(
+                                                                    color: ColorResources
+                                                                        .conceptTextColor,
+                                                                  ),
+                                                                  recognizer:
+                                                                      TapGestureRecognizer()
+                                                                        ..onTap =
+                                                                            () {
+                                                                          //Todo : incrementProductApiMethod using product quantity increment
+                                                                          controller
+                                                                              .incrementProductApiMethod(
+                                                                            cartId:
+                                                                                "${controller.getAddCartData?.cart!.cartId}",
+                                                                            productId:
+                                                                                "${controller.getAddCartData?.cart?.quantity?[index].productId!.productId}",
+                                                                            productSize:
+                                                                                controller.getAddCartData?.cart?.quantity?[index].size,
+                                                                            carat:
+                                                                                controller.getAddCartData?.cart?.quantity?[index].caratBy,
+                                                                            colorJewellery:
+                                                                                controller.getAddCartData?.cart?.quantity?[index].colorBy,
+                                                                            index:
+                                                                                index,
+                                                                          );
+                                                                        }),
+                                                              TextSpan(
+                                                                text:
+                                                                    "${controller.getAddCartData?.cart?.quantity?[index].quantity}",
+                                                                style:
+                                                                    semiBoldLarge
+                                                                        .copyWith(
+                                                                  color: ColorResources
+                                                                      .conceptTextColor,
+                                                                ),
+                                                              ),
+                                                              TextSpan(
+                                                                  text: ' -',
+                                                                  style: semiBoldLarge
+                                                                      .copyWith(
+                                                                    color: ColorResources
+                                                                        .conceptTextColor,
+                                                                  ),
+                                                                  recognizer:
+                                                                      TapGestureRecognizer()
+                                                                        ..onTap =
+                                                                        controller.getAddCartData?.cart?.quantity?[index].quantity==1? null:     () {
+                                                                          //Todo : incrementProductApiMethod using product quantity increment
+                                                                          controller
+                                                                              .decrementProductApiMethod(
+                                                                            cartId:
+                                                                                "${controller.getAddCartData?.cart!.cartId}",
+                                                                            productId:
+                                                                                "${controller.getAddCartData?.cart?.quantity?[index].productId!.productId}",
+                                                                            productSize:
+                                                                                controller.getAddCartData?.cart?.quantity?[index].size,
+                                                                            carat:
+                                                                                controller.getAddCartData?.cart?.quantity?[index].caratBy,
+                                                                            colorJewellery:
+                                                                                controller.getAddCartData?.cart?.quantity?[index].colorBy,
+                                                                            index:
+                                                                                index,
+                                                                          );
+                                                                        }),
+                                                            ]),
+                                                      ),
+
+                                                      const SizedBox(
+                                                          width: Dimensions
+                                                              .space20),
+                                                      Text(
+                                                        '${LocalStrings.size} ',
+                                                        style:
+                                                            boldSmall.copyWith(
+                                                          color: ColorResources
+                                                              .conceptTextColor,
+                                                        ),
+                                                      ),
+                                                      Text(
+                                                        "${controller.getAddCartData?.cart?.quantity?[index].size}",
+                                                        style: semiBoldLarge
+                                                            .copyWith(
+                                                          color: ColorResources
+                                                              .conceptTextColor,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                  const SizedBox(
+                                                      height:
+                                                          Dimensions.space5),
+                                                  Text(
+                                                    LocalStrings.deliveryDate,
+                                                    style: boldSmall.copyWith(
+                                                      color: ColorResources
+                                                          .deliveryColorColor,
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            GestureDetector(
+                                              onTap: () {
+                                                // bottomSheetWidget(
+                                                //   controller.productsImage[index],
+                                                //   controller.productsName[index],
+                                                //   controller,
+                                                //   index,
+                                                // );
+                                                //Todo : Remove particular add to cart products
+                                                /*controller.removeCartApiMethod(
+                                                itemId: controller.getAddCartData
+                                                    ?.cart
+                                                    ?.quantity?[index]!
+                                                    .productId
+                                                    ?.productId);
+                                            */
+                                                bottomSheetWidget(
+                                                    controller
+                                                            .getAddCartData
+                                                            ?.cart
+                                                            ?.quantity?[index]
+                                                            .productId
+                                                            ?.image01 ??
+                                                        '',
+                                                    controller
+                                                            .getAddCartData
+                                                            ?.cart
+                                                            ?.quantity?[index]
+                                                            .productId
+                                                            ?.title ??
+                                                        '',
+                                                    controller,
+                                                    index,
+                                                    controller
+                                                        .getAddCartData
+                                                        ?.cart
+                                                        ?.quantity?[index]
+                                                        .productId
+                                                        ?.productId);
+                                              },
+                                              child: Container(
+                                                height: 20,
+                                                width: 20,
+                                                decoration: const BoxDecoration(
+                                                    shape: BoxShape.circle,
+                                                    color: ColorResources
+                                                        .conceptTextColor),
+                                                child: const Icon(
+                                                  Icons.close,
+                                                  size: 15,
+                                                  color:
+                                                      ColorResources.whiteColor,
+                                                ),
                                               ),
                                             ),
                                           ],
                                         ),
-                                        const SizedBox(
-                                            height: Dimensions.space5),
-                                        Text(
-                                          LocalStrings.deliveryDate,
-                                          style: boldSmall.copyWith(
-                                            color: ColorResources
-                                                .deliveryColorColor,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                  GestureDetector(
-                                    onTap: () {
-                                      bottomSheetWidget(
-                                        controller.productsImage[index],
-                                        controller.productsName[index],
-                                        controller,
-                                        index,
                                       );
                                     },
-                                    child: Container(
-                                      height: 20,
-                                      width: 20,
-                                      decoration: const BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          color:
-                                              ColorResources.conceptTextColor),
-                                      child: const Icon(
-                                        Icons.close,
-                                        size: 15,
-                                        color: ColorResources.whiteColor,
-                                      ),
-                                    ),
                                   ),
-                                ],
-                              ),
-                            );
-                          },
-                        ),
-                        const SizedBox(height: Dimensions.space10),
+                        SizedBox(
+                            height:
+                                (controller.getAddCartData?.cart!.quantity ==
+                                            null ||
+                                        controller.getAddCartData?.cart!
+                                                .quantity!.isEmpty ==
+                                            true)
+                                    ? Dimensions.space50
+                                    : Dimensions.space10),
                         Align(
                           alignment: Alignment.centerLeft,
                           child: Text(
@@ -483,7 +671,7 @@ class _AddToCartScreenState extends State<AddToCartScreen> {
                                               ColorResources.conceptTextColor),
                                     ),
                                     Text(
-                                      LocalStrings.orderRupeesFirst,
+                                      "₹${controller.getAddCartData?.totalPrice != null ? controller.getAddCartData?.totalPrice?.round() : 0}",
                                       style: boldSmall.copyWith(
                                           color:
                                               ColorResources.conceptTextColor),
@@ -555,11 +743,35 @@ class _AddToCartScreenState extends State<AddToCartScreen> {
                                           color:
                                               ColorResources.conceptTextColor),
                                     ),
-                                    Text(
-                                      LocalStrings.grandTotalPrice,
-                                      style: boldLarge.copyWith(
-                                          color:
-                                              ColorResources.conceptTextColor),
+                                    Obx(
+                                      () {
+                                        return addCartController
+                                                    .isGetCartData.value ==
+                                                true
+                                            ? Shimmer.fromColors(
+                                                baseColor:
+                                                    ColorResources.baseColor,
+                                                highlightColor: ColorResources
+                                                    .highlightColor,
+                                                child: Container(
+                                                  height: 13,
+                                                  width: 55,
+                                                  decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            Dimensions
+                                                                .minimumRadius),
+                                                    color: ColorResources
+                                                        .highlightColor,
+                                                  ),
+                                                ))
+                                            : Text(
+                                                "₹${controller.getAddCartData?.totalPrice != null ? controller.getAddCartData?.totalPrice?.round() : 0}",
+                                                style: boldMediumLarge.copyWith(
+                                                    color: ColorResources
+                                                        .conceptTextColor),
+                                              );
+                                      },
                                     ),
                                   ],
                                 ),
@@ -574,6 +786,196 @@ class _AddToCartScreenState extends State<AddToCartScreen> {
                 );
         },
       ),
+    );
+  }
+
+//Todo: get cart data time shimmer effect view
+  wishlistProductsShimmerEffect(AddToCartController controller) {
+    final size = MediaQuery.of(context).size;
+    return ListView.builder(
+      itemCount: 3,
+      physics: const BouncingScrollPhysics(),
+      padding: const EdgeInsets.only(top: 15, left: 15, right: 15),
+      shrinkWrap: true,
+      itemBuilder: (context, index) {
+        return Container(
+          padding: const EdgeInsets.symmetric(
+            horizontal: 15,
+            vertical: 15,
+          ),
+          margin: const EdgeInsets.only(bottom: 17),
+          decoration: BoxDecoration(
+            color: ColorResources.cardBgColor,
+            borderRadius: BorderRadius.circular(
+              Dimensions.offersCardRadius,
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: ColorResources.borderColor.withOpacity(0.1),
+                spreadRadius: 1,
+                blurRadius: 2,
+                offset: const Offset(0, 2),
+              ),
+            ],
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                height: size.height * 0.11,
+                width: size.width * 0.22,
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: ColorResources.offerSixColor,
+                  ),
+                  borderRadius: BorderRadius.circular(
+                    Dimensions.offersCardRadius,
+                  ),
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(
+                    Dimensions.offersCardRadius,
+                  ),
+                  child: Shimmer.fromColors(
+                    baseColor: ColorResources.baseColor,
+                    highlightColor: ColorResources.highlightColor,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        color: ColorResources.highlightColor,
+                        borderRadius: BorderRadius.circular(
+                          Dimensions.offersCardRadius,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(width: Dimensions.space20),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Shimmer.fromColors(
+                        baseColor: ColorResources.baseColor,
+                        highlightColor: ColorResources.highlightColor,
+                        child: Container(
+                          height: 10,
+                          width: 50,
+                          decoration: BoxDecoration(
+                            borderRadius:
+                                BorderRadius.circular(Dimensions.minimumRadius),
+                            color: ColorResources.highlightColor,
+                          ),
+                        )),
+                    const SizedBox(height: Dimensions.space5),
+                    Shimmer.fromColors(
+                        baseColor: ColorResources.baseColor,
+                        highlightColor: ColorResources.highlightColor,
+                        child: Container(
+                          height: 10,
+                          width: 40,
+                          decoration: BoxDecoration(
+                            borderRadius:
+                                BorderRadius.circular(Dimensions.minimumRadius),
+                            color: ColorResources.highlightColor,
+                          ),
+                        )),
+                    const SizedBox(height: Dimensions.space15),
+                    Row(
+                      children: [
+                        Text(
+                          '${LocalStrings.quantity} ',
+                          style: boldSmall.copyWith(
+                            color: ColorResources.conceptTextColor,
+                          ),
+                        ),
+                        //Todo : + , - & quantity set and size set only ring & bracelet
+                        Row(
+                          children: [
+                            Text(
+                              '+ ',
+                              style: semiBoldLarge.copyWith(
+                                color: ColorResources.conceptTextColor,
+                              ),
+                            ),
+                            Shimmer.fromColors(
+                                baseColor: ColorResources.baseColor,
+                                highlightColor: ColorResources.highlightColor,
+                                child: Container(
+                                  height: 17,
+                                  width: 10,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(
+                                        Dimensions.minimumRadius),
+                                    color: ColorResources.highlightColor,
+                                  ),
+                                )),
+                            Text(
+                              ' -',
+                              style: semiBoldLarge.copyWith(
+                                color: ColorResources.conceptTextColor,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(width: Dimensions.space20),
+                        Text(
+                          '${LocalStrings.size} ',
+                          style: boldSmall.copyWith(
+                            color: ColorResources.conceptTextColor,
+                          ),
+                        ),
+                        Shimmer.fromColors(
+                            baseColor: ColorResources.baseColor,
+                            highlightColor: ColorResources.highlightColor,
+                            child: Container(
+                              height: 17,
+                              width: 10,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(
+                                    Dimensions.minimumRadius),
+                                color: ColorResources.highlightColor,
+                              ),
+                            )),
+                      ],
+                    ),
+                    const SizedBox(height: Dimensions.space5),
+                    Shimmer.fromColors(
+                        baseColor: ColorResources.baseColor,
+                        highlightColor: ColorResources.highlightColor,
+                        child: Container(
+                          height: 10,
+                          width: 120,
+                          decoration: BoxDecoration(
+                            borderRadius:
+                                BorderRadius.circular(Dimensions.minimumRadius),
+                            color: ColorResources.highlightColor,
+                          ),
+                        )),
+                  ],
+                ),
+              ),
+              Container(
+                height: 20,
+                width: 20,
+                decoration: const BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: ColorResources.highlightColor),
+                child: Shimmer.fromColors(
+                  baseColor: ColorResources.baseColor,
+                  highlightColor: ColorResources.highlightColor,
+                  child: const Icon(
+                    Icons.close,
+                    size: 15,
+                    color: ColorResources.whiteColor,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 
@@ -637,10 +1039,12 @@ class _AddToCartScreenState extends State<AddToCartScreen> {
     );
   }
 
-  // Bottom sheet cancel cart items
+  //Todo: Bottom sheet cancel cart items
   bottomSheetWidget(String image, String productName,
-      AddToCartController controller, int index) {
+      AddToCartController controller, int index, String? productId) {
     final size = MediaQuery.of(context).size;
+    final collectionController =
+        Get.put<CollectionController>(CollectionController());
     return showModalBottomSheet(
       backgroundColor: ColorResources.cardBgColor,
       shape: const OutlineInputBorder(
@@ -697,7 +1101,7 @@ class _AddToCartScreenState extends State<AddToCartScreen> {
                 LocalStrings.designCart,
                 softWrap: true,
                 overflow: TextOverflow.ellipsis,
-                style: mediumSmall.copyWith(),
+                style: semiBoldSmall.copyWith(),
               ),
               const SizedBox(height: Dimensions.space20),
               Row(
@@ -705,50 +1109,86 @@ class _AddToCartScreenState extends State<AddToCartScreen> {
                   Expanded(
                     child: GestureDetector(
                       onTap: () {
-                        controller.removeProduct(index);
-                        Get.back();
                         AppAnalytics().actionTriggerWithProductsLogs(
                             eventName:
                                 LocalStrings.logAddCartReMoveProductClick,
                             productName: productName,
                             productImage: image,
                             index: 4);
+                        //Todo : Remove product to the cart api method & removeProduct remove locally
+                        controller.removeCartApiMethod(itemId: productId);
+                        controller.removeProduct(index);
+                        Get.back();
                       },
                       child: Container(
-                        height: size.height * 0.055,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(
-                            Dimensions.offersCardRadius,
-                          ),
-                          border: const GradientBoxBorder(
-                            gradient: LinearGradient(
-                              colors: [
-                                ColorResources.offerColor,
-                                ColorResources.buttonGradientColor
-                              ],
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
+                          height: size.height * 0.055,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(
+                              Dimensions.offersCardRadius,
+                            ),
+                            border: const GradientBoxBorder(
+                              gradient: LinearGradient(
+                                colors: [
+                                  ColorResources.offerColor,
+                                  ColorResources.buttonGradientColor
+                                ],
+                                begin: Alignment.topLeft,
+                                end: Alignment.bottomRight,
+                              ),
                             ),
                           ),
-                        ),
-                        child: Center(
-                          child: Text(
-                            LocalStrings.remove,
-                            style: mediumLarge.copyWith(
-                                fontWeight: FontWeight.w500),
-                          ),
-                        ),
-                      ),
+                          child: Obx(
+                            () {
+                              return Center(
+                                child: controller.isRemoveCart.value == true
+                                    ? const Padding(
+                                        padding: EdgeInsets.all(8.0),
+                                        child: CircularProgressIndicator(
+                                          color: ColorResources.blackColor,
+                                        ),
+                                      )
+                                    : Text(
+                                        LocalStrings.remove,
+                                        style: mediumLarge.copyWith(
+                                            fontWeight: FontWeight.w500),
+                                      ),
+                              );
+                            },
+                          )),
                     ),
                   ),
                   const SizedBox(width: Dimensions.space25),
                   Expanded(
-                    child: CommonButton(
-                      onTap: () {
+                    child: CommonButton(onTap: () {
+                      //Todo : Move ro wishlist functionality api called & delay some millisecond back
+                      collectionController.favoritesProducts(
+                          userId: PrefManager.getString('userId'),
+                          productId: productId,
+                          index: index,
+                          isMoveWishlistText: LocalStrings.moveWishlist);
+                      Future.delayed(const Duration(milliseconds: 1000), () {
                         Get.back();
+                      });
+                    }, child: Obx(
+                      () {
+                        return Center(
+                          child:
+                              collectionController.isMoveWishlist.value == true
+                                  ? const Padding(
+                                      padding: EdgeInsets.all(8.0),
+                                      child: CircularProgressIndicator(
+                                        color: ColorResources.whiteColor,
+                                      ),
+                                    )
+                                  : Text(
+                                      LocalStrings.moveWishlist,
+                                      style: mediumLarge.copyWith(
+                                          fontWeight: FontWeight.w500,
+                                          color: ColorResources.whiteColor),
+                                    ),
+                        );
                       },
-                      buttonName: LocalStrings.moveWishlist,
-                    ),
+                    )),
                   ),
                 ],
               ),

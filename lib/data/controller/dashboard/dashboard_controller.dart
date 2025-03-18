@@ -342,7 +342,6 @@ class DashboardController extends GetxController {
     });
     update();
   }
-
   // Handle search field changes
   void onSearchChanged(String value) {
     searchQuery.value = value;

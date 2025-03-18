@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
 import 'package:get/get.dart';
 import 'package:saltandGlitz/core/route/route.dart';
 import 'package:saltandGlitz/core/utils/local_strings.dart';
@@ -10,7 +11,6 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await initializeDefaultFirebase();
   await PrefManager.init();
-
   // Register BottomBarController globally
   Get.put(BottomBarController(), permanent: true);
   runApp(
@@ -42,6 +42,7 @@ class MyApp extends StatelessWidget {
       initialRoute: RouteHelper.splashScreen,
       theme: ThemeData.light(),
       getPages: RouteHelper().routes,
+      builder: EasyLoading.init(),
     );
   }
 }

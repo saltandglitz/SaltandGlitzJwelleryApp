@@ -1,7 +1,14 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
+import 'package:saltandGlitz/core/route/route.dart';
 import 'package:saltandGlitz/core/utils/images.dart';
+import 'package:saltandGlitz/data/controller/add_to_cart/add_to_cart_controller.dart';
+import 'package:saltandGlitz/data/controller/collection/collection_controller.dart';
 import 'package:saltandGlitz/data/controller/wishlist/wishlist_controller.dart';
+import 'package:saltandGlitz/data/product/product_controller.dart';
+import 'package:saltandGlitz/local_storage/pref_manager.dart';
 import 'package:shimmer/shimmer.dart';
 
 import '../../../analytics/app_analytics.dart';
@@ -24,19 +31,22 @@ class WishlistScreen extends StatefulWidget {
 class _WishlistScreenState extends State<WishlistScreen> {
   final mainController = Get.put<MainController>(MainController());
   final wishlistController = Get.put<WishlistController>(WishlistController());
+  final collectionController =
+      Get.put<CollectionController>(CollectionController());
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    print("Get user id :${PrefManager.getString('userId')}");
     mainController.checkToAssignNetworkConnections();
     getWishlistApi();
     AppAnalytics()
         .actionTriggerLogs(eventName: LocalStrings.logWishList, index: 3);
   }
 
+//Todo: Get Wishlist api method
   getWishlistApi() async {
-    print("Enter to wishlist");
     await wishlistController.getWishlistDataApiMethod();
   }
 
@@ -100,34 +110,32 @@ class _WishlistScreenState extends State<WishlistScreen> {
                         ? wishlistProductsShimmerEffect()
                         : controller.wishlistProducts.isEmpty
                             ? Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 10),
-                              child: Column(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 10),
+                                child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    Image.asset(
-                                      MyImages.noWishlistItemImage,
-                                      height: size.height * 0.25,
-                                      width: 200,
-                                      fit: BoxFit.fill
-                                    ),
+                                    Image.asset(MyImages.noWishlistItemImage,
+                                        height: size.height * 0.25,
+                                        width: 200,
+                                        fit: BoxFit.fill),
                                     const SizedBox(height: Dimensions.space20),
                                     Center(
                                       child: Text(
                                         LocalStrings.wishlistEmpty,
                                         textAlign: TextAlign.center,
                                         style: semiBoldLarge.copyWith(
-                                            color:
-                                                ColorResources.conceptTextColor),
+                                            color: ColorResources
+                                                .conceptTextColor),
                                       ),
                                     ),
                                     const SizedBox(height: Dimensions.space70),
-
                                   ],
                                 ),
-                            )
+                              )
                             : ListView.builder(
                                 itemCount: controller.wishlistProducts.length,
-                                physics: const BouncingScrollPhysics(),
+                                physics: const ClampingScrollPhysics(),
                                 padding: const EdgeInsets.only(
                                     top: 15, left: 15, right: 15),
                                 shrinkWrap: true,
@@ -207,7 +215,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
                                               const SizedBox(
                                                   height: Dimensions.space2),
                                               Text(
-                                                "${controller.wishlistProducts[index].productId!.total14KT}",
+                                                "₹${controller.wishlistProducts[index].productId!.total14KT?.round()}",
                                                 style: boldSmall.copyWith(
                                                     color: ColorResources
                                                         .conceptTextColor),
@@ -227,14 +235,21 @@ class _WishlistScreenState extends State<WishlistScreen> {
                                                               .logWishListMoveCartProduct,
                                                           productName: controller
                                                               .wishlistProducts[
-                                                          index]
+                                                                  index]
                                                               .productId!
                                                               .title,
                                                           productImage: controller
-                                                              .wishlistProducts[index]
+                                                              .wishlistProducts[
+                                                                  index]
                                                               .productId!
                                                               .image01,
                                                           index: 3);
+
+                                                      //Todo : Seen move to cart dialog box
+                                                      _showCustomIntegerPicker(
+                                                          context,
+                                                          controller,
+                                                          index);
                                                     },
                                                     child: Container(
                                                       height:
@@ -266,11 +281,12 @@ class _WishlistScreenState extends State<WishlistScreen> {
                                                               .logWishListShareProduct,
                                                           productName: controller
                                                               .wishlistProducts[
-                                                          index]
+                                                                  index]
                                                               .productId!
                                                               .title,
                                                           productImage: controller
-                                                              .wishlistProducts[index]
+                                                              .wishlistProducts[
+                                                                  index]
                                                               .productId!
                                                               .image01,
                                                           index: 3);
@@ -301,14 +317,18 @@ class _WishlistScreenState extends State<WishlistScreen> {
                                         ),
                                         GestureDetector(
                                           onTap: () {
+                                            var productId = controller
+                                                .wishlistProducts[index]
+                                                .productId!
+                                                .productId;
+
                                             /// Remove product clicked analysis
                                             AppAnalytics()
                                                 .actionTriggerWithProductsLogs(
                                                     eventName: LocalStrings
                                                         .logWishListRemoveProduct,
                                                     productName: controller
-                                                        .wishlistProducts[
-                                                    index]
+                                                        .wishlistProducts[index]
                                                         .productId!
                                                         .title,
                                                     productImage: controller
@@ -316,7 +336,16 @@ class _WishlistScreenState extends State<WishlistScreen> {
                                                         .productId!
                                                         .image01,
                                                     index: 3);
-                                            controller.removeLocally(index);
+                                            //Todo : Locally remove to wishlist screen
+                                            controller
+                                                .removeLocallyWishlist(index);
+                                            //Todo : Background workable remove api method
+                                            collectionController
+                                                .removeWishlistApiMethod(
+                                                    productId: productId);
+                                            //Todo : Collection & Wishlist screen wishlist match productId and remove locally
+                                            controller.updateProductStatus(
+                                                productId!, false);
                                           },
                                           child: Container(
                                             height: 20,
@@ -490,4 +519,130 @@ class _WishlistScreenState extends State<WishlistScreen> {
       },
     );
   }
+
+//Todo : Move carat dialog show
+  void moveCartDialog() {
+    Get.dialog(StatefulBuilder(
+      builder: (context, setState) {
+        return Dialog(
+          child: AnimatedOpacity(
+            opacity: 1.0,
+            duration: const Duration(milliseconds: 500),
+            child: Material(
+              color: ColorResources.whiteColor,
+              borderRadius: BorderRadius.circular(8.0),
+              elevation: 5.0,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    LocalStrings.size,
+                    style: mediumSmall.copyWith(
+                        decoration: TextDecoration.underline),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    ));
+  }
+}
+
+// Method to show the custom integer picker
+void _showCustomIntegerPicker(
+    BuildContext context, WishlistController controller, int index) {
+  final productController = Get.put<ProductController>(ProductController());
+  final collectionController =
+      Get.put<CollectionController>(CollectionController());
+  showCupertinoModalPopup(
+    context: context,
+    builder: (_) => CupertinoActionSheet(
+      message: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Container(
+          height: 250, // You can adjust this based on the number of items
+          child: CupertinoPicker(
+            itemExtent: 40, // Adjust item height
+            scrollController: FixedExtentScrollController(
+              initialItem: controller.selectedNumber.value -
+                  6, // Initialize based on selected number
+            ),
+            onSelectedItemChanged: (index) {
+              // Update the selected number when an item is picked
+              controller.updateSelectedNumber(6 + index);
+            },
+            children: List<Widget>.generate(productController.ringSize.length,
+                (index) {
+              return Center(
+                child: Text(
+                  '${controller.selectedNumber.value + index}',
+                  // Generate numbers from 6 to 15
+                  style: const TextStyle(fontSize: 18),
+                ),
+              );
+            }),
+          ),
+        ),
+      ),
+      actions: <Widget>[
+        Obx(
+          () {
+            return CupertinoActionSheetAction(
+              child: RichText(
+                  text: TextSpan(children: [
+                TextSpan(
+                    text: LocalStrings.size,
+                    style: semiBoldLarge.copyWith(
+                        color: ColorResources.blackColor)),
+                TextSpan(
+                    text: ' ${controller.selectedNumber.value}',
+                    style:
+                        boldLarge.copyWith(color: ColorResources.blackColor)),
+              ])),
+              onPressed: () {},
+            );
+          },
+        ),
+        CupertinoActionSheetAction(
+          isDestructiveAction: true,
+          onPressed: () {
+            Get.back();
+          },
+          child: Text(LocalStrings.cancel.toUpperCase(),
+              style: semiBoldLarge.copyWith()),
+        ),
+        Obx(
+          () {
+            return CupertinoActionSheetAction(
+              child: productController.isAddToCart.value == true
+                  ? const Padding(
+                      padding: EdgeInsets.all(15.0),
+                      child: CircularProgressIndicator(
+                        color: ColorResources.blackColor,
+                      ),
+                    )
+                  : Text(LocalStrings.moveCart,
+                      style: semiBoldLarge.copyWith()),
+              onPressed: () {
+                var productId =
+                    controller.wishlistProducts[index].productId!.productId;
+                //Todo : Add cart api method calling
+                productController.addToCartApiMethod(
+                  userId: PrefManager.getString("userId"),
+                  productId: productId,
+                  size: controller.selectedNumber.value,
+                  type: LocalStrings.moveCart,
+                  indexWishlist: index,
+                );
+              },
+            );
+          },
+        ),
+      ],
+    ),
+  ).then(
+    (value) => controller.selectedNumber = 6.obs,
+  );
 }

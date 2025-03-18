@@ -23,32 +23,41 @@ class CollectionFilterController extends GetxController {
   }
 
   /// Get filter data key & value list of model type
-  String getFormattedFilters() {
+  // Function to get formatted filters as a map of categories to selected filter values
+  Map<String, List<String>> getFormattedFilters() {
     var formattedFilters = <String, List<String>>{};
+
+    // Loop through each category to find the selected filter values
     for (var category in categories) {
       var filtersList = filters[category] ?? [];
       var selected = filtersList
           .where((filter) => selectedFilters.contains(filter))
           .toList();
+
       if (selected.isNotEmpty) {
+        // Check if the category is 'Price' and clean the values
+        if (category == 'Price') {
+          selected = selected
+              .map((filter) => filter.replaceAll('₹', '').trim())
+              .toList();
+        }
+
+        // Add the selected filter values to the map for the specific category
         formattedFilters[category] = selected;
       }
     }
-    return formattedFilters.entries.map((entry) {
-      var category = entry.key;
-      var values = entry.value.join(', ');
-      return '$category: {$values}';
-    }).join(', ');
+
+    return formattedFilters;
   }
 
   void logSelectedFilters() {
     print("Selected Filters: ${getFormattedFilters()}");
 
     /// Whole filter product set analysis product
-    AppAnalytics().actionTriggerWithProductsLogs(
-        eventName: LocalStrings.logCollectionProductFilter,
-        productFilter: getFormattedFilters(),
-        index: 7);
+    // AppAnalytics().actionTriggerWithProductsLogs(
+    //     eventName: LocalStrings.logCollectionProductFilter,
+    //     productFilter: getFormattedFilters(),
+    //     index: 7);
   }
 
 // Clear all selected filter
@@ -63,15 +72,15 @@ class CollectionFilterController extends GetxController {
     LocalStrings.material,
     LocalStrings.shopFor,
     LocalStrings.occasion,
-    LocalStrings.gemstone,
+    // LocalStrings.gemstone,
     LocalStrings.gifts,
-    LocalStrings.theme,
-    LocalStrings.fastDelivery,
-    LocalStrings.engravable,
+    // LocalStrings.theme,
+    // LocalStrings.fastDelivery,
+    // LocalStrings.engravable,
   ];
 
   final Map<String, List<String>> filters = {
-    LocalStrings.price: [
+    /*LocalStrings.price: [
       'Under Rs.5000',
       'Rs.5001 To Rs.10000',
       'Rs.10001 To Rs.15000',
@@ -83,90 +92,85 @@ class CollectionFilterController extends GetxController {
       'Rs.75001 To Rs.100000',
       'Rs.100001 To Rs.150000',
       'Rs.150001 To Rs.200000',
+    ],*/
+    LocalStrings.price: [
+      "₹ ${LocalStrings.itemFirstPrice}",
+      "₹ ${LocalStrings.itemSecondPrice}",
+      "₹ ${LocalStrings.itemThirdPrice}",
+      "₹ ${LocalStrings.itemForPrice}",
+      "₹ ${LocalStrings.itemFivePrice}",
+      "₹ ${LocalStrings.itemSixPrice}",
+      "₹ ${LocalStrings.itemSevenPrice}",
+      "₹ ${LocalStrings.itemEightPrice}",
     ],
     LocalStrings.productsType: [
-      'Earrings',
-      'Rings',
-      'Necklaces',
-      'Pendants',
-      'Set Product',
-      'Bracelets',
-      'Bangles',
-      'Chains',
-      'Sets',
-      'Mangalsutra',
-      'Nose pin',
-      'Nath',
-      'Charms',
-      'Adjustable Rings',
-      'Charms Builders',
-      'Tanmaniya'
+      LocalStrings.ringFilter,
+      LocalStrings.earringFilter,
+      LocalStrings.ladiesBraceletFilter,
     ],
     LocalStrings.material: [
-      'Platinum',
-      'Gold',
-      'Diamond',
-      'Gemstone',
-      'Solitaire'
+      LocalStrings.gemstoneFilter,
+      LocalStrings.platinumFilter,
+      LocalStrings.solitaireFilter,
+      LocalStrings.goldFilter,
     ],
-    LocalStrings.shopFor: ['Women', 'Men'],
-    LocalStrings.occasion: ['Work Wear', 'Daily Wear', 'Evening', 'Party Wear'],
-    LocalStrings.gemstone: [
-      'Pearl',
-      'Synthetic Ruby',
-      'Sapphire',
-      'Synthetic Sapphire',
-      'Ruby',
-      'Synthetic Emerald',
-      'Cat’s Eye',
-      'Coral',
-      'Emerald',
-      'Topaz',
-      'Citrine',
-      'Onyx',
-      'Synthetic Topaz',
-      'Amethyst',
-      'Smoky Quartz',
-      'Synthetic Amethyst',
-      'Synthetic Green',
-      'Peridot',
-      'Rose Quartz',
-      'Synthetic Black',
-      'Evil Eye Stone'
+    LocalStrings.shopFor: [
+      LocalStrings.female,
+      LocalStrings.male,
     ],
+    LocalStrings.occasion: [
+      LocalStrings.chainOccasionFilter,
+      LocalStrings.jhumkasOccasionFilter,
+      LocalStrings.ovalOccasionFilter,
+      LocalStrings.solitaireOccasionFilter,
+      LocalStrings.engagementOccasionFilter,
+    ],
+    // LocalStrings.gemstone: [
+    //   'Pearl',
+    //   'Synthetic Ruby',
+    //   'Sapphire',
+    //   'Synthetic Sapphire',
+    //   'Ruby',
+    //   'Synthetic Emerald',
+    //   'Cat’s Eye',
+    //   'Coral',
+    //   'Emerald',
+    //   'Topaz',
+    //   'Citrine',
+    //   'Onyx',
+    //   'Synthetic Topaz',
+    //   'Amethyst',
+    //   'Smoky Quartz',
+    //   'Synthetic Amethyst',
+    //   'Synthetic Green',
+    //   'Peridot',
+    //   'Rose Quartz',
+    //   'Synthetic Black',
+    //   'Evil Eye Stone'
+    // ],
     LocalStrings.gifts: [
-      'Self Gifting Curation',
-      'Birthday Gifts',
-      'Anniversary Gifts',
-      'Women’s Day Gifts',
-      'Harvest Season Gifts',
-      'Festive Gifts',
-      'Mother’s Day Gifts',
-      'Karva Chauth Gifts for Wife',
-      'Gifts for Friends',
-      'New Arrivals',
-      'Valentine’s Day Gifts for Mom',
-      'Valentine’s Day Special Hearts Gifts',
-      'Just Because Gifts',
-      '15k',
-      'Valentine’s Day Gifts for Wife'
+      LocalStrings.graduateGiftsFilter,
+      LocalStrings.birthdayGiftsFilter,
+      LocalStrings.weddingGiftsFilter,
+      LocalStrings.engagementGiftsFilter,
+      LocalStrings.herGiftsFilter,
     ],
-    LocalStrings.theme: [
-      'Quirky',
-      'Designer',
-      'Cluster',
-      'Bow',
-      'Essentials',
-      'Contemporary',
-      'Cut Out',
-      'Heartbeat Diamonds',
-      'Modern',
-      'Tassels',
-      'Traditional',
-      'International Necklace',
-      'Krishna'
-    ],
-    LocalStrings.fastDelivery: ['1'],
-    LocalStrings.engravable: ['1'],
+    // LocalStrings.theme: [
+    //   'Quirky',
+    //   'Designer',
+    //   'Cluster',
+    //   'Bow',
+    //   'Essentials',
+    //   'Contemporary',
+    //   'Cut Out',
+    //   'Heartbeat Diamonds',
+    //   'Modern',
+    //   'Tassels',
+    //   'Traditional',
+    //   'International Necklace',
+    //   'Krishna'
+    // ],
+    // LocalStrings.fastDelivery: ['1'],
+    // LocalStrings.engravable: ['1'],
   };
 }

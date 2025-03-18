@@ -1,7 +1,9 @@
 import 'dart:developer';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:saltandGlitz/data/controller/login/login_controller.dart';
 import 'package:saltandGlitz/view/components/common_textfield.dart';
 import '../../../core/route/route.dart';
 import '../../../core/utils/color_resources.dart';
@@ -23,6 +25,8 @@ class SetOtp extends StatefulWidget {
 class _SetOtpState extends State<SetOtp> {
   final createAccountController = Get.put(CreateAccountController());
   final setPasswordController = Get.put(SetPasswordController());
+  final resendController = Get.put(ResendOtpController());
+  final loginController = Get.put(LoginController());
   List<TextEditingController> otpControllers =
       List.generate(4, (index) => TextEditingController());
   String isForgot = '';
@@ -31,6 +35,12 @@ class _SetOtpState extends State<SetOtp> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    //Todo : Initial start timer to resend otp
+    WidgetsBinding.instance.addPostFrameCallback(
+      (_) {
+        resendController.startTimer();
+      },
+    );
     if (Get.arguments != null) {
       isForgot = Get.arguments;
     }
@@ -137,11 +147,11 @@ class _SetOtpState extends State<SetOtp> {
                     ),
                   ],
                 ),
-                const SizedBox(height: Dimensions.space5),
-                Text(
-                  LocalStrings.phoneNumber,
-                  style: mediumLarge.copyWith(),
-                ),
+                // const SizedBox(height: Dimensions.space5),
+                // Text(
+                //   LocalStrings.phoneNumber,
+                //   style: mediumLarge.copyWith(),
+                // ),
                 const SizedBox(height: Dimensions.space35),
                 // Row(
                 //   mainAxisAlignment: MainAxisAlignment.center,
@@ -183,6 +193,9 @@ class _SetOtpState extends State<SetOtp> {
                               FocusScope.of(context).previousFocus();
                             }
                           },
+                          inputFormatters: <TextInputFormatter>[
+                            FilteringTextInputFormatter.digitsOnly
+                          ],
                         ),
                       );
                     },
@@ -223,9 +236,8 @@ class _SetOtpState extends State<SetOtp> {
                         ],
                       )
                     : const SizedBox(),
-                GetBuilder(
-                  init: CreateAccountController(),
-                  builder: (ctrl) {
+                Obx(
+                  () {
                     return CommonButton(
                       onTap: () async {
                         String otp = otpControllers
@@ -240,20 +252,29 @@ class _SetOtpState extends State<SetOtp> {
                           );
                           return;
                         }
-                        ctrl.getOtpApiMethod(
-                          email: setPasswordController.email ?? '',
-                          context: context,
-                          otp: otp,
-                        );
-                        log("isOtpValid: $ctrl.isLogin");
+                        isForgot == 'forgot'
+                            ? createAccountController.resetPasswordApiMethod(
+                                email: setPasswordController.email,
+                                context: context,
+                                otp: otp,
+                                newPassword: createAccountController
+                                    .passwordController.text
+                                    .trim())
+                            : createAccountController.getOtpApiMethod(
+                                email: setPasswordController.email ?? '',
+                                context: context,
+                                otp: otp,
+                              );
                       },
                       height: size.height * 0.065,
                       width: double.infinity,
-                      child: ctrl.isCreateUserAccount.value == true
+                      child: createAccountController.isLogin.value == true
                           ? const CircularProgressIndicator(
                               color: ColorResources.whiteColor)
                           : Text(
-                              LocalStrings.login,
+                              isForgot == 'forgot'
+                                  ? LocalStrings.reset
+                                  : LocalStrings.login,
                               style: mediumLarge.copyWith(
                                 color: ColorResources.whiteColor,
                               ),
@@ -262,32 +283,44 @@ class _SetOtpState extends State<SetOtp> {
                   },
                 ),
                 const SizedBox(height: Dimensions.space25),
-                Obx(
-                  () => RichText(
-                    text: TextSpan(
-                      children: [
-                        TextSpan(
-                          text: resendOtpController.isTextEnabled.value
-                              ? LocalStrings.resendOTP
-                              : 'Resend OTP in ${resendOtpController.remainingTime.value} seconds',
-                          style: mediumLarge.copyWith(
-                            color: ColorResources.offerColor,
+                isForgot == 'forgot'
+                    ? const SizedBox()
+                    : Obx(
+                        () => RichText(
+                          text: TextSpan(
+                            children: [
+                              TextSpan(
+                                text: resendOtpController.isTextEnabled.value
+                                    ? LocalStrings.resendOTP
+                                    : 'Resend OTP in ${resendOtpController.remainingTime.value} seconds',
+                                style: mediumLarge.copyWith(
+                                  color: ColorResources.offerColor,
+                                ),
+                                recognizer: resendOtpController
+                                        .isTextEnabled.value
+                                    ? (TapGestureRecognizer()
+                                      ..onTap = () {
+                                        resendOtpController.startTimer();
+                                        isForgot == 'forgot'
+                                            ? createAccountController
+                                                .getNewPasswordApiMethod(
+                                                    email: loginController
+                                                        .emailController.text
+                                                        .trim(),
+                                                    context: context)
+                                            : createAccountController
+                                                .sendOtpApiMethod(
+                                                email:
+                                                    setPasswordController.email,
+                                                context: context,
+                                              );
+                                      })
+                                    : null,
+                              ),
+                            ],
                           ),
-                          recognizer: resendOtpController.isTextEnabled.value
-                              ? (TapGestureRecognizer()
-                                ..onTap = () {
-                                  resendOtpController.startTimer();
-                                  createAccountController.sendOtpApiMethod(
-                                    email: setPasswordController.email,
-                                    context: context,
-                                  );
-                                })
-                              : null,
                         ),
-                      ],
-                    ),
-                  ),
-                ),
+                      ),
                 const SizedBox(height: Dimensions.space100),
                 CommonButton(
                   onTap: () {

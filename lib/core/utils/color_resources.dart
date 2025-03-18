@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 class ColorResources {
   static const Color bottomSheetContainerColor = Color(0xFFf0f0f0);
   static const Color scaffoldBackgroundColor = Color(0xFFffffff);
-  static const Color activeTabColor = Color(0xff000000);
   static const Color blackColor = Color(0xff000000);
   static const Color shimmerEffectHighlightColor = Color(0xFFF5F5F5);
   static const Color shimmerEffectBaseColor = Color(0xFFE0E0E0);

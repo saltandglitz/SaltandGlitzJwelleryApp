@@ -1103,37 +1103,45 @@ class _MenCategoriesScreenState extends State<MenCategoriesScreen> {
                                   childAspectRatio: 7 / 5,
                                   crossAxisSpacing: 10),
                           itemBuilder: (context, index) {
-                            return Column(
-                              children: [
-                                Container(
-                                  height: size.height * 0.065,
-                                  width: size.width * 0.25,
-                                  decoration: BoxDecoration(
-                                    color: ColorResources.whiteColor,
-                                    borderRadius: BorderRadius.circular(
-                                        Dimensions.defaultRadius),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: ColorResources.borderColor
-                                            .withOpacity(0.1),
-                                        spreadRadius: 3,
-                                        blurRadius: 2,
-                                        offset: const Offset(0, 2),
-                                      ),
-                                    ],
+                            return GestureDetector(
+                              onTap: () {
+                                controller.filterCategoriesApiMethod(
+                                    priceLimit:
+                                    controller.shopPriceNameLst[index]);
+                                Get.toNamed(RouteHelper.collectionScreen);
+                              },
+                              child: Column(
+                                children: [
+                                  Container(
+                                    height: size.height * 0.065,
+                                    width: size.width * 0.25,
+                                    decoration: BoxDecoration(
+                                      color: ColorResources.whiteColor,
+                                      borderRadius: BorderRadius.circular(
+                                          Dimensions.defaultRadius),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: ColorResources.borderColor
+                                              .withOpacity(0.1),
+                                          spreadRadius: 3,
+                                          blurRadius: 2,
+                                          offset: const Offset(0, 2),
+                                        ),
+                                      ],
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                          controller.shopPriceNameLst[index],
+                                          textAlign: TextAlign.center,
+                                          softWrap: true,
+                                          maxLines: 2,
+                                          style: mediumDefault.copyWith(
+                                              color: ColorResources
+                                                  .conceptTextColor)),
+                                    ),
                                   ),
-                                  child: Center(
-                                    child: Text(
-                                        controller.shopPriceNameLst[index],
-                                        textAlign: TextAlign.center,
-                                        softWrap: true,
-                                        maxLines: 2,
-                                        style: mediumDefault.copyWith(
-                                            color: ColorResources
-                                                .conceptTextColor)),
-                                  ),
-                                ),
-                              ],
+                                ],
+                              ),
                             );
                           },
                         ),

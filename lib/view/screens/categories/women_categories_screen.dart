@@ -1066,37 +1066,45 @@ class _WomenCategoriesScreenState extends State<WomenCategoriesScreen> {
                                   childAspectRatio: 7 / 5,
                                   crossAxisSpacing: 10),
                           itemBuilder: (context, index) {
-                            return Column(
-                              children: [
-                                Container(
-                                  height: size.height * 0.065,
-                                  width: size.width * 0.25,
-                                  decoration: BoxDecoration(
-                                    color: ColorResources.whiteColor,
-                                    borderRadius: BorderRadius.circular(
-                                        Dimensions.defaultRadius),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: ColorResources.borderColor
-                                            .withOpacity(0.1),
-                                        spreadRadius: 3,
-                                        blurRadius: 2,
-                                        offset: const Offset(0, 2),
-                                      ),
-                                    ],
+                            return GestureDetector(
+                              onTap: () {
+                                controller.filterCategoriesApiMethod(
+                                    priceLimit:
+                                        controller.shopPriceNameLst[index]);
+                                Get.toNamed(RouteHelper.collectionScreen);
+                              },
+                              child: Column(
+                                children: [
+                                  Container(
+                                    height: size.height * 0.065,
+                                    width: size.width * 0.25,
+                                    decoration: BoxDecoration(
+                                      color: ColorResources.whiteColor,
+                                      borderRadius: BorderRadius.circular(
+                                          Dimensions.defaultRadius),
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: ColorResources.borderColor
+                                              .withOpacity(0.1),
+                                          spreadRadius: 3,
+                                          blurRadius: 2,
+                                          offset: const Offset(0, 2),
+                                        ),
+                                      ],
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                          controller.shopPriceNameLst[index],
+                                          textAlign: TextAlign.center,
+                                          softWrap: true,
+                                          maxLines: 2,
+                                          style: mediumDefault.copyWith(
+                                              color: ColorResources
+                                                  .conceptTextColor)),
+                                    ),
                                   ),
-                                  child: Center(
-                                    child: Text(
-                                        controller.shopPriceNameLst[index],
-                                        textAlign: TextAlign.center,
-                                        softWrap: true,
-                                        maxLines: 2,
-                                        style: mediumDefault.copyWith(
-                                            color: ColorResources
-                                                .conceptTextColor)),
-                                  ),
-                                ),
-                              ],
+                                ],
+                              ),
                             );
                           },
                         ),
@@ -1190,7 +1198,7 @@ Widget mostBrowsedExpandedContent(CategoriesController controller, int index,
                                       Container(
                                         height: size.height * 0.22,
                                         width: size.width * 0.40,
-                                        padding:  EdgeInsets.zero,
+                                        padding: EdgeInsets.zero,
                                         decoration: BoxDecoration(
                                           borderRadius: BorderRadius.circular(
                                               Dimensions.fullRadius),
@@ -1201,7 +1209,8 @@ Widget mostBrowsedExpandedContent(CategoriesController controller, int index,
                                           child: CachedCommonImage(
                                             width: double.infinity,
                                             networkImageUrl:
-                                                getCategoryMostBrowsedData[index]
+                                                getCategoryMostBrowsedData[
+                                                        index]
                                                     .subCategory?[
                                                         indexSubCategories]
                                                     .image01,
@@ -1219,7 +1228,8 @@ Widget mostBrowsedExpandedContent(CategoriesController controller, int index,
                                                 Dimensions.offersCardRadius),
                                             boxShadow: [
                                               BoxShadow(
-                                                color: ColorResources.borderColor
+                                                color: ColorResources
+                                                    .borderColor
                                                     .withOpacity(0.1),
                                                 spreadRadius: 3,
                                                 blurRadius: 2,
@@ -1229,7 +1239,8 @@ Widget mostBrowsedExpandedContent(CategoriesController controller, int index,
                                           ),
                                           child: Center(
                                             child: Text(
-                                                getCategoryMostBrowsedData[index]
+                                                getCategoryMostBrowsedData[
+                                                            index]
                                                         .subCategory?[
                                                             indexSubCategories]
                                                         .title ??

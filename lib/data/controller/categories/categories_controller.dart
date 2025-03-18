@@ -13,6 +13,7 @@ import '../../../core/route/route.dart';
 import '../../../core/utils/app_const.dart';
 import '../../../core/utils/images.dart';
 import '../../../core/utils/local_strings.dart';
+import '../../../local_storage/pref_manager.dart';
 import '../../model/categories_filter_view_model.dart';
 import '../../model/get_categories_view_model.dart';
 
@@ -244,8 +245,8 @@ class CategoriesController extends GetxController {
     update();
   }
 
-  void onPageChangedWomenProducts(int index,
-      CarouselPageChangedReason changeReason) {
+  void onPageChangedWomenProducts(
+      int index, CarouselPageChangedReason changeReason) {
     currentWomenIndex.value = index;
     if (changeReason == CarouselPageChangedReason.manual) {
       AppAnalytics().actionTriggerWithProductsLogs(
@@ -255,8 +256,8 @@ class CategoriesController extends GetxController {
     }
   }
 
-  void onPageChangedMenProducts(int index,
-      CarouselPageChangedReason changeReason) {
+  void onPageChangedMenProducts(
+      int index, CarouselPageChangedReason changeReason) {
     currentMenIndex.value = index;
     if (changeReason == CarouselPageChangedReason.manual) {
       AppAnalytics().actionTriggerWithProductsLogs(
@@ -340,22 +341,56 @@ class CategoriesController extends GetxController {
 
   //Todo : Filter categories & price wise product api method
   Future filterCategoriesApiMethod(
-      {String? occasionBy, String? priceLimit, String? priceOrder}) async {
+      {String? occasionBy,
+      String? priceLimit,
+      String? priceOrder,
+      String? isFilterScreen,
+      String? wrappedBy,
+      String? giftFor,
+      String? title,
+      String? materialBy,
+      List<String>? priceLimitList,
+      List<String>? productTypeList,
+      List<String>? materialList,
+      List<String>? shopForList,
+      List<String>? occasionByList,
+      List<String>? giftsList}) async {
     filterProductData.clear();
     final collectionController =
-    Get.put<CollectionController>(CollectionController());
+        Get.put<CollectionController>(CollectionController());
     try {
       collectionController.isShowCategories.value = false;
-      Map<String, dynamic> params = {
-        'occasionBy': occasionBy??'',
-        'priceLimit': priceLimit ?? '',
-        'priceOrder':priceOrder??'',
-
-        //Todo : Low to high / High to low
-        // 'priceOrder':priceOrder=="lowToHigh"||priceOrder=="highToLow"? priceOrder:'',
-        //Todo : Latest / Featured
-        // 'sortBy':priceOrder=="newestFirst"||priceOrder==LocalStrings.featured? priceOrder: '',
-      };
+      //Todo : IsFilterScreen == "YES" fill this time all {} params list format push in api
+      // If IsFilterScreen == "YES" parameter particular key value not available value take automatic null
+      Map<String, dynamic> params = isFilterScreen == "YES"
+          ? {
+              "priceLimit": priceLimitList,
+              "title": productTypeList,
+              "materialBy": materialList,
+              "typeBy": shopForList,
+              "occasionBy": occasionByList,
+              "giftFor": giftsList,
+              "userId": PrefManager.getString('userId') ?? '',
+            }
+          : {
+              'occasionBy': occasionBy ?? '',
+              'priceLimit': priceLimit ?? '',
+              //Todo : Low to high / High to low
+              'priceOrder':
+                  priceOrder == "lowToHigh" || priceOrder == "highToLow"
+                      ? priceOrder
+                      : '',
+              'userId': PrefManager.getString('userId') ?? '',
+              //Todo : Latest / Featured
+              'sortBy': priceOrder == "newestFirst" ||
+                      priceOrder == LocalStrings.featured
+                  ? priceOrder
+                  : '',
+              'wrappedBy': wrappedBy ?? '',
+              'giftFor': giftFor ?? '',
+              'title': title ?? '',
+              'materialBy': materialBy ?? '',
+            };
       Response response = await APIFunction().apiCall(
         apiName: LocalStrings.filterProductApi,
         context: Get.context,

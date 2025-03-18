@@ -9,7 +9,7 @@ class DatabaseHelper {
   static const columnImage = 'image';
   static const columnName = 'name';
   static const columnTotalCost = 'totalCost';
-  static const columnCutoffCost = 'cutoffCost';
+  static const productId = 'productId';
   DatabaseHelper._privateConstructor();
   static final DatabaseHelper instance = DatabaseHelper._privateConstructor();
 
@@ -37,7 +37,7 @@ class DatabaseHelper {
         $columnImage TEXT,
         $columnName TEXT,
         $columnTotalCost TEXT,
-        $columnCutoffCost TEXT
+        $productId TEXT
       )
     ''');
   }
@@ -81,18 +81,18 @@ class DatabaseHelper {
     required String image,
     required String name,
     required String totalCost,
-    required String cutoffCost,
+    required String productIdData,
   }) async {
     Database db = await instance.database;
     return await db.query(
       table,
       where:
-          '$columnImage = ? AND $columnName = ? AND $columnTotalCost = ? AND $columnCutoffCost = ?',
+          '$columnImage = ? AND $columnName = ? AND $columnTotalCost = ? AND $productId = ?',
       whereArgs: [
         image,
         name,
         totalCost,
-        cutoffCost,
+        productIdData,
       ],
     );
   }

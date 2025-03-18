@@ -1,16 +1,18 @@
 //Todo : App const Globally set Data
 import '../../data/model/categories_filter_view_model.dart';
+import '../../data/model/get_add_cart_view_model.dart';
 import '../../data/model/get_categories_view_model.dart';
 import '../../data/model/home_view_model.dart';
 
 ///<<<-------------- Dashboard Screen ----------------->>>
-List<Banner> bannerList = [];
-List<Category> categoryList = [];
+// List<Banner> bannerList = [];
+List<BottomBanner> bannerList = [];
+List<CategoryImage> categoryList = [];
 List<Solitire> solitaireList = [];
-List<NewArrival> newArrivalList = [];
+List<NewArrivals> newArrivalList = [];
 List<FilterCategory> filterCategoryList = [];
 List<BottomBanner> bottomBannerList = [];
-List<GiftElement> giftElementList = [];
+List<Gifts> giftElementList = [];
 
 List<dynamic> advertiseBanner = [];
 List<Categories> getCategoryData = [];

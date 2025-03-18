@@ -91,7 +91,7 @@ class HttpUtil {
       case DioErrorType.sendTimeout:
         return ErrorEntity(code: -3, message: "Send timeout in connection with server");
       case DioErrorType.receiveTimeout:
-        return ErrorEntity(code: -4, message: "Receive timeout in connection with server");
+        return ErrorEntity(code: -4, message: "Unable to fetch data. Please check your network.");
       case DioErrorType.response:
         {
           try {

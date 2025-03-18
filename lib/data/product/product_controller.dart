@@ -1,26 +1,68 @@
 import 'package:carousel_slider/carousel_controller.dart';
 import 'package:carousel_slider/carousel_options.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:get/get.dart';
+import 'package:get/get.dart' hide Response;
+import 'package:saltandGlitz/api_repository/api_function.dart';
+import 'package:saltandGlitz/data/controller/wishlist/wishlist_controller.dart';
+import 'package:saltandGlitz/view/components/common_message_show.dart';
+import 'package:video_player/video_player.dart';
 
 import '../../analytics/app_analytics.dart';
+import '../../core/route/route.dart';
 import '../../core/utils/color_resources.dart';
 import '../../core/utils/images.dart';
 import '../../core/utils/local_strings.dart';
+import '../../local_storage/pref_manager.dart';
+import '../controller/add_to_cart/add_to_cart_controller.dart';
+import '../controller/collection/collection_controller.dart';
+import '../model/categories_filter_view_model.dart';
 
 class ProductController extends GetxController {
   var currentIndex = 0.obs;
   var colorCurrentIndex = (2).obs;
   var ktCurrentIndex = (0).obs;
   bool isFavorites = false;
+  RxBool isAddToCart = false.obs;
+  RxBool isBuyNowCart = false.obs;
+  RxInt byDefaultRingSize = 6.obs;
   final CarouselController carouselController =
-  CarouselController(); // Add CarouselController
+      CarouselController(); // Add CarouselController
+  VideoPlayerController? videoController;
 
+  //Todo : var productData var set because multi pal screen open this screen so set common to fetch all data and show product
+  var productData;
   TextEditingController search = TextEditingController();
   TextEditingController pincode = TextEditingController();
-  String productImage='';
-  List<String> imageUrls = [
+  String productImage = '';
+  List<int> ringSize = [
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18,
+    19,
+    20,
+    21,
+    22,
+    23,
+    24,
+    25,
+    26,
+    27,
+    28,
+    29,
+    30
   ];
+  List<String> imageUrls = [];
   List<Color> colorLst = [
     ColorResources.offerNineColor,
     ColorResources.borderColor.withOpacity(0.2),
@@ -62,13 +104,6 @@ class ProductController extends GetxController {
     LocalStrings.gst,
     LocalStrings.totalText,
   ];
-  List breakupItemPriceLst = [
-    LocalStrings.goldPrice,
-    LocalStrings.diamondPrice,
-    LocalStrings.chargFirst,
-    LocalStrings.gstPrice,
-    LocalStrings.totalPrice,
-  ];
   List promiseImageLst = [
     MyImages.buyBackImage,
     MyImages.exchangeImage,
@@ -87,22 +122,53 @@ class ProductController extends GetxController {
   ];
   RxBool isEnableNetwork = false.obs;
 
-  @override
-  void onInit() {
-    // TODO: implement onInit
-    super.onInit();
-    if (Get.arguments != null) {
-      /// Previous screen to get image data
-      productImage=Get.arguments[0];
-      /// Stored get image
-      imageUrls=[
-        productImage,
-        productImage,
-        productImage,
-        productImage
-      ];
-    }
+  // @override
+  // void onInit() {
+  //   // TODO: implement onInit
+  //   super.onInit();
+  //   /// Previous screen to get image data
+  //   productImage=MyImages.menAnniversaryGiftImage;
+  //   /// Stored get image
+  //   imageUrls=[
+  //     productImage,
+  //     productImage,
+  //     productImage,
+  //     productImage
+  //   ];
+  // }
+  ringSizeOnChangValue(value) {
+    byDefaultRingSize.value = value!.toInt();
+    print("Ring Size:${byDefaultRingSize.value}");
+    update();
   }
+
+  // Method to handle video playback
+  void handleMediaPlayback(int index) {
+    final media = productData?.media?[index].productAsset;
+    if (media != null && productData?.media?[index].type == 'goldVideo') {
+      // Check if videoController is initialized
+      if (videoController == null || !videoController!.value.isInitialized) {
+        // Initialize the video player only if it's not initialized
+        videoController = VideoPlayerController.networkUrl(Uri.parse(media))
+          ..initialize().then((_) {
+            // Set looping to true for continuous playback
+            videoController!.setLooping(true);
+            videoController!.play();
+            update(); // Notify the UI for the changes
+          }).catchError((error) {
+            // Handle any error that might occur during initialization
+            print("Error initializing video: $error");
+          });
+      } else {
+        // If the video controller is already initialized, just play the video
+        videoController!.play();
+      }
+    } else {
+      videoController?.pause();
+    }
+    update();
+  }
+
   enableNetworkHideLoader() {
     if (isEnableNetwork.value == false) {
       isEnableNetwork.value = true;
@@ -116,6 +182,7 @@ class ProductController extends GetxController {
     }
     update();
   }
+
   void onPageChanged(int index, CarouselPageChangedReason changeReason) {
     currentIndex.value = index;
 
@@ -124,8 +191,8 @@ class ProductController extends GetxController {
       /// Product name now static but when integration dynamic data set product name dynamic
       AppAnalytics().actionTriggerWithProductsLogs(
           eventName: LocalStrings.logProductAngleView,
-          productImage: imageUrls[index],
-          productName: LocalStrings.goldenRing,
+          productImage: productData?.media?[index].productAsset,
+          productName: productData?.title,
           index: 6);
     }
   }
@@ -158,22 +225,42 @@ class ProductController extends GetxController {
     colorCurrentIndex.value = index;
     if (colorCurrentIndex.value == 1) {
       /// Product name now static but when integration dynamic data set product name dynamic
-      AppAnalytics().actionTriggerWithProductsLogs(
-          eventName:
-          "${LocalStrings.logProductSliver}_${LocalStrings.logProductProductTypeSelection}",
-          productName: LocalStrings.goldenRing,
-          productImage: imageUrls[0],
-          index: 6);
+      // AppAnalytics().actionTriggerWithProductsLogs(
+      //     eventName:
+      //         "${LocalStrings.logProductSliver}_${LocalStrings.logProductProductTypeSelection}",
+      //     productName: LocalStrings.goldenRing,
+      //     productImage: imageUrls[0],
+      //     index: 6);
     } else if (colorCurrentIndex.value == 2) {
       /// Product name now static but when integration dynamic data set product name dynamic
-      AppAnalytics().actionTriggerWithProductsLogs(
-          eventName:
-          "${LocalStrings.logProductGold}_${LocalStrings.logProductProductTypeSelection}",
-          productName: LocalStrings.goldenRing,
-          productImage: imageUrls[0],
-          index: 6);
+      // AppAnalytics().actionTriggerWithProductsLogs(
+      //     eventName:
+      //         "${LocalStrings.logProductGold}_${LocalStrings.logProductProductTypeSelection}",
+      //     productName: LocalStrings.goldenRing,
+      //     productImage: imageUrls[0],
+      //     index: 6);
     }
     update();
+  }
+
+//Todo : Jewellery color selection method
+  String jewelleryColor() {
+    if (colorCurrentIndex.value == 0) {
+      return "Rose Gold";
+    } else if (colorCurrentIndex.value == 1) {
+      return "Silver Gold";
+    } else {
+      return "Yellow Gold";
+    }
+  }
+
+  //Todo L Jewellery karat selection method
+  String jewelleryKt() {
+    if (ktCurrentIndex.value == 0) {
+      return "14KT";
+    } else {
+      return "18KT";
+    }
   }
 
   void ktSelectionJewellery(int index) {
@@ -182,9 +269,9 @@ class ProductController extends GetxController {
     /// Product name now static but when integration dynamic data set product name dynamic
     AppAnalytics().actionTriggerWithProductsLogs(
         eventName:
-        "${ctLst[index] == '18Kt' ? 'Eighteen_Kt' : 'Fourteen_Kt'}_${LocalStrings.logProductProductTypeSelection}",
-        productName: LocalStrings.goldenRing,
-        productImage: imageUrls[0],
+            "${ctLst[index] == '18Kt' ? 'Eighteen_Kt' : 'Fourteen_Kt'}_${LocalStrings.logProductProductTypeSelection}",
+        productName: productData?.title,
+        productImage: productData?.media?[index].productAsset,
         index: 6);
     update();
   }
@@ -195,5 +282,98 @@ class ProductController extends GetxController {
 
   void applyDiscount() {
     originalPrice.value = discountedPrice.value;
+  }
+
+  //Todo: Add to cart api method
+  Future addToCartApiMethod(
+      {String? userId,
+      String? productId,
+      int? quantity,
+      int? size,
+      String? carat,
+      String? color,
+      String? type,
+      int? indexWishlist,
+      String? cartType}) async {
+    try {
+      final collectionController =
+          Get.put<CollectionController>(CollectionController());
+      final wishlistController =
+          Get.put<WishlistController>(WishlistController());
+      if (cartType == LocalStrings.buyNow) {
+        isBuyNowCart.value = true;
+      } else {
+        isAddToCart.value = true;
+      }
+      String currentUserId = PrefManager.getString('userId') ?? '';
+
+      Map<String, dynamic> params =
+          currentUserId == null || currentUserId.trim().isEmpty
+              ? {
+                  "product": productId ?? "",
+                  "quantity": quantity ?? 1,
+                  "size": size ?? 6,
+                  "caratBy": carat ?? jewelleryKt(),
+                  "colorBy": color ?? jewelleryColor()
+                }
+              : {
+                  "user": currentUserId ?? "",
+                  "product": productId ?? "",
+                  "quantity": quantity ?? 1,
+                  "size": size ?? 6,
+                  "caratBy": carat ?? jewelleryKt(),
+                  "colorBy": color ?? jewelleryColor()
+                };
+      print("Get UserId : $currentUserId");
+      print("Add to cart params : $params");
+      Response response = await APIFunction().apiCall(
+          apiName: LocalStrings.addToCartApi,
+          context: Get.context,
+          params: params,
+          isLoading: false);
+
+      if (response.statusCode == 201 || response.statusCode == 200) {
+        if (currentUserId == null || currentUserId.trim().isEmpty) {
+          PrefManager.setString(
+              'userId', "${response.data['newCart']['userId']}" ?? '');
+        }
+        if (type == LocalStrings.moveCart) {
+          //Todo : Remove to the wishlist
+          collectionController.removeWishlistApiMethod(productId: productId);
+          Get.back();
+
+          //Todo : Locally cart item remove
+          wishlistController.removeLocallyWishlist(indexWishlist!);
+          Get.put<AddToCartController>(AddToCartController());
+          Get.toNamed(RouteHelper.addCartScreen);
+        }
+        PrefManager.addCartProductToList('cartProductId', '$productId',
+            "${size ?? 6}", carat ?? jewelleryKt(), color ?? jewelleryColor());
+        List<String>? cartData = PrefManager.getStringList('cartProductId');
+        print("Stored Data cart : ${cartData?.toList()}");
+        print("Get user id : ${PrefManager.getString('userId')}");
+        showToast(
+            message: '${response.data['message']}', context: Get.context!);
+      } else {
+        showSnackBar(
+            context: Get.context!, message: '${response.data['message']}');
+      }
+    } catch (e) {
+      print("Add to cart time issue : $e");
+    } finally {
+      isAddToCart.value = false;
+      if (cartType == LocalStrings.buyNow) {
+        isBuyNowCart.value = false;
+      } else {
+        isBuyNowCart.value = false;
+      }
+      update();
+    }
+  }
+
+  @override
+  void dispose() {
+    videoController?.dispose(); // Dispose if it's not null
+    super.dispose();
   }
 }

@@ -8,6 +8,7 @@ import '../../../core/utils/dimensions.dart';
 import '../../../core/utils/local_strings.dart';
 import '../../../core/utils/style.dart';
 import '../../../data/controller/create_account/create_account_controller.dart';
+import '../../../data/controller/login/login_controller.dart';
 import '../../components/common_button.dart';
 import '../../components/common_textfield.dart';
 
@@ -19,12 +20,9 @@ class SetPassword extends StatefulWidget {
 }
 
 class _SetPasswordState extends State<SetPassword> {
-  final createAccountController = Get.put(
-    CreateAccountController(),
-  );
-  final setPasswordController = Get.put(
-    SetPasswordController(),
-  );
+  final createAccountController = Get.put(CreateAccountController());
+  final setPasswordController = Get.put(SetPasswordController());
+  final loginController = Get.put(LoginController());
   String? otp;
 
   @override
@@ -108,7 +106,7 @@ class _SetPasswordState extends State<SetPassword> {
                 // ),
                 const SizedBox(height: Dimensions.space35),
                 GetBuilder(
-                  init: CreateAccountController(),
+                  init: SetPasswordController(),
                   builder: (controller) {
                     return CommonTextField(
                       controller: controller.passwordController,
@@ -135,14 +133,29 @@ class _SetPasswordState extends State<SetPassword> {
                   },
                 ),
                 const SizedBox(height: Dimensions.space25),
-                CommonButton(
-                  onTap: () {
-                    /// Password empty or not checked & login api called
-                    setPasswordController.isValidatePasswordAndLogin();
+                Obx(
+                  () {
+                    return CommonButton(
+                      onTap: () {
+                        /// Password empty or not checked & login api called
+                        setPasswordController.isValidatePasswordAndLogin(
+                            email: loginController.emailController.text.trim(),
+                            password: setPasswordController
+                                .passwordController.text
+                                .trim());
+                      },
+                      height: size.height * 0.065,
+                      width: double.infinity,
+                      child: setPasswordController.isLogin.value == true
+                          ? const CircularProgressIndicator(
+                              color: ColorResources.whiteColor)
+                          : Text(
+                              LocalStrings.login,
+                              style: mediumLarge.copyWith(
+                                  color: ColorResources.whiteColor),
+                            ),
+                    );
                   },
-                  height: size.height * 0.065,
-                  width: double.infinity,
-                  buttonName: LocalStrings.login,
                 ),
                 const SizedBox(height: Dimensions.space25),
                 GetBuilder(
@@ -156,13 +169,13 @@ class _SetPasswordState extends State<SetPassword> {
                             recognizer: TapGestureRecognizer()
                               ..onTap = () {
                                 Get.toNamed(RouteHelper.forgetPasswordScreen);
-                                controller.resetPasswordApiMethod(
+                               /* controller.resetPasswordApiMethod(
                                   newPassword:
                                       controller.passwordController.text,
                                   otp: otp,
                                   email: setPasswordController.email,
                                   context: context,
-                                );
+                                );*/
                               },
                             style: mediumLarge.copyWith(
                               color: ColorResources.offerColor,

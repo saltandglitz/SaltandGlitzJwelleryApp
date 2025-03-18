@@ -1,6 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:saltandGlitz/data/controller/login/login_controller.dart';
 import '../../../core/route/route.dart';
 import '../../../core/utils/color_resources.dart';
 import '../../../core/utils/dimensions.dart';
@@ -20,16 +21,19 @@ class ForgetPassword extends StatefulWidget {
 }
 
 class _ForgetPasswordState extends State<ForgetPassword> {
-  final createAccountController = Get.put(
-    CreateAccountController(),
-  );
-  final setPasswordController = Get.put(
-    SetPasswordController(),
-  );
+  final createAccountController = Get.put(CreateAccountController());
+  final setPasswordController = Get.put(SetPasswordController());
+  final loginController = Get.put(LoginController());
+  final forgetController = Get.put(ForgetPasswordController());
 
   @override
   initState() {
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      createAccountController.getNewPasswordApiMethod(
+          email: loginController.emailController.text.trim(), context: context);
+      forgetController.startTimer();
+    });
   }
 
   // bool isTextEnabled = true;
@@ -148,6 +152,8 @@ class _ForgetPasswordState extends State<ForgetPassword> {
                         recognizer: forgetPasswordController.isTextEnabled.value
                             ? (TapGestureRecognizer()
                               ..onTap = () {
+                                createAccountController.getNewPasswordApiMethod(
+                                    email: loginController.emailController.text.trim(), context: context);
                                 forgetPasswordController.startTimer();
                               })
                             : null,

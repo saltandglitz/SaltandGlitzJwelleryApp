@@ -105,7 +105,12 @@ class _CollectionScreenState extends State<CollectionScreen> {
               ),
               IconButton(
                   onPressed: () {
-                    Get.toNamed(RouteHelper.wishlistScreen);
+                    Get.toNamed(RouteHelper.wishlistScreen)!.then(
+                      (value) {
+                        //Todo : Wishlist screen locally remove to products move back update list
+                        collectionController.update();
+                      },
+                    );
                   },
                   icon: const Icon(Icons.favorite_rounded),
                   color: ColorResources.conceptTextColor),
@@ -207,22 +212,22 @@ class _CollectionScreenState extends State<CollectionScreen> {
                       style: boldDefault.copyWith(
                           color: ColorResources.whiteColor),
                     ),
-                    const SizedBox(width: Dimensions.space15),
-                    Container(
-                      height: size.height * 0.027,
-                      width: size.width * 0.055,
-                      decoration: BoxDecoration(
-                          borderRadius:
-                              BorderRadius.circular(Dimensions.smallRadius),
-                          color: ColorResources.cardTabColor),
-                      child: Center(
-                        child: Text(
-                          LocalStrings.quantityFirst,
-                          style: boldDefault.copyWith(
-                              color: ColorResources.whiteColor),
-                        ),
-                      ),
-                    ),
+                    // const SizedBox(width: Dimensions.space15),
+                    // Container(
+                    //   height: size.height * 0.027,
+                    //   width: size.width * 0.055,
+                    //   decoration: BoxDecoration(
+                    //       borderRadius:
+                    //           BorderRadius.circular(Dimensions.smallRadius),
+                    //       color: ColorResources.cardTabColor),
+                    //   child: Center(
+                    //     child: Text(
+                    //       LocalStrings.quantityFirst,
+                    //       style: boldDefault.copyWith(
+                    //           color: ColorResources.whiteColor),
+                    //     ),
+                    //   ),
+                    // ),
                   ],
                 ),
               ),
@@ -397,20 +402,25 @@ class _CollectionScreenState extends State<CollectionScreen> {
                                               )
                                             : filterProductData.isEmpty
                                                 ? Padding(
-                                                  padding:  EdgeInsets.only(top:MediaQuery.of(context).padding.top * 5),
-                                                  child: Text(
-                                                    LocalStrings
-                                                        .collectionEmpty,
-                                                    textAlign:
-                                                        TextAlign.center,
-                                                    softWrap: true,
-                                                    style: semiBoldLarge
-                                                        .copyWith(
-                                                      color: ColorResources
-                                                          .conceptTextColor,
+                                                    padding: EdgeInsets.only(
+                                                        top: MediaQuery.of(
+                                                                    context)
+                                                                .padding
+                                                                .top *
+                                                            5),
+                                                    child: Text(
+                                                      LocalStrings
+                                                          .collectionEmpty,
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      softWrap: true,
+                                                      style: semiBoldLarge
+                                                          .copyWith(
+                                                        color: ColorResources
+                                                            .conceptTextColor,
+                                                      ),
                                                     ),
-                                                  ),
-                                                )
+                                                  )
                                                 : Expanded(
                                                     child: ListView.builder(
                                                       controller:
@@ -454,22 +464,18 @@ class _CollectionScreenState extends State<CollectionScreen> {
                                                                           : GestureDetector(
                                                                               onTap: () {
                                                                                 // First index used stored data sqflite
-                                                                                // controller
-                                                                                //     .addProduct(
-                                                                                //   controller
-                                                                                //       .collectionDataImageLst[firstIndex],
-                                                                                //   controller
-                                                                                //       .collectionDataNameLst[firstIndex],
-                                                                                //   controller
-                                                                                //       .collectionCutOffPrice[firstIndex],
-                                                                                //   controller
-                                                                                //       .collectionTotalPrice[firstIndex],
-                                                                                // );
-                                                                                // Get.toNamed(
-                                                                                //     RouteHelper.productScreen,
-                                                                                //     arguments: [
-                                                                                //       controller.collectionDataImageLst[firstIndex]
-                                                                                //     ]);
+                                                                                controller.addProduct(
+                                                                                  filterProductData[firstIndex].media![0].productAsset ?? '',
+                                                                                  filterProductData[firstIndex].title ?? '',
+                                                                                  "${filterProductData[firstIndex].price14KT}",
+                                                                                  "${filterProductData[firstIndex].productId}",
+                                                                                );
+                                                                                //Todo : Id product detail using remove wishlist this time then using update screen
+                                                                                Get.toNamed(RouteHelper.productScreen, arguments: filterProductData[firstIndex])!.then(
+                                                                                  (value) {
+                                                                                    controller.update();
+                                                                                  },
+                                                                                );
 
                                                                                 /// Product screen seen product analysis log
                                                                                 AppAnalytics().actionTriggerWithProductsLogs(
@@ -505,24 +511,18 @@ class _CollectionScreenState extends State<CollectionScreen> {
                                                                           onTap:
                                                                               () {
                                                                             // Second index used stored data sqflite
-                                                                            // controller
-                                                                            //     .addProduct(
-                                                                            //   controller
-                                                                            //           .collectionDataImageLst[
-                                                                            //       secondIndex],
-                                                                            //   controller
-                                                                            //           .collectionDataNameLst[
-                                                                            //       secondIndex],
-                                                                            //   controller
-                                                                            //           .collectionCutOffPrice[
-                                                                            //       secondIndex],
-                                                                            //   controller
-                                                                            //           .collectionTotalPrice[
-                                                                            //       secondIndex],
-                                                                            // );
-                                                                            // Get.toNamed(
-                                                                            //     RouteHelper
-                                                                            //         .productScreen);
+                                                                            controller.addProduct(
+                                                                              filterProductData[secondIndex].media![0].productAsset ?? '',
+                                                                              filterProductData[secondIndex].title ?? '',
+                                                                              "${filterProductData[firstIndex].price14KT}",
+                                                                              "${filterProductData[firstIndex].productId}",
+                                                                            );
+                                                                            //Todo : Id product detail using remove wishlist this time then using update screen
+                                                                            Get.toNamed(RouteHelper.productScreen, arguments: filterProductData[secondIndex])!.then(
+                                                                              (value) {
+                                                                                controller.update();
+                                                                              },
+                                                                            );
                                                                           },
                                                                           child:
                                                                               collectionItems(secondIndex),
@@ -912,28 +912,33 @@ class _CollectionScreenState extends State<CollectionScreen> {
                           dotSecondaryColor: ColorResources.notValidateColor,
                         ),
                         likeBuilder: (bool isLiked) {
-                          // filterProductData[index].isWishlisted = isLiked;
+                          // filterProductData[index].isAlready = isLiked;
                           return Icon(
-                            isLiked
+                            filterProductData[index].isAlready == true
                                 ? Icons.favorite_rounded
                                 : Icons.favorite_border,
-                            color: isLiked
+                            color: filterProductData[index].isAlready == true
                                 ? ColorResources.notValidateColor
                                 : ColorResources.inactiveTabColor,
                             // size: buttonSize,
                           );
                         },
                         onTap: (isLiked) async {
-                          print(
-                              "Wishlist like: $isLiked");     print(
-                              "Wishlist product id: ${filterProductData[index].productId}");
-                          print(
-                              "Wishlist product : ${PrefManager.getString('user_id')}");
-                          //Todo : Wishlist particular products api method
-                          controller.favoritesProducts(
-                              userId: PrefManager.getString('user_id'),
-                              productId: filterProductData[index].productId);
-                          // If user is logged in, proceed with like/unlike logic
+                          if (filterProductData[index].isAlready == true) {
+                            //Todo : Remove Wishlist particular products api method
+                            controller.removeWishlistApiMethod(
+                                productId: filterProductData[index].productId);
+                            filterProductData[index].isAlready = false;
+                            controller.update();
+                          } else {
+                            filterProductData[index].isAlready = true;
+                            controller.update();
+                            //Todo : Wishlist particular products api method
+                            controller.favoritesProducts(
+                                userId: PrefManager.getString('userId') ?? '',
+                                productId: filterProductData[index].productId,
+                                index: index);
+                          } // If user is logged in, proceed with like/unlike logic
                           return !isLiked; // toggle like/unlike
                         },
                       ),
@@ -957,14 +962,14 @@ class _CollectionScreenState extends State<CollectionScreen> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            "${filterProductData[index].rating}",
+                            "${filterProductData[index].rating ?? 0.toInt()}",
                             style: semiBoldSmall.copyWith(
                                 color: ColorResources.conceptTextColor),
                           ),
                           const SizedBox(width: Dimensions.space3),
-                          const Icon(
+                           Icon(
                             Icons.star,
-                            color: ColorResources.updateCardColor,
+                            color:filterProductData[index].rating==null?ColorResources.borderColor : ColorResources.updateCardColor,
                             size: 13,
                           )
                         ],
@@ -982,7 +987,7 @@ class _CollectionScreenState extends State<CollectionScreen> {
                   Row(
                     children: [
                       Text(
-                        "₹${filterProductData[index].total14KT}",
+                        "₹${filterProductData[index].total14KT?.round()}",
                         style: semiBoldDefault.copyWith(
                             color: ColorResources.conceptTextColor),
                       ),
@@ -996,8 +1001,7 @@ class _CollectionScreenState extends State<CollectionScreen> {
                     ],
                   ),
                   Text(
-                    filterProductData[index].subCategory ?? '',
-                    // filterProductData[index].title??'',
+                    filterProductData[index].title ?? '',
                     maxLines: 2,
                     style: semiBoldSmall.copyWith(
                         color: ColorResources.offerColor),
@@ -1157,9 +1161,7 @@ class _CollectionScreenState extends State<CollectionScreen> {
                       //     )),
                     ],
                   ),
-                  const SizedBox(
-                    height: Dimensions.space7,
-                  ),
+                  const SizedBox(height: Dimensions.space7),
                   Shimmer.fromColors(
                       baseColor: ColorResources.baseColor,
                       highlightColor: ColorResources.highlightColor,
