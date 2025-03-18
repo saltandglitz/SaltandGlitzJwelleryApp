@@ -593,6 +593,8 @@ class CreateAccountController extends GetxController {
         params: params,
         isLoading: false,
       );
+      print("API URL: ${LocalStrings.resetPasswordApi}");
+
       print("API Response: ${response.data}");
       if (response.statusCode == 200) {
         Get.toNamed(RouteHelper.setPasswordScreen);

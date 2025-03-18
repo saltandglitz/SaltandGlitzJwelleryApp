@@ -22,6 +22,8 @@ class CommonTextField extends StatelessWidget {
   ValueChanged? onChange;
   bool? obSecureText;
   Color? cursorColor;
+  int? maxLines;
+  int? maxLength;
 
   CommonTextField({
     super.key,
@@ -43,6 +45,8 @@ class CommonTextField extends StatelessWidget {
     this.onChange,
     this.obSecureText,
     this.cursorColor,
+    this.maxLines,
+    this.maxLength,
   });
 
   @override
@@ -53,6 +57,8 @@ class CommonTextField extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: paddingTextField ?? 0),
       child: TextField(
         controller: controller,
+        maxLines: maxLines ?? 1,
+        maxLength: maxLength,
         cursorColor: cursorColor ?? ColorResources.conceptTextColor,
         textInputAction: textInputAction ?? TextInputAction.done,
         keyboardType: textInputType ?? TextInputType.name,

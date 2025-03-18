@@ -52,6 +52,7 @@ class LocalStrings {
   static const String hardwareSalt = "HardWare By Salt and Glitz";
   static const String shopNow = "Shop Now >";
   static const String shopBy = "Shop by Category";
+  static const String wrappedWithLove = "Wrapped with Love !";
   static const String earings = "Earings";
   static const String brilliantDesign =
       "Brilliant design and unparalleled craftsmanship.";
@@ -760,7 +761,7 @@ class LocalStrings {
       "No network detected!\nMake sure you're Enable internet";
   static const String retry = "Retry";
 
-  ///<<<---------------------------- Network connectivity screen log string ---------------------------->>>
+  ///<<<---------------------------- Place Order screen log string ---------------------------->>>
   static const String deliveryDetails = "Delivery Details";
   static const String shippingAddress = "Shipping Address";
   static const String billingAddress = "Billing Address";
@@ -781,6 +782,7 @@ class LocalStrings {
       "We're available by phone +91 -44-66075200 (Toll Free) \n every day, 9 AM to 1 AM IST (Mon - Sun)";
   static const String contactUs2 = "Contact Us: ";
   static const String contactNumber = "+91 -44-66075200 (Helpline) |";
+  static const String contactUsAt = "contactus@saltandglitz.com";
   static const String inStorePickUp = "In-Store Pick Up";
   static const String buyNowPickUp =
       "Buy now, Pick up from our store at your convenience";
@@ -788,6 +790,54 @@ class LocalStrings {
   static const String sameAsShippingAddress = "Same as Shipping Address";
   static const String useADifferentBillingAddress =
       "Use a Different Billing Address";
+  static const String streetHouseNumber = "Street & House Number";
+  static const String additionalInformation = "Additional Information";
+  static const String city = "City";
+  static const String state = "State";
+  static const String country = "Country";
+  static const String selectAddressType = "Select Address Type";
+  static const String work = "Work";
+  static const String save = "Save";
+
+  ///<<<---------------------------- Gift screen log string ---------------------------->>>
+  static const String chooseAGiftWrap = "Choose a Gift Wrap";
+  static const String warmHugs = "Warm hugs";
+  static const String purpleAun = "Purple aun";
+  static const String fairyTales = "Fairy Tales";
+  static const String addAGiftMessage = "Add a gift message";
+  static const String optional = "Optional";
+  static const String whoIsThisGiftFor = "Who is the gift for?";
+  static const String youCanWriteAPersonalNote =
+      "You can write a personal note with this gift. We \n promise we'll send it to your loved one.";
+  static const String recipientsMobile = "Recipient's Mobile*";
+  static const String self = "Self";
+  static const String friend = "Friend";
+  static const String family = "Family";
+  static const String wife = "Wife";
+  static const String mother = "Mother";
+  static const String father = "Father";
+  static const String brother = "Brother";
+  static const String sister = "Sister";
+  static const String processToPayment = "Process To Payment";
+
+  ///<<<---------------------------- Payment screen log string ---------------------------->>>
+  static const String creditCard = "Credit Card";
+  static const String debitCard = "Debit Card";
+  static const String upi = "UPI";
+  static const String netBanking = "Net Banking";
+  static const String cashOnDelivery = "COD : Cash On Delivery";
+  static const String saveAndPayViaCreditCard = "Save & Pay via Credit Card";
+  static const String saveAndPayViaDebitCard = "Save & Pay via Debit Card";
+  static const String paytmGooglePay = "Paytm, Phonepe, Google Pay, & more";
+  static const String selectFromListOfBanks = "Select from a List of Banks";
+  static const String cod = "COD";
+  static const String add = "Add";
+  static const String payNow = "PAY NOW";
+  static const String preferredPayment = "Preferred Payment Options";
+  static const String giftCard = "Gift Card";
+  static const String haveAGiftCard = "Have a gift Card?";
+  static const String availableAdditionalDiscount =
+      "Available Additional Discount with gift cards";
 }
 
 class AppFonts {
