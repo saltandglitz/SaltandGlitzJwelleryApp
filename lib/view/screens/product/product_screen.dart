@@ -165,8 +165,9 @@ class _ProductScreenState extends State<ProductScreen> {
                             onTap: () {
                               List<String>? getCartListProductId =
                                   PrefManager.getStringList('cartProductId');
-                              if (getCartListProductId != null && getCartListProductId.contains(
-                                  controller.productData!.productId)) {
+                              if (getCartListProductId != null &&
+                                  getCartListProductId.contains(
+                                      controller.productData!.productId)) {
                                 Get.toNamed(RouteHelper.addCartScreen);
                               } else {
                                 controller.addToCartApiMethod(
@@ -226,8 +227,9 @@ class _ProductScreenState extends State<ProductScreen> {
                                   PrefManager.getStringList('cartProductId');
                               print(
                                   "Get stored cart id : $getCartListProductId");
-                              if (getCartListProductId != null &&getCartListProductId.contains(
-                                  controller.productData!.productId)) {
+                              if (getCartListProductId != null &&
+                                  getCartListProductId.contains(
+                                      controller.productData!.productId)) {
                                 Get.toNamed(RouteHelper.addCartScreen);
                               } else {
                                 controller.addToCartApiMethod(
@@ -527,7 +529,7 @@ class _ProductScreenState extends State<ProductScreen> {
                                               ),
                                               Container(
                                                 height: size.height * 0.05,
-                                                width: size.width * 0.090,
+                                                width: size.width * 0.099,
                                                 decoration: BoxDecoration(
                                                   borderRadius:
                                                       BorderRadius.circular(
@@ -540,10 +542,9 @@ class _ProductScreenState extends State<ProductScreen> {
                                                 child: LikeButton(
                                                   circleColor:
                                                       const CircleColor(
-                                                          start:
-                                                              Color(0xff00ddff),
-                                                          end: Color(
-                                                              0xff0099cc)),
+                                                    start: Color(0xff00ddff),
+                                                    end: Color(0xff0099cc),
+                                                  ),
                                                   bubblesColor:
                                                       const BubblesColor(
                                                     dotPrimaryColor:
@@ -557,7 +558,7 @@ class _ProductScreenState extends State<ProductScreen> {
                                                     return Padding(
                                                       padding:
                                                           const EdgeInsets.only(
-                                                              left: 2, top: 2),
+                                                              left: 4, top: 2),
                                                       child: Icon(
                                                           controller.productData
                                                                       ?.isAlready ==
@@ -574,7 +575,7 @@ class _ProductScreenState extends State<ProductScreen> {
                                                                   .notValidateColor
                                                               : ColorResources
                                                                   .inactiveTabColor,
-                                                          size: 27),
+                                                          size: 25),
                                                     );
                                                   },
                                                   onTap: (isLiked) async {
@@ -914,9 +915,11 @@ class _ProductScreenState extends State<ProductScreen> {
                                                       borderRadius:
                                                           const BorderRadius
                                                               .all(
-                                                              Radius.circular(
-                                                        Dimensions.smallRadius,
-                                                      )),
+                                                        Radius.circular(
+                                                          Dimensions
+                                                              .smallRadius,
+                                                        ),
+                                                      ),
                                                       color: ColorResources
                                                           .borderColor
                                                           .withOpacity(0.2),
@@ -1065,14 +1068,14 @@ class _ProductScreenState extends State<ProductScreen> {
                                                       horizontal: 15,
                                                       vertical: 15),
                                                   decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              Dimensions
-                                                                  .categoriesRadius),
-                                                      border: Border.all(
-                                                          color: ColorResources
-                                                              .buttonColorDark,
-                                                          width: 2)),
+                                                    borderRadius: BorderRadius
+                                                        .circular(Dimensions
+                                                            .categoriesRadius),
+                                                    border: Border.all(
+                                                        color: ColorResources
+                                                            .buttonColorDark,
+                                                        width: 2),
+                                                  ),
                                                   child: Column(
                                                     crossAxisAlignment:
                                                         CrossAxisAlignment
@@ -1097,19 +1100,19 @@ class _ProductScreenState extends State<ProductScreen> {
                                                       ),
                                                       const SizedBox(
                                                           height: Dimensions
-                                                              .space15),
+                                                              .space10),
                                                       Row(
                                                         children: [
                                                           Text(
                                                             LocalStrings.gross,
-                                                            style: mediumDefault
+                                                            style: mediumSmall
                                                                 .copyWith(),
                                                           ),
                                                           Expanded(
                                                             child: Text(
                                                               "${controller.productData?.grossWt} gram",
                                                               softWrap: true,
-                                                              style: mediumDefault
+                                                              style: mediumSmall
                                                                   .copyWith(),
                                                             ),
                                                           ),
@@ -1122,14 +1125,14 @@ class _ProductScreenState extends State<ProductScreen> {
                                                         children: [
                                                           Text(
                                                             LocalStrings.net,
-                                                            style: mediumDefault
+                                                            style: mediumSmall
                                                                 .copyWith(),
                                                           ),
                                                           Expanded(
                                                             child: Text(
                                                               "${controller.productData?.netWeight14KT} gram",
                                                               softWrap: true,
-                                                              style: mediumDefault
+                                                              style: mediumSmall
                                                                   .copyWith(),
                                                             ),
                                                           ),
@@ -1149,14 +1152,14 @@ class _ProductScreenState extends State<ProductScreen> {
                                                       horizontal: 15,
                                                       vertical: 15),
                                                   decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              Dimensions
-                                                                  .categoriesRadius),
-                                                      border: Border.all(
-                                                          color: ColorResources
-                                                              .buttonColorDark,
-                                                          width: 2)),
+                                                    borderRadius: BorderRadius
+                                                        .circular(Dimensions
+                                                            .categoriesRadius),
+                                                    border: Border.all(
+                                                        color: ColorResources
+                                                            .buttonColorDark,
+                                                        width: 2),
+                                                  ),
                                                   child: Column(
                                                     crossAxisAlignment:
                                                         CrossAxisAlignment
@@ -1195,7 +1198,7 @@ class _ProductScreenState extends State<ProductScreen> {
                                                               .space15),
                                                       Text(
                                                         "${controller.ktCurrentIndex.value == 0 ? '14' : '18'}${LocalStrings.ktGold}",
-                                                        style: mediumDefault
+                                                        style: mediumSmall
                                                             .copyWith(),
                                                       ),
                                                     ],

@@ -648,7 +648,10 @@ class _MyAccountScreenState extends State<MyAccountScreen>
                                                   recognizer:
                                                       TapGestureRecognizer()
                                                         ..onTap = () {
-                                                    Get.toNamed(RouteHelper.loginScreen);
+                                                          Get.toNamed(
+                                                              RouteHelper
+                                                                  .loginScreen);
+
                                                           /// Analysis view offer purpose login
                                                           AppAnalytics()
                                                               .actionTriggerLogs(
@@ -853,7 +856,9 @@ class _MyAccountScreenState extends State<MyAccountScreen>
                                                 print("Facebook");
                                               } else {
                                                 /// Ask to user logout confirmation dialog Box
-                                                controller.logoutConfirmationDialog(context);
+                                                controller
+                                                    .logoutConfirmationDialog(
+                                                        context);
 
                                                 /// Analysis logout
                                                 AppAnalytics().actionTriggerLogs(

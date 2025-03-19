@@ -263,30 +263,35 @@ class _DashboardScreenState extends State<DashboardScreen>
                                               BorderRadius.circular(20),
                                           child: GestureDetector(
                                             onTap: () {
-                                              categoriesController.filterCategoriesApiMethod(
-                                                  title: categoryList[index].categoryName);
-                                              Get.toNamed(RouteHelper.collectionScreen);
+                                              categoriesController
+                                                  .filterCategoriesApiMethod(
+                                                      title: categoryList[index]
+                                                          .categoryName);
+                                              Get.toNamed(
+                                                  RouteHelper.collectionScreen);
                                             },
                                             child: CachedNetworkImage(
                                               height: size.height * 0.09,
                                               width: size.height * 0.11,
-                                              imageUrl:
-                                                  categoryList[index].categoryImage!,
+                                              imageUrl: categoryList[index]
+                                                  .categoryImage!,
                                               fit: BoxFit.cover,
-                                              progressIndicatorBuilder: (context,
-                                                      url, downloadProgress) =>
-                                                  Shimmer.fromColors(
+                                              progressIndicatorBuilder:
+                                                  (context, url,
+                                                          downloadProgress) =>
+                                                      Shimmer.fromColors(
                                                 baseColor:
                                                     ColorResources.baseColor,
-                                                highlightColor:
-                                                    ColorResources.highlightColor,
+                                                highlightColor: ColorResources
+                                                    .highlightColor,
                                                 child: Container(
                                                   height: size.height * 0.09,
                                                   width: size.height * 0.11,
                                                   decoration: BoxDecoration(
                                                     color: Colors.grey,
                                                     borderRadius:
-                                                        BorderRadius.circular(20),
+                                                        BorderRadius.circular(
+                                                            20),
                                                   ),
                                                 ),
                                               ),
@@ -328,7 +333,9 @@ class _DashboardScreenState extends State<DashboardScreen>
                                         : CarouselSlider.builder(
                                             key: const PageStorageKey(
                                                 'carousel_slider_key'),
-                                            itemCount: bannerList.length>3? 3:bannerList.length,
+                                            itemCount: bannerList.length > 3
+                                                ? 3
+                                                : bannerList.length,
                                             options: CarouselOptions(
                                               onPageChanged:
                                                   controller.onPageChanged,
@@ -378,7 +385,9 @@ class _DashboardScreenState extends State<DashboardScreen>
                                               mainAxisAlignment:
                                                   MainAxisAlignment.center,
                                               children: List.generate(
-                                                bannerList.length>3? 3:bannerList.length,
+                                                bannerList.length > 3
+                                                    ? 3
+                                                    : bannerList.length,
                                                 (i) => Padding(
                                                   padding: const EdgeInsets
                                                       .symmetric(
@@ -650,7 +659,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                                                 ),*/
                                                 const SizedBox(
                                                     height: Dimensions.space5),
-                                               /* Text(
+                                                /* Text(
                                                   solitaireList[index].category,
                                                   textAlign: TextAlign.center,
                                                   style:
@@ -688,9 +697,11 @@ class _DashboardScreenState extends State<DashboardScreen>
                                         horizontal: 120.0),
                                     child: CommonButton(
                                       onTap: () {
-                                          categoriesController.filterCategoriesApiMethod(
-                                              materialBy: 'Solitaire');
-                                          Get.toNamed(RouteHelper.collectionScreen);
+                                        categoriesController
+                                            .filterCategoriesApiMethod(
+                                                materialBy: 'Solitaire');
+                                        Get.toNamed(
+                                            RouteHelper.collectionScreen);
                                       },
                                       gradientFirstColor:
                                           ColorResources.whiteColor,
@@ -817,13 +828,15 @@ class _DashboardScreenState extends State<DashboardScreen>
                                                   return const SizedBox(); // Prevents crashes
                                                 }
                                                 return GestureDetector(
-                                                 onTap: () {
-                                                   categoriesController.filterCategoriesApiMethod(
-                                                       wrappedBy: filterCategoryList[
-                                                       imageIndex]
-                                                           .filterCategoryName);
-                                                   Get.toNamed(RouteHelper.collectionScreen);
-                                                 },
+                                                  onTap: () {
+                                                    categoriesController
+                                                        .filterCategoriesApiMethod(
+                                                            wrappedBy: filterCategoryList[
+                                                                    imageIndex]
+                                                                .filterCategoryName);
+                                                    Get.toNamed(RouteHelper
+                                                        .collectionScreen);
+                                                  },
                                                   child: Column(
                                                     mainAxisSize:
                                                         MainAxisSize.min,
@@ -838,34 +851,40 @@ class _DashboardScreenState extends State<DashboardScreen>
                                                               BoxDecoration(
                                                             borderRadius:
                                                                 BorderRadius
-                                                                    .circular(15),
+                                                                    .circular(
+                                                                        15),
                                                             color: Colors.grey
-                                                                .withOpacity(0.1),
+                                                                .withOpacity(
+                                                                    0.1),
                                                           ),
-                                                          child:ClipRRect(
+                                                          child: ClipRRect(
                                                             borderRadius:
-                                                            BorderRadius
-                                                                .circular(15),
-                                                            child: CachedCommonImage(
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        15),
+                                                            child:
+                                                                CachedCommonImage(
                                                               networkImageUrl:
-                                                              filterCategoryList[
-                                                              imageIndex]
-                                                                  .filterCategoryImage!,
-                                                              width: double.infinity,
+                                                                  filterCategoryList[
+                                                                          imageIndex]
+                                                                      .filterCategoryImage!,
+                                                              width: double
+                                                                  .infinity,
                                                             ),
                                                           ),
                                                         ),
                                                       ),
                                                       const SizedBox(
-                                                          height:
-                                                              Dimensions.space5),
+                                                          height: Dimensions
+                                                              .space5),
                                                       Transform.translate(
                                                         offset:
                                                             Offset(0, offsetY),
                                                         child: Text(
                                                           filterCategoryList[
-                                                                  imageIndex]
-                                                              .filterCategoryName??'',
+                                                                      imageIndex]
+                                                                  .filterCategoryName ??
+                                                              '',
                                                           style: regularDefault
                                                               .copyWith(
                                                             fontWeight:
@@ -890,14 +909,19 @@ class _DashboardScreenState extends State<DashboardScreen>
                             ),
                             const SizedBox(height: Dimensions.space40),
                             /* New Arrival */
-                            newArrivalList.isNotEmpty?  Text(
-                              LocalStrings.newArrival,
-                              textAlign: TextAlign.center,
-                              style: regularOverLarge.copyWith(
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ):SizedBox(),
-                             SizedBox(height: newArrivalList.isNotEmpty?Dimensions.space10:0),
+                            newArrivalList.isNotEmpty
+                                ? Text(
+                                    LocalStrings.newArrival,
+                                    textAlign: TextAlign.center,
+                                    style: regularOverLarge.copyWith(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  )
+                                : SizedBox(),
+                            SizedBox(
+                                height: newArrivalList.isNotEmpty
+                                    ? Dimensions.space10
+                                    : 0),
                             GetBuilder(
                               init: MainController(),
                               builder: (ctrl) {
@@ -917,8 +941,9 @@ class _DashboardScreenState extends State<DashboardScreen>
                                       ),
                                       scrollDirection: Axis.horizontal,
                                       physics: const BouncingScrollPhysics(),
-                                      itemCount:
-                                      newArrivalList.isEmpty ? 6 : newArrivalList.length,
+                                      itemCount: newArrivalList.isEmpty
+                                          ? 6
+                                          : newArrivalList.length,
                                       itemBuilder: (context, index) {
                                         if (newArrivalList.isEmpty) {
                                           return Padding(
@@ -989,22 +1014,29 @@ class _DashboardScreenState extends State<DashboardScreen>
                                             child: GestureDetector(
                                               onTap: () {
                                                 //Todo: Products details seen arrivals
-                                                Get.toNamed(RouteHelper.productScreen, arguments: newArrivalList[index]);
+                                                Get.toNamed(
+                                                    RouteHelper.productScreen,
+                                                    arguments:
+                                                        newArrivalList[index]);
                                               },
                                               child: Container(
                                                 color: Colors.transparent,
                                                 child: Column(
                                                   crossAxisAlignment:
                                                       CrossAxisAlignment.start,
-                                                  mainAxisSize: MainAxisSize.min,
+                                                  mainAxisSize:
+                                                      MainAxisSize.min,
                                                   children: [
                                                     ClipRRect(
                                                       borderRadius:
-                                                          BorderRadius.circular(10),
+                                                          BorderRadius.circular(
+                                                              10),
                                                       child: CachedCommonImage(
                                                         networkImageUrl:
-                                                            newArrivalList[index]
-                                                                .media![0].productAsset,
+                                                            newArrivalList[
+                                                                    index]
+                                                                .media![0]
+                                                                .productAsset,
                                                         height: 180,
                                                         width: double.infinity,
                                                       ),
@@ -1040,23 +1072,29 @@ class _DashboardScreenState extends State<DashboardScreen>
                                                       // ),
                                                     ),
                                                     const SizedBox(
-                                                        height: Dimensions.space5),
+                                                        height:
+                                                            Dimensions.space5),
                                                     Text(
                                                       newArrivalList[index]
-                                                          .category??'',
-                                                      textAlign: TextAlign.center,
+                                                              .category ??
+                                                          '',
+                                                      textAlign:
+                                                          TextAlign.center,
                                                       style:
-                                                      mediumLarge.copyWith(
+                                                          mediumLarge.copyWith(
                                                               fontWeight:
-                                                                  FontWeight.bold),
+                                                                  FontWeight
+                                                                      .bold),
                                                     ),
                                                     Text(
                                                       "₹${newArrivalList[index].price14KT?.round()}",
-                                                      textAlign: TextAlign.center,
+                                                      textAlign:
+                                                          TextAlign.center,
                                                       style:
-                                                      mediumLarge.copyWith(
+                                                          mediumLarge.copyWith(
                                                               fontWeight:
-                                                                  FontWeight.bold),
+                                                                  FontWeight
+                                                                      .bold),
                                                     ),
                                                   ],
                                                 ),
@@ -1077,8 +1115,9 @@ class _DashboardScreenState extends State<DashboardScreen>
                                   const EdgeInsets.symmetric(horizontal: 120.0),
                               child: CommonButton(
                                 onTap: () {
-                                  categoriesController.filterCategoriesApiMethod(
-                                      priceOrder: 'newestFirst');
+                                  categoriesController
+                                      .filterCategoriesApiMethod(
+                                          priceOrder: 'newestFirst');
                                   Get.toNamed(RouteHelper.collectionScreen);
                                 },
                                 gradientFirstColor: ColorResources.whiteColor,
@@ -1130,7 +1169,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                                             height: size.height * 0.33,
                                             width: double.infinity,
                                             networkImageUrl:
-                                            bannerList[3].bannerImage,
+                                                bannerList[3].bannerImage,
                                           ),
                                   ),
                                 );
@@ -1173,7 +1212,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                                             height: size.height * 0.25,
                                             width: double.infinity,
                                             networkImageUrl:
-                                            bannerList[4].bannerImage,
+                                                bannerList[4].bannerImage,
                                           ),
                                   ),
                                 );
@@ -1216,7 +1255,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                                             height: size.height * 0.25,
                                             width: double.infinity,
                                             networkImageUrl:
-                                            bannerList[5].bannerImage,
+                                                bannerList[5].bannerImage,
                                           ),
                                   ),
                                 );
@@ -1295,10 +1334,14 @@ class _DashboardScreenState extends State<DashboardScreen>
                                                 horizontal: 5.0),
                                             child: GestureDetector(
                                               onTap: () {
-                                                categoriesController.filterCategoriesApiMethod(
-                                                    giftFor: giftElementList[index]
-                                                        .giftName);
-                                                Get.toNamed(RouteHelper.collectionScreen);
+                                                categoriesController
+                                                    .filterCategoriesApiMethod(
+                                                        giftFor:
+                                                            giftElementList[
+                                                                    index]
+                                                                .giftName);
+                                                Get.toNamed(RouteHelper
+                                                    .collectionScreen);
                                               },
                                               child: Column(
                                                 mainAxisSize: MainAxisSize.min,
@@ -1308,36 +1351,41 @@ class _DashboardScreenState extends State<DashboardScreen>
                                                         BorderRadius.circular(
                                                             10), // ✅ Rounded corners
                                                     child: Card(
-                                                      shape: RoundedRectangleBorder(
+                                                      shape:
+                                                          RoundedRectangleBorder(
                                                         borderRadius:
-                                                        BorderRadius.circular(
-                                                            10),
+                                                            BorderRadius
+                                                                .circular(10),
                                                       ),
                                                       child: ClipRRect(
                                                         borderRadius:
-                                                        BorderRadius.circular(
-                                                            10),
-                                                        child: CachedCommonImage(
+                                                            BorderRadius
+                                                                .circular(10),
+                                                        child:
+                                                            CachedCommonImage(
                                                           networkImageUrl:
-                                                          giftElementList[
-                                                          index]
-                                                              .giftImage,
-                                                          width: double
-                                                              .infinity,
+                                                              giftElementList[
+                                                                      index]
+                                                                  .giftImage,
+                                                          width:
+                                                              double.infinity,
                                                         ),
                                                       ),
                                                     ),
                                                   ),
                                                   const SizedBox(
-                                                      height: Dimensions.space5),
+                                                      height:
+                                                          Dimensions.space5),
                                                   Text(
                                                     giftElementList[index]
-                                                        .giftName??'',
+                                                            .giftName ??
+                                                        '',
                                                     textAlign: TextAlign.center,
                                                     style: mediumMediumLarge
                                                         .copyWith(
                                                             fontWeight:
-                                                                FontWeight.bold),
+                                                                FontWeight
+                                                                    .bold),
                                                   ),
                                                 ],
                                               ),
@@ -1766,26 +1814,28 @@ class _DashboardScreenState extends State<DashboardScreen>
                                                           ColorResources
                                                               .highlightColor,
                                                       child: ClipRRect(
-                                                        borderRadius: const BorderRadius
-                                                            .only(
-                                                            topLeft:
-                                                                Radius.circular(
-                                                                    Dimensions
-                                                                        .defaultRadius),
-                                                            topRight:
-                                                                Radius.circular(
-                                                                    Dimensions
-                                                                        .defaultRadius)),
+                                                        borderRadius:
+                                                            const BorderRadius
+                                                                .only(
+                                                          topLeft: Radius
+                                                              .circular(Dimensions
+                                                                  .defaultRadius),
+                                                          topRight: Radius
+                                                              .circular(Dimensions
+                                                                  .defaultRadius),
+                                                        ),
                                                         child: Container(
-                                                          height: 90,
-                                                          decoration: BoxDecoration(
-                                                              color:
-                                                                  ColorResources
-                                                                      .whiteColor,
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          3)),
+                                                          height: 80,
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            color:
+                                                                ColorResources
+                                                                    .whiteColor,
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        3),
+                                                          ),
                                                         ),
                                                       ),
                                                     ),
@@ -1798,14 +1848,14 @@ class _DashboardScreenState extends State<DashboardScreen>
                                                       child: Container(
                                                         height:
                                                             size.height * 0.015,
-                                                        decoration: BoxDecoration(
-                                                            color:
-                                                                ColorResources
-                                                                    .whiteColor,
-                                                            borderRadius:
-                                                                BorderRadius
-                                                                    .circular(
-                                                                        3)),
+                                                        decoration:
+                                                            BoxDecoration(
+                                                          color: ColorResources
+                                                              .whiteColor,
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(3),
+                                                        ),
                                                       ),
                                                     ),
                                                   ],
@@ -1822,7 +1872,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                                                   overflow:
                                                       TextOverflow.ellipsis,
                                                   softWrap: false,
-                                                  style: semiBoldLarge.copyWith(
+                                                  style: semiBoldSmall.copyWith(
                                                     color: ColorResources
                                                         .conceptTextColor,
                                                   ),
@@ -1881,16 +1931,18 @@ class _DashboardScreenState extends State<DashboardScreen>
                                                             MainAxisSize.min,
                                                         children: [
                                                           ClipRRect(
-                                                            borderRadius: const BorderRadius
-                                                                .only(
-                                                                topLeft: Radius
-                                                                    .circular(
-                                                                        Dimensions
-                                                                            .defaultRadius),
-                                                                topRight: Radius
-                                                                    .circular(
-                                                                        Dimensions
-                                                                            .defaultRadius)),
+                                                            borderRadius:
+                                                                const BorderRadius
+                                                                    .only(
+                                                              topLeft: Radius
+                                                                  .circular(
+                                                                      Dimensions
+                                                                          .defaultRadius),
+                                                              topRight: Radius
+                                                                  .circular(
+                                                                      Dimensions
+                                                                          .defaultRadius),
+                                                            ),
                                                             child:
                                                                 CachedCommonImage(
                                                               networkImageUrl:
@@ -1902,7 +1954,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                                                               //         .images,
                                                               width: double
                                                                   .infinity,
-                                                              height: 90,
+                                                              height: 80,
                                                             ),
                                                           ),
                                                           Text(
@@ -1917,7 +1969,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                                                                 TextOverflow
                                                                     .ellipsis,
                                                             softWrap: false,
-                                                            style: semiBoldLarge
+                                                            style: semiBoldSmall
                                                                 .copyWith(
                                                               color: ColorResources
                                                                   .conceptTextColor,

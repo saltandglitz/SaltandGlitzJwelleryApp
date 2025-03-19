@@ -103,25 +103,27 @@ class _AddToCartScreenState extends State<AddToCartScreen> {
                 GetBuilder(
                   init: AddToCartController(),
                   builder: (controller) {
-                  return  controller.isGetCartData.value == true
-                      ? Shimmer.fromColors(
-                      baseColor: ColorResources.baseColor,
-                      highlightColor: ColorResources.highlightColor,
-                      child: Container(
-                        height: 13,
-                        width: 55,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(
-                              Dimensions.minimumRadius),
-                          color: ColorResources.highlightColor,
-                        ),
-                      ))
-                      : Text(
-                    "₹${controller.getAddCartData?.totalPrice != null ? controller.getAddCartData?.totalPrice?.round() : 0}",
-                    style: boldMediumLarge.copyWith(
-                        color: ColorResources.conceptTextColor),
-                  );
-                },),
+                    return controller.isGetCartData.value == true
+                        ? Shimmer.fromColors(
+                            baseColor: ColorResources.baseColor,
+                            highlightColor: ColorResources.highlightColor,
+                            child: Container(
+                              height: 13,
+                              width: 55,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(
+                                    Dimensions.minimumRadius),
+                                color: ColorResources.highlightColor,
+                              ),
+                            ),
+                          )
+                        : Text(
+                            "₹${controller.getAddCartData?.totalPrice != null ? controller.getAddCartData?.totalPrice?.round() : 0}",
+                            style: boldMediumLarge.copyWith(
+                                color: ColorResources.conceptTextColor),
+                          );
+                  },
+                ),
                 Text(
                   LocalStrings.viewOrder,
                   style: boldSmall.copyWith(color: ColorResources.offerColor),
@@ -422,27 +424,20 @@ class _AddToCartScreenState extends State<AddToCartScreen> {
                                                                     color: ColorResources
                                                                         .conceptTextColor,
                                                                   ),
-                                                                  recognizer:
-                                                                      TapGestureRecognizer()
-                                                                        ..onTap =
-                                                                        controller.getAddCartData?.cart?.quantity?[index].quantity==1? null:     () {
-                                                                          //Todo : incrementProductApiMethod using product quantity increment
-                                                                          controller
-                                                                              .decrementProductApiMethod(
-                                                                            cartId:
-                                                                                "${controller.getAddCartData?.cart!.cartId}",
-                                                                            productId:
-                                                                                "${controller.getAddCartData?.cart?.quantity?[index].productId!.productId}",
-                                                                            productSize:
-                                                                                controller.getAddCartData?.cart?.quantity?[index].size,
-                                                                            carat:
-                                                                                controller.getAddCartData?.cart?.quantity?[index].caratBy,
-                                                                            colorJewellery:
-                                                                                controller.getAddCartData?.cart?.quantity?[index].colorBy,
-                                                                            index:
-                                                                                index,
-                                                                          );
-                                                                        }),
+                                                                  recognizer: TapGestureRecognizer()
+                                                                    ..onTap = controller.getAddCartData?.cart?.quantity?[index].quantity == 1
+                                                                        ? null
+                                                                        : () {
+                                                                            //Todo : incrementProductApiMethod using product quantity increment
+                                                                            controller.decrementProductApiMethod(
+                                                                              cartId: "${controller.getAddCartData?.cart!.cartId}",
+                                                                              productId: "${controller.getAddCartData?.cart?.quantity?[index].productId!.productId}",
+                                                                              productSize: controller.getAddCartData?.cart?.quantity?[index].size,
+                                                                              carat: controller.getAddCartData?.cart?.quantity?[index].caratBy,
+                                                                              colorJewellery: controller.getAddCartData?.cart?.quantity?[index].colorBy,
+                                                                              index: index,
+                                                                            );
+                                                                          }),
                                                             ]),
                                                       ),
 
@@ -919,7 +914,7 @@ class _AddToCartScreenState extends State<AddToCartScreen> {
                             ),
                           ],
                         ),
-                        const SizedBox(width: Dimensions.space20),
+                        const SizedBox(width: Dimensions.space15),
                         Text(
                           '${LocalStrings.size} ',
                           style: boldSmall.copyWith(
@@ -927,17 +922,18 @@ class _AddToCartScreenState extends State<AddToCartScreen> {
                           ),
                         ),
                         Shimmer.fromColors(
-                            baseColor: ColorResources.baseColor,
-                            highlightColor: ColorResources.highlightColor,
-                            child: Container(
-                              height: 17,
-                              width: 10,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(
-                                    Dimensions.minimumRadius),
-                                color: ColorResources.highlightColor,
-                              ),
-                            )),
+                          baseColor: ColorResources.baseColor,
+                          highlightColor: ColorResources.highlightColor,
+                          child: Container(
+                            height: 17,
+                            width: 9,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(
+                                  Dimensions.minimumRadius),
+                              color: ColorResources.highlightColor,
+                            ),
+                          ),
+                        ),
                       ],
                     ),
                     const SizedBox(height: Dimensions.space5),
