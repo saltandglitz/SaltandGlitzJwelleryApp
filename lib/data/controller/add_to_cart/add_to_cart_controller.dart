@@ -26,7 +26,7 @@ class AddToCartController extends GetxController {
   GetAddCartViewModel? getAddCartData;
   final bottomBarController =
       Get.put<BottomBarController>(BottomBarController());
-  static const List<Map<String, String>> texts = [
+  static  List<Map<String, String>> texts = [
     {"title": LocalStrings.pointsOrder, "subtitle": LocalStrings.nextOrder},
     {"title": LocalStrings.oderOnline, "subtitle": LocalStrings.sameDay},
   ];
@@ -123,7 +123,7 @@ class AddToCartController extends GetxController {
 
       // Handle the response based on the status code
       if (response.statusCode == 200) {
-        PrefManager.removeCartListItem('cartProductId', '$itemId');
+        PrefManager.removeCartWishlistListItem('cartProductId', '$itemId');
         List<String>? wishlistData = PrefManager.getStringList('cartProductId');
         print("Stored Data cart remove: ${wishlistData?.toList()}");
         showToast(

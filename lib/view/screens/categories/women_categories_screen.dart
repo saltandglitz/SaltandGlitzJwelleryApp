@@ -270,7 +270,7 @@ class _WomenCategoriesScreenState extends State<WomenCategoriesScreen> {
                         },
                       ),
                       const SizedBox(height: Dimensions.space5),
-                      Align(
+                      getCategoryBannerData.isNotEmpty?  Align(
                         alignment: Alignment.center,
                         child: Text(
                           LocalStrings.silverJewellery,
@@ -279,9 +279,9 @@ class _WomenCategoriesScreenState extends State<WomenCategoriesScreen> {
                                 ColorResources.buttonColorDark.withOpacity(0.7),
                           ),
                         ),
-                      ),
-                      const SizedBox(height: Dimensions.space10),
-                      GetBuilder(
+                      ):const SizedBox(),
+                       SizedBox(height:getCategoryBannerData.isNotEmpty? Dimensions.space10:0),
+                      getCategoryBannerData.isNotEmpty?    GetBuilder(
                         init: CategoriesController(),
                         builder: (controller) {
                           return Stack(
@@ -338,7 +338,7 @@ class _WomenCategoriesScreenState extends State<WomenCategoriesScreen> {
                                           child: CachedCommonImage(
                                             networkImageUrl:
                                                 getCategoryBannerData[index]
-                                                    .bannerImage,
+                                                    .mobileBannerImage,
                                             width: double.infinity,
                                           ),
                                         );
@@ -398,8 +398,8 @@ class _WomenCategoriesScreenState extends State<WomenCategoriesScreen> {
                             ],
                           );
                         },
-                      ),
-                      const SizedBox(height: Dimensions.space25),
+                      ):const SizedBox(),
+                       SizedBox(height:getCategoryBannerData.isNotEmpty? Dimensions.space25:Dimensions.space15),
                       Align(
                         alignment: Alignment.center,
                         child: Text(
@@ -620,9 +620,7 @@ class _WomenCategoriesScreenState extends State<WomenCategoriesScreen> {
                 Container(
                   height: size.height * 0.080,
                   width: size.width * 0.17,
-                  decoration: BoxDecoration(
-                    borderRadius:
-                        BorderRadius.circular(Dimensions.offersCardRadius),
+                  decoration: BoxDecoration(borderRadius:BorderRadius.circular(Dimensions.offersCardRadius),
                     boxShadow: const [
                       BoxShadow(
                         color: ColorResources.shimmerEffectBaseColor,
@@ -630,9 +628,7 @@ class _WomenCategoriesScreenState extends State<WomenCategoriesScreen> {
                       ),
                     ],
                   ),
-                  child: ClipRRect(
-                    borderRadius:
-                        BorderRadius.circular(Dimensions.offersCardRadius),
+                  child: ClipRRect(borderRadius:BorderRadius.circular(Dimensions.offersCardRadius),
                     child: CachedCommonImage(
                       width: double.infinity,
                       networkImageUrl: getCategoryData[index].categoryImage,
@@ -1005,8 +1001,8 @@ class _WomenCategoriesScreenState extends State<WomenCategoriesScreen> {
                                   crossAxisSpacing: 10),
                           itemBuilder: (context, index) {
                             return GestureDetector(
-                              onTap: () {
-                                controller.filterCategoriesApiMethod(
+                              onTap: ()  {
+                                 controller.filterCategoriesApiMethod(
                                     occasionBy: getCategoryData[
                                             controller.expandedIndex.value]
                                         .subCategory![index]
@@ -1038,10 +1034,7 @@ class _WomenCategoriesScreenState extends State<WomenCategoriesScreen> {
                                   const SizedBox(height: Dimensions.space5),
                                   Expanded(
                                     child: Text(
-                                        getCategoryData[controller
-                                                    .expandedIndex.value]
-                                                .subCategory![index]
-                                                .title ??
+                                        getCategoryData[controller.expandedIndex.value].subCategory![index].title ??
                                             '',
                                         textAlign: TextAlign.center,
                                         softWrap: true,

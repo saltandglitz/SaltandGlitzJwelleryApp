@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
@@ -363,15 +362,21 @@ class _DashboardScreenState extends State<DashboardScreen>
                                                   return controller.currentIndex
                                                               .value ==
                                                           index
-                                                      ? controller
-                                                                  .videoController
-                                                                  ?.value
-                                                                  .isInitialized ==
-                                                              true
-                                                          ? _buildVideoPlayer(
+                                                      ? Obx(() {
+                                                          if (controller
+                                                                  .isVideoReady
+                                                                  .value &&
                                                               controller
-                                                                  .videoController)
-                                                          : Shimmer.fromColors(
+                                                                      .videoController
+                                                                      ?.value
+                                                                      .isInitialized ==
+                                                                  true) {
+                                                            return _buildVideoPlayer(
+                                                                controller
+                                                                    .videoController);
+                                                          } else {
+                                                            return Shimmer
+                                                                .fromColors(
                                                               baseColor:
                                                                   ColorResources
                                                                       .baseColor,
@@ -387,7 +392,9 @@ class _DashboardScreenState extends State<DashboardScreen>
                                                                 color: ColorResources
                                                                     .inactiveTabColor,
                                                               ),
-                                                            )
+                                                            );
+                                                          }
+                                                        })
                                                       : Container(); // Empty container when not the selected video
                                                 }
                                                 return Container(); // Fallback for unsupported media types

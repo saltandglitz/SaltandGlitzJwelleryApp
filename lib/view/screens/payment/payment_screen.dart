@@ -30,7 +30,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
         child: AppBar(
           automaticallyImplyLeading: false,
           titleSpacing: 0,
-          title: const Text(LocalStrings.appName),
+          title:  Text(LocalStrings.appName),
           titleTextStyle: regularLarge.copyWith(
             fontWeight: FontWeight.w500,
             color: ColorResources.conceptTextColor,

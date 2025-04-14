@@ -4,6 +4,9 @@ import '../../data/model/get_add_cart_view_model.dart';
 import '../../data/model/get_categories_view_model.dart';
 import '../../data/model/home_view_model.dart';
 
+// Whole app filled strings
+Map<String, dynamic> appStrings = {};
+
 ///<<<-------------- Dashboard Screen ----------------->>>
 // List<Banner> bannerList = [];
 List<BottomBanner> bottomBannerList = [];

@@ -310,14 +310,11 @@ class _MenCategoriesScreenState extends State<MenCategoriesScreen> {
                                       },
                                     )
                                   : CarouselSlider.builder(
-                                      key: const PageStorageKey(
-                                          'carousel_slider_key'),
+                                      key: const PageStorageKey('carousel_slider_key'),
                                       // Add PageStorageKey
-                                      itemCount:
-                                          getCategoryBannerMaleData.length,
+                                      itemCount:getCategoryBannerMaleData.length,
                                       options: CarouselOptions(
-                                        onPageChanged:
-                                            controller.onPageChangedMenProducts,
+                                        onPageChanged:controller.onPageChangedMenProducts,
                                         autoPlay: true,
                                         enlargeCenterPage: true,
                                         aspectRatio: 4 / 1.30,
@@ -331,7 +328,7 @@ class _MenCategoriesScreenState extends State<MenCategoriesScreen> {
                                           child: CachedCommonImage(
                                             networkImageUrl:
                                                 getCategoryBannerMaleData[index]
-                                                    .bannerImage,
+                                                    .mobileBannerImage,
                                             width: double.infinity,
                                           ),
                                         );

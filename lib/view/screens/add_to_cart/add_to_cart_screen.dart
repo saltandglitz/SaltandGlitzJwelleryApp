@@ -15,6 +15,7 @@ import '../../../core/utils/app_const.dart';
 import '../../../core/utils/color_resources.dart';
 import '../../../core/utils/dimensions.dart';
 import '../../../core/utils/style.dart';
+import '../../../data/product/product_controller.dart';
 import '../../../local_storage/pref_manager.dart';
 import '../../../main_controller.dart';
 import '../../components/app_bar_background.dart';
@@ -135,7 +136,7 @@ class _AddToCartScreenState extends State<AddToCartScreen> {
             CommonButton(
               onTap: () {
                 //Todo : If users not login this time show this snackBar message
-                if (PrefManager.getString('isLogin') != "yes") {
+                if (addCartController.getAddCartData!.cart!.quantity!.isEmpty) {
                   showSnackBar(
                       context: context, message: LocalStrings.pleaseLogin);
                 } else {
@@ -1156,12 +1157,25 @@ class _AddToCartScreenState extends State<AddToCartScreen> {
                   const SizedBox(width: Dimensions.space25),
                   Expanded(
                     child: CommonButton(onTap: () {
+                      final productController = Get.put<ProductController>(ProductController());
+
                       //Todo : Move ro wishlist functionality api called & delay some millisecond back
                       collectionController.favoritesProducts(
                           userId: PrefManager.getString('userId'),
                           productId: productId,
                           index: index,
-                          isMoveWishlistText: LocalStrings.moveWishlist);
+                          isMoveWishlistText: LocalStrings.moveWishlist,
+                          size: controller
+                              .getAddCartData
+                              ?.cart
+                              ?.quantity?[index].productId
+                              ?.netWeight14KT?.toInt(),
+                          carat:
+                          productController
+                              .jewelleryKt(),
+                          color: productController
+                              .jewelleryColor()
+                      );
                       Future.delayed(const Duration(milliseconds: 1000), () {
                         Get.back();
                       });

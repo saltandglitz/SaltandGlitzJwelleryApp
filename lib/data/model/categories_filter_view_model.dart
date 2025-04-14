@@ -23,7 +23,8 @@ class CategoriesFilterViewModel {
 class UpdatedProducts {
   final String? productId;
   final List<Media>? media;
-   bool? isAlready;
+  bool? isAlready;
+  bool? isCart;
   final String? id;
   final String? title;
   final double? price14KT;
@@ -51,6 +52,7 @@ class UpdatedProducts {
     this.productId,
     this.media,
     this.isAlready,
+    this.isCart,
     this.id,
     this.title,
     this.price14KT,
@@ -81,7 +83,8 @@ class UpdatedProducts {
             ?.map((dynamic e) => Media.fromJson(e as Map<String, dynamic>))
             .toList(),
         isAlready = json['isAlready'] ?? false,
-      id = json['id'] as String?,
+        isCart = json['isCart'] ?? false,
+        id = json['id'] as String?,
         title = json['title'] as String?,
         price14KT = (json['price14KT'] as num?)?.toDouble(),
         price18KT = (json['price18KT'] as num?)?.toDouble(),
@@ -107,6 +110,8 @@ class UpdatedProducts {
   Map<String, dynamic> toJson() => {
         'product_id': productId,
         'media': media?.map((e) => e.toJson()).toList(),
+        'isAlready': isAlready,
+        'isCart': isCart,
         'id': id,
         'title': title,
         'price14KT': price14KT,

@@ -4,6 +4,8 @@ import 'package:like_button/like_button.dart';
 import 'package:saltandGlitz/core/utils/dimensions.dart';
 import 'package:saltandGlitz/core/utils/images.dart';
 import 'package:saltandGlitz/data/controller/dashboard/dashboard_controller.dart';
+import 'package:saltandGlitz/data/controller/wishlist/wishlist_controller.dart';
+import 'package:saltandGlitz/data/product/product_controller.dart';
 import 'package:saltandGlitz/view/components/common_message_show.dart';
 import 'package:shimmer/shimmer.dart';
 
@@ -471,7 +473,7 @@ class _CollectionScreenState extends State<CollectionScreen> {
                                                                                   "${filterProductData[firstIndex].productId}",
                                                                                 );
                                                                                 //Todo : Id product detail using remove wishlist this time then using update screen
-                                                                                Get.toNamed(RouteHelper.productScreen, arguments: filterProductData[firstIndex])!.then(
+                                                                                Get.toNamed(RouteHelper.productScreen, arguments: [filterProductData[firstIndex],firstIndex])!.then(
                                                                                   (value) {
                                                                                     controller.update();
                                                                                   },
@@ -518,7 +520,7 @@ class _CollectionScreenState extends State<CollectionScreen> {
                                                                               "${filterProductData[firstIndex].productId}",
                                                                             );
                                                                             //Todo : Id product detail using remove wishlist this time then using update screen
-                                                                            Get.toNamed(RouteHelper.productScreen, arguments: filterProductData[secondIndex])!.then(
+                                                                            Get.toNamed(RouteHelper.productScreen, arguments: [filterProductData[secondIndex],secondIndex])!.then(
                                                                               (value) {
                                                                                 controller.update();
                                                                               },
@@ -782,9 +784,7 @@ class _CollectionScreenState extends State<CollectionScreen> {
                                                                             .value = false;
                                                                       },
                                                                       child:
-                                                                          Column(
-                                                                        mainAxisSize:
-                                                                            MainAxisSize.min,
+                                                                          Stack(
                                                                         children: [
                                                                           ClipRRect(
                                                                             borderRadius:
@@ -795,21 +795,24 @@ class _CollectionScreenState extends State<CollectionScreen> {
                                                                               // categoryList[index]
                                                                               //         .images,
                                                                               width: double.infinity,
-                                                                              height: 90,
+                                                                              height: size.height * 0.11,
                                                                             ),
                                                                           ),
-                                                                          Text(
-                                                                            dashboardController.searchProducts[index].title ??
-                                                                                '',
-                                                                            textAlign:
-                                                                                TextAlign.center,
-                                                                            overflow:
-                                                                                TextOverflow.ellipsis,
-                                                                            softWrap:
-                                                                                false,
-                                                                            style:
-                                                                                semiBoldLarge.copyWith(
-                                                                              color: ColorResources.conceptTextColor,
+                                                                          Align(
+                                                                            alignment:
+                                                                                Alignment.bottomCenter,
+                                                                            child:
+                                                                                Padding(
+                                                                              padding: const EdgeInsets.only(bottom: 2),
+                                                                              child: Text(
+                                                                                dashboardController.searchProducts[index].title ?? '',
+                                                                                textAlign: TextAlign.center,
+                                                                                overflow: TextOverflow.ellipsis,
+                                                                                softWrap: false,
+                                                                                style: semiBoldLarge.copyWith(
+                                                                                  color: ColorResources.conceptTextColor,
+                                                                                ),
+                                                                              ),
                                                                             ),
                                                                           ),
                                                                         ],
@@ -931,13 +934,18 @@ class _CollectionScreenState extends State<CollectionScreen> {
                             filterProductData[index].isAlready = false;
                             controller.update();
                           } else {
+                            final productController =
+                                Get.put<ProductController>(ProductController());
                             filterProductData[index].isAlready = true;
                             controller.update();
                             //Todo : Wishlist particular products api method
                             controller.favoritesProducts(
                                 userId: PrefManager.getString('userId') ?? '',
                                 productId: filterProductData[index].productId,
-                                index: index);
+                                index: index,
+                                size: filterProductData[index].netWeight14KT?.toInt(),
+                                carat: productController.jewelleryKt(),
+                                color: productController.jewelleryColor());
                           } // If user is logged in, proceed with like/unlike logic
                           return !isLiked; // toggle like/unlike
                         },
@@ -967,9 +975,11 @@ class _CollectionScreenState extends State<CollectionScreen> {
                                 color: ColorResources.conceptTextColor),
                           ),
                           const SizedBox(width: Dimensions.space3),
-                           Icon(
+                          Icon(
                             Icons.star,
-                            color:filterProductData[index].rating==null?ColorResources.borderColor : ColorResources.updateCardColor,
+                            color: filterProductData[index].rating == null
+                                ? ColorResources.borderColor
+                                : ColorResources.updateCardColor,
                             size: 13,
                           )
                         ],

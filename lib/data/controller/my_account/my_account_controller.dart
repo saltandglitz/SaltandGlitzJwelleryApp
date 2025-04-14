@@ -107,6 +107,9 @@ class MyAccountController extends GetxController {
         PrefManager.removeString('phoneNumber');
         PrefManager.removeString('gender');
         PrefManager.removeString('token');
+        PrefManager.removeString('userId');
+        PrefManager.removeEntireItem('wishlistProductId');
+        PrefManager.removeEntireItem('cartProductId');
         //Todo : Off all navigation and move My account screen
         Get.offAllNamed(RouteHelper.bottomBarScreen);
         printAction("Logout Users");

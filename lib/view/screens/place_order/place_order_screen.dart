@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:saltandGlitz/data/controller/place_order_controller/place_order_controller.dart';
 import 'package:saltandGlitz/main_controller.dart';
 import 'package:saltandGlitz/view/components/common_button.dart';
 import 'package:saltandGlitz/view/components/common_textfield.dart';
@@ -18,20 +19,14 @@ class PlaceOrderScreen extends StatefulWidget {
   State<PlaceOrderScreen> createState() => _PlaceOrderScreenState();
 }
 
-bool isSameAsShipping = true;
-
 class _PlaceOrderScreenState extends State<PlaceOrderScreen> {
   @override
   Widget build(BuildContext context) {
-    void toggleSelection() {
-      setState(() {
-        isSameAsShipping = !isSameAsShipping;
-      });
-    }
-
     String? selectedAddressType;
     final size = MediaQuery.of(context).size;
     final mainController = Get.put<MainController>(MainController());
+    final placeOrderController =
+        Get.put<PlaceOrderController>(PlaceOrderController());
 
     return Scaffold(
       backgroundColor: ColorResources.scaffoldBackgroundColor,
@@ -39,7 +34,7 @@ class _PlaceOrderScreenState extends State<PlaceOrderScreen> {
         child: AppBar(
           automaticallyImplyLeading: false,
           titleSpacing: 0,
-          title: const Text(LocalStrings.appName),
+          title: Text(LocalStrings.appName.toUpperCase()),
           titleTextStyle: regularLarge.copyWith(
             fontWeight: FontWeight.w500,
             color: ColorResources.conceptTextColor,
@@ -73,13 +68,13 @@ class _PlaceOrderScreenState extends State<PlaceOrderScreen> {
         ),
       ),
       body: SingleChildScrollView(
-        physics: const BouncingScrollPhysics(),
+        physics: const ClampingScrollPhysics(),
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
             children: [
               const SizedBox(height: Dimensions.space10),
-              Center(
+              /*  Center(
                 child: Text(
                   LocalStrings.deliveryDetails,
                   style: boldMediumLarge.copyWith(
@@ -167,7 +162,7 @@ class _PlaceOrderScreenState extends State<PlaceOrderScreen> {
                   ],
                 ),
               ),
-              const SizedBox(height: Dimensions.space40),
+              const SizedBox(height: Dimensions.space40),*/
               Center(
                 child: Text(
                   LocalStrings.shippingAddress,
@@ -180,221 +175,61 @@ class _PlaceOrderScreenState extends State<PlaceOrderScreen> {
               GestureDetector(
                 onTap: () {
                   mainController.checkToAssignNetworkConnections();
-                  showDialog(
-                    context: context,
-                    builder: (_) => Dialog(
-                      backgroundColor: ColorResources.whiteColor,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(16),
-                        child: SingleChildScrollView(
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              const Text(
-                                LocalStrings.addANewAddress,
-                                style: boldMediumLarge,
-                              ),
-                              const SizedBox(height: Dimensions.space10),
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: CommonTextField(
-                                      hintText: LocalStrings.firstName,
-                                      hintTexStyle: mediumDefault,
-                                      fillColor: ColorResources.whiteColor,
-                                    ),
-                                  ),
-                                  const SizedBox(width: Dimensions.space10),
-                                  Expanded(
-                                    child: CommonTextField(
-                                      hintText: LocalStrings.lastName,
-                                      hintTexStyle: mediumDefault,
-                                      fillColor: ColorResources.whiteColor,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: Dimensions.space10),
-                              CommonTextField(
-                                hintText: LocalStrings.streetHouseNumber,
-                                hintTexStyle: mediumDefault,
-                                fillColor: ColorResources.whiteColor,
-                              ),
-                              const SizedBox(height: Dimensions.space10),
-                              CommonTextField(
-                                hintText: LocalStrings.additionalInformation,
-                                hintTexStyle: mediumDefault,
-                                fillColor: ColorResources.whiteColor,
-                              ),
-                              const SizedBox(height: Dimensions.space10),
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: CommonTextField(
-                                      hintText: LocalStrings.pinCode,
-                                      hintTexStyle: mediumDefault,
-                                      fillColor: ColorResources.whiteColor,
-                                    ),
-                                  ),
-                                  const SizedBox(width: Dimensions.space10),
-                                  Expanded(
-                                    child: CommonTextField(
-                                      hintText: LocalStrings.city,
-                                      hintTexStyle: mediumDefault,
-                                      fillColor: ColorResources.whiteColor,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: Dimensions.space10),
-                              Row(
-                                children: [
-                                  Expanded(
-                                    child: CommonTextField(
-                                      hintText: LocalStrings.state,
-                                      hintTexStyle: mediumDefault,
-                                      fillColor: ColorResources.whiteColor,
-                                    ),
-                                  ),
-                                  const SizedBox(width: Dimensions.space10),
-                                  Expanded(
-                                    child: CommonTextField(
-                                      hintText: LocalStrings.country,
-                                      hintTexStyle: mediumDefault,
-                                      fillColor: ColorResources.whiteColor,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              const SizedBox(height: Dimensions.space10),
-                              CommonTextField(
-                                hintText: LocalStrings.mobileNumber,
-                                hintTexStyle: mediumDefault,
-                                fillColor: ColorResources.whiteColor,
-                              ),
-                              const SizedBox(height: Dimensions.space10),
-                              DropdownButtonFormField<String>(
-                                decoration: const InputDecoration(
-                                  fillColor: ColorResources.whiteColor,
-                                  filled: true,
-                                  border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.all(
-                                      Radius.circular(10),
-                                    ),
-                                    borderSide: BorderSide(
-                                      color: ColorResources.borderColor,
-                                      width: 1,
-                                    ),
-                                  ),
-                                  contentPadding:
-                                      EdgeInsets.symmetric(horizontal: 10),
-                                ),
-                                hint: const Text(
-                                  LocalStrings.selectAddressType,
-                                  style: TextStyle(
-                                    color: ColorResources.borderColor,
-                                  ),
-                                ),
-                                style: const TextStyle(
-                                  color: ColorResources.blackColor,
-                                ),
-                                value: selectedAddressType,
-                                items: ['Home', 'Work', 'Other']
-                                    .map((String type) {
-                                  return DropdownMenuItem<String>(
-                                    value: type,
-                                    child: Text(
-                                      type,
-                                      style: const TextStyle(
-                                        color: ColorResources.blackColor,
-                                      ),
-                                    ),
-                                  );
-                                }).toList(),
-                                onChanged: (value) {
-                                  selectedAddressType = value;
-                                },
-                              ),
-                              const SizedBox(height: Dimensions.space10),
-                              Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  ElevatedButton(
-                                    onPressed: () => Navigator.pop(context),
-                                    child: const Text('Cancel'),
-                                  ),
-                                  ElevatedButton(
-                                    onPressed: () => Navigator.pop(context),
-                                    child: const Text('Save'),
-                                  ),
-                                ],
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  );
+
+                  /// Add address dialog box
+                  addAddressDialogBox(selectedAddressType: selectedAddressType);
                 },
-                child: Stack(
-                  children: [
-                    Container(
-                      width: double.infinity,
-                      height: size.height * 0.09,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: const Color(0xfff0f4f7),
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.grey.shade300,
-                            spreadRadius: 3,
-                            blurRadius: 6,
-                            offset: const Offset(0, 4),
-                          ),
-                        ],
+                child: Container(
+                  width: double.infinity,
+                  height: size.height * 0.07,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    color: const Color(0xfff0f4f7),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.grey.shade300,
+                        spreadRadius: 3,
+                        blurRadius: 6,
+                        offset: const Offset(0, 4),
                       ),
-                      alignment: Alignment.centerLeft,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 15),
-                      child: Text(
+                    ],
+                  ),
+                  alignment: Alignment.centerLeft,
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
                         LocalStrings.addANewAddress,
-                        style: mediumDefault.copyWith(
+                        style: boldLarge.copyWith(
                           color: ColorResources.conceptTextColor,
-                          fontWeight: FontWeight.w900,
                         ),
                       ),
-                    ),
-                    Positioned(
-                      child: Transform.translate(
-                        offset: const Offset(270, -3),
-                        child: Container(
-                          height: size.height * 0.1,
-                          width: size.width * 0.099,
-                          decoration: BoxDecoration(
-                            boxShadow: [
-                              BoxShadow(
-                                color:
-                                    ColorResources.borderColor.withOpacity(0.1),
-                                spreadRadius: 3,
-                                blurRadius: 2,
-                                offset: const Offset(0, 2),
-                              ),
-                            ],
-                            shape: BoxShape.circle,
-                            color: ColorResources.whiteColor,
-                          ),
-                          child: const Icon(
-                            Icons.arrow_forward_rounded,
-                            color: ColorResources.conceptTextColor,
-                          ),
+                      Container(
+                        height: size.height * 0.1,
+                        width: size.width * 0.099,
+                        decoration: BoxDecoration(
+                          boxShadow: [
+                            BoxShadow(
+                              color:
+                                  ColorResources.borderColor.withOpacity(0.1),
+                              spreadRadius: 3,
+                              blurRadius: 2,
+                              offset: const Offset(0, 2),
+                            ),
+                          ],
+                          shape: BoxShape.circle,
+                          color: ColorResources.addressColor,
+                        ),
+                        child: const Icon(
+                          Icons.add,
+                          color: ColorResources.conceptTextColor,
+                          size: 30,
                         ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
               const SizedBox(height: Dimensions.space30),
@@ -489,184 +324,194 @@ class _PlaceOrderScreenState extends State<PlaceOrderScreen> {
               //     ],
               //   ),
               // ),
-              Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  _buildRadioTile(
-                    size * 0.9,
-                    LocalStrings.sameAsShippingAddress,
-                    isSameAsShipping,
-                    () => toggleSelection(),
-                  ),
-                  const SizedBox(height: Dimensions.space15),
-                  _buildRadioTile(
-                    size * 0.9,
-                    LocalStrings.useADifferentBillingAddress,
-                    !isSameAsShipping,
-                    () => toggleSelection(),
-                  ),
-                ],
-              ),
+              GetBuilder(
+                  init: PlaceOrderController(),
+                  builder: (controller) {
+                    return Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        _buildRadioTile(
+                          size * 0.9,
+                          LocalStrings.sameAsShippingAddress,
+                          controller.isSameAsShipping,
+                          () => controller.selectAddressOption(true),
+                        ),
+                        const SizedBox(height: Dimensions.space15),
+                        _buildRadioTile(
+                          size * 0.9,
+                          LocalStrings.useADifferentBillingAddress,
+                          !controller.isSameAsShipping,
+                          () => controller.selectAddressOption(false),
+                        ),
+                      ],
+                    );
+                  }),
               const SizedBox(height: Dimensions.space15),
-              isSameAsShipping
-                  ? Container()
-                  : Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: SingleChildScrollView(
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            const Text(
-                              LocalStrings.addANewAddress,
-                              style: boldMediumLarge,
-                            ),
-                            const SizedBox(height: Dimensions.space10),
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: CommonTextField(
-                                    hintText: LocalStrings.firstName,
+              GetBuilder(
+                  init: PlaceOrderController(),
+                  builder: (controller) {
+                    return controller.isSameAsShipping
+                        ? Container()
+                        : Padding(
+                            padding: const EdgeInsets.all(16),
+                            child: SingleChildScrollView(
+                              child: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(
+                                    LocalStrings.addANewAddress,
+                                    style: boldMediumLarge,
+                                  ),
+                                  const SizedBox(height: Dimensions.space10),
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: CommonTextField(
+                                          hintText: LocalStrings.firstName,
+                                          hintTexStyle: mediumDefault,
+                                          fillColor: ColorResources.whiteColor,
+                                        ),
+                                      ),
+                                      const SizedBox(width: Dimensions.space10),
+                                      Expanded(
+                                        child: CommonTextField(
+                                          hintText: LocalStrings.lastName,
+                                          hintTexStyle: mediumDefault,
+                                          fillColor: ColorResources.whiteColor,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: Dimensions.space10),
+                                  CommonTextField(
+                                    hintText: LocalStrings.streetHouseNumber,
                                     hintTexStyle: mediumDefault,
                                     fillColor: ColorResources.whiteColor,
                                   ),
-                                ),
-                                const SizedBox(width: Dimensions.space10),
-                                Expanded(
-                                  child: CommonTextField(
-                                    hintText: LocalStrings.lastName,
+                                  const SizedBox(height: Dimensions.space10),
+                                  CommonTextField(
+                                    hintText:
+                                        LocalStrings.additionalInformation,
                                     hintTexStyle: mediumDefault,
                                     fillColor: ColorResources.whiteColor,
                                   ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: Dimensions.space10),
-                            CommonTextField(
-                              hintText: LocalStrings.streetHouseNumber,
-                              hintTexStyle: mediumDefault,
-                              fillColor: ColorResources.whiteColor,
-                            ),
-                            const SizedBox(height: Dimensions.space10),
-                            CommonTextField(
-                              hintText: LocalStrings.additionalInformation,
-                              hintTexStyle: mediumDefault,
-                              fillColor: ColorResources.whiteColor,
-                            ),
-                            const SizedBox(height: Dimensions.space10),
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: CommonTextField(
-                                    hintText: LocalStrings.pinCode,
+                                  const SizedBox(height: Dimensions.space10),
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: CommonTextField(
+                                          hintText: LocalStrings.pinCode,
+                                          hintTexStyle: mediumDefault,
+                                          fillColor: ColorResources.whiteColor,
+                                        ),
+                                      ),
+                                      const SizedBox(width: Dimensions.space10),
+                                      Expanded(
+                                        child: CommonTextField(
+                                          hintText: LocalStrings.city,
+                                          hintTexStyle: mediumDefault,
+                                          fillColor: ColorResources.whiteColor,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: Dimensions.space10),
+                                  Row(
+                                    children: [
+                                      Expanded(
+                                        child: CommonTextField(
+                                          hintText: LocalStrings.state,
+                                          hintTexStyle: mediumDefault,
+                                          fillColor: ColorResources.whiteColor,
+                                        ),
+                                      ),
+                                      const SizedBox(width: Dimensions.space10),
+                                      Expanded(
+                                        child: CommonTextField(
+                                          hintText: LocalStrings.country,
+                                          hintTexStyle: mediumDefault,
+                                          fillColor: ColorResources.whiteColor,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: Dimensions.space10),
+                                  CommonTextField(
+                                    hintText: LocalStrings.mobileNumber,
                                     hintTexStyle: mediumDefault,
                                     fillColor: ColorResources.whiteColor,
                                   ),
-                                ),
-                                const SizedBox(width: Dimensions.space10),
-                                Expanded(
-                                  child: CommonTextField(
-                                    hintText: LocalStrings.city,
-                                    hintTexStyle: mediumDefault,
-                                    fillColor: ColorResources.whiteColor,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: Dimensions.space10),
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: CommonTextField(
-                                    hintText: LocalStrings.state,
-                                    hintTexStyle: mediumDefault,
-                                    fillColor: ColorResources.whiteColor,
-                                  ),
-                                ),
-                                const SizedBox(width: Dimensions.space10),
-                                Expanded(
-                                  child: CommonTextField(
-                                    hintText: LocalStrings.country,
-                                    hintTexStyle: mediumDefault,
-                                    fillColor: ColorResources.whiteColor,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: Dimensions.space10),
-                            CommonTextField(
-                              hintText: LocalStrings.mobileNumber,
-                              hintTexStyle: mediumDefault,
-                              fillColor: ColorResources.whiteColor,
-                            ),
-                            const SizedBox(height: Dimensions.space10),
-                            DropdownButtonFormField<String>(
-                              decoration: const InputDecoration(
-                                fillColor: ColorResources.whiteColor,
-                                filled: true,
-                                border: OutlineInputBorder(
-                                  borderRadius: BorderRadius.all(
-                                    Radius.circular(10),
-                                  ),
-                                  borderSide: BorderSide(
-                                    color: ColorResources.borderColor,
-                                    width: 1,
-                                  ),
-                                ),
-                                contentPadding:
-                                    EdgeInsets.symmetric(horizontal: 10),
-                              ),
-                              hint: const Text(
-                                LocalStrings.selectAddressType,
-                                style: TextStyle(
-                                  color: ColorResources.borderColor,
-                                ),
-                              ),
-                              style: const TextStyle(
-                                color: ColorResources.blackColor,
-                              ),
-                              value: selectedAddressType,
-                              items:
-                                  ['Home', 'Work', 'Other'].map((String type) {
-                                return DropdownMenuItem<String>(
-                                  value: type,
-                                  child: Text(
-                                    type,
+                                  const SizedBox(height: Dimensions.space10),
+                                  DropdownButtonFormField<String>(
+                                    decoration: const InputDecoration(
+                                      fillColor: ColorResources.whiteColor,
+                                      filled: true,
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.all(
+                                          Radius.circular(10),
+                                        ),
+                                        borderSide: BorderSide(
+                                          color: ColorResources.borderColor,
+                                          width: 1,
+                                        ),
+                                      ),
+                                      contentPadding:
+                                          EdgeInsets.symmetric(horizontal: 10),
+                                    ),
+                                    hint: Text(
+                                      LocalStrings.selectAddressType,
+                                      style: const TextStyle(
+                                        color: ColorResources.borderColor,
+                                      ),
+                                    ),
                                     style: const TextStyle(
                                       color: ColorResources.blackColor,
                                     ),
+                                    value: selectedAddressType,
+                                    items: ['Home', 'Work', 'Other']
+                                        .map((String type) {
+                                      return DropdownMenuItem<String>(
+                                        value: type,
+                                        child: Text(
+                                          type,
+                                          style: const TextStyle(
+                                            color: ColorResources.blackColor,
+                                          ),
+                                        ),
+                                      );
+                                    }).toList(),
+                                    onChanged: (value) {
+                                      selectedAddressType = value;
+                                    },
                                   ),
-                                );
-                              }).toList(),
-                              onChanged: (value) {
-                                selectedAddressType = value;
-                              },
+                                  const SizedBox(height: Dimensions.space10),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      TextButton(
+                                        onPressed: () => Navigator.pop(context),
+                                        child: const Text('Cancel'),
+                                      ),
+                                      ElevatedButton(
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                        child: const Text('Save'),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ),
-                            const SizedBox(height: Dimensions.space10),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                TextButton(
-                                  onPressed: () => Navigator.pop(context),
-                                  child: const Text('Cancel'),
-                                ),
-                                ElevatedButton(
-                                  onPressed: () {
-                                    Navigator.pop(context);
-                                  },
-                                  child: const Text('Save'),
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
+                          );
+                  }),
               const SizedBox(height: Dimensions.space20),
               CommonButton(
                 gradientFirstColor: ColorResources.conceptTextColor,
                 gradientSecondColor: ColorResources.conceptTextColor,
                 width: double.infinity,
-                buttonName: LocalStrings.continuePlaceOrder,
+                buttonName: LocalStrings.continuePlaceOrder.toUpperCase(),
                 onTap: () {
                   Get.toNamed(RouteHelper.giftScreen);
                 },
@@ -674,14 +519,12 @@ class _PlaceOrderScreenState extends State<PlaceOrderScreen> {
                   color: ColorResources.whiteColor,
                 ),
               ),
-              const SizedBox(height: Dimensions.space70),
+              const SizedBox(height: Dimensions.space50),
               Align(
                 alignment: Alignment.topLeft,
                 child: Text(
                   LocalStrings.orderSummary,
-                  style: mediumExtraLarge.copyWith(
-                    fontWeight: FontWeight.w900,
-                  ),
+                  style: boldMediumLarge.copyWith(fontWeight: FontWeight.bold),
                 ),
               ),
               const SizedBox(height: Dimensions.space30),
@@ -691,12 +534,12 @@ class _PlaceOrderScreenState extends State<PlaceOrderScreen> {
                   Align(
                     alignment: Alignment.topLeft,
                     child: Container(
-                      width: size.width * 0.32,
-                      height: size.height * 0.15,
+                      width: size.width * 0.30,
+                      height: size.height * 0.13,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(10),
                         border:
-                            Border.all(color: ColorResources.conceptTextColor),
+                            Border.all(color: ColorResources.inactiveTabColor),
                         color: ColorResources.whiteColor,
                         image: const DecorationImage(
                           image: AssetImage(MyImages.ringOneImage),
@@ -705,31 +548,32 @@ class _PlaceOrderScreenState extends State<PlaceOrderScreen> {
                     ),
                   ),
                   const SizedBox(width: Dimensions.space20),
-                  Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        LocalStrings.earring,
-                        style: mediumDefault.copyWith(
-                          fontWeight: FontWeight.w900,
+                  Expanded(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          LocalStrings.earring,
+                          overflow: TextOverflow.ellipsis,
+                          style: semiBoldLarge.copyWith(),
                         ),
-                      ),
-                      Text(
-                        LocalStrings.sku,
-                        style: mediumDefault.copyWith(),
-                      ),
-                      Text(
-                        "${LocalStrings.quantity}: 1",
-                        style: mediumLarge.copyWith(
-                          fontWeight: FontWeight.bold,
+                        Text(
+                          LocalStrings.sku,
+                          style: mediumDefault.copyWith(),
                         ),
-                      ),
-                      Text(
-                        LocalStrings.price,
-                        style: mediumLarge.copyWith(),
-                      ),
-                    ],
+                        Text(
+                          "${LocalStrings.quantity}: 1",
+                          style: mediumLarge.copyWith(
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Text(
+                          LocalStrings.price,
+                          style: mediumLarge.copyWith(),
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
@@ -914,6 +758,165 @@ class _PlaceOrderScreenState extends State<PlaceOrderScreen> {
       ),
     );
   }
+
+  addAddressDialogBox({String? selectedAddressType}) {
+    showDialog(
+      context: context,
+      builder: (_) => Dialog(
+        backgroundColor: ColorResources.whiteColor,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  LocalStrings.addANewAddress,
+                  style: boldMediumLarge,
+                ),
+                const SizedBox(height: Dimensions.space10),
+                Row(
+                  children: [
+                    Expanded(
+                      child: CommonTextField(
+                        hintText: LocalStrings.firstName,
+                        hintTexStyle: mediumDefault,
+                        fillColor: ColorResources.whiteColor,
+                      ),
+                    ),
+                    const SizedBox(width: Dimensions.space10),
+                    Expanded(
+                      child: CommonTextField(
+                        hintText: LocalStrings.lastName,
+                        hintTexStyle: mediumDefault,
+                        fillColor: ColorResources.whiteColor,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: Dimensions.space10),
+                CommonTextField(
+                  hintText: LocalStrings.streetHouseNumber,
+                  hintTexStyle: mediumDefault,
+                  fillColor: ColorResources.whiteColor,
+                ),
+                const SizedBox(height: Dimensions.space10),
+                CommonTextField(
+                  hintText: LocalStrings.additionalInformation,
+                  hintTexStyle: mediumDefault,
+                  fillColor: ColorResources.whiteColor,
+                ),
+                const SizedBox(height: Dimensions.space10),
+                Row(
+                  children: [
+                    Expanded(
+                      child: CommonTextField(
+                        hintText: LocalStrings.pinCode,
+                        hintTexStyle: mediumDefault,
+                        fillColor: ColorResources.whiteColor,
+                      ),
+                    ),
+                    const SizedBox(width: Dimensions.space10),
+                    Expanded(
+                      child: CommonTextField(
+                        hintText: LocalStrings.city,
+                        hintTexStyle: mediumDefault,
+                        fillColor: ColorResources.whiteColor,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: Dimensions.space10),
+                Row(
+                  children: [
+                    Expanded(
+                      child: CommonTextField(
+                        hintText: LocalStrings.state,
+                        hintTexStyle: mediumDefault,
+                        fillColor: ColorResources.whiteColor,
+                      ),
+                    ),
+                    const SizedBox(width: Dimensions.space10),
+                    Expanded(
+                      child: CommonTextField(
+                        hintText: LocalStrings.country,
+                        hintTexStyle: mediumDefault,
+                        fillColor: ColorResources.whiteColor,
+                      ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: Dimensions.space10),
+                CommonTextField(
+                  hintText: LocalStrings.mobileNumber,
+                  hintTexStyle: mediumDefault,
+                  fillColor: ColorResources.whiteColor,
+                ),
+                const SizedBox(height: Dimensions.space10),
+                DropdownButtonFormField<String>(
+                  decoration: const InputDecoration(
+                    fillColor: ColorResources.whiteColor,
+                    filled: true,
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(
+                        Radius.circular(10),
+                      ),
+                      borderSide: BorderSide(
+                        color: ColorResources.borderColor,
+                        width: 1,
+                      ),
+                    ),
+                    contentPadding: EdgeInsets.symmetric(horizontal: 10),
+                  ),
+                  hint: Text(
+                    LocalStrings.selectAddressType,
+                    style: const TextStyle(
+                      color: ColorResources.borderColor,
+                    ),
+                  ),
+                  style: const TextStyle(
+                    color: ColorResources.blackColor,
+                  ),
+                  value: selectedAddressType,
+                  items: ['Home', 'Work', 'Other'].map((String type) {
+                    return DropdownMenuItem<String>(
+                      value: type,
+                      child: Text(
+                        type,
+                        style: const TextStyle(
+                          color: ColorResources.blackColor,
+                        ),
+                      ),
+                    );
+                  }).toList(),
+                  onChanged: (value) {
+                    selectedAddressType = value;
+                  },
+                ),
+                const SizedBox(height: Dimensions.space10),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () => Navigator.pop(context),
+                      child: const Text('Cancel'),
+                    ),
+                    ElevatedButton(
+                      onPressed: () => Navigator.pop(context),
+                      child: const Text('Save'),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
 }
 
 Widget _buildRadioTile(
@@ -928,22 +931,28 @@ Widget _buildRadioTile(
       borderRadius: BorderRadius.circular(10),
     ),
     color: const Color(0xfff6f4f9),
-    child: ListTile(
-      contentPadding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-      title: Text(
-        title,
-        style: mediumLarge.copyWith(
-          fontWeight: FontWeight.bold,
-          color: ColorResources.conceptTextColor,
+    child: Theme(
+      data: ThemeData(splashColor: Colors.transparent),
+      child: ListTile(
+        contentPadding:
+            const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        title: Text(
+          title,
+          style: boldLarge.copyWith(
+            color: ColorResources.conceptTextColor,
+          ),
         ),
+        trailing: Transform.scale(
+          scale: 1.50,
+          child: Radio<bool>(
+            value: isSelected,
+            groupValue: isSelected ? true : null,
+            activeColor: ColorResources.conceptTextColor,
+            onChanged: (value) => onTap(),
+          ),
+        ),
+        onTap: onTap,
       ),
-      trailing: Radio<bool>(
-        value: true,
-        groupValue: isSelected ? true : null,
-        activeColor: ColorResources.conceptTextColor,
-        onChanged: (value) => onTap(),
-      ),
-      onTap: onTap,
     ),
   );
 }

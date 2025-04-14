@@ -184,30 +184,22 @@ class SubCategory {
 }
 
 class Banners {
-  final String? bannerId;
-  final String? bannerImage;
-  final String? createdAt;
-  final int? v;
+  final String? type;
+  final String? mobileBannerImage;
 
   Banners({
-    this.bannerId,
-    this.bannerImage,
-    this.createdAt,
-    this.v,
+    this.type,
+    this.mobileBannerImage,
   });
 
   Banners.fromJson(Map<String, dynamic> json)
-      : bannerId = json['banner_id'] as String?,
-        bannerImage = json['bannerImage'] as String?,
-        createdAt = json['createdAt'] as String?,
-        v = json['__v'] as int?;
+      : type = json['type'] as String?,
+        mobileBannerImage = json['mobileBannerImage'] as String?;
 
   Map<String, dynamic> toJson() => {
-        'banner_id': bannerId,
-        'bannerImage': bannerImage,
-        'createdAt': createdAt,
-        '__v': v
-      };
+    'type' : type,
+    'bannerImage' : mobileBannerImage
+  };
 }
 
 class MergedProducts {

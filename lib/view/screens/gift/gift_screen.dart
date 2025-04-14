@@ -33,7 +33,7 @@ class _GiftScreenState extends State<GiftScreen> {
         child: AppBar(
           automaticallyImplyLeading: false,
           titleSpacing: 0,
-          title: const Text(LocalStrings.appName),
+          title:  Text(LocalStrings.appName),
           titleTextStyle: regularLarge.copyWith(
             fontWeight: FontWeight.w500,
             color: ColorResources.conceptTextColor,

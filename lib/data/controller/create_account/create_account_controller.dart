@@ -6,7 +6,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:get/get.dart' hide FormData, Response;
-import 'package:get_storage/get_storage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 import '../../../api_repository/api_function.dart';
@@ -213,7 +212,9 @@ class CreateAccountController extends GetxController {
           String email = user.email ?? '';
 
           /// Get current user id token if want send api token this token used and you want used any get api response used this token google authentication time
-          final currentUserIdToken = auth.currentUser?.getIdToken();
+          // final currentUserIdToken = auth.currentUser?.getIdToken();
+          await googleSigInPushTokenBackendMethod(
+              token: googleSignInAuthentication.idToken);
 
           /// Display name show First name & Last name wise divide
           List<String> nameParameters = displayName.split(" ");
@@ -225,6 +226,7 @@ class CreateAccountController extends GetxController {
 
           /// Phone number
           String phoneNumber = user.phoneNumber ?? '';
+          print("Google sigIn token : ${googleSignInAuthentication.idToken}");
 
           /// Stored data in device Google login or not,First name, Last name & email
           PrefManager.setString('isLogin', 'yes');
@@ -252,6 +254,25 @@ class CreateAccountController extends GetxController {
       }
     }
     return user;
+  }
+
+// Google authentication get token and push this api method to login google authentication users
+  Future googleSigInPushTokenBackendMethod({String? token}) async {
+    try {
+      Map<String, dynamic> params = {"token": token ?? ''};
+      Response response = await APIFunction().apiCall(
+          apiName: LocalStrings.googleSigInApi,
+          context: Get.context,
+          params: params,
+          isLoading: false);
+      if (response.statusCode == 200) {
+        print("Google authentication backend Success full push token");
+      } else {
+        print("Google authentication backend Not Success full push token");
+      }
+    } catch (e) {
+      print("Google authentication backend time error : $e");
+    }
   }
 
   /// Set if api called otherwise google authentication time process complete after hide loader.

@@ -71,7 +71,7 @@ class PrefManager {
   }
 
   // Remove a product from a list of cart items
-  static Future<bool> removeCartListItem(String key, String itemId) async {
+  static Future<bool> removeCartWishlistListItem(String key, String itemId) async {
     // Retrieve the list of cart items (stored as JSON strings)
     List<String>? currentList = preferencesInstance?.getStringList(key);
 
@@ -114,7 +114,7 @@ class PrefManager {
   }
 
   // Add a product to the list in SharedPreferences
-  static Future<void> addCartProductToList(String key, String productId,
+  static Future<void> addCartAndWishlistProductToList(String key, String productId,
       String size, String caratBy, String colorBy) async {
     // Retrieve the current list of products for the given key
     List<String>? currentList = preferencesInstance!.getStringList(key);
@@ -128,6 +128,27 @@ class PrefManager {
       "size": size,
       "caratBy": caratBy,
       "colorBy": colorBy,
+    };
+
+    // Convert the product map to a JSON string
+    String productJson = jsonEncode(product);
+
+    // Add the product JSON string to the list
+    currentList.add(productJson);
+
+    // Save the updated list back to SharedPreferences
+    await preferencesInstance!.setStringList(key, currentList);
+  } // Add a wishlist to the list in SharedPreferences
+  static Future<void> addWishlistProductToList(String key, String productId) async {
+    // Retrieve the current list of products for the given key
+    List<String>? currentList = preferencesInstance!.getStringList(key);
+
+    // If no list is found, initialize an empty list
+    currentList ??= [];
+
+    // Create a new product map
+    Map<String, String> product = {
+      "productId": productId,
     };
 
     // Convert the product map to a JSON string

@@ -1,3 +1,6 @@
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart' hide Response;
@@ -60,6 +63,8 @@ class SetPasswordController extends GetxController {
         PrefManager.setString('gender', response.data['user']['gender'] ?? '');
         PrefManager.setString('token', response.data['user']['token'] ?? '');
         PrefManager.setString('userId', response.data['user']['_id'] ?? '');
+        //Todo : Guest users merge data api method
+      await  mergeProductApiMethod(userId: PrefManager.getString('userId'));
         //Todo : Off all navigation and move My account screen
         Get.offAllNamed(RouteHelper.bottomBarScreen);
         bottomBarController.selectedIndex = 2.obs;
@@ -91,6 +96,50 @@ class SetPasswordController extends GetxController {
       }
     } catch (e) {
       printActionError("Get otp error : $e");
+    }
+  }
+
+//Todo : Merge product api method guest users time
+  Future mergeProductApiMethod({String? userId}) async {
+    try {
+      // "cartProducts": PrefManager.getStringList('cartProductId') ?? [],
+      // Retrieve the cart product details from PrefManager (assuming you have the full object)
+      List<Map<String, dynamic>> cartProducts = PrefManager.getStringList('cartProductId')?.map((item) {
+        Map<String, dynamic> productMap = json.decode(item);
+        return {
+          "productId": productMap["productId"],  // Assuming productId is already a string
+          "size": productMap["size"],  // Ensure size is a string
+          "caratBy": productMap["caratBy"],  // Ensure caratBy is a string
+          "colorBy": productMap["colorBy"],  // Ensure colorBy is a string
+        };
+      }).toList() ?? [];
+      // "wishlistProducts": PrefManager.getStringList('wishlistProductId') ?? []
+      // Fix wishlistProducts - Map each productId to an object with proper structure
+      List<Map<String, dynamic>> wishlistProducts = PrefManager.getStringList('wishlistProductId')?.map((item) {
+        Map<String, dynamic> productMap = json.decode(item);
+        return {
+          "productId": productMap["productId"],  // Assuming each wishlist entry is a productId string
+          // Add other details to the wishlist item if required
+        };
+      }).toList() ?? [];
+      Map<String, dynamic> params = {
+        "userId": userId,
+        "cartProducts": cartProducts,
+        "wishlistProducts": wishlistProducts
+      };
+      Response response = await APIFunction().apiCall(
+        apiName: LocalStrings.mergeProductApi,
+        context: Get.context,
+        params: params,
+        isLoading: false,
+      );
+      if (response.statusCode == 201) {
+        print("Successfully merge products");
+      }
+    } catch (e) {
+      print("Merge product error : $e");
+    } finally {
+      update();
     }
   }
 }

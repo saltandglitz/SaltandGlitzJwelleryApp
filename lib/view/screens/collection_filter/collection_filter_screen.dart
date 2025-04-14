@@ -46,7 +46,7 @@ class _CollectionFilterScreenState extends State<CollectionFilterScreen> {
               child: AppBar(
                 automaticallyImplyLeading: false,
                 titleSpacing: 0,
-                title: const Text(LocalStrings.filters),
+                title:  Text(LocalStrings.filters),
                 titleTextStyle: regularLarge.copyWith(
                   fontWeight: FontWeight.w500,
                   color: ColorResources.conceptTextColor,

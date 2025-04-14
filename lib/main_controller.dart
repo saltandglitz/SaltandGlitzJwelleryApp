@@ -1,6 +1,7 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart' hide Banner;
 import 'package:get/get.dart' hide Response;
 import 'package:saltandGlitz/local_storage/pref_manager.dart';
@@ -260,10 +261,36 @@ class MainController extends GetxController {
     });
   }
 
+  //Todo : Fetch firebase to whole app strings
+  Future<void> fetchStringFirebaseData() async {
+    DatabaseReference databaseReference = FirebaseDatabase.instance
+        .refFromURL('https://saltand-glitz-default-rtdb.firebaseio.com/');
+
+    // Fetch the data
+    try {
+      final snapshot = await databaseReference.get();
+      print("Firebase Snapshot: $snapshot"); // Print snapshot to debug
+      print("Snapshot Value: ${snapshot.value}");
+      if (snapshot.exists) {
+        // Successfully found data, now store it in the appStrings map
+        appStrings = Map<String, dynamic>.from(snapshot.value as Map);
+        print("Fetched data: ${appStrings['appName']}");
+      } else {
+        // No data found at the 'app_strings' path
+        throw Exception('No data found in Firebase Database');
+      }
+    } catch (e) {
+      // Catch any errors that happen during the fetch
+      print('Error fetching data from Firebase: $e');
+      throw Exception('Error fetching data from Firebase: $e');
+    }
+  }
   @override
   void onInit() {
     // TODO: implement onInit
     super.onInit();
     print("Token : ${PrefManager.getString('token')}");
   }
+
+
 }

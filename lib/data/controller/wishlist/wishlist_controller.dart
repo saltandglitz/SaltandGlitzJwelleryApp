@@ -42,6 +42,7 @@ class WishlistController extends GetxController {
     LocalStrings.wishlistPriceSeven,
     LocalStrings.wishlistPriceEight,
   ];
+
   // Using Rx to make the selected number observable
   Rx<int> selectedNumber = 6.obs; // Initial value is 6
 
@@ -49,6 +50,7 @@ class WishlistController extends GetxController {
   void updateSelectedNumber(int number) {
     selectedNumber.value = number;
   }
+
   removeLocallyWishlist(int index) {
     wishlistProducts.removeAt(index);
     update();
@@ -67,6 +69,7 @@ class WishlistController extends GetxController {
     }
     update();
   }
+
   // Method to update the 'isAlready' status for products in 'filterProductData'
   void updateProductStatus(String productId, bool isAlready) {
     // Update the 'isAlready' status for the product with matching productId
@@ -76,8 +79,9 @@ class WishlistController extends GetxController {
         break;
       }
     }
-    update(); // To reflect changes in UI
+    update();
   }
+
   //Todo : Wishlist products get data api method
   Future getWishlistDataApiMethod() async {
     try {

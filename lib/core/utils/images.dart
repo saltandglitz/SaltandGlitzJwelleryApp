@@ -190,6 +190,14 @@ class MyImages {
   static const String hallmarkImage = '${imagePath}hallmark_image.png';
   static const String certifiedImage = '${imagePath}certified_image.png';
   static const String freeShipingImage = '${imagePath}free_shiping_image.png';
+  static const String vvsGradeDiamondImage = '${imagePath}vvs_grade_diamond_image.png';
+  static const String pdpDeliveryTahSpriteImage = '${imagePath}pdp_delivery_tah_sprite_image.png';
+  static const String clAdvantageSpriteRupeesImage = '${imagePath}cl_advantage_sprite_rupees_image.png';
+  static const String clAdvantageSpriteImage = '${imagePath}cl_advantage_sprite_image.png';
+  static const String certifiedLogoImage = '${imagePath}certified_logo_image.png';
+  static const String clAdvantageSpriteDateImage = '${imagePath}cl_advantage_sprite_date_image.png';
+  static const String appLogoImage = '${imagePath}app_logo_image.png';
+  static const String clAdvantageSpritePurityCheckImage = '${imagePath}cl_advantage_sprite_purity_check_image.png';
 
   ///<<<---------------------------- Wishlist screen images ---------------------------->>>
   static const String noWishlistItemImage = '${imagePath}no_wishlist_items.png';

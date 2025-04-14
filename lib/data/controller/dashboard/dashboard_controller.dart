@@ -42,6 +42,7 @@ class DashboardController extends GetxController {
       Get.put<BottomBarController>(BottomBarController());
   bool isMenuOpen = false;
   RxBool isEnableNetwork = false.obs;
+  var isVideoReady = false.obs;
 
   final List<String> giftsForText = [
     LocalStrings.giftsGraduate,
@@ -442,29 +443,32 @@ class DashboardController extends GetxController {
   Future<void> handleMediaPlay(int index) async {
     final mediaUrl = mediaList[index].mobileBannerImage?.trim();
 
+    isVideoReady.value = false; // Reset
+
     if (videoController != null) {
       await videoController!.pause();
       await videoController!.dispose();
       videoController = null;
-      update();
     }
 
     if (mediaUrl != null &&
         mediaUrl.isNotEmpty &&
         mediaList[index].type == 'goldVideo') {
-      await Future.delayed(const Duration(milliseconds: 200)); // 🛠️ add this
+      await Future.delayed(const Duration(milliseconds: 200));
+
       videoController = VideoPlayerController.networkUrl(Uri.parse(mediaUrl));
 
       try {
         await videoController!.initialize();
         videoController!.setLooping(true);
         await videoController!.play();
-        update();
+        isVideoReady.value = true;
       } catch (error) {
         print("Video initialization error: $error");
       }
     }
   }
+
 
   //Todo  : Particular Products wishlist add
   Future wishlistAddApiMethod() async {

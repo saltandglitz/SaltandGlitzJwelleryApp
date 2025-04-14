@@ -8,6 +8,7 @@ class ColorResources {
   static const Color shimmerEffectBaseColor = Color(0xFFE0E0E0);
   static const Color inactiveTabColor = Color(0xffaeaeae);
   static const Color iconColor = Color(0xFF3b3b3b);
+  static const Color addressColor = Color(0xFFF0F4F7);
   static const Color baseColor = Color(0xFFD2D8DC); // Light grey (previously grey[300])
   static const Color highlightColor = Color(0xFFE1E8ED); // Very light grey (previously grey[100])
   static const Color splashFirstColor = Color(0xffE5733F);
@@ -39,6 +40,7 @@ class ColorResources {
   static const Color helpNeedSecondColor = Color(0xFFFFCCBC);
   static const Color helpNeedThirdColor = Color(0xFFFFE0B2);
   static const Color moveCartColor = Color(0xFF0C6421);
+  static const Color termsColor = Color(0xFF032F0D);
   static const Color videoCallColor = Color(0xFF64DD17);
   static const Color sortSelectedColor = Color(0xFF9575CD);
   static const Color updateCardColor = Color(0xFFFFC107);

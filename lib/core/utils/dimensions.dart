@@ -49,5 +49,6 @@ class Dimensions {
   static const double space90 = 90;
   static const double space100 = 100;
   static const double space150 = 155;
+  static const double space163 = 163;
   static const double space200 = 200;
 }

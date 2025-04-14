@@ -209,6 +209,9 @@ class CollectionController extends GetxController {
       {String? userId,
       String? productId,
       int? index,
+      int? size,
+      String? carat,
+      String? color,
       String? isMoveWishlistText}) async {
     try {
       isMoveWishlist.value = true;
@@ -241,7 +244,10 @@ class CollectionController extends GetxController {
       if (response.statusCode == 201) {
         isWishlist = Wishlist.fromJson(response.data['wishlist']);
         PrefManager.setString('userId', isWishlist?.userId ?? '');
-        PrefManager.addProductToList('wishlistProductId', '$productId');
+        // PrefManager.addWishlistProductToList('wishlistProductId', '$productId');
+        PrefManager.addCartAndWishlistProductToList(
+            'wishlistProductId', '$productId', "${size ?? 6}", carat!, color!);
+        // PrefManager.addProductToList('wishlistProductId', '$productId');
         List<String>? wishlistData =
             PrefManager.getStringList('wishlistProductId');
         print("Stored Data wishlist : ${wishlistData?.toList()}");
@@ -280,7 +286,10 @@ class CollectionController extends GetxController {
           isLoading: false);
 
       if (response.statusCode == 200) {
-        PrefManager.removeListItem('wishlistProductId', '$productId');
+        // PrefManager.removeCartWishlistListItem('wishlistProductId', '$productId');
+        PrefManager.removeCartWishlistListItem(
+            'wishlistProductId', '$productId');
+        // PrefManager.removeListItem('wishlistProductId', '$productId');
         List<String>? wishlistData =
             PrefManager.getStringList('wishlistProductId');
         print("Stored Data wishlist remove: ${wishlistData?.toList()}");

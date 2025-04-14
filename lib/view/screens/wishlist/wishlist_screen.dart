@@ -62,7 +62,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
             child: AppBar(
               automaticallyImplyLeading: false,
               titleSpacing: 0,
-              title: const Text(LocalStrings.wishlist),
+              title:  Text(LocalStrings.wishlist),
               titleTextStyle: regularLarge.copyWith(
                 fontWeight: FontWeight.w500,
                 color: ColorResources.conceptTextColor,

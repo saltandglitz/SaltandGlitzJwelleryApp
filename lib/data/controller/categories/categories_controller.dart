@@ -30,8 +30,8 @@ class CategoriesController extends GetxController {
   var selectedTab = 0.obs;
 
   final List<Tab> myTabs = <Tab>[
-    const Tab(text: LocalStrings.women),
-    const Tab(text: LocalStrings.men),
+    Tab(text: LocalStrings.women),
+    Tab(text: LocalStrings.men),
   ];
 
   List womenTopCategoriesImage = [
@@ -249,10 +249,10 @@ class CategoriesController extends GetxController {
       int index, CarouselPageChangedReason changeReason) {
     currentWomenIndex.value = index;
     if (changeReason == CarouselPageChangedReason.manual) {
-      AppAnalytics().actionTriggerWithProductsLogs(
+      /*   AppAnalytics().actionTriggerWithProductsLogs(
           eventName: LocalStrings.logCategoriesWomenSilverJewelleryView,
           productImage: silverJewelleryImage[index],
-          index: 1);
+          index: 1);*/
     }
   }
 
@@ -260,10 +260,10 @@ class CategoriesController extends GetxController {
       int index, CarouselPageChangedReason changeReason) {
     currentMenIndex.value = index;
     if (changeReason == CarouselPageChangedReason.manual) {
-      AppAnalytics().actionTriggerWithProductsLogs(
+      /*AppAnalytics().actionTriggerWithProductsLogs(
           eventName: LocalStrings.logCategoriesMenSilverJewelleryView,
           productImage: silverJewelleryImage[index],
-          index: 1);
+          index: 1);*/
     }
   }
 
@@ -292,6 +292,7 @@ class CategoriesController extends GetxController {
         //Todo : add all jewellery banners categories data
         getCategoryBannerData = (response.data['banners'] as List)
             .map((banners) => Banners.fromJson(banners))
+            .where((banners) => banners.mobileBannerImage != null)
             .toList();
         print("GETDATA: $getCategoryBannerData");
       } else {
@@ -329,6 +330,7 @@ class CategoriesController extends GetxController {
         //Todo : Male add all jewellery banners categories data
         getCategoryBannerMaleData = (response.data['banners'] as List)
             .map((banners) => Banners.fromJson(banners))
+            .where((banners) => banners.mobileBannerImage != null)
             .toList();
       } else {
         print("Something went wrong");
@@ -360,6 +362,7 @@ class CategoriesController extends GetxController {
     final collectionController =
         Get.put<CollectionController>(CollectionController());
     try {
+      print("Enter filter");
       collectionController.isShowCategories.value = false;
       //Todo : IsFilterScreen == "YES" fill this time all {} params list format push in api
       // If IsFilterScreen == "YES" parameter particular key value not available value take automatic null

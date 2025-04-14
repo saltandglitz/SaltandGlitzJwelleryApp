@@ -24,7 +24,7 @@ class CommonTextField extends StatelessWidget {
   Color? cursorColor;
   int? maxLines;
   int? maxLength;
-
+  Color? textColor;
   CommonTextField({
     super.key,
     this.controller,
@@ -47,6 +47,7 @@ class CommonTextField extends StatelessWidget {
     this.cursorColor,
     this.maxLines,
     this.maxLength,
+    this.textColor,
   });
 
   @override
@@ -62,7 +63,7 @@ class CommonTextField extends StatelessWidget {
         cursorColor: cursorColor ?? ColorResources.conceptTextColor,
         textInputAction: textInputAction ?? TextInputAction.done,
         keyboardType: textInputType ?? TextInputType.name,
-        style: mediumDefault.copyWith(color: ColorResources.conceptTextColor),
+        style: mediumDefault.copyWith(color:textColor?? ColorResources.conceptTextColor),
         onChanged: onChange,
         obscureText: obSecureText ?? false,
         textAlignVertical: textAlignVertical,

@@ -1,9 +1,15 @@
+import 'dart:io';
+import 'dart:math';
+
 import 'package:carousel_slider/carousel_controller.dart';
 import 'package:carousel_slider/carousel_options.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:get/get.dart' hide Response;
+import 'package:flutter/material.dart';
+import 'package:get/get.dart' hide Response, FormData, MultipartFile;
+import 'package:image_picker/image_picker.dart';
 import 'package:saltandGlitz/api_repository/api_function.dart';
+import 'package:saltandGlitz/core/utils/dimensions.dart';
 import 'package:saltandGlitz/data/controller/wishlist/wishlist_controller.dart';
 import 'package:saltandGlitz/view/components/common_message_show.dart';
 import 'package:video_player/video_player.dart';
@@ -13,10 +19,13 @@ import '../../core/route/route.dart';
 import '../../core/utils/color_resources.dart';
 import '../../core/utils/images.dart';
 import '../../core/utils/local_strings.dart';
+import '../../core/utils/style.dart';
+import '../../core/utils/validation.dart';
 import '../../local_storage/pref_manager.dart';
 import '../controller/add_to_cart/add_to_cart_controller.dart';
 import '../controller/collection/collection_controller.dart';
 import '../model/categories_filter_view_model.dart';
+import '../model/get_rating_view_model.dart';
 
 class ProductController extends GetxController {
   var currentIndex = 0.obs;
@@ -26,12 +35,22 @@ class ProductController extends GetxController {
   RxBool isAddToCart = false.obs;
   RxBool isBuyNowCart = false.obs;
   RxInt byDefaultRingSize = 6.obs;
+  TextEditingController feedBack = TextEditingController();
+  TextEditingController name = TextEditingController();
+  TextEditingController email = TextEditingController();
+  RxDouble ratingValue = 0.0.obs;
+  var pickedImage = Rx<File?>(null);
   final CarouselController carouselController =
       CarouselController(); // Add CarouselController
   VideoPlayerController? videoController;
+  GetRatingViewModel? getRatingViewModel;
+  String? userRatingValue;
 
   //Todo : var productData var set because multi pal screen open this screen so set common to fetch all data and show product
   var productData;
+  int? collectionIndex;
+  File? imageFile;
+  RxBool isRating = false.obs;
   TextEditingController search = TextEditingController();
   TextEditingController pincode = TextEditingController();
   String productImage = '';
@@ -63,6 +82,13 @@ class ProductController extends GetxController {
     30
   ];
   List<String> imageUrls = [];
+  List<String> ratingList = [
+    LocalStrings.fiveRating,
+    LocalStrings.foreRating,
+    LocalStrings.thirdRating,
+    LocalStrings.secondRating,
+    LocalStrings.firstRating,
+  ];
   List<Color> colorLst = [
     ColorResources.offerNineColor,
     ColorResources.borderColor.withOpacity(0.2),
@@ -105,20 +131,26 @@ class ProductController extends GetxController {
     LocalStrings.totalText,
   ];
   List promiseImageLst = [
-    MyImages.buyBackImage,
-    MyImages.exchangeImage,
-    MyImages.returnImage,
-    MyImages.freeShipingImage,
-    MyImages.hallmarkImage,
-    MyImages.certifiedImage,
+    MyImages.clAdvantageSpritePurityCheckImage,
+    MyImages.clAdvantageSpriteRupeesImage,
+    MyImages.clAdvantageSpriteImage,
+    MyImages.clAdvantageSpriteDateImage,
+  ];
+  List promisePurityImageLst = [
+    MyImages.certifiedLogoImage,
+    MyImages.vvsGradeDiamondImage,
+    MyImages.pdpDeliveryTahSpriteImage,
   ];
   List promiseNameLst = [
-    LocalStrings.buyBack,
-    LocalStrings.exchange,
+    LocalStrings.certifiedPercent,
     LocalStrings.returns,
-    LocalStrings.shippingInsuranceFree,
-    LocalStrings.hallmarked,
-    LocalStrings.certified,
+    LocalStrings.exchange,
+    LocalStrings.warranty,
+  ];
+  List promisePurityNameLst = [
+    LocalStrings.certifiedRecognised,
+    LocalStrings.blankText,
+    LocalStrings.certifiedSalt,
   ];
   RxBool isEnableNetwork = false.obs;
 
@@ -139,6 +171,12 @@ class ProductController extends GetxController {
   ringSizeOnChangValue(value) {
     byDefaultRingSize.value = value!.toInt();
     print("Ring Size:${byDefaultRingSize.value}");
+    update();
+  }
+
+  /// Rating users
+  ratingUsers(double newRating) {
+    ratingValue.value = newRating;
     update();
   }
 
@@ -169,11 +207,163 @@ class ProductController extends GetxController {
     }
   }
 
+  /// Image picker through gallery image pick
+  Future<void> imagePickGalleryMethod() async {
+    final pick = ImagePicker();
+    final pickFile = await pick.pickImage(source: ImageSource.gallery);
+// Check if no file was picked
+    if (pickFile == null) {
+      showSnackBar(
+          context: Get.context!, message: LocalStrings.noSelectedImage);
+      return;
+    }
+
+    imageFile = File(pickFile.path);
+    if (_isValidImage(imageFile!)) {
+      pickedImage.value = imageFile;
+      update();
+    } else {
+      showSnackBar(context: Get.context!, message: LocalStrings.invalidFile);
+      update();
+    }
+    update();
+  }
+
+  /// Image picker through camera image pick
+  Future<void> imagePickCameraMethod() async {
+    final pick = ImagePicker();
+    final pickFile = await pick.pickImage(source: ImageSource.camera);
+    // Check if no file was picked
+    if (pickFile == null) {
+      showSnackBar(
+          context: Get.context!, message: LocalStrings.noSelectedImage);
+      return;
+    }
+    imageFile = File(pickFile.path);
+    print("Pick file : $imageFile");
+    // Validate image
+    if (_isValidImage(imageFile!)) {
+      pickedImage.value = imageFile;
+      print("Pick file 111: ${pickedImage.value}");
+      update();
+    } else {
+      showSnackBar(context: Get.context!, message: LocalStrings.invalidFile);
+      update();
+    }
+    update();
+  }
+
+  /// Clear Image
+  clearImage() {
+    pickedImage.value = null;
+    update();
+  }
+
+  /// Clear start rating
+  clearRating() {
+    ratingValue.value = 0.0;
+    update();
+  }
+
+  /// Image pick ask options dialog gallery & camera.
+  imagePickOptionsDialogBox() {
+    Get.dialog(StatefulBuilder(
+      builder: (context, setState) {
+        return Dialog(
+          backgroundColor: Colors.transparent,
+          insetPadding: const EdgeInsets.symmetric(horizontal: 25),
+          child: AnimatedOpacity(
+            opacity: 1.0,
+            duration: const Duration(milliseconds: 500),
+            child: Material(
+              color: ColorResources.whiteColor,
+              borderRadius: BorderRadius.circular(8),
+              elevation: 5.0,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 15),
+                child: SizedBox(
+                    width: double.infinity,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          LocalStrings.selectImage,
+                          style: semiBoldOverLarge.copyWith(),
+                        ),
+                        const SizedBox(height: Dimensions.space15),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                /// Camera pick image method
+                                imagePickCameraMethod();
+                                Future.delayed(
+                                    const Duration(milliseconds: 500), () {
+                                  Get.back();
+                                });
+                              },
+                              child: Column(
+                                children: [
+                                  const Icon(Icons.camera,
+                                      size: 35,
+                                      color: ColorResources.conceptTextColor),
+                                  const SizedBox(height: Dimensions.space5),
+                                  Text(
+                                    LocalStrings.camera,
+                                    style: semiBoldExtraLarge.copyWith(),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(width: Dimensions.space35),
+                            GestureDetector(
+                              onTap: () {
+                                /// Gallery pick image method
+                                imagePickGalleryMethod();
+                                Future.delayed(
+                                    const Duration(milliseconds: 500), () {
+                                  Get.back();
+                                });
+                              },
+                              child: Column(
+                                children: [
+                                  const Icon(Icons.photo,
+                                      size: 35,
+                                      color: ColorResources.conceptTextColor),
+                                  const SizedBox(height: Dimensions.space5),
+                                  Text(
+                                    LocalStrings.gallery,
+                                    style: semiBoldExtraLarge.copyWith(),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    )),
+              ),
+            ),
+          ),
+        );
+      },
+    ));
+  }
+
   enableNetworkHideLoader() {
     if (isEnableNetwork.value == false) {
       isEnableNetwork.value = true;
     }
     update();
+  }
+
+  bool _isValidImage(File file) {
+    final allowExtensions = ['gif', 'jpg', 'jpeg', 'png'];
+    final fileExtension = file.path.split('.').last.toLowerCase();
+    final fileSize = file.lengthSync();
+    bool isValidSize = fileSize <= 5 * 1024 * 1024;
+    return allowExtensions.contains(fileExtension) && isValidSize;
   }
 
   disableNetworkLoaderByDefault() {
@@ -276,12 +466,94 @@ class ProductController extends GetxController {
     update();
   }
 
-  var originalPrice = 75386.obs;
-  var discountedPrice = 57386.obs;
-  var discountCode = 'JB10';
+  /// Add rating users
+  Future<void> addRatingUsers(
+      {String? userId,
+      String? productId,
+      String? userRating,
+      String? userReview}) async {
+    try {
+      isRating.value = true;
+      FormData formData;
+      Map<String, dynamic> params = {
+        "userId": userId ?? '',
+        "productId": productId ?? "",
+        "userRating": userRating ?? "",
+        "userReview": userReview ?? "",
+      };
+      formData = FormData.fromMap({
+        ...params,
+        "productImage": imageFile?.path != null
+            ? await MultipartFile.fromFile(imageFile?.path ?? '',
+                filename: imageFile!.path.split('.').last)
+            : "",
+      });
 
-  void applyDiscount() {
-    originalPrice.value = discountedPrice.value;
+      Response response = await APIFunction().apiCall(
+          apiName: LocalStrings.addRatingApi,
+          context: Get.context!,
+          params: formData,
+          isLoading: false);
+
+      if (response.statusCode == 200) {
+        getRatingApiMethod(productId: productId);
+        showToast(message: LocalStrings.adminApproval, context: Get.context!);
+      } else {
+        print("Something went wrong rating time");
+      }
+    } catch (e) {
+      print("Add rating : $e");
+    } finally {
+      isRating.value = false;
+      Get.back();
+    }
+  }
+
+  /// Update rating users
+  /// Update rating users
+  Future<void> updateRatingUsers({
+    String? userId,
+    String? productId,
+    String? userRating,
+    String? userReview,
+  }) async {
+    try {
+      isRating.value = true;
+      FormData formData;
+      Map<String, dynamic> params = {
+        "userId": userId ?? '',
+        "productId": productId ?? "",
+        "userRating": userRating ?? "",
+        "userReview": userReview ?? "",
+      };
+      formData = FormData.fromMap({
+        ...params,
+        "productImage": imageFile?.path != null
+            ? await MultipartFile.fromFile(imageFile?.path ?? '',
+            filename: imageFile!.path.split('.').last)
+            : "",
+      });
+      // Use PUT method to update the rating
+      Response response = await APIFunction().apiCall(
+        apiName: LocalStrings.updateRatingApi,  // Endpoint for updating rating
+        context: Get.context!,
+        params: formData,  // Data to update rating
+        isLoading: false,
+        isPut: true,  // Indicating it's a PUT request
+      );
+
+      if (response.statusCode == 200) {
+        getRatingApiMethod(productId: productId);
+        showToast(message: LocalStrings.ratingUpdated, context: Get.context!);
+      } else {
+        print("Something went wrong rating time");
+      }
+    } catch (e) {
+      print("Update rating time error : $e");
+    } finally {
+      isRating.value = false;
+      Get.back();
+    }
   }
 
   //Todo: Add to cart api method
@@ -345,9 +617,10 @@ class ProductController extends GetxController {
           //Todo : Locally cart item remove
           wishlistController.removeLocallyWishlist(indexWishlist!);
           Get.put<AddToCartController>(AddToCartController());
+          wishlistController.updateProductStatus(productId!, false);
           Get.toNamed(RouteHelper.addCartScreen);
         }
-        PrefManager.addCartProductToList('cartProductId', '$productId',
+        PrefManager.addCartAndWishlistProductToList('cartProductId', '$productId',
             "${size ?? 6}", carat ?? jewelleryKt(), color ?? jewelleryColor());
         List<String>? cartData = PrefManager.getStringList('cartProductId');
         print("Stored Data cart : ${cartData?.toList()}");
@@ -367,6 +640,81 @@ class ProductController extends GetxController {
       } else {
         isBuyNowCart.value = false;
       }
+      update();
+    }
+  }
+
+  /// Validate rating dialog
+  isValidateRating(
+      {String? userId,
+      String? productId,
+      String? userRating,
+      String? userReview}) {
+    print("Enter rating 11");
+    if (ratingValue.value == 0.0 && userId!.isNotEmpty) {
+      print("Enter rating 22");
+      showSnackBar(context: Get.context!, message: LocalStrings.selectRating);
+    } else if (CommonValidation().isValidationEmpty(userReview) &&
+        userId!.isNotEmpty) {
+      print("Enter rating 33");
+      showSnackBar(context: Get.context!, message: LocalStrings.enterFeedback);
+    } else if (isRating.value == false &&
+        userReview!.isNotEmpty &&
+        ratingValue.value != 0.0 &&
+        userId!.isNotEmpty) {
+      if (userRatingValue == null && userRatingValue!.isEmpty) {
+        /// Add new rating
+        addRatingUsers(
+          userId: userId,
+          productId: productId,
+          userRating: userRating,
+          userReview: userReview,
+        );
+      } else {
+        /// Update already have rating
+        updateRatingUsers(
+          userId: userId,
+          productId: productId,
+          userRating: userRating,
+          userReview: userReview,
+        );
+      }
+    } else {
+      print("Enter rating 55");
+      showSnackBar(context: Get.context!, message: LocalStrings.ratingLogin);
+    }
+    print("Enter rating 66");
+  }
+
+  /// Using this method get all rating particular product rating
+  Future<void> getRatingApiMethod({String? productId}) async {
+    try {
+      print("Get ratting 12: ");
+      Response response = await APIFunction().apiCall(
+          apiName: "${LocalStrings.getRatingApi}$productId",
+          context: Get.context!,
+          isGet: true,
+          isLoading: false);
+      if (response.statusCode == 200) {
+        String? userId = PrefManager.getString('userId');
+        getRatingViewModel = GetRatingViewModel.fromJson(response.data);
+        for (var rating in (getRatingViewModel!.approvedRating!)) {
+          String? ratingUserId = rating.userId?.id;
+          if (ratingUserId == userId) {
+            userRatingValue = rating.userRating;
+            ratingValue.value = double.parse(userRatingValue!);
+            print("Get ratting 11: $userRatingValue");
+            break;
+          }
+        }
+
+        print("Get ratting : ${response.data}");
+      } else {
+        print("Get ratting not fetch");
+      }
+    } catch (e) {
+      print("Get ratting time error : $e");
+    } finally {
       update();
     }
   }

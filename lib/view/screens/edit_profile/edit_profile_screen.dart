@@ -47,7 +47,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               child: AppBar(
                 automaticallyImplyLeading: false,
                 titleSpacing: 0,
-                title: const Text(LocalStrings.myAccount),
+                title:  Text(LocalStrings.myAccount),
                 titleTextStyle: regularLarge.copyWith(
                   fontWeight: FontWeight.w500,
                   color: ColorResources.conceptTextColor,
