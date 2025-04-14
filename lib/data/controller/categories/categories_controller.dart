@@ -293,6 +293,7 @@ class CategoriesController extends GetxController {
         getCategoryBannerData = (response.data['banners'] as List)
             .map((banners) => Banners.fromJson(banners))
             .toList();
+        print("GETDATA: $getCategoryBannerData");
       } else {
         print("Something went wrong");
       }

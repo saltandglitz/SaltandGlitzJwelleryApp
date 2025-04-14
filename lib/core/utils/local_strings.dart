@@ -53,10 +53,19 @@ class LocalStrings {
   static const String shopNow = "Shop Now >";
   static const String shopBy = "Shop by Category";
   static const String wrappedWithLove = "Wrapped with Love !";
+  static const String saltPromise = "The Salt Promise";
+  static const String easyReturns = "30 Days Easy\nReturns";
+  static const String oneYearWarranty = "One Year\nWarranty";
+  static const String hundredCertified = "100%\nCertified";
+  static const String lifeTimeExchange = "Lifetime Exchange\n& Buyback";
+
   static const String earings = "Earings";
   static const String brilliantDesign =
       "Brilliant design and unparalleled craftsmanship.";
   static const String newArrival = "New Arrivals";
+  static const String curatedOnlyForYou = "Curated Only For You";
+  static const String exclusiveDeals = "Exclusive Deals";
+  static const String viewAllLatestDesigns = "View All Latest Designs";
   static const String planOfPurchase = "Your Plan of Purchase";
   static const String startYourPop = "Start your pop!";
   static const String aHassleFree = "A hassle free Plan of Purchase";

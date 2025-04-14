@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:saltandGlitz/data/controller/categories/categories_controller.dart';
+import 'package:saltandGlitz/data/controller/dashboard/dashboard_controller.dart';
 
+import '../../../core/utils/app_const.dart';
 import '../../../core/utils/color_resources.dart';
 import '../../../core/utils/dimensions.dart';
 import '../../../core/utils/images.dart';
@@ -18,6 +20,8 @@ class SplashScreen extends StatefulWidget {
 
 class _SplashScreenState extends State<SplashScreen> {
   final mainController = Get.put<MainController>(MainController());
+  final dashboardController =
+      Get.put<DashboardController>(DashboardController());
   final categoriesController =
       Get.put<CategoriesController>(CategoriesController());
 
@@ -28,6 +32,10 @@ class _SplashScreenState extends State<SplashScreen> {
     //Todo : Banner data show api method
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await mainController.getDashboardJewelleryData();
+      for (int i = 0; i < bottomBannerList.length; i++) {
+        String? media = bottomBannerList[i].bannerImage;
+        dashboardController.handleMediaPlayback(media: media!, index: i);
+      }
       // await mainController.getBannerData();
       // await mainController.getCategoryData();
       // await mainController.getNewArrivalData();

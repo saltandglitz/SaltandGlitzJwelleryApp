@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +14,7 @@ import 'package:saltandGlitz/view/components/cached_image.dart';
 import 'package:saltandGlitz/view/components/common_button.dart';
 import 'package:saltandGlitz/view/components/common_textfield.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:video_player/video_player.dart';
 import '../../../analytics/app_analytics.dart';
 import '../../../core/utils/app_const.dart';
 import '../../../core/utils/color_resources.dart';
@@ -39,9 +41,6 @@ class _DashboardScreenState extends State<DashboardScreen>
   );
   final mainController = Get.put<MainController>(MainController());
 
-  /* *********************************************************************************************************** */
-  // late VideoPlayerController _controller;
-
   @override
   void initState() {
     super.initState();
@@ -67,32 +66,15 @@ class _DashboardScreenState extends State<DashboardScreen>
         }
         // Manage when app open only single time show bottom sheet recent view products detail
         dashboardController.bottomSheetShowMethod();
+        // Loop through bottomBannerList to handle media playback for all the banners
+
+        // if (Get.arguments != null) {
+        //   dashboardController.mediaData = Get.arguments;
+        // }
       },
     );
-    /* *********************************************************************************************************** */
-    // _controller = VideoPlayerController.network(
-    //   'https://cdn.caratlane.com/media/catalog/product/S/R/SR04121-YGP900_16_video.mp4',
-    // )
-    //   ..initialize().then((_) {
-    //     setState(() {});
-    //     _controller.play(); // Automatically play the video
-    //   })
-    //   ..setLooping(true);
   }
 
-  /* *********************************************************************************************************** */
-  // @override
-  // void dispose() {
-  //   super.dispose();
-  //   _controller.pause(); // Pause the video and audio when navigating away
-  //   _controller.dispose(); // Dispose of the controller
-  // }
-
-  // @override
-  // void dispose() {
-  //   dashboardController.animationController.dispose();
-  //   super.dispose();
-  // }
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -220,7 +202,6 @@ class _DashboardScreenState extends State<DashboardScreen>
                               init: Get.find<MainController>(),
                               builder: (ctrl) {
                                 bool isLoading = categoryList.isEmpty;
-
                                 return SizedBox(
                                   height: size.height * 0.10,
                                   child: GridView.builder(
@@ -309,397 +290,724 @@ class _DashboardScreenState extends State<DashboardScreen>
                             ),
                             const SizedBox(height: Dimensions.space25),
                             /* Show jewellery products auto loop method */
-                            GetBuilder(
-                              init: MainController(),
-                              builder: (ctrl) {
-                                return Stack(
-                                  alignment: AlignmentDirectional.bottomCenter,
-                                  children: [
-                                    bannerList.isEmpty
-                                        ? Shimmer.fromColors(
-                                            baseColor: ColorResources
-                                                .shimmerEffectBaseColor,
-                                            highlightColor: ColorResources
-                                                .shimmerEffectHighlightColor,
-                                            child: AspectRatio(
-                                              aspectRatio: 1 / 0.99,
-                                              child: Container(
-                                                width: double.infinity,
-                                                color:
-                                                    ColorResources.whiteColor,
-                                              ),
-                                            ),
-                                          )
-                                        : CarouselSlider.builder(
-                                            key: const PageStorageKey(
-                                                'carousel_slider_key'),
-                                            itemCount: bannerList.length > 3
-                                                ? 3
-                                                : bannerList.length,
-                                            options: CarouselOptions(
-                                              onPageChanged:
-                                                  controller.onPageChanged,
-                                              autoPlay: true,
-                                              enlargeCenterPage: true,
-                                              aspectRatio: 1 / 0.99,
-                                              viewportFraction: 1,
-                                            ),
-                                            itemBuilder: (BuildContext context,
-                                                int index, int realIndex) {
-                                              return CachedCommonImage(
-                                                networkImageUrl:
-                                                    bannerList[index]
-                                                        .bannerImage,
-                                                width: double.infinity,
-                                              );
-                                            },
-                                          ),
-                                    bannerList.isEmpty
-                                        ? Shimmer.fromColors(
-                                            baseColor: ColorResources
-                                                .shimmerEffectBaseColor,
-                                            highlightColor: ColorResources
-                                                .shimmerEffectHighlightColor,
-                                            child: Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: List.generate(
-                                                5, // Default shimmer dots count
-                                                (i) => const Padding(
-                                                  padding: EdgeInsets.symmetric(
-                                                    horizontal: 7,
-                                                    vertical: 15,
+                            Padding(
+                              padding: const EdgeInsets.all(9.0),
+                              child: GetBuilder(
+                                init: MainController(),
+                                builder: (ctrl) {
+                                  return Stack(
+                                    alignment:
+                                        AlignmentDirectional.bottomCenter,
+                                    children: [
+                                      mediaList.isEmpty
+                                          ? Shimmer.fromColors(
+                                              baseColor: ColorResources
+                                                  .shimmerEffectBaseColor,
+                                              highlightColor: ColorResources
+                                                  .shimmerEffectHighlightColor,
+                                              child: AspectRatio(
+                                                aspectRatio: 1 / 0.99,
+                                                child: Container(
+                                                  width: double.infinity,
+                                                  decoration:
+                                                      const BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.all(
+                                                      Radius.circular(20),
+                                                    ),
+                                                    color: ColorResources
+                                                        .whiteColor,
                                                   ),
-                                                  child: CircleAvatar(
-                                                    radius: 3.5,
-                                                    backgroundColor:
-                                                        ColorResources
-                                                            .whiteColor,
+                                                ),
+                                              ),
+                                            )
+                                          : CarouselSlider.builder(
+                                              key: const PageStorageKey(
+                                                  'carousel_slider_key'),
+                                              itemCount: mediaList.length,
+                                              carouselController:
+                                                  controller.carouselController,
+                                              options: CarouselOptions(
+                                                onPageChanged: (index, reason) {
+                                                  controller.onPageChanged(
+                                                      index, reason);
+                                                  controller
+                                                          .currentIndex.value =
+                                                      index; // Update current index on page change
+                                                  controller.handleMediaPlay(
+                                                      index); // Handle media playback when the page changes
+                                                },
+                                                autoPlay: true,
+                                                enlargeCenterPage: true,
+                                                aspectRatio: 1 / 0.99,
+                                                viewportFraction: 1,
+                                              ),
+                                              itemBuilder: (
+                                                BuildContext context,
+                                                int index,
+                                                int realIndex,
+                                              ) {
+                                                final media = mediaList[index];
+                                                final mediaType = media.type;
+                                                if (mediaType == 'goldImage') {
+                                                  // Show image
+                                                  return CachedCommonImage(
+                                                    networkImageUrl: media
+                                                            .mobileBannerImage ??
+                                                        '',
+                                                    width: double.infinity,
+                                                  );
+                                                } else if (mediaType ==
+                                                    'goldVideo') {
+                                                  // Show video player if it's the current index and the video is initialized
+                                                  return controller.currentIndex
+                                                              .value ==
+                                                          index
+                                                      ? controller
+                                                                  .videoController
+                                                                  ?.value
+                                                                  .isInitialized ==
+                                                              true
+                                                          ? _buildVideoPlayer(
+                                                              controller
+                                                                  .videoController)
+                                                          : Shimmer.fromColors(
+                                                              baseColor:
+                                                                  ColorResources
+                                                                      .baseColor,
+                                                              highlightColor:
+                                                                  ColorResources
+                                                                      .highlightColor,
+                                                              child: Container(
+                                                                height:
+                                                                    size.height *
+                                                                        0.40,
+                                                                width: double
+                                                                    .infinity,
+                                                                color: ColorResources
+                                                                    .inactiveTabColor,
+                                                              ),
+                                                            )
+                                                      : Container(); // Empty container when not the selected video
+                                                }
+                                                return Container(); // Fallback for unsupported media types
+                                              },
+                                            ),
+                                      mediaList.isEmpty
+                                          ? Shimmer.fromColors(
+                                              baseColor: ColorResources
+                                                  .shimmerEffectBaseColor,
+                                              highlightColor: ColorResources
+                                                  .shimmerEffectHighlightColor,
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: List.generate(
+                                                  5,
+                                                  (i) => const Padding(
+                                                    padding:
+                                                        EdgeInsets.symmetric(
+                                                      horizontal: 7,
+                                                      vertical: 15,
+                                                    ),
+                                                    child: CircleAvatar(
+                                                      radius: 3.5,
+                                                      backgroundColor:
+                                                          ColorResources
+                                                              .whiteColor,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            )
+                                          : Obx(
+                                              () => Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: List.generate(
+                                                  mediaList.length,
+                                                  (i) => Padding(
+                                                    padding: const EdgeInsets
+                                                        .symmetric(
+                                                      horizontal: 7,
+                                                      vertical: 15,
+                                                    ),
+                                                    child: CircleAvatar(
+                                                      radius: 3.5,
+                                                      backgroundColor: controller
+                                                                  .currentIndex
+                                                                  .value ==
+                                                              i
+                                                          ? ColorResources
+                                                              .activeCardColor
+                                                          : ColorResources
+                                                              .inactiveCardColor,
+                                                    ),
                                                   ),
                                                 ),
                                               ),
                                             ),
-                                          )
-                                        : Obx(
-                                            () => Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: List.generate(
-                                                bannerList.length > 3
-                                                    ? 3
-                                                    : bannerList.length,
-                                                (i) => Padding(
-                                                  padding: const EdgeInsets
-                                                      .symmetric(
-                                                    horizontal: 7,
-                                                    vertical: 15,
-                                                  ),
-                                                  child: CircleAvatar(
-                                                    radius: 3.5,
-                                                    backgroundColor: controller
-                                                                .currentIndex
-                                                                .value ==
-                                                            i
-                                                        ? ColorResources
-                                                            .activeCardColor
-                                                        : ColorResources
-                                                            .inactiveCardColor,
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          ),
-                                  ],
-                                );
-                              },
+                                    ],
+                                  );
+                                },
+                              ),
                             ),
                             const SizedBox(height: Dimensions.space30),
-                            /* *********************************************************************************************************** */
-                            // Container(
-                            //   height: size.height * 0.5,
-                            //   child: VisibilityDetector(
-                            //     key: Key('video-key'),
-                            //     onVisibilityChanged: (visibilityInfo) {
-                            //       // Pause the video when it's not visible
-                            //       if (visibilityInfo.visibleFraction == 0) {
-                            //         _controller.pause();
-                            //       } else {
-                            //         _controller.play();
-                            //       }
-                            //     },
-                            //     child: Container(
-                            //       height: 200,
-                            //       child: _controller.value.isInitialized
-                            //           ? AspectRatio(
-                            //               aspectRatio: _controller.value.aspectRatio,
-                            //               child: VideoPlayer(_controller),
-                            //             )
-                            //           : Center(child: CircularProgressIndicator()),
-                            //     ),
-                            //   ),
-                            // ),
-                            // const SizedBox(height: Dimensions.space30),
-                            /* Solitaire Products */
-                            solitaireList.isEmpty
-                                ? const SizedBox()
-                                : Text(
-                                    LocalStrings.solitaire,
-                                    textAlign: TextAlign.center,
-                                    style: regularOverLarge.copyWith(
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                            SizedBox(
-                                height: solitaireList.isEmpty
-                                    ? 0
-                                    : Dimensions.space5),
-                            // CarouselSlider.builder(
-                            //   key: const PageStorageKey('carousel_slider_key_second'),
-                            //   // Add PageStorageKey
-                            //   carouselController: controller.carouselSolitaireController,
-                            //   itemCount: 4,
-                            //   options: CarouselOptions(
-                            //     onPageChanged: controller.onPageChangedSolitaire,
-                            //     autoPlay: false,
-                            //     // Disable autoPlay
-                            //     enlargeCenterPage: true,
-                            //     height: size.height * 0.45,
-                            //     viewportFraction: 0.9,
-                            //     enableInfiniteScroll: false, // Disable infinite scroll
-                            //   ),
-                            //   itemBuilder:
-                            //       (BuildContext context, int index, int realIndex) {
-                            //     return Stack(
-                            //       alignment: Alignment.center,
-                            //       children: [
-                            //         Container(
-                            //           height: size.height * 0.45,
-                            //           width: double.infinity,
-                            //           decoration: BoxDecoration(
-                            //             borderRadius: BorderRadius.circular(
-                            //                 Dimensions.defaultRadius),
-                            //           ),
-                            //           child: ClipRRect(
-                            //             borderRadius: BorderRadius.circular(
-                            //                 Dimensions.defaultRadius),
-                            //             child: CachedCommonImage(
-                            //               networkImageUrl:
-                            //                   controller.imageUrlsSolitaire[index],
-                            //             ),
-                            //           ),
-                            //         ),
-                            //         Obx(
-                            //           () {
-                            //             return controller.currentSolitaireIndex.value > 0
-                            //                 ? Positioned(
-                            //                     left: 16,
-                            //                     child: IconButton(
-                            //                       icon: const Icon(
-                            //                         Icons.arrow_back_ios_rounded,
-                            //                         color:
-                            //                             ColorResources.inactiveCardColor,
-                            //                       ),
-                            //                       onPressed: () =>
-                            //                           controller.goToPreviousSolitaire(),
-                            //                     ),
-                            //                   )
-                            //                 : const SizedBox();
-                            //           },
-                            //         ),
-                            //         Obx(
-                            //           () {
-                            //             return controller.currentSolitaireIndex.value <= 2
-                            //                 ? Positioned(
-                            //                     right: 16,
-                            //                     child: IconButton(
-                            //                       icon: const Icon(
-                            //                         Icons.arrow_forward_ios_rounded,
-                            //                         color:
-                            //                             ColorResources.inactiveCardColor,
-                            //                       ),
-                            //                       onPressed: () =>
-                            //                           controller.goToNextSolitaire(),
-                            //                     ),
-                            //                   )
-                            //                 : const SizedBox();
-                            //           },
-                            //         )
-                            //       ],
-                            //     );
-                            //   },
-                            // ),
+                            /* Banner images */
                             GetBuilder(
                               init: MainController(),
                               builder: (ctrl) {
-                                bool isLoading = solitaireList.isEmpty;
-                                return Container(
-                                  height: solitaireList.isEmpty
-                                      ? 0
-                                      : size.height * 0.30,
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 10.0),
-                                    child: GridView.builder(
-                                      gridDelegate:
-                                          const SliverGridDelegateWithFixedCrossAxisCount(
-                                        crossAxisCount: 1,
-                                        crossAxisSpacing: 5,
-                                        mainAxisSpacing: 1,
-                                        childAspectRatio: 1.5,
-                                      ),
-                                      scrollDirection: Axis.horizontal,
-                                      physics: const BouncingScrollPhysics(),
-                                      itemCount:
-                                          isLoading ? 0 : solitaireList.length,
-                                      itemBuilder: (context, index) {
-                                        if (isLoading) {
-                                          return Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 5.0),
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: [
-                                                Shimmer.fromColors(
-                                                  baseColor: ColorResources
-                                                      .shimmerEffectBaseColor,
-                                                  highlightColor: ColorResources
-                                                      .shimmerEffectHighlightColor,
-                                                  child: Container(
-                                                    height: 180,
-                                                    decoration: BoxDecoration(
-                                                      color: Colors.grey,
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              10),
-                                                    ),
-                                                  ),
-                                                ),
-                                                const SizedBox(
-                                                    height: Dimensions.space5),
-                                                Shimmer.fromColors(
-                                                  baseColor: ColorResources
-                                                      .shimmerEffectBaseColor,
-                                                  highlightColor: ColorResources
-                                                      .shimmerEffectHighlightColor,
-                                                  child: Container(
-                                                    height: 12,
-                                                    width: 80,
-                                                    decoration: BoxDecoration(
-                                                      color: Colors.grey,
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              5),
-                                                    ),
-                                                  ),
-                                                ),
-                                                const SizedBox(height: 5),
-                                                Shimmer.fromColors(
-                                                  baseColor: ColorResources
-                                                      .shimmerEffectBaseColor,
-                                                  highlightColor: ColorResources
-                                                      .shimmerEffectHighlightColor,
-                                                  child: Container(
-                                                    height: 12,
-                                                    width: 50,
-                                                    decoration: BoxDecoration(
-                                                      color: Colors.grey,
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              5),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
+                                String? media = bottomBannerList[0]
+                                    .bannerImage; // Get the media URL
+                                // Trigger the media playback for this index
+                                dashboardController.handleMediaPlayback(
+                                    media: media!, index: 0);
+                                // bool isLoading = bottomBannerList.isEmpty;
+                                return Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(
+                                        Dimensions.defaultRadius),
+                                    child: bottomBannerList.isEmpty
+                                        ? Shimmer.fromColors(
+                                            baseColor: ColorResources
+                                                .shimmerEffectBaseColor,
+                                            highlightColor: ColorResources
+                                                .shimmerEffectHighlightColor,
+                                            child: Container(
+                                              height: size.height * 0.33,
+                                              width: double.infinity,
+                                              decoration: BoxDecoration(
+                                                color:
+                                                    ColorResources.whiteColor,
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        Dimensions
+                                                            .defaultRadius),
+                                              ),
                                             ),
-                                          );
-                                        } else {
-                                          return Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 5.0),
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: [
-                                                /*ClipRRect(
-                                                  borderRadius:
-                                                      BorderRadius.circular(10),
-                                                  child: CachedNetworkImage(
-                                                    height: 180,
-                                                    width: double.infinity,
-                                                    imageUrl:
-                                                        solitaireList[index]
-                                                            .image01,
-                                                    fit: BoxFit.cover,
-                                                    progressIndicatorBuilder:
-                                                        (context, url,
-                                                                downloadProgress) =>
-                                                            Shimmer.fromColors(
-                                                      baseColor: ColorResources
-                                                          .shimmerEffectBaseColor,
-                                                      highlightColor: ColorResources
-                                                          .shimmerEffectHighlightColor,
-                                                      child: Container(
-                                                        height: 180,
-                                                        decoration:
-                                                            BoxDecoration(
-                                                          color: Colors.grey,
-                                                          borderRadius:
-                                                              BorderRadius
-                                                                  .circular(10),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    errorWidget: (context, url,
-                                                            error) =>
-                                                        const Icon(Icons.error),
-                                                  ),
-                                                ),*/
-                                                const SizedBox(
-                                                    height: Dimensions.space5),
-                                                /* Text(
-                                                  solitaireList[index].category,
-                                                  textAlign: TextAlign.center,
-                                                  style:
-                                                      regularDefault.copyWith(
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                ),*/
-                                                Text(
-                                                  "₹${solitaireList[index].price14KT}",
-                                                  textAlign: TextAlign.center,
-                                                  style:
-                                                      regularDefault.copyWith(
-                                                          fontWeight:
-                                                              FontWeight.bold),
-                                                ),
-                                              ],
+                                          )
+                                        : SizedBox(
+                                            height: size.height * 0.33,
+                                            child: LayoutBuilder(
+                                              builder: (context, constraints) {
+                                                // Ensure the video player is only built once the layout is done
+                                                return _buildVideoPlayer(
+                                                    dashboardController
+                                                        .videoControllers[0]);
+                                              },
                                             ),
-                                          );
-                                        }
-                                      },
-                                    ),
+                                          ),
                                   ),
                                 );
                               },
                             ),
-                            SizedBox(
-                                height: solitaireList.isEmpty
-                                    ? 0
-                                    : Dimensions.space5),
-                            /* View All Button */
-                            solitaireList.isEmpty
-                                ? const SizedBox()
-                                : Padding(
+                            const SizedBox(height: Dimensions.space10),
+                            GetBuilder(
+                              init: MainController(),
+                              builder: (ctrl) {
+                                // bool isLoading = bottomBannerList.isEmpty ||
+                                //     bottomBannerList.length < 2;
+                                return Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(
+                                        Dimensions.defaultRadius),
+                                    child: bottomBannerList.isEmpty
+                                        ? Shimmer.fromColors(
+                                            baseColor: ColorResources
+                                                .shimmerEffectBaseColor,
+                                            highlightColor: ColorResources
+                                                .shimmerEffectHighlightColor,
+                                            child: Container(
+                                              height: size.height * 0.25,
+                                              width: double.infinity,
+                                              decoration: BoxDecoration(
+                                                color:
+                                                    ColorResources.whiteColor,
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        Dimensions
+                                                            .defaultRadius),
+                                              ),
+                                            ),
+                                          )
+                                        : CachedCommonImage(
+                                            key: const PageStorageKey(
+                                                'summer_Rings_Image'),
+                                            height: size.height * 0.25,
+                                            width: double.infinity,
+                                            networkImageUrl:
+                                                bottomBannerList[1].bannerImage,
+                                          ),
+                                  ),
+                                );
+                              },
+                            ),
+                            const SizedBox(height: Dimensions.space10),
+                            GetBuilder(
+                              init: MainController(),
+                              builder: (ctrl) {
+                                // bool isLoading = bottomBannerList.isEmpty ||
+                                //     bottomBannerList.length < 2;
+                                return Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(
+                                        Dimensions.defaultRadius),
+                                    child: bottomBannerList.isEmpty
+                                        ? Shimmer.fromColors(
+                                            baseColor: ColorResources
+                                                .shimmerEffectBaseColor,
+                                            highlightColor: ColorResources
+                                                .shimmerEffectHighlightColor,
+                                            child: Container(
+                                              height: size.height * 0.25,
+                                              width: double.infinity,
+                                              decoration: BoxDecoration(
+                                                color:
+                                                    ColorResources.whiteColor,
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        Dimensions
+                                                            .defaultRadius),
+                                              ),
+                                            ),
+                                          )
+                                        : CachedCommonImage(
+                                            key: const PageStorageKey(
+                                                'summer_Rings_Image'),
+                                            height: size.height * 0.25,
+                                            width: double.infinity,
+                                            networkImageUrl:
+                                                bottomBannerList[2].bannerImage,
+                                          ),
+                                  ),
+                                );
+                              },
+                            ),
+                            const SizedBox(height: Dimensions.space50),
+                            /* The Salt Promise */
+                            Text(
+                              LocalStrings.saltPromise,
+                              textAlign: TextAlign.center,
+                              style: regularOverLarge.copyWith(
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const SizedBox(height: Dimensions.space15),
+                            Container(
+                              height: size.height * 0.15,
+                              width: size.width * double.infinity,
+                              decoration: const BoxDecoration(
+                                color: Color(0xFFe1f1ea),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.black12,
+                                    blurRadius: 8,
+                                    offset: Offset(0, 4),
+                                  ),
+                                ],
+                              ),
+                              child: Padding(
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 16),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment
+                                      .spaceBetween, // Even spacing
+                                  children: [
+                                    GetBuilder(
+                                        init: DashboardController(),
+                                        builder: (controller) {
+                                          return Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Container(
+                                                width:
+                                                    48, // Adjust size as needed
+                                                height: 48,
+                                                decoration: const BoxDecoration(
+                                                  shape: BoxShape.circle,
+                                                ),
+                                                child: ClipOval(
+                                                  child: Image.asset(
+                                                    controller.iconImagesList[
+                                                        0], // Use the list dynamically
+                                                    fit: BoxFit.cover,
+                                                  ),
+                                                ),
+                                              ),
+                                              const SizedBox(
+                                                  height: Dimensions.space5),
+                                              Text(
+                                                LocalStrings.easyReturns,
+                                                textAlign: TextAlign.center,
+                                                style: mediumSmall.copyWith(
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                            ],
+                                          );
+                                        }),
+                                    GetBuilder(
+                                        init: DashboardController(),
+                                        builder: (controller) {
+                                          return Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Container(
+                                                width: 48,
+                                                height: 48,
+                                                decoration: const BoxDecoration(
+                                                  shape: BoxShape.circle,
+                                                ),
+                                                child: ClipOval(
+                                                  child: Image.asset(
+                                                    controller
+                                                        .iconImagesList[1],
+                                                    fit: BoxFit.cover,
+                                                  ),
+                                                ),
+                                              ),
+                                              const SizedBox(
+                                                  height: Dimensions.space5),
+                                              Text(
+                                                LocalStrings.oneYearWarranty,
+                                                textAlign: TextAlign.center,
+                                                style: mediumSmall.copyWith(
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                            ],
+                                          );
+                                        }),
+                                    GetBuilder(
+                                        init: DashboardController(),
+                                        builder: (controller) {
+                                          return Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Container(
+                                                width: 48,
+                                                height: 48,
+                                                decoration: const BoxDecoration(
+                                                  shape: BoxShape.circle,
+                                                ),
+                                                child: ClipOval(
+                                                  child: Image.asset(
+                                                    controller
+                                                        .iconImagesList[2],
+                                                    fit: BoxFit.cover,
+                                                  ),
+                                                ),
+                                              ),
+                                              const SizedBox(
+                                                  height: Dimensions.space5),
+                                              Text(
+                                                LocalStrings.hundredCertified,
+                                                textAlign: TextAlign.center,
+                                                style: mediumSmall.copyWith(
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                            ],
+                                          );
+                                        }),
+                                    GetBuilder(
+                                        init: DashboardController(),
+                                        builder: (controller) {
+                                          return Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Container(
+                                                width: 48,
+                                                height: 48,
+                                                decoration: const BoxDecoration(
+                                                  shape: BoxShape.circle,
+                                                ),
+                                                child: ClipOval(
+                                                  child: Image.asset(
+                                                    controller
+                                                        .iconImagesList[3],
+                                                    fit: BoxFit.cover,
+                                                  ),
+                                                ),
+                                              ),
+                                              const SizedBox(
+                                                  height: Dimensions.space5),
+                                              Text(
+                                                LocalStrings.lifeTimeExchange,
+                                                textAlign: TextAlign.center,
+                                                style: mediumSmall.copyWith(
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              ),
+                                            ],
+                                          );
+                                        }),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: Dimensions.space40),
+                            /* Curated Only For */
+                            Container(
+                              height: size.height * 0.51,
+                              width: double.infinity,
+                              color: const Color(0xFFe1f1ea),
+                              child: Column(
+                                children: [
+                                  newArrivalList.isNotEmpty
+                                      ? Column(
+                                          children: [
+                                            const SizedBox(
+                                                height: Dimensions.space20),
+                                            Text(
+                                              LocalStrings.exclusiveDeals,
+                                              textAlign: TextAlign.center,
+                                              style: regularSmall.copyWith(),
+                                            ),
+                                            Text(
+                                              LocalStrings.curatedOnlyForYou,
+                                              textAlign: TextAlign.center,
+                                              style: regularOverLarge.copyWith(
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ],
+                                        )
+                                      : const SizedBox(),
+                                  SizedBox(
+                                      height: newArrivalList.isNotEmpty
+                                          ? Dimensions.space10
+                                          : 0),
+                                  GetBuilder(
+                                    init: MainController(),
+                                    builder: (ctrl) {
+                                      // bool isLoading = newArrivalList.isEmpty;
+                                      return Container(
+                                        height: size.height * 0.30,
+                                        child: Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 10.0),
+                                          child: GridView.builder(
+                                            gridDelegate:
+                                                const SliverGridDelegateWithFixedCrossAxisCount(
+                                              crossAxisCount: 1,
+                                              crossAxisSpacing: 5,
+                                              mainAxisSpacing: 1,
+                                              childAspectRatio: 1.5,
+                                            ),
+                                            scrollDirection: Axis.horizontal,
+                                            physics:
+                                                const BouncingScrollPhysics(),
+                                            itemCount: newArrivalList.isEmpty
+                                                ? 6
+                                                : newArrivalList.length,
+                                            itemBuilder: (context, index) {
+                                              if (newArrivalList.isEmpty) {
+                                                return Padding(
+                                                  padding: const EdgeInsets
+                                                      .symmetric(
+                                                      horizontal: 5.0),
+                                                  child: Column(
+                                                    crossAxisAlignment:
+                                                        CrossAxisAlignment
+                                                            .start,
+                                                    mainAxisSize:
+                                                        MainAxisSize.min,
+                                                    children: [
+                                                      Shimmer.fromColors(
+                                                        baseColor: ColorResources
+                                                            .shimmerEffectBaseColor,
+                                                        highlightColor:
+                                                            ColorResources
+                                                                .shimmerEffectHighlightColor,
+                                                        child: Container(
+                                                          height: 180,
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            color: Colors.grey,
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        10),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      const SizedBox(
+                                                          height: Dimensions
+                                                              .space5),
+                                                      Shimmer.fromColors(
+                                                        baseColor: ColorResources
+                                                            .shimmerEffectBaseColor,
+                                                        highlightColor:
+                                                            ColorResources
+                                                                .shimmerEffectHighlightColor,
+                                                        child: Container(
+                                                          height: 12,
+                                                          width: 80,
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            color: Colors.grey,
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        5),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      const SizedBox(height: 5),
+                                                      Shimmer.fromColors(
+                                                        baseColor: ColorResources
+                                                            .shimmerEffectBaseColor,
+                                                        highlightColor:
+                                                            ColorResources
+                                                                .shimmerEffectHighlightColor,
+                                                        child: Container(
+                                                          height: 12,
+                                                          width: 50,
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            color: Colors.grey,
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        5),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                );
+                                              } else {
+                                                return Padding(
+                                                  padding: const EdgeInsets
+                                                      .symmetric(
+                                                      horizontal: 5.0),
+                                                  child: GestureDetector(
+                                                    onTap: () {
+                                                      //Todo: Products details seen arrivals
+                                                      Get.toNamed(
+                                                          RouteHelper
+                                                              .productScreen,
+                                                          arguments:
+                                                              newArrivalList[
+                                                                  index]);
+                                                    },
+                                                    child: Container(
+                                                      color: Colors.transparent,
+                                                      child: Column(
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment
+                                                                .start,
+                                                        mainAxisSize:
+                                                            MainAxisSize.min,
+                                                        children: [
+                                                          ClipRRect(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        10),
+                                                            child:
+                                                                CachedCommonImage(
+                                                              networkImageUrl:
+                                                                  newArrivalList[
+                                                                          index]
+                                                                      .media![0]
+                                                                      .productAsset,
+                                                              height: 180,
+                                                              width: double
+                                                                  .infinity,
+                                                            ),
+                                                            // CachedNetworkImage(
+                                                            //   height: 180,
+                                                            //   width: double.infinity,
+                                                            //   imageUrl:
+                                                            //       newArrivalList[index]
+                                                            //           .image01,
+                                                            //   fit: BoxFit.cover,
+                                                            //   progressIndicatorBuilder:
+                                                            //       (context, url,
+                                                            //               downloadProgress) =>
+                                                            //           Shimmer.fromColors(
+                                                            //     baseColor: ColorResources
+                                                            //         .shimmerEffectBaseColor,
+                                                            //     highlightColor: ColorResources
+                                                            //         .shimmerEffectHighlightColor,
+                                                            //     child: Container(
+                                                            //       height: 180,
+                                                            //       decoration:
+                                                            //           BoxDecoration(
+                                                            //         color: Colors.grey,
+                                                            //         borderRadius:
+                                                            //             BorderRadius
+                                                            //                 .circular(10),
+                                                            //       ),
+                                                            //     ),
+                                                            //   ),
+                                                            //   errorWidget: (context, url,
+                                                            //           error) =>
+                                                            //       const Icon(Icons.error),
+                                                            // ),
+                                                          ),
+                                                          const SizedBox(
+                                                              height: Dimensions
+                                                                  .space5),
+                                                          Text(
+                                                            newArrivalList[
+                                                                        index]
+                                                                    .category ??
+                                                                '',
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                            style: mediumLarge
+                                                                .copyWith(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                            ),
+                                                          ),
+                                                          Text(
+                                                            "₹${newArrivalList[index].price14KT?.round()}",
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                            style: mediumLarge
+                                                                .copyWith(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ),
+                                                );
+                                              }
+                                            },
+                                          ),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                  const SizedBox(height: Dimensions.space5),
+                                  /* View All Button */
+                                  Padding(
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 120.0),
                                     child: CommonButton(
                                       onTap: () {
                                         categoriesController
                                             .filterCategoriesApiMethod(
-                                                materialBy: 'Solitaire');
+                                                priceOrder: 'newestFirst');
                                         Get.toNamed(
                                             RouteHelper.collectionScreen);
                                       },
@@ -719,10 +1027,152 @@ class _DashboardScreenState extends State<DashboardScreen>
                                       ),
                                     ),
                                   ),
+                                  const SizedBox(height: Dimensions.space40),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(height: Dimensions.space20),
+                            /* Banner images */
+                            GetBuilder(
+                              init: MainController(),
+                              builder: (ctrl) {
+                                String? media = bottomBannerList[3]
+                                    .bannerImage; // Get the media URL
+                                // Trigger the media playback for this index
+                                dashboardController.handleMediaPlayback(
+                                    media: media!,
+                                    index:
+                                        3); // bool isLoading = bottomBannerList.isEmpty;
+                                return Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(
+                                        Dimensions.defaultRadius),
+                                    child: bottomBannerList.isEmpty
+                                        ? Shimmer.fromColors(
+                                            baseColor: ColorResources
+                                                .shimmerEffectBaseColor,
+                                            highlightColor: ColorResources
+                                                .shimmerEffectHighlightColor,
+                                            child: Container(
+                                              height: size.height * 0.33,
+                                              width: double.infinity,
+                                              decoration: BoxDecoration(
+                                                color:
+                                                    ColorResources.whiteColor,
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        Dimensions
+                                                            .defaultRadius),
+                                              ),
+                                            ),
+                                          )
+                                        : SizedBox(
+                                            height: size.height * 0.33,
+                                            child: LayoutBuilder(
+                                              builder: (context, constraints) {
+                                                // Ensure the video player is only built once the layout is done
+                                                return _buildVideoPlayer(
+                                                    dashboardController
+                                                        .videoControllers[3]);
+                                              },
+                                            ),
+                                          ),
+                                  ),
+                                );
+                              },
+                            ),
+                            const SizedBox(height: Dimensions.space10),
+                            GetBuilder(
+                              init: MainController(),
+                              builder: (ctrl) {
+                                // bool isLoading = bottomBannerList.isEmpty ||
+                                //     bottomBannerList.length < 2;
+                                return Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(
+                                        Dimensions.defaultRadius),
+                                    child: bottomBannerList.isEmpty
+                                        ? Shimmer.fromColors(
+                                            baseColor: ColorResources
+                                                .shimmerEffectBaseColor,
+                                            highlightColor: ColorResources
+                                                .shimmerEffectHighlightColor,
+                                            child: Container(
+                                              height: size.height * 0.25,
+                                              width: double.infinity,
+                                              decoration: BoxDecoration(
+                                                color:
+                                                    ColorResources.whiteColor,
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        Dimensions
+                                                            .defaultRadius),
+                                              ),
+                                            ),
+                                          )
+                                        : CachedCommonImage(
+                                            key: const PageStorageKey(
+                                                'summer_Rings_Image'),
+                                            height: size.height * 0.25,
+                                            width: double.infinity,
+                                            networkImageUrl:
+                                                bottomBannerList[4].bannerImage,
+                                          ),
+                                  ),
+                                );
+                              },
+                            ),
+                            const SizedBox(height: Dimensions.space10),
+                            GetBuilder(
+                              init: MainController(),
+                              builder: (ctrl) {
+                                // bool isLoading = bottomBannerList.isEmpty ||
+                                //     bottomBannerList.length < 2;
+                                return Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 10),
+                                  child: ClipRRect(
+                                    borderRadius: BorderRadius.circular(
+                                        Dimensions.defaultRadius),
+                                    child: bottomBannerList.isEmpty
+                                        ? Shimmer.fromColors(
+                                            baseColor: ColorResources
+                                                .shimmerEffectBaseColor,
+                                            highlightColor: ColorResources
+                                                .shimmerEffectHighlightColor,
+                                            child: Container(
+                                              height: size.height * 0.25,
+                                              width: double.infinity,
+                                              decoration: BoxDecoration(
+                                                color:
+                                                    ColorResources.whiteColor,
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        Dimensions
+                                                            .defaultRadius),
+                                              ),
+                                            ),
+                                          )
+                                        : CachedCommonImage(
+                                            key: const PageStorageKey(
+                                                'summer_Rings_Image'),
+                                            height: size.height * 0.25,
+                                            width: double.infinity,
+                                            networkImageUrl:
+                                                bottomBannerList[5].bannerImage,
+                                          ),
+                                  ),
+                                );
+                              },
+                            ),
                             const SizedBox(height: Dimensions.space40),
-                            /*shop by category*/
+                            /* Wrapped with love */
                             Text(
-                              LocalStrings.shopBy,
+                              LocalStrings.wrappedWithLove,
                               textAlign: TextAlign.center,
                               style: regularOverLarge.copyWith(
                                 fontWeight: FontWeight.bold,
@@ -908,232 +1358,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                               },
                             ),
                             const SizedBox(height: Dimensions.space40),
-                            /* New Arrival */
-                            newArrivalList.isNotEmpty
-                                ? Text(
-                                    LocalStrings.newArrival,
-                                    textAlign: TextAlign.center,
-                                    style: regularOverLarge.copyWith(
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  )
-                                : SizedBox(),
-                            SizedBox(
-                                height: newArrivalList.isNotEmpty
-                                    ? Dimensions.space10
-                                    : 0),
-                            GetBuilder(
-                              init: MainController(),
-                              builder: (ctrl) {
-                                // bool isLoading = newArrivalList.isEmpty;
-                                return Container(
-                                  height: size.height * 0.30,
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 10.0),
-                                    child: GridView.builder(
-                                      gridDelegate:
-                                          const SliverGridDelegateWithFixedCrossAxisCount(
-                                        crossAxisCount: 1,
-                                        crossAxisSpacing: 5,
-                                        mainAxisSpacing: 1,
-                                        childAspectRatio: 1.5,
-                                      ),
-                                      scrollDirection: Axis.horizontal,
-                                      physics: const BouncingScrollPhysics(),
-                                      itemCount: newArrivalList.isEmpty
-                                          ? 6
-                                          : newArrivalList.length,
-                                      itemBuilder: (context, index) {
-                                        if (newArrivalList.isEmpty) {
-                                          return Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 5.0),
-                                            child: Column(
-                                              crossAxisAlignment:
-                                                  CrossAxisAlignment.start,
-                                              mainAxisSize: MainAxisSize.min,
-                                              children: [
-                                                Shimmer.fromColors(
-                                                  baseColor: ColorResources
-                                                      .shimmerEffectBaseColor,
-                                                  highlightColor: ColorResources
-                                                      .shimmerEffectHighlightColor,
-                                                  child: Container(
-                                                    height: 180,
-                                                    decoration: BoxDecoration(
-                                                      color: Colors.grey,
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              10),
-                                                    ),
-                                                  ),
-                                                ),
-                                                const SizedBox(
-                                                    height: Dimensions.space5),
-                                                Shimmer.fromColors(
-                                                  baseColor: ColorResources
-                                                      .shimmerEffectBaseColor,
-                                                  highlightColor: ColorResources
-                                                      .shimmerEffectHighlightColor,
-                                                  child: Container(
-                                                    height: 12,
-                                                    width: 80,
-                                                    decoration: BoxDecoration(
-                                                      color: Colors.grey,
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              5),
-                                                    ),
-                                                  ),
-                                                ),
-                                                const SizedBox(height: 5),
-                                                Shimmer.fromColors(
-                                                  baseColor: ColorResources
-                                                      .shimmerEffectBaseColor,
-                                                  highlightColor: ColorResources
-                                                      .shimmerEffectHighlightColor,
-                                                  child: Container(
-                                                    height: 12,
-                                                    width: 50,
-                                                    decoration: BoxDecoration(
-                                                      color: Colors.grey,
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              5),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ],
-                                            ),
-                                          );
-                                        } else {
-                                          return Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 5.0),
-                                            child: GestureDetector(
-                                              onTap: () {
-                                                //Todo: Products details seen arrivals
-                                                Get.toNamed(
-                                                    RouteHelper.productScreen,
-                                                    arguments:
-                                                        newArrivalList[index]);
-                                              },
-                                              child: Container(
-                                                color: Colors.transparent,
-                                                child: Column(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.start,
-                                                  mainAxisSize:
-                                                      MainAxisSize.min,
-                                                  children: [
-                                                    ClipRRect(
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              10),
-                                                      child: CachedCommonImage(
-                                                        networkImageUrl:
-                                                            newArrivalList[
-                                                                    index]
-                                                                .media![0]
-                                                                .productAsset,
-                                                        height: 180,
-                                                        width: double.infinity,
-                                                      ),
-                                                      // CachedNetworkImage(
-                                                      //   height: 180,
-                                                      //   width: double.infinity,
-                                                      //   imageUrl:
-                                                      //       newArrivalList[index]
-                                                      //           .image01,
-                                                      //   fit: BoxFit.cover,
-                                                      //   progressIndicatorBuilder:
-                                                      //       (context, url,
-                                                      //               downloadProgress) =>
-                                                      //           Shimmer.fromColors(
-                                                      //     baseColor: ColorResources
-                                                      //         .shimmerEffectBaseColor,
-                                                      //     highlightColor: ColorResources
-                                                      //         .shimmerEffectHighlightColor,
-                                                      //     child: Container(
-                                                      //       height: 180,
-                                                      //       decoration:
-                                                      //           BoxDecoration(
-                                                      //         color: Colors.grey,
-                                                      //         borderRadius:
-                                                      //             BorderRadius
-                                                      //                 .circular(10),
-                                                      //       ),
-                                                      //     ),
-                                                      //   ),
-                                                      //   errorWidget: (context, url,
-                                                      //           error) =>
-                                                      //       const Icon(Icons.error),
-                                                      // ),
-                                                    ),
-                                                    const SizedBox(
-                                                        height:
-                                                            Dimensions.space5),
-                                                    Text(
-                                                      newArrivalList[index]
-                                                              .category ??
-                                                          '',
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      style:
-                                                          mediumLarge.copyWith(
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold),
-                                                    ),
-                                                    Text(
-                                                      "₹${newArrivalList[index].price14KT?.round()}",
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      style:
-                                                          mediumLarge.copyWith(
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            ),
-                                          );
-                                        }
-                                      },
-                                    ),
-                                  ),
-                                );
-                              },
-                            ),
-                            const SizedBox(height: Dimensions.space5),
-                            /* View All Button */
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 120.0),
-                              child: CommonButton(
-                                onTap: () {
-                                  categoriesController
-                                      .filterCategoriesApiMethod(
-                                          priceOrder: 'newestFirst');
-                                  Get.toNamed(RouteHelper.collectionScreen);
-                                },
-                                gradientFirstColor: ColorResources.whiteColor,
-                                gradientSecondColor: ColorResources.whiteColor,
-                                borderColor: ColorResources.conceptTextColor,
-                                height: size.height * 0.05,
-                                child: Text(
-                                  LocalStrings.viewAll,
-                                  style: mediumDefault.copyWith(
-                                    color: ColorResources.conceptTextColor,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            const SizedBox(height: Dimensions.space40),
-                            /* Gift images */
+                            /* Banner Image */
                             GetBuilder(
                               init: MainController(),
                               builder: (ctrl) {
@@ -1144,7 +1369,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(
                                         Dimensions.defaultRadius),
-                                    child: bannerList.isEmpty
+                                    child: bottomBannerList.isEmpty
                                         ? Shimmer.fromColors(
                                             baseColor: ColorResources
                                                 .shimmerEffectBaseColor,
@@ -1166,35 +1391,35 @@ class _DashboardScreenState extends State<DashboardScreen>
                                         : CachedCommonImage(
                                             key: const PageStorageKey(
                                                 'silver_Gifts_Image'),
-                                            height: size.height * 0.33,
+                                            height: size.height * 0.6,
                                             width: double.infinity,
                                             networkImageUrl:
-                                                bannerList[3].bannerImage,
+                                                bottomBannerList[7].bannerImage,
                                           ),
                                   ),
                                 );
                               },
                             ),
-                            const SizedBox(height: Dimensions.space10),
+                            const SizedBox(height: Dimensions.space40),
+                            /* Banner images */
                             GetBuilder(
                               init: MainController(),
                               builder: (ctrl) {
-                                // bool isLoading = bottomBannerList.isEmpty ||
-                                //     bottomBannerList.length < 2;
+                                // bool isLoading = bottomBannerList.isEmpty;
                                 return Padding(
                                   padding: const EdgeInsets.symmetric(
                                       horizontal: 10),
                                   child: ClipRRect(
                                     borderRadius: BorderRadius.circular(
                                         Dimensions.defaultRadius),
-                                    child: bannerList.isEmpty
+                                    child: bottomBannerList.isEmpty
                                         ? Shimmer.fromColors(
                                             baseColor: ColorResources
                                                 .shimmerEffectBaseColor,
                                             highlightColor: ColorResources
                                                 .shimmerEffectHighlightColor,
                                             child: Container(
-                                              height: size.height * 0.25,
+                                              height: size.height * 0.33,
                                               width: double.infinity,
                                               decoration: BoxDecoration(
                                                 color:
@@ -1208,54 +1433,11 @@ class _DashboardScreenState extends State<DashboardScreen>
                                           )
                                         : CachedCommonImage(
                                             key: const PageStorageKey(
-                                                'summer_Rings_Image'),
-                                            height: size.height * 0.25,
+                                                'silver_Gifts_Image'),
+                                            height: size.height * 0.6,
                                             width: double.infinity,
                                             networkImageUrl:
-                                                bannerList[4].bannerImage,
-                                          ),
-                                  ),
-                                );
-                              },
-                            ),
-                            const SizedBox(height: Dimensions.space10),
-                            GetBuilder(
-                              init: MainController(),
-                              builder: (ctrl) {
-                                // bool isLoading = bottomBannerList.isEmpty ||
-                                //     bottomBannerList.length < 2;
-                                return Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 10),
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(
-                                        Dimensions.defaultRadius),
-                                    child: bannerList.isEmpty
-                                        ? Shimmer.fromColors(
-                                            baseColor: ColorResources
-                                                .shimmerEffectBaseColor,
-                                            highlightColor: ColorResources
-                                                .shimmerEffectHighlightColor,
-                                            child: Container(
-                                              height: size.height * 0.25,
-                                              width: double.infinity,
-                                              decoration: BoxDecoration(
-                                                color:
-                                                    ColorResources.whiteColor,
-                                                borderRadius:
-                                                    BorderRadius.circular(
-                                                        Dimensions
-                                                            .defaultRadius),
-                                              ),
-                                            ),
-                                          )
-                                        : CachedCommonImage(
-                                            key: const PageStorageKey(
-                                                'summer_Rings_Image'),
-                                            height: size.height * 0.25,
-                                            width: double.infinity,
-                                            networkImageUrl:
-                                                bannerList[5].bannerImage,
+                                                bottomBannerList[9].bannerImage,
                                           ),
                                   ),
                                 );
@@ -1310,14 +1492,16 @@ class _DashboardScreenState extends State<DashboardScreen>
                                                 const SizedBox(
                                                     height: Dimensions.space5),
                                                 Shimmer.fromColors(
-                                                  baseColor: Colors.grey[300]!,
-                                                  highlightColor:
-                                                      Colors.grey[100]!,
+                                                  baseColor: ColorResources
+                                                      .shimmerEffectBaseColor,
+                                                  highlightColor: ColorResources
+                                                      .shimmerEffectHighlightColor,
                                                   child: Container(
                                                     height: 16,
                                                     width: 100,
                                                     decoration: BoxDecoration(
-                                                      color: Colors.white,
+                                                      color: ColorResources
+                                                          .whiteColor,
                                                       borderRadius:
                                                           BorderRadius.circular(
                                                               5),
@@ -1926,9 +2110,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                                                             .isDialogVisible
                                                             .value = false;
                                                       },
-                                                      child: Column(
-                                                        mainAxisSize:
-                                                            MainAxisSize.min,
+                                                      child: Stack(
                                                         children: [
                                                           ClipRRect(
                                                             borderRadius:
@@ -1954,25 +2136,38 @@ class _DashboardScreenState extends State<DashboardScreen>
                                                               //         .images,
                                                               width: double
                                                                   .infinity,
-                                                              height: 80,
+                                                              height: 100,
                                                             ),
                                                           ),
-                                                          Text(
-                                                            controller
-                                                                    .searchProducts[
-                                                                        index]
-                                                                    .title ??
-                                                                '',
-                                                            textAlign: TextAlign
-                                                                .center,
-                                                            overflow:
-                                                                TextOverflow
-                                                                    .ellipsis,
-                                                            softWrap: false,
-                                                            style: semiBoldSmall
-                                                                .copyWith(
-                                                              color: ColorResources
-                                                                  .conceptTextColor,
+                                                          Align(
+                                                            alignment: Alignment
+                                                                .bottomCenter,
+                                                            child: Padding(
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .only(
+                                                                      bottom:
+                                                                          5),
+                                                              child: Text(
+                                                                controller
+                                                                        .searchProducts[
+                                                                            index]
+                                                                        .title ??
+                                                                    '',
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .center,
+                                                                overflow:
+                                                                    TextOverflow
+                                                                        .ellipsis,
+                                                                softWrap: false,
+                                                                style:
+                                                                    semiBoldSmall
+                                                                        .copyWith(
+                                                                  color: ColorResources
+                                                                      .conceptTextColor,
+                                                                ),
+                                                              ),
                                                             ),
                                                           ),
                                                         ],
@@ -2192,4 +2387,71 @@ class _DashboardScreenState extends State<DashboardScreen>
       },
     );
   }
+}
+//
+// Widget VideoPlayerWidget({
+//   required String videoUrl,
+//   required double height,
+//   required double width,
+// }) {
+//   return FutureBuilder<VideoPlayerController>(
+//     future: _initializeController(videoUrl),
+//     builder: (context, snapshot) {
+//       if (snapshot.connectionState == ConnectionState.waiting) {
+//         return Shimmer.fromColors(
+//           baseColor: ColorResources.shimmerEffectBaseColor,
+//           highlightColor: ColorResources.shimmerEffectHighlightColor,
+//           child: Container(
+//             height: height,
+//             width: double.infinity,
+//             decoration: BoxDecoration(
+//               color: ColorResources.whiteColor,
+//               borderRadius: BorderRadius.circular(Dimensions.defaultRadius),
+//             ),
+//           ),
+//         );
+//       } else if (snapshot.hasError) {
+//         return Center(child: Text('Error loading video'));
+//       } else {
+//         final controller = snapshot.data!;
+//         controller.play();
+//         controller.setLooping(true);
+//
+//         return SizedBox(
+//           height: height,
+//           width: width,
+//           child: AspectRatio(
+//             aspectRatio: controller.value.aspectRatio,
+//             child: VideoPlayer(controller),
+//           ),
+//         );
+//       }
+//     },
+//   );
+// }
+
+// Future<VideoPlayerController> _initializeController(String videoUrl) async {
+//   final controller = VideoPlayerController.network(videoUrl);
+//   await controller.initialize();
+//   return controller;
+// }
+
+Widget _buildVideoPlayer(VideoPlayerController? controller) {
+  if (controller == null || !controller.value.isInitialized) {
+    return Center(
+        child: Shimmer.fromColors(
+      baseColor: ColorResources.shimmerEffectBaseColor,
+      highlightColor: ColorResources.shimmerEffectHighlightColor,
+      child: Container(
+        height: 250,
+        width: double.infinity,
+        decoration: BoxDecoration(
+          color: ColorResources.whiteColor,
+          borderRadius: BorderRadius.circular(Dimensions.defaultRadius),
+        ),
+      ),
+    )); // Show loading indicator until initialized
+  }
+  return VideoPlayer(
+      controller); // Return the video player widget once it's initialized
 }

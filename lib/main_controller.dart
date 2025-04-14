@@ -46,37 +46,41 @@ class MainController extends GetxController {
     return isNetworkConnection;
   }
 
-Future getDashboardJewelleryData() async{
-  try {
-    Response response = await APIFunction().apiCall(
-      apiName: LocalStrings.getHomeViewApi,
-      context: Get.context,
-      isGet: true,
-      isLoading: false,
-    );
-    if (response.statusCode == 200) {
-      bannerList = (response.data['bottomBanner'] as List)
-          .map((banner) => BottomBanner.fromJson(banner))
-          .toList();
-      categoryList = (response.data['categoryImage'] as List)
-          .map((category) => CategoryImage.fromJson(category))
-          .toList();
-      filterCategoryList = (response.data['filterCategory'] as List)
-          .map((filterCategory) => FilterCategory.fromJson(filterCategory))
-          .toList();
-      newArrivalList = (response.data['newArrivals'] as List)
-          .map((newArrivals) => NewArrivals.fromJson(newArrivals))
-          .toList();
-      giftElementList = (response.data['gifts'] as List)
-          .map((gifts) => Gifts.fromJson(gifts))
-          .toList();
-    } else {
-      print("Something went wrong Home : ${response.data['message']}");
+  Future getDashboardJewelleryData() async {
+    try {
+      Response response = await APIFunction().apiCall(
+        apiName: LocalStrings.getHomeViewApi,
+        context: Get.context,
+        isGet: true,
+        isLoading: false,
+      );
+      if (response.statusCode == 200) {
+        bottomBannerList = (response.data['bottomBanner'] as List)
+            .map((banner) => BottomBanner.fromJson(banner))
+            .toList();
+        categoryList = (response.data['categoryImage'] as List)
+            .map((category) => CategoryImage.fromJson(category))
+            .toList();
+        filterCategoryList = (response.data['filterCategory'] as List)
+            .map((filterCategory) => FilterCategory.fromJson(filterCategory))
+            .toList();
+        newArrivalList = (response.data['newArrivals'] as List)
+            .map((newArrivals) => NewArrivals.fromJson(newArrivals))
+            .toList();
+        giftElementList = (response.data['gifts'] as List)
+            .map((gifts) => Gifts.fromJson(gifts))
+            .toList();
+        mediaList = (response.data['media'] as List)
+            .where((media) => media.containsKey('mobileBannerImage'))
+            .map((media) => Media.fromJson(media))
+            .toList();
+      } else {
+        print("Something went wrong Home : ${response.data['message']}");
+      }
+    } catch (e) {
+      print("Get Banner Error : $e");
     }
-  } catch (e) {
-    print("Get Banner Error : $e");
   }
-}
   //Todo : Get banner data using this api method
   // getBannerData() async {
   //   try {
@@ -255,6 +259,7 @@ Future getDashboardJewelleryData() async{
       Get.toNamed(RouteHelper.bottomBarScreen);
     });
   }
+
   @override
   void onInit() {
     // TODO: implement onInit

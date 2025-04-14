@@ -56,6 +56,11 @@ class MyImages {
       'https://images.unsplash.com/photo-1620360094127-854a67f8c959?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D';
   static const String diamondImage =
       'https://media.istockphoto.com/id/639777488/photo/diamond-on-the-water.jpg?s=612x612&w=0&k=20&c=4Nnvy7zs8W5mnbtJubeTWRS2KguoOb4uTZJCDb5B3YE=';
+  static const String iconOne = '${imagePath}easy_return.png';
+  static const String iconTwo = '${imagePath}one_year_warranty.png';
+  static const String iconThree = '${imagePath}certified.png';
+  static const String iconFour = '${imagePath}lifetime_exchange.png';
+  static const String appLogo = '${imagePath}logo_website.png';
 
   ///<<<---------------------------- Add to cart screen images ---------------------------->>>
   static const String chatImage = '${imagePath}chat_image.png';

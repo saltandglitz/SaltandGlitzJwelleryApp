@@ -9,7 +9,9 @@ import 'package:saltandGlitz/core/utils/local_strings.dart';
 import 'package:saltandGlitz/data/controller/bottom_bar/bottom_bar_controller.dart';
 import 'package:saltandGlitz/data/controller/collection/collection_controller.dart';
 import 'package:saltandGlitz/view/components/common_message_show.dart';
+import 'package:video_player/video_player.dart';
 import '../../../analytics/app_analytics.dart';
+import '../../../core/utils/app_const.dart';
 import '../../../core/utils/images.dart';
 import '../../../local_storage/sqflite_local_storage.dart';
 import '../../model/search_product_view_model.dart';
@@ -28,6 +30,9 @@ class DashboardController extends GetxController {
   var searchQuery = ''.obs;
   final ScrollController scrollController = ScrollController();
   List<SearchProductsViewModel> searchProducts = [];
+  List<VideoPlayerController?> videoControllers = [];
+  VideoPlayerController? videoController;
+  // var mediaData;
 
   // TextEditingController for the search field
   final TextEditingController searchTextController = TextEditingController();
@@ -66,6 +71,13 @@ class DashboardController extends GetxController {
     MyImages.ringOneImage,
     MyImages.ringThirdImage,
     MyImages.ringSecondImage,
+  ];
+
+  final List iconImagesList = [
+    MyImages.iconOne,
+    MyImages.iconTwo,
+    MyImages.iconThree,
+    MyImages.iconFour
   ];
   final List imageSolitaireText = [
     LocalStrings.goldenRing,
@@ -342,6 +354,7 @@ class DashboardController extends GetxController {
     });
     update();
   }
+
   // Handle search field changes
   void onSearchChanged(String value) {
     searchQuery.value = value;
@@ -368,6 +381,89 @@ class DashboardController extends GetxController {
       collectionController.isShowSearchField.value = false;
     }
     update();
+  }
+
+  // void handleMediaPlayback(int index) {
+  //   final media = bottomBannerList[index].bannerImage;
+  //   if (media != null) {
+  //     // Check if videoController is initialized
+  //     if (videoController == null || !videoController!.value.isInitialized) {
+  //       // Initialize the video player only if it's not initialized
+  //       videoController = VideoPlayerController.networkUrl(Uri.parse(media))
+  //         ..initialize().then((_) {
+  //           // Set looping to true for continuous playback
+  //           videoController!.setLooping(true);
+  //           videoController!.play();
+  //           update(); // Notify the UI for the changes
+  //         }).catchError((error) {
+  //           // Handle any error that might occur during initialization
+  //           print("Error initializing video: $error");
+  //         });
+  //     } else {
+  //       // If the video controller is already initialized, just play the video
+  //       videoController!.play();
+  //     }
+  //   } else {
+  //     videoController?.pause();
+  //   }
+  //   update();
+  // }
+  void handleMediaPlayback({required String media, required int index}) {
+    // Initialize the video controller if it doesn't exist for the index
+    if (videoControllers.length <= index) {
+      videoControllers.add(null); // Add a null controller placeholder
+    }
+
+    // If the controller is null or uninitialized, initialize it with new media
+    if (videoControllers[index] == null ||
+        !videoControllers[index]!.value.isInitialized ||
+        videoControllers[index]!.dataSource != media) {
+      // Dispose the previous controller if it exists
+      videoControllers[index]?.dispose();
+
+      videoControllers[index] =
+          VideoPlayerController.networkUrl(Uri.parse(media))
+            ..initialize().then((_) {
+              videoControllers[index]!.setLooping(true);
+              videoControllers[index]!.play();
+              videoControllers[index]?.setVolume(0.0);
+              // Defer update() to avoid layout conflicts
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                update();
+              });
+            }).catchError((error) {
+              print("Error initializing video: $error");
+            });
+    } else {
+      videoControllers[index]!.play();
+    }
+  }
+
+  Future<void> handleMediaPlay(int index) async {
+    final mediaUrl = mediaList[index].mobileBannerImage?.trim();
+
+    if (videoController != null) {
+      await videoController!.pause();
+      await videoController!.dispose();
+      videoController = null;
+      update();
+    }
+
+    if (mediaUrl != null &&
+        mediaUrl.isNotEmpty &&
+        mediaList[index].type == 'goldVideo') {
+      await Future.delayed(const Duration(milliseconds: 200)); // 🛠️ add this
+      videoController = VideoPlayerController.networkUrl(Uri.parse(mediaUrl));
+
+      try {
+        await videoController!.initialize();
+        videoController!.setLooping(true);
+        await videoController!.play();
+        update();
+      } catch (error) {
+        print("Video initialization error: $error");
+      }
+    }
   }
 
   //Todo  : Particular Products wishlist add

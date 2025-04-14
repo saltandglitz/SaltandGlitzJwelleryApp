@@ -143,30 +143,30 @@ class ProductController extends GetxController {
   }
 
   // Method to handle video playback
-  void handleMediaPlayback(int index) {
-    final media = productData?.media?[index].productAsset;
+  void handleMediaPlayback(int index) async {
+    final media = productData?.media?[index].productAsset?.trim();
+
+    // Dispose previous controller if exists
+    if (videoController != null) {
+      await videoController!.pause();
+      await videoController!.dispose();
+      videoController = null;
+    }
+
     if (media != null && productData?.media?[index].type == 'goldVideo') {
-      // Check if videoController is initialized
-      if (videoController == null || !videoController!.value.isInitialized) {
-        // Initialize the video player only if it's not initialized
-        videoController = VideoPlayerController.networkUrl(Uri.parse(media))
-          ..initialize().then((_) {
-            // Set looping to true for continuous playback
-            videoController!.setLooping(true);
-            videoController!.play();
-            update(); // Notify the UI for the changes
-          }).catchError((error) {
-            // Handle any error that might occur during initialization
-            print("Error initializing video: $error");
-          });
-      } else {
-        // If the video controller is already initialized, just play the video
-        videoController!.play();
+      videoController = VideoPlayerController.networkUrl(Uri.parse(media));
+
+      try {
+        await videoController!.initialize();
+        videoController!.setLooping(true);
+        await videoController!.play(); // Auto play on slide change
+        update();
+      } catch (error) {
+        print("Error initializing video: $error");
       }
     } else {
-      videoController?.pause();
+      update(); // Just update for image or non-video
     }
-    update();
   }
 
   enableNetworkHideLoader() {

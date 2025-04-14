@@ -23,8 +23,9 @@ class CachedCommonImage extends StatelessWidget {
       width: width,
       imageUrl: networkImageUrl ?? "",
       fit: BoxFit.cover,
-      progressIndicatorBuilder: (context, url,
-              downloadProgress) => // Show shimmer effect while loading
+      memCacheHeight: 460,
+      memCacheWidth: 500,
+      progressIndicatorBuilder: (context, url, downloadProgress) =>
           Shimmer.fromColors(
         baseColor: ColorResources.baseColor,
         highlightColor: ColorResources.highlightColor,

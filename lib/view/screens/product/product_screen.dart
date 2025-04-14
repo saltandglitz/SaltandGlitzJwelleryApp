@@ -327,8 +327,8 @@ class _ProductScreenState extends State<ProductScreen> {
                                               index, reason);
                                           controller.currentIndex.value =
                                               index; // Update current index on page change
-                                          controller.handleMediaPlayback(
-                                              index); // Handle media playback when the page changes
+                                          controller.handleMediaPlayback(index);
+                                          // Handle media playback when the page changes
                                         },
                                         enlargeCenterPage: true,
                                         aspectRatio: 1 / 1.30,
@@ -375,14 +375,11 @@ class _ProductScreenState extends State<ProductScreen> {
                                                     )
                                               : Container(); // Empty container when not the selected video
                                         }
-
                                         return Container(); // Fallback for unsupported media types
                                       },
                                     ),
                                   ),
-
                                   const SizedBox(height: Dimensions.space10),
-
                                   // Indicator Row showing either the circle for image or play icon for video
                                   Obx(
                                     () {
@@ -444,8 +441,7 @@ class _ProductScreenState extends State<ProductScreen> {
                                       );
                                     },
                                   ),
-
-                                  // Image scrolling CarouselSlider show and on clicked show upper chnage image
+                                  // Image scrolling CarouselSlider show and on clicked show upper change image
                                   // Obx(() => Row(
                                   //       mainAxisAlignment: MainAxisAlignment.center,
                                   //       children: List.generate(
@@ -584,7 +580,7 @@ class _ProductScreenState extends State<ProductScreen> {
                                                             ?.isAlready ==
                                                         true) {
                                                       //Todo : Remove Wishlist particular products api method
-//Todo : Wishlist particular products api method
+                                                      //Todo : Wishlist particular products api method
                                                       collectionController
                                                           .removeWishlistApiMethod(
                                                               productId: controller
@@ -1588,7 +1584,6 @@ class _ProductScreenState extends State<ProductScreen> {
                                       ),
                                     ),
                                   ),
-
                                   SizedBox(height: size.height * 0.090),
                                 ],
                               ),

@@ -23,26 +23,46 @@ class HomeViewModel {
 
   HomeViewModel.fromJson(Map<String, dynamic> json)
       : message = json['message'] as String?,
-        banner = (json['banner'] as List?)?.map((dynamic e) => Banner.fromJson(e as Map<String,dynamic>)).toList(),
-        newArrivals = (json['newArrivals'] as List?)?.map((dynamic e) => NewArrivals.fromJson(e as Map<String,dynamic>)).toList(),
-        poster = (json['poster'] as List?)?.map((dynamic e) => Poster.fromJson(e as Map<String,dynamic>)).toList(),
-        solitire = (json['solitire'] as List?)?.map((dynamic e) => Solitire.fromJson(e as Map<String,dynamic>)).toList(),
-        bottomBanner = (json['bottomBanner'] as List?)?.map((dynamic e) => BottomBanner.fromJson(e as Map<String,dynamic>)).toList(),
-        filterCategory = (json['filterCategory'] as List?)?.map((dynamic e) => FilterCategory.fromJson(e as Map<String,dynamic>)).toList(),
-        categoryImage = (json['categoryImage'] as List?)?.map((dynamic e) => CategoryImage.fromJson(e as Map<String,dynamic>)).toList(),
-        gifts = (json['gifts'] as List?)?.map((dynamic e) => Gifts.fromJson(e as Map<String,dynamic>)).toList();
+        banner = (json['banner'] as List?)
+            ?.map((dynamic e) => Banner.fromJson(e as Map<String, dynamic>))
+            .toList(),
+        newArrivals = (json['newArrivals'] as List?)
+            ?.map(
+                (dynamic e) => NewArrivals.fromJson(e as Map<String, dynamic>))
+            .toList(),
+        poster = (json['poster'] as List?)
+            ?.map((dynamic e) => Poster.fromJson(e as Map<String, dynamic>))
+            .toList(),
+        solitire = (json['solitire'] as List?)
+            ?.map((dynamic e) => Solitire.fromJson(e as Map<String, dynamic>))
+            .toList(),
+        bottomBanner = (json['bottomBanner'] as List?)
+            ?.map(
+                (dynamic e) => BottomBanner.fromJson(e as Map<String, dynamic>))
+            .toList(),
+        filterCategory = (json['filterCategory'] as List?)
+            ?.map((dynamic e) =>
+                FilterCategory.fromJson(e as Map<String, dynamic>))
+            .toList(),
+        categoryImage = (json['categoryImage'] as List?)
+            ?.map((dynamic e) =>
+                CategoryImage.fromJson(e as Map<String, dynamic>))
+            .toList(),
+        gifts = (json['gifts'] as List?)
+            ?.map((dynamic e) => Gifts.fromJson(e as Map<String, dynamic>))
+            .toList();
 
   Map<String, dynamic> toJson() => {
-    'message' : message,
-    'banner' : banner?.map((e) => e.toJson()).toList(),
-    'newArrivals' : newArrivals?.map((e) => e.toJson()).toList(),
-    'poster' : poster?.map((e) => e.toJson()).toList(),
-    'solitire' : solitire?.map((e) => e.toJson()).toList(),
-    'bottomBanner' : bottomBanner?.map((e) => e.toJson()).toList(),
-    'filterCategory' : filterCategory?.map((e) => e.toJson()).toList(),
-    'categoryImage' : categoryImage?.map((e) => e.toJson()).toList(),
-    'gifts' : gifts?.map((e) => e.toJson()).toList()
-  };
+        'message': message,
+        'banner': banner?.map((e) => e.toJson()).toList(),
+        'newArrivals': newArrivals?.map((e) => e.toJson()).toList(),
+        'poster': poster?.map((e) => e.toJson()).toList(),
+        'solitire': solitire?.map((e) => e.toJson()).toList(),
+        'bottomBanner': bottomBanner?.map((e) => e.toJson()).toList(),
+        'filterCategory': filterCategory?.map((e) => e.toJson()).toList(),
+        'categoryImage': categoryImage?.map((e) => e.toJson()).toList(),
+        'gifts': gifts?.map((e) => e.toJson()).toList()
+      };
 }
 
 class Banner {
@@ -65,17 +85,36 @@ class Banner {
         v = json['__v'] as int?;
 
   Map<String, dynamic> toJson() => {
-    'banner_id' : bannerId,
-    'bannerImage' : bannerImage,
-    'createdAt' : createdAt,
-    '__v' : v
-  };
+        'banner_id': bannerId,
+        'bannerImage': bannerImage,
+        'createdAt': createdAt,
+        '__v': v
+      };
+}
+
+class Media {
+  final String? type;
+  final String? mobileBannerImage;
+
+  Media({
+    this.type,
+    this.mobileBannerImage,
+  });
+
+  Media.fromJson(Map<String, dynamic> json)
+      : type = json['type'] as String?,
+        mobileBannerImage = json['mobileBannerImage'] as String?;
+
+  Map<String, dynamic> toJson() => {
+        'type': type,
+        'mobileBannerImage': mobileBannerImage,
+      };
 }
 
 class NewArrivals {
   final String? productId;
   final String? isAlready;
-  final List<Media>? media;
+  final List<MediaNewArrivals>? media;
   final String? id;
   final String? title;
   final String? gender;
@@ -142,7 +181,10 @@ class NewArrivals {
   NewArrivals.fromJson(Map<String, dynamic> json)
       : productId = json['product_id'] as String?,
         isAlready = json['isAlready'] as String?,
-        media = (json['media'] as List?)?.map((dynamic e) => Media.fromJson(e as Map<String,dynamic>)).toList(),
+        media = (json['media'] as List?)
+            ?.map((dynamic e) =>
+                MediaNewArrivals.fromJson(e as Map<String, dynamic>))
+            .toList(),
         id = json['id'] as String?,
         title = json['title'] as String?,
         gender = json['gender'] as String?,
@@ -173,57 +215,54 @@ class NewArrivals {
         v = json['__v'] as int?;
 
   Map<String, dynamic> toJson() => {
-    'product_id' : productId,
-    'isAlready' : isAlready,
-    'media' : media?.map((e) => e.toJson()).toList(),
-    'id' : id,
-    'title' : title,
-    'gender' : gender,
-    'price14KT' : price14KT,
-    'price18KT' : price18KT,
-    'image01' : image01,
-    'image02' : image02,
-    'image03' : image03,
-    'image04' : image04,
-    'image05' : image05,
-    'video' : video,
-    'category' : category,
-    'subCategory' : subCategory,
-    'material' : material,
-    'diamondprice' : diamondprice,
-    'makingCharge14KT' : makingCharge14KT,
-    'makingCharge18KT' : makingCharge18KT,
-    'grossWt' : grossWt,
-    'netWeight14KT' : netWeight14KT,
-    'netWeight18KT' : netWeight18KT,
-    'gst14KT' : gst14KT,
-    'gst18KT' : gst18KT,
-    'total14KT' : total14KT,
-    'total18KT' : total18KT,
-    'isFavourite' : isFavourite,
-    'createdAt' : createdAt,
-    'updatedAt' : updatedAt,
-    '__v' : v
-  };
+        'product_id': productId,
+        'isAlready': isAlready,
+        'media': media?.map((e) => e.toJson()).toList(),
+        'id': id,
+        'title': title,
+        'gender': gender,
+        'price14KT': price14KT,
+        'price18KT': price18KT,
+        'image01': image01,
+        'image02': image02,
+        'image03': image03,
+        'image04': image04,
+        'image05': image05,
+        'video': video,
+        'category': category,
+        'subCategory': subCategory,
+        'material': material,
+        'diamondprice': diamondprice,
+        'makingCharge14KT': makingCharge14KT,
+        'makingCharge18KT': makingCharge18KT,
+        'grossWt': grossWt,
+        'netWeight14KT': netWeight14KT,
+        'netWeight18KT': netWeight18KT,
+        'gst14KT': gst14KT,
+        'gst18KT': gst18KT,
+        'total14KT': total14KT,
+        'total18KT': total18KT,
+        'isFavourite': isFavourite,
+        'createdAt': createdAt,
+        'updatedAt': updatedAt,
+        '__v': v
+      };
 }
 
-class Media {
+class MediaNewArrivals {
   final String? type;
   final String? productAsset;
 
-  Media({
+  MediaNewArrivals({
     this.type,
     this.productAsset,
   });
 
-  Media.fromJson(Map<String, dynamic> json)
+  MediaNewArrivals.fromJson(Map<String, dynamic> json)
       : type = json['type'] as String?,
         productAsset = json['productAsset'] as String?;
 
-  Map<String, dynamic> toJson() => {
-    'type' : type,
-    'productAsset' : productAsset
-  };
+  Map<String, dynamic> toJson() => {'type': type, 'productAsset': productAsset};
 }
 
 class Poster {
@@ -246,11 +285,11 @@ class Poster {
         v = json['__v'] as int?;
 
   Map<String, dynamic> toJson() => {
-    'poster_id' : posterId,
-    'posterImage' : posterImage,
-    'createdAt' : createdAt,
-    '__v' : v
-  };
+        'poster_id': posterId,
+        'posterImage': posterImage,
+        'createdAt': createdAt,
+        '__v': v
+      };
 }
 
 class Solitire {
@@ -323,7 +362,10 @@ class Solitire {
   Solitire.fromJson(Map<String, dynamic> json)
       : productId = json['product_id'] as String?,
         isAlready = json['isAlready'] as String?,
-        media = (json['media'] as List?)?.map((dynamic e) => MediaSolitire.fromJson(e as Map<String,dynamic>)).toList(),
+        media = (json['media'] as List?)
+            ?.map((dynamic e) =>
+                MediaSolitire.fromJson(e as Map<String, dynamic>))
+            .toList(),
         id = json['id'] as String?,
         title = json['title'] as String?,
         gender = json['gender'] as String?,
@@ -354,38 +396,38 @@ class Solitire {
         v = json['__v'] as int?;
 
   Map<String, dynamic> toJson() => {
-    'product_id' : productId,
-    'isAlready' : isAlready,
-    'media' : media?.map((e) => e.toJson()).toList(),
-    'id' : id,
-    'title' : title,
-    'gender' : gender,
-    'price14KT' : price14KT,
-    'price18KT' : price18KT,
-    'image01' : image01,
-    'image02' : image02,
-    'image03' : image03,
-    'image04' : image04,
-    'image05' : image05,
-    'video' : video,
-    'category' : category,
-    'subCategory' : subCategory,
-    'material' : material,
-    'diamondprice' : diamondprice,
-    'makingCharge14KT' : makingCharge14KT,
-    'makingCharge18KT' : makingCharge18KT,
-    'grossWt' : grossWt,
-    'netWeight14KT' : netWeight14KT,
-    'netWeight18KT' : netWeight18KT,
-    'gst14KT' : gst14KT,
-    'gst18KT' : gst18KT,
-    'total14KT' : total14KT,
-    'total18KT' : total18KT,
-    'isFavourite' : isFavourite,
-    'createdAt' : createdAt,
-    'updatedAt' : updatedAt,
-    '__v' : v
-  };
+        'product_id': productId,
+        'isAlready': isAlready,
+        'media': media?.map((e) => e.toJson()).toList(),
+        'id': id,
+        'title': title,
+        'gender': gender,
+        'price14KT': price14KT,
+        'price18KT': price18KT,
+        'image01': image01,
+        'image02': image02,
+        'image03': image03,
+        'image04': image04,
+        'image05': image05,
+        'video': video,
+        'category': category,
+        'subCategory': subCategory,
+        'material': material,
+        'diamondprice': diamondprice,
+        'makingCharge14KT': makingCharge14KT,
+        'makingCharge18KT': makingCharge18KT,
+        'grossWt': grossWt,
+        'netWeight14KT': netWeight14KT,
+        'netWeight18KT': netWeight18KT,
+        'gst14KT': gst14KT,
+        'gst18KT': gst18KT,
+        'total14KT': total14KT,
+        'total18KT': total18KT,
+        'isFavourite': isFavourite,
+        'createdAt': createdAt,
+        'updatedAt': updatedAt,
+        '__v': v
+      };
 }
 
 class MediaSolitire {
@@ -401,10 +443,7 @@ class MediaSolitire {
       : type = json['type'] as String?,
         productAsset = json['productAsset'] as String?;
 
-  Map<String, dynamic> toJson() => {
-    'type' : type,
-    'productAsset' : productAsset
-  };
+  Map<String, dynamic> toJson() => {'type': type, 'productAsset': productAsset};
 }
 
 class BottomBanner {
@@ -427,11 +466,11 @@ class BottomBanner {
         v = json['__v'] as int?;
 
   Map<String, dynamic> toJson() => {
-    'bottomBanner_id' : bottomBannerId,
-    'bannerImage' : bannerImage,
-    'createdAt' : createdAt,
-    '__v' : v
-  };
+        'bottomBanner_id': bottomBannerId,
+        'bannerImage': bannerImage,
+        'createdAt': createdAt,
+        '__v': v
+      };
 }
 
 class FilterCategory {
@@ -457,12 +496,12 @@ class FilterCategory {
         v = json['__v'] as int?;
 
   Map<String, dynamic> toJson() => {
-    'filterCategory_id' : filterCategoryId,
-    'filterCategoryName' : filterCategoryName,
-    'filterCategoryImage' : filterCategoryImage,
-    'createdAt' : createdAt,
-    '__v' : v
-  };
+        'filterCategory_id': filterCategoryId,
+        'filterCategoryName': filterCategoryName,
+        'filterCategoryImage': filterCategoryImage,
+        'createdAt': createdAt,
+        '__v': v
+      };
 }
 
 class CategoryImage {
@@ -488,12 +527,12 @@ class CategoryImage {
         v = json['__v'] as int?;
 
   Map<String, dynamic> toJson() => {
-    'categoryImage_Id' : categoryImageId,
-    'categoryName' : categoryName,
-    'categoryImage' : categoryImage,
-    'createdAt' : createdAt,
-    '__v' : v
-  };
+        'categoryImage_Id': categoryImageId,
+        'categoryName': categoryName,
+        'categoryImage': categoryImage,
+        'createdAt': createdAt,
+        '__v': v
+      };
 }
 
 class Gifts {
@@ -519,10 +558,10 @@ class Gifts {
         v = json['__v'] as int?;
 
   Map<String, dynamic> toJson() => {
-    'gift_id' : giftId,
-    'giftName' : giftName,
-    'giftImage' : giftImage,
-    'createdAt' : createdAt,
-    '__v' : v
-  };
+        'gift_id': giftId,
+        'giftName': giftName,
+        'giftImage': giftImage,
+        'createdAt': createdAt,
+        '__v': v
+      };
 }
