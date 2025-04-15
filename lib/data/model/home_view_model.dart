@@ -541,6 +541,7 @@ class Gifts {
   final String? giftImage;
   final String? createdAt;
   final int? v;
+  final String? type;
 
   Gifts({
     this.giftId,
@@ -548,6 +549,7 @@ class Gifts {
     this.giftImage,
     this.createdAt,
     this.v,
+    this.type,
   });
 
   Gifts.fromJson(Map<String, dynamic> json)
@@ -555,13 +557,15 @@ class Gifts {
         giftName = json['giftName'] as String?,
         giftImage = json['giftImage'] as String?,
         createdAt = json['createdAt'] as String?,
-        v = json['__v'] as int?;
+        v = json['__v'] as int?,
+        type = json['type'] as String?;
 
   Map<String, dynamic> toJson() => {
         'gift_id': giftId,
         'giftName': giftName,
         'giftImage': giftImage,
         'createdAt': createdAt,
-        '__v': v
+        '__v': v,
+        'type': type
       };
 }

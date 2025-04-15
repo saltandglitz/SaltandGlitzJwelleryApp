@@ -371,9 +371,17 @@ class _DashboardScreenState extends State<DashboardScreen>
                                                                       ?.value
                                                                       .isInitialized ==
                                                                   true) {
-                                                            return _buildVideoPlayer(
-                                                                controller
-                                                                    .videoController);
+                                                            return SizedBox(
+                                                              width: double.infinity,
+                                                              child: LayoutBuilder(
+                                                                builder: (context, constraints) {
+                                                                  // Ensure the video player is only built once the layout is done
+                                                                  return _buildVideoPlayer(
+                                                                      controller
+                                                                          .videoController);
+                                                                },
+                                                              ),
+                                                            );
                                                           } else {
                                                             return Shimmer
                                                                 .fromColors(
@@ -1457,7 +1465,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                               builder: (ctrl) {
                                 bool isLoading = giftElementList.isEmpty;
                                 return Container(
-                                  height: size.height * 0.35,
+                                  height: size.height * 0.40,
                                   child: Padding(
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 10.0),
@@ -1537,46 +1545,106 @@ class _DashboardScreenState extends State<DashboardScreen>
                                               child: Column(
                                                 mainAxisSize: MainAxisSize.min,
                                                 children: [
-                                                  ClipRRect(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            10), // ✅ Rounded corners
-                                                    child: Card(
-                                                      shape:
-                                                          RoundedRectangleBorder(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(10),
-                                                      ),
-                                                      child: ClipRRect(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(10),
-                                                        child:
-                                                            CachedCommonImage(
-                                                          networkImageUrl:
-                                                              giftElementList[
-                                                                      index]
-                                                                  .giftImage,
-                                                          width:
-                                                              double.infinity,
+                                                  SizedBox(
+                                                    height: size.height * 0.33,
+                                                    width: double.infinity,
+                                                    child: ClipRRect(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10), // ✅ Rounded corners
+                                                      child: Card(
+                                                        shape:
+                                                            RoundedRectangleBorder(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(10),
                                                         ),
+                                                        child: ClipRRect(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(
+                                                                        10),
+                                                            child: giftElementList[
+                                                                            index]
+                                                                        .type ==
+                                                                    "goldImage"
+                                                                ? CachedCommonImage(
+                                                                    networkImageUrl:
+                                                                        giftElementList[index]
+                                                                            .giftImage,
+                                                                    width: double
+                                                                        .infinity,
+                                                                  )
+                                                                : Obx(() {
+                                                                    // Trigger video init if not ready
+                                                                    controller
+                                                                        .handleMediaPlayback(
+                                                                      media:
+                                                                          "${giftElementList[index].giftImage}",
+                                                                      index:
+                                                                          index,
+                                                                    );
+
+                                                                    bool isReady = controller.isVideoReadyList.length >
+                                                                            index &&
+                                                                        controller.isVideoReadyList[index] ==
+                                                                            true;
+
+                                                                    var videoController = controller.videoControllers.length >
+                                                                            index
+                                                                        ? controller
+                                                                            .videoControllers[index]
+                                                                        : null;
+
+                                                                    if (isReady &&
+                                                                        videoController !=
+                                                                            null &&
+                                                                        videoController
+                                                                            .value
+                                                                            .isInitialized) {
+                                                                      return _buildVideoPlayer(
+                                                                          videoController);
+                                                                    } else {
+                                                                      return Shimmer
+                                                                          .fromColors(
+                                                                        baseColor:
+                                                                            ColorResources.baseColor,
+                                                                        highlightColor:
+                                                                            ColorResources.highlightColor,
+                                                                        child:
+                                                                            Container(
+                                                                          height:
+                                                                              size.height * 0.26,
+                                                                          width:
+                                                                              double.infinity,
+                                                                          color:
+                                                                              ColorResources.inactiveTabColor,
+                                                                        ),
+                                                                      );
+                                                                    }
+                                                                  })),
                                                       ),
                                                     ),
                                                   ),
                                                   const SizedBox(
                                                       height:
                                                           Dimensions.space5),
-                                                  Text(
-                                                    giftElementList[index]
-                                                            .giftName ??
-                                                        '',
-                                                    textAlign: TextAlign.center,
-                                                    style: mediumMediumLarge
-                                                        .copyWith(
-                                                            fontWeight:
-                                                                FontWeight
-                                                                    .bold),
+                                                  Expanded(
+                                                    child: Text(
+                                                      giftElementList[index]
+                                                              .giftName ??
+                                                          '',
+                                                      maxLines: 2,
+                                                      softWrap: true,
+                                                      overflow: TextOverflow.ellipsis,
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      style: mediumMediumLarge
+                                                          .copyWith(
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold),
+                                                    ),
                                                   ),
                                                 ],
                                               ),
@@ -2459,6 +2527,8 @@ Widget _buildVideoPlayer(VideoPlayerController? controller) {
       ),
     )); // Show loading indicator until initialized
   }
-  return VideoPlayer(
-      controller); // Return the video player widget once it's initialized
+  return AspectRatio(
+    aspectRatio: controller.value.aspectRatio,
+    child: VideoPlayer(controller),
+  ); // Return the video player widget once it's initialized
 }

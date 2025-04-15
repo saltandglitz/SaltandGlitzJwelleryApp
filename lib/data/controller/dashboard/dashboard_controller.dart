@@ -33,6 +33,7 @@ class DashboardController extends GetxController {
   List<VideoPlayerController?> videoControllers = [];
   VideoPlayerController? videoController;
   // var mediaData;
+  RxList<bool> isVideoReadyList = <bool>[].obs;
 
   // TextEditingController for the search field
   final TextEditingController searchTextController = TextEditingController();
@@ -409,7 +410,7 @@ class DashboardController extends GetxController {
   //   }
   //   update();
   // }
-  void handleMediaPlayback({required String media, required int index}) {
+  /*void handleMediaPlayback({required String media, required int index}) {
     // Initialize the video controller if it doesn't exist for the index
     if (videoControllers.length <= index) {
       videoControllers.add(null); // Add a null controller placeholder
@@ -435,6 +436,32 @@ class DashboardController extends GetxController {
             }).catchError((error) {
               print("Error initializing video: $error");
             });
+    } else {
+      videoControllers[index]!.play();
+    }
+  }*/
+  void handleMediaPlayback({required String media, required int index}) {
+    // Extend the list if necessary
+    while (videoControllers.length <= index) {
+      videoControllers.add(null);
+      isVideoReadyList.add(false);
+    }
+
+    if (videoControllers[index] == null ||
+        !videoControllers[index]!.value.isInitialized ||
+        videoControllers[index]!.dataSource != media) {
+      videoControllers[index]?.dispose();
+
+      videoControllers[index] = VideoPlayerController.network(media)
+        ..initialize().then((_) {
+          videoControllers[index]!.setLooping(true);
+          videoControllers[index]!.play();
+          videoControllers[index]!.setVolume(0.0);
+          isVideoReadyList[index] = true;
+          isVideoReadyList.refresh(); // Notify Obx
+        }).catchError((e) {
+          print("Video Init Error: $e");
+        });
     } else {
       videoControllers[index]!.play();
     }
@@ -475,5 +502,14 @@ class DashboardController extends GetxController {
     try {} catch (e) {
       print("Products wishlist add error : $e");
     }
+  }
+  @override
+  void onClose() {
+    for (var controller in videoControllers) {
+      controller?.dispose();
+    }
+    videoController?.dispose();
+    // TODO: implement onClose
+    super.onClose();
   }
 }
