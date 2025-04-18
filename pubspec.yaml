@@ -69,6 +69,8 @@ dependencies:
   like_button: ^2.0.5
   flutter_rating: ^2.0.2
   image_picker: ^1.1.2
+  flutter_inappwebview: ^6.0.0
+  permission_handler: ^11.2.0
 
 
 dev_dependencies:

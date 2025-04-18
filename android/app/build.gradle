@@ -25,14 +25,17 @@ if (flutterVersionName == null) {
 }
 android {
     namespace = "com.jwellery.saltandGlitz"
-    compileSdk = flutter.compileSdkVersion
+    compileSdk = 34
     ndkVersion = flutter.ndkVersion
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
-
+    dexOptions {
+        preDexLibraries = false
+        javaMaxHeapSize "4g"  // Increase heap size if necessary
+    }
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId = "com.jwellery.saltandGlitz"

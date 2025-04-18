@@ -270,136 +270,158 @@ class _WomenCategoriesScreenState extends State<WomenCategoriesScreen> {
                         },
                       ),
                       const SizedBox(height: Dimensions.space5),
-                      getCategoryBannerData.isNotEmpty?  Align(
-                        alignment: Alignment.center,
-                        child: Text(
-                          LocalStrings.silverJewellery,
-                          style: semiBoldLarge.copyWith(
-                            color:
-                                ColorResources.buttonColorDark.withOpacity(0.7),
-                          ),
-                        ),
-                      ):const SizedBox(),
-                       SizedBox(height:getCategoryBannerData.isNotEmpty? Dimensions.space10:0),
-                      getCategoryBannerData.isNotEmpty?    GetBuilder(
-                        init: CategoriesController(),
-                        builder: (controller) {
-                          return Stack(
-                            alignment: AlignmentDirectional.bottomCenter,
-                            children: [
-                              getCategoryBannerData.isEmpty
-                                  ? CarouselSlider.builder(
-                                      key: const PageStorageKey(
-                                          'carousel_slider_key'),
-                                      // Add PageStorageKey
-                                      itemCount: 3,
-                                      options: CarouselOptions(
-                                        onPageChanged: controller
-                                            .onPageChangedWomenProducts,
-                                        autoPlay: true,
-                                        enlargeCenterPage: true,
-                                        aspectRatio: 4 / 1.4,
-                                        viewportFraction: 1,
-                                      ),
-                                      itemBuilder: (BuildContext context,
-                                          int index, int realIndex) {
-                                        return Shimmer.fromColors(
-                                          baseColor: ColorResources.baseColor,
-                                          highlightColor:
-                                              ColorResources.highlightColor,
-                                          child: ClipRRect(
-                                            borderRadius: BorderRadius.circular(
-                                                Dimensions.bottomSheetRadius),
-                                            child: Container(
-                                                color: ColorResources
-                                                    .highlightColor),
-                                          ),
-                                        );
-                                      },
-                                    )
-                                  : CarouselSlider.builder(
-                                      key: const PageStorageKey(
-                                          'carousel_slider_key'),
-                                      // Add PageStorageKey
-                                      itemCount: getCategoryBannerData.length,
-                                      options: CarouselOptions(
-                                        onPageChanged: controller
-                                            .onPageChangedWomenProducts,
-                                        autoPlay: true,
-                                        enlargeCenterPage: true,
-                                        aspectRatio: 4 / 1.4,
-                                        viewportFraction: 1,
-                                      ),
-                                      itemBuilder: (BuildContext context,
-                                          int index, int realIndex) {
-                                        return ClipRRect(
-                                          borderRadius: BorderRadius.circular(
-                                              Dimensions.bottomSheetRadius),
-                                          child: CachedCommonImage(
-                                            networkImageUrl:
-                                                getCategoryBannerData[index]
-                                                    .mobileBannerImage,
-                                            width: double.infinity,
-                                          ),
-                                        );
-                                      },
-                                    ),
-                              getCategoryBannerData.isEmpty
-                                  ? Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: List.generate(
-                                        3,
-                                        (i) => const Padding(
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 7, vertical: 15),
-                                          child: CircleAvatar(
-                                            radius: 5,
-                                            backgroundColor: ColorResources
-                                                .inactiveCardColor,
-                                            child: CircleAvatar(
-                                              radius: 4,
-                                              backgroundColor: ColorResources
-                                                  .inactiveCardColor,
+                      getCategoryBannerData.isNotEmpty
+                          ? Align(
+                              alignment: Alignment.center,
+                              child: Text(
+                                LocalStrings.silverJewellery,
+                                style: semiBoldLarge.copyWith(
+                                  color: ColorResources.buttonColorDark
+                                      .withOpacity(0.7),
+                                ),
+                              ),
+                            )
+                          : const SizedBox(),
+                      SizedBox(
+                          height: getCategoryBannerData.isNotEmpty
+                              ? Dimensions.space10
+                              : 0),
+                      getCategoryBannerData.isNotEmpty
+                          ? GetBuilder(
+                              init: CategoriesController(),
+                              builder: (controller) {
+                                return Stack(
+                                  alignment: AlignmentDirectional.bottomCenter,
+                                  children: [
+                                    getCategoryBannerData.isEmpty
+                                        ? CarouselSlider.builder(
+                                            key: const PageStorageKey(
+                                                'carousel_slider_key'),
+                                            // Add PageStorageKey
+                                            itemCount: 3,
+                                            options: CarouselOptions(
+                                              onPageChanged: controller
+                                                  .onPageChangedWomenProducts,
+                                              autoPlay: true,
+                                              enlargeCenterPage: true,
+                                              aspectRatio: 4 / 1.4,
+                                              viewportFraction: 1,
                                             ),
+                                            itemBuilder: (BuildContext context,
+                                                int index, int realIndex) {
+                                              return Shimmer.fromColors(
+                                                baseColor:
+                                                    ColorResources.baseColor,
+                                                highlightColor: ColorResources
+                                                    .highlightColor,
+                                                child: ClipRRect(
+                                                  borderRadius: BorderRadius
+                                                      .circular(Dimensions
+                                                          .bottomSheetRadius),
+                                                  child: Container(
+                                                      color: ColorResources
+                                                          .highlightColor),
+                                                ),
+                                              );
+                                            },
+                                          )
+                                        : CarouselSlider.builder(
+                                            key: const PageStorageKey(
+                                                'carousel_slider_key'),
+                                            // Add PageStorageKey
+                                            itemCount:
+                                                getCategoryBannerData.length,
+                                            options: CarouselOptions(
+                                              onPageChanged: controller
+                                                  .onPageChangedWomenProducts,
+                                              autoPlay: true,
+                                              enlargeCenterPage: true,
+                                              aspectRatio: 4 / 1.4,
+                                              viewportFraction: 1,
+                                            ),
+                                            itemBuilder: (BuildContext context,
+                                                int index, int realIndex) {
+                                              return ClipRRect(
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        Dimensions
+                                                            .bottomSheetRadius),
+                                                child: CachedCommonImage(
+                                                  networkImageUrl:
+                                                      getCategoryBannerData[
+                                                              index]
+                                                          .mobileBannerImage,
+                                                  width: double.infinity,
+                                                ),
+                                              );
+                                            },
                                           ),
-                                        ),
-                                      ),
-                                    )
-                                  : Obx(
-                                      () => Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: List.generate(
-                                          getCategoryBannerData.length,
-                                          (i) => Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 7, vertical: 15),
-                                            child: CircleAvatar(
-                                              radius: 5,
-                                              backgroundColor: ColorResources
-                                                  .inactiveCardColor,
-                                              child: CircleAvatar(
-                                                radius: 4,
-                                                backgroundColor: controller
-                                                            .currentWomenIndex
-                                                            .value ==
-                                                        i
-                                                    ? ColorResources
-                                                        .buttonGradientColor
-                                                    : ColorResources
-                                                        .inactiveCardColor,
+                                    getCategoryBannerData.isEmpty
+                                        ? Row(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: List.generate(
+                                              3,
+                                              (i) => const Padding(
+                                                padding: EdgeInsets.symmetric(
+                                                    horizontal: 7,
+                                                    vertical: 15),
+                                                child: CircleAvatar(
+                                                  radius: 5,
+                                                  backgroundColor:
+                                                      ColorResources
+                                                          .inactiveCardColor,
+                                                  child: CircleAvatar(
+                                                    radius: 4,
+                                                    backgroundColor:
+                                                        ColorResources
+                                                            .inactiveCardColor,
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          )
+                                        : Obx(
+                                            () => Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: List.generate(
+                                                getCategoryBannerData.length,
+                                                (i) => Padding(
+                                                  padding: const EdgeInsets
+                                                      .symmetric(
+                                                      horizontal: 7,
+                                                      vertical: 15),
+                                                  child: CircleAvatar(
+                                                    radius: 5,
+                                                    backgroundColor:
+                                                        ColorResources
+                                                            .inactiveCardColor,
+                                                    child: CircleAvatar(
+                                                      radius: 4,
+                                                      backgroundColor: controller
+                                                                  .currentWomenIndex
+                                                                  .value ==
+                                                              i
+                                                          ? ColorResources
+                                                              .buttonGradientColor
+                                                          : ColorResources
+                                                              .inactiveCardColor,
+                                                    ),
+                                                  ),
+                                                ),
                                               ),
                                             ),
                                           ),
-                                        ),
-                                      ),
-                                    ),
-                            ],
-                          );
-                        },
-                      ):const SizedBox(),
-                       SizedBox(height:getCategoryBannerData.isNotEmpty? Dimensions.space25:Dimensions.space15),
+                                  ],
+                                );
+                              },
+                            )
+                          : const SizedBox(),
+                      SizedBox(
+                          height: getCategoryBannerData.isNotEmpty
+                              ? Dimensions.space25
+                              : Dimensions.space15),
                       Align(
                         alignment: Alignment.center,
                         child: Text(
@@ -428,6 +450,9 @@ class _WomenCategoriesScreenState extends State<WomenCategoriesScreen> {
                                             .logCategoriesWomenPostCardsView,
                                         index: 10);
                                   } else if (index == 1) {
+                                    Get.toNamed(RouteHelper.inAppWebViewScreen,
+                                        arguments:
+                                            "https://saltandglitz.com/plan-of-purchaes");
                                     AppAnalytics().actionTriggerLogs(
                                         eventName: LocalStrings
                                             .logCategoriesWomenClTvView,
@@ -620,7 +645,9 @@ class _WomenCategoriesScreenState extends State<WomenCategoriesScreen> {
                 Container(
                   height: size.height * 0.080,
                   width: size.width * 0.17,
-                  decoration: BoxDecoration(borderRadius:BorderRadius.circular(Dimensions.offersCardRadius),
+                  decoration: BoxDecoration(
+                    borderRadius:
+                        BorderRadius.circular(Dimensions.offersCardRadius),
                     boxShadow: const [
                       BoxShadow(
                         color: ColorResources.shimmerEffectBaseColor,
@@ -628,7 +655,9 @@ class _WomenCategoriesScreenState extends State<WomenCategoriesScreen> {
                       ),
                     ],
                   ),
-                  child: ClipRRect(borderRadius:BorderRadius.circular(Dimensions.offersCardRadius),
+                  child: ClipRRect(
+                    borderRadius:
+                        BorderRadius.circular(Dimensions.offersCardRadius),
                     child: CachedCommonImage(
                       width: double.infinity,
                       networkImageUrl: getCategoryData[index].categoryImage,
@@ -1001,8 +1030,8 @@ class _WomenCategoriesScreenState extends State<WomenCategoriesScreen> {
                                   crossAxisSpacing: 10),
                           itemBuilder: (context, index) {
                             return GestureDetector(
-                              onTap: ()  {
-                                 controller.filterCategoriesApiMethod(
+                              onTap: () {
+                                controller.filterCategoriesApiMethod(
                                     occasionBy: getCategoryData[
                                             controller.expandedIndex.value]
                                         .subCategory![index]
@@ -1034,7 +1063,10 @@ class _WomenCategoriesScreenState extends State<WomenCategoriesScreen> {
                                   const SizedBox(height: Dimensions.space5),
                                   Expanded(
                                     child: Text(
-                                        getCategoryData[controller.expandedIndex.value].subCategory![index].title ??
+                                        getCategoryData[controller
+                                                    .expandedIndex.value]
+                                                .subCategory![index]
+                                                .title ??
                                             '',
                                         textAlign: TextAlign.center,
                                         softWrap: true,
