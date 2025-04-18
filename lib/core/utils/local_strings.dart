@@ -990,6 +990,12 @@ class LocalStrings {
   static String faqs = appStrings.isNotEmpty ? appStrings['faqs'] : 'FAQs';
   static String shipping =
       appStrings.isNotEmpty ? appStrings['shipping'] : 'Shipping';
+  static String warrantyAccount =
+      /*appStrings.isNotEmpty ? appStrings['warrantyAccount'] :*/ 'Warranty';
+  static String cancellation =
+      /*appStrings.isNotEmpty ? appStrings['cancellation'] :*/ 'cancellation';
+  static String shippingPolicy =
+      /*appStrings.isNotEmpty ? appStrings['shipping'] :*/ 'shippingPolicy';
   static String exchangeText =
       appStrings.isNotEmpty ? appStrings['exchangeText'] : 'Exchange';
   static String returnText =

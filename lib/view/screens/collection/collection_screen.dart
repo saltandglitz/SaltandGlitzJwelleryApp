@@ -154,10 +154,10 @@ class _CollectionScreenState extends State<CollectionScreen> {
           ),
         ),
         bottomSheet: Container(
-          height: size.height * 0.080,
+          height: size.height * 0.070,
           padding: const EdgeInsets.symmetric(horizontal: 20),
           decoration: const BoxDecoration(
-            color: ColorResources.conceptTextColor,
+            color: ColorResources.buttonColor,
             boxShadow: [
               BoxShadow(
                 color: ColorResources.borderColor,
@@ -237,7 +237,7 @@ class _CollectionScreenState extends State<CollectionScreen> {
             ],
           ),
         ),
-        floatingActionButton: GetBuilder(
+       /* floatingActionButton: GetBuilder(
             init: MainController(),
             builder: (mainController) {
               return GestureDetector(
@@ -272,7 +272,7 @@ class _CollectionScreenState extends State<CollectionScreen> {
                   )),
                 ),
               );
-            }),
+            }),*/
         body: PopScope(
           canPop: true,
           onPopInvoked: (didPop) {
@@ -956,8 +956,8 @@ class _CollectionScreenState extends State<CollectionScreen> {
                 Positioned(
                   bottom: 0,
                   child: Container(
-                    height: size.height * 0.033,
-                    width: size.width * 0.12,
+                    height: size.height * 0.025,
+                    width: size.width * 0.10,
                     margin: const EdgeInsets.only(left: 15, bottom: 10),
                     decoration: BoxDecoration(
                       borderRadius:
@@ -1014,7 +1014,7 @@ class _CollectionScreenState extends State<CollectionScreen> {
                     filterProductData[index].title ?? '',
                     maxLines: 2,
                     style: semiBoldSmall.copyWith(
-                        color: ColorResources.offerColor),
+                        color: ColorResources.buttonColor),
                   ),
                 ],
               ),

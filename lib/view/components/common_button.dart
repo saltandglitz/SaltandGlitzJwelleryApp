@@ -42,8 +42,8 @@ class CommonButton extends StatelessWidget {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(Dimensions.offersCardRadius),
           gradient: LinearGradient(colors: [
-            gradientFirstColor ?? ColorResources.offerColor,
-            gradientSecondColor ?? ColorResources.buttonGradientColor
+            gradientFirstColor ?? /*ColorResources.offerColor*/ColorResources.buttonColor,
+            gradientSecondColor ?? /*ColorResources.buttonGradientColor*/ColorResources.buttonSecondColor
           ], begin: Alignment.topLeft, end: Alignment.bottomRight),
           border: Border.all(color: borderColor ?? Colors.transparent),
         ),

@@ -51,6 +51,8 @@ class MyAccountController extends GetxController {
   List accountServiceLst = [
     LocalStrings.faqs,
     LocalStrings.shipping,
+    LocalStrings.shippingPolicy,
+    LocalStrings.warrantyAccount,
     LocalStrings.exchangeText,
     LocalStrings.returnText,
     LocalStrings.repair,
@@ -58,6 +60,7 @@ class MyAccountController extends GetxController {
     LocalStrings.shareApp,
     LocalStrings.sendFeedback,
     LocalStrings.termsUse,
+    LocalStrings.cancellation,
   ];
   List offerLst = [
     LocalStrings.buyProducts,

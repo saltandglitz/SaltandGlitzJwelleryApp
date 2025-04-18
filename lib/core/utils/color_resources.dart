@@ -17,6 +17,8 @@ class ColorResources {
   static const Color deliveryColor = Color(0xFF536DFE);
   static const Color inactiveCardColor = Color(0xFFF9F9F9);
   static const Color whiteColor = Color(0xFFFFFFFF);
+  static const Color buttonColor = Color(0xFF00362A); // Converted color
+  static const Color buttonSecondColor = Color(0xFF006D54); // Converted color
   static const Color cardBgColor = Color(0xFFFAFAFA);
   static const Color borderColor = Color(0xff777777);
   static const Color hintTextColor = Color(0xffB7B7B7);

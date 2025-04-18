@@ -685,6 +685,39 @@ class _MyAccountScreenState extends State<MyAccountScreen>
                                     itemBuilder: (context, index) {
                                       return GestureDetector(
                                         onTap: () {
+                                          if (index == 0) {
+                                          } else if (index == 1) {
+                                            Get.toNamed(
+                                                RouteHelper.inAppWebViewScreen,
+                                                arguments:
+                                                    "https://saltandglitz.com/plan-of-purchaes");
+                                          } else if (index == 2) {
+                                            Get.toNamed(
+                                                RouteHelper.inAppWebViewScreen,
+                                                arguments:
+                                                    "https://saltandglitz.com/shippingPolicy");
+                                          } else if (index == 3) {
+                                            Get.toNamed(
+                                                RouteHelper.inAppWebViewScreen,
+                                                arguments:
+                                                    "https://saltandglitz.com/warranty");
+                                          } else if (index == 4) {
+                                            Get.toNamed(
+                                                RouteHelper.inAppWebViewScreen,
+                                                arguments:
+                                                    "https://saltandglitz.com/exchange");
+                                          } else if (index == 5) {
+                                            Get.toNamed(
+                                                RouteHelper.inAppWebViewScreen,
+                                                arguments:
+                                                    "https://saltandglitz.com/return");
+                                          } else if (index == 11) {
+                                            Get.toNamed(
+                                                RouteHelper.inAppWebViewScreen,
+                                                arguments:
+                                                    "https://saltandglitz.com/cancellation");
+                                          }
+
                                           /// Analysis Account Users Services Provide
                                           AppAnalytics().actionTriggerLogs(
                                               eventName:

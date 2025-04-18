@@ -69,8 +69,7 @@ class _InAppWebViewScreenState extends State<InAppWebViewScreen> {
                     }
                     return null;
                   },
-                  initialUrlRequest: URLRequest(
-                      url: WebUri.uri(Uri.parse(controller.webUrl))),
+                  initialUrlRequest: URLRequest(url: WebUri.uri(Uri.parse(controller.webUrl))),
                 ),
 
                 // Progress loader, centered in the screen

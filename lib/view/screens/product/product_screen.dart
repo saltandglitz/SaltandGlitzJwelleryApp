@@ -173,6 +173,8 @@ class _ProductScreenState extends State<ProductScreen> {
                       // Common Place order button
                       Expanded(
                         child: CommonButton(
+                            gradientFirstColor: ColorResources.buttonColor.withOpacity(0.3),
+                            gradientSecondColor: ColorResources.buttonSecondColor.withOpacity(0.3),
                             onTap: () {
                               List<String>? getCartListProductId =
                                   PrefManager.getStringList('cartProductId');
@@ -193,10 +195,6 @@ class _ProductScreenState extends State<ProductScreen> {
                             },
                             height: size.height * 0.050,
                             buttonColor: ColorResources.buttonColorDark,
-                            gradientFirstColor:
-                                ColorResources.offerThirdTextColor,
-                            gradientSecondColor:
-                                ColorResources.offerThirdTextColor,
                             child: Obx(
                               () {
                                 return controller.isAddToCart.value == true
@@ -204,8 +202,7 @@ class _ProductScreenState extends State<ProductScreen> {
                                         child: Padding(
                                           padding: EdgeInsets.symmetric(vertical: 5),
                                           child: CircularProgressIndicator(
-                                              color: ColorResources
-                                                  .bottomSheetContainerColor),
+                                              color: ColorResources.bottomSheetContainerColor),
                                         ),
                                       )
                                     : Row(
@@ -234,11 +231,11 @@ class _ProductScreenState extends State<ProductScreen> {
                       const SizedBox(width: Dimensions.space15),
                       Expanded(
                         child: CommonButton(
+                          gradientFirstColor: ColorResources.buttonColor,
+                            gradientSecondColor: ColorResources.buttonSecondColor,
                             onTap: () {
                               List<String>? getCartListProductId =
                                   PrefManager.getStringList('cartProductId');
-                              print(
-                                  "Get stored cart id : $getCartListProductId");
                               if (getCartListProductId != null &&
                                       getCartListProductId.contains(
                                           controller.productData!.productId) ||
