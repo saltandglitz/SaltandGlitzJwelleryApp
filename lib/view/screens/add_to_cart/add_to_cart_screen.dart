@@ -62,7 +62,7 @@ class _AddToCartScreenState extends State<AddToCartScreen> {
           automaticallyImplyLeading: false,
           titleSpacing: 0,
           title: Text(
-              "${LocalStrings.shoppingCart} (${addCartController.productsImage.length})"),
+              LocalStrings.shoppingCart),
           titleTextStyle: regularLarge.copyWith(
             fontWeight: FontWeight.w500,
             color: ColorResources.conceptTextColor,
@@ -136,11 +136,10 @@ class _AddToCartScreenState extends State<AddToCartScreen> {
             CommonButton(
               onTap: () {
                 //Todo : If users not login this time show this snackBar message
-                if (addCartController.getAddCartData!.cart!.quantity!.isEmpty) {
-                  showSnackBar(
-                      context: context, message: LocalStrings.pleaseLogin);
+                if (PrefManager.getString('isLogin') == null || PrefManager.getString('isLogin')!="yes") {
+                  showSnackBar(context: context, message: LocalStrings.pleaseLogin);
                 } else {
-                  Get.toNamed(RouteHelper.placeOrder);
+                  Get.toNamed(RouteHelper.placeOrder,arguments: addCartController.getAddCartData?.cart?.cartId);
                 }
               },
             ),

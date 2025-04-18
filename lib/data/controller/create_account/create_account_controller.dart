@@ -125,13 +125,11 @@ class CreateAccountController extends GetxController {
           context: Get.context!, message: LocalStrings.enterMobileNumber);
     } else if (!CommonValidation().phoneValidator(mobileController.text) ||
         mobileController.text.length <= 9) {
-      showSnackBar(
-          context: Get.context!, message: LocalStrings.enterValidNumber);
+      showSnackBar(context: Get.context!, message: LocalStrings.enterValidNumber);
     } else if (CommonValidation().isValidationEmpty(emailController.text)) {
       showSnackBar(context: Get.context!, message: LocalStrings.enterEmailText);
     } else if (!CommonValidation().emailValidator(emailController.text)) {
-      showSnackBar(
-          context: Get.context!, message: LocalStrings.enterValidEmail);
+      showSnackBar(context: Get.context!, message: LocalStrings.enterValidEmail);
     } else if (CommonValidation().isValidationEmpty(firstNameController.text)) {
       showSnackBar(context: Get.context!, message: LocalStrings.enterFirstName);
     } else if (CommonValidation().isValidationEmpty(lastNameController.text)) {
@@ -144,13 +142,10 @@ class CreateAccountController extends GetxController {
         hasSymbol == false ||
         hasNumber == false) {
       showSnackBar(context: Get.context!, message: LocalStrings.validPassword);
-    } else if (CommonValidation()
-        .isValidationEmpty(confirmPasswordController.text)) {
-      showSnackBar(
-          context: Get.context!, message: LocalStrings.enterConfirmPassword);
+    } else if (CommonValidation().isValidationEmpty(confirmPasswordController.text)) {
+      showSnackBar(context: Get.context!, message: LocalStrings.enterConfirmPassword);
     } else if (passwordController.text != confirmPasswordController.text) {
-      showSnackBar(
-          context: Get.context!, message: LocalStrings.validConfirmPassword);
+      showSnackBar(context: Get.context!, message: LocalStrings.validConfirmPassword);
     } else {
       //Todo : New user create account
       createNewUserAccountApiMethod(

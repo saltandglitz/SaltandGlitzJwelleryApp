@@ -202,7 +202,7 @@ class _ProductScreenState extends State<ProductScreen> {
                                 return controller.isAddToCart.value == true
                                     ? const Center(
                                         child: Padding(
-                                          padding: EdgeInsets.all(8.0),
+                                          padding: EdgeInsets.symmetric(vertical: 5),
                                           child: CircularProgressIndicator(
                                               color: ColorResources
                                                   .bottomSheetContainerColor),
@@ -261,7 +261,7 @@ class _ProductScreenState extends State<ProductScreen> {
                                 return controller.isBuyNowCart.value == true
                                     ? const Center(
                                         child: Padding(
-                                          padding: EdgeInsets.all(8.0),
+                                          padding: EdgeInsets.symmetric(vertical: 5),
                                           child: CircularProgressIndicator(
                                               color: ColorResources
                                                   .bottomSheetContainerColor),
@@ -324,8 +324,7 @@ class _ProductScreenState extends State<ProductScreen> {
                                   Container(
                                     height: size.height * 0.40,
                                     width: double.infinity,
-                                    color: ColorResources.borderColor
-                                        .withOpacity(0.1),
+                                    color: ColorResources.borderColor.withOpacity(0.1),
                                     child: CarouselSlider.builder(
                                       key: const PageStorageKey(
                                           'carousel_slider_key'),
@@ -609,10 +608,7 @@ class _ProductScreenState extends State<ProductScreen> {
                                                       controller.update();
                                                       //Todo : Wishlist particular products api method
                                                       collectionController.favoritesProducts(
-                                                          userId: PrefManager
-                                                                  .getString(
-                                                                      'userId') ??
-                                                              '',
+                                                          userId: PrefManager.getString('userId') ??'',
                                                           productId: controller
                                                               .productData
                                                               .productId,
@@ -956,7 +952,7 @@ class _ProductScreenState extends State<ProductScreen> {
                                           Row(
                                             children: [
                                               Text(
-                                                LocalStrings.ringSize,
+                                                LocalStrings.sizeWithoutDots,
                                                 style: mediumDefault.copyWith(),
                                               ),
                                               const Spacer(),
@@ -1330,8 +1326,7 @@ class _ProductScreenState extends State<ProductScreen> {
                                                       return Column(
                                                         children: [
                                                           SizedBox(
-                                                            width: size.width *
-                                                                0.25,
+                                                            width: size.width *0.27,
                                                             child: Text(
                                                               controller
                                                                       .diamondWeightTableLst[
@@ -1342,41 +1337,23 @@ class _ProductScreenState extends State<ProductScreen> {
                                                                           .borderColor),
                                                             ),
                                                           ),
-                                                          const SizedBox(
-                                                              height: Dimensions
-                                                                  .space10),
+                                                          const SizedBox(height:Dimensions.space10),
                                                           Container(
-                                                            height:
-                                                                size.height *
-                                                                    0.0010,
-                                                            width: size.width *
-                                                                0.25,
-                                                            color: ColorResources
-                                                                .borderColor
-                                                                .withOpacity(
-                                                                    0.2),
+                                                            height:size.height *0.0010,
+                                                            width: size.width *0.25,
+                                                            color: ColorResources.borderColor.withOpacity(0.2),
                                                           ),
-                                                          const SizedBox(
-                                                              height: Dimensions
-                                                                  .space10),
+                                                          const SizedBox(height: Dimensions.space10),
                                                           SizedBox(
-                                                            width: size.width *
-                                                                0.25,
+                                                            width: size.width *0.25,
                                                             child: Text(
-                                                              controller
-                                                                      .diamondWeightTableValueLst[
-                                                                  index],
+                                                              controller.diamondWeightTableValueLst[index],
                                                               softWrap: true,
                                                               maxLines: 2,
-                                                              style: mediumLarge
-                                                                  .copyWith(
-                                                                      color: ColorResources
-                                                                          .borderColor),
+                                                              style: mediumLarge.copyWith(color: ColorResources.borderColor),
                                                             ),
                                                           ),
-                                                          const SizedBox(
-                                                              height: Dimensions
-                                                                  .space10),
+                                                          const SizedBox(height: Dimensions.space10),
                                                           Container(
                                                             height:
                                                                 size.height *
@@ -1681,16 +1658,39 @@ class _ProductScreenState extends State<ProductScreen> {
                                                             children: [
                                                               ListView.builder(
                                                                 itemCount: 5,
-                                                                shrinkWrap: true,
-                                                                physics: const NeverScrollableScrollPhysics(),
-                                                                padding: const EdgeInsets.symmetric(vertical: 10),
-                                                                itemBuilder: (context, index) {
-                                                                  final ratingCountMap = calculateRatingCount(controller.getRatingViewModel?.approvedRating);
-                                                                  final totalCount = getTotalRatings(ratingCountMap);
+                                                                shrinkWrap:
+                                                                    true,
+                                                                physics:
+                                                                    const NeverScrollableScrollPhysics(),
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                        .symmetric(
+                                                                        vertical:
+                                                                            10),
+                                                                itemBuilder:
+                                                                    (context,
+                                                                        index) {
+                                                                  final ratingCountMap =
+                                                                      calculateRatingCount(controller
+                                                                          .getRatingViewModel
+                                                                          ?.approvedRating);
+                                                                  final totalCount =
+                                                                      getTotalRatings(
+                                                                          ratingCountMap);
 
-                                                                  int star = 5 - index;
-                                                                  int count = ratingCountMap[star] ?? 0;
-                                                                  double percentage = totalCount > 0 ? count / totalCount : 0.0;
+                                                                  int star =
+                                                                      5 - index;
+                                                                  int count =
+                                                                      ratingCountMap[
+                                                                              star] ??
+                                                                          0;
+                                                                  double
+                                                                      percentage =
+                                                                      totalCount >
+                                                                              0
+                                                                          ? count /
+                                                                              totalCount
+                                                                          : 0.0;
 
                                                                   return Column(
                                                                     children: [
@@ -1698,11 +1698,16 @@ class _ProductScreenState extends State<ProductScreen> {
                                                                         children: [
                                                                           Text(
                                                                             "$star",
-                                                                            style: boldMediumLarge.copyWith(),
+                                                                            style:
+                                                                                boldMediumLarge.copyWith(),
                                                                           ),
-                                                                          const Icon(Icons.star, size: 20, color: ColorResources.blackColor),
+                                                                          const Icon(
+                                                                              Icons.star,
+                                                                              size: 20,
+                                                                              color: ColorResources.blackColor),
                                                                           Expanded(
-                                                                            child: Padding(
+                                                                            child:
+                                                                                Padding(
                                                                               padding: const EdgeInsets.symmetric(horizontal: 5),
                                                                               child: LinearProgressIndicator(
                                                                                 value: percentage,
@@ -1715,16 +1720,18 @@ class _ProductScreenState extends State<ProductScreen> {
                                                                           ),
                                                                           Text(
                                                                             "$count",
-                                                                            style: boldMediumLarge.copyWith(),
+                                                                            style:
+                                                                                boldMediumLarge.copyWith(),
                                                                           ),
                                                                         ],
                                                                       ),
-                                                                      const SizedBox(height: Dimensions.space10),
+                                                                      const SizedBox(
+                                                                          height:
+                                                                              Dimensions.space10),
                                                                     ],
                                                                   );
                                                                 },
                                                               ),
-
                                                             ],
                                                           ),
                                                         ),
@@ -1830,7 +1837,8 @@ class _ProductScreenState extends State<ProductScreen> {
                                                         .shimmerEffectBaseColor
                                                         .withOpacity(0.3),
                                                     borderRadius:
-                                                        BorderRadius.circular(Dimensions
+                                                        BorderRadius.circular(
+                                                            Dimensions
                                                                 .smallRadius),
                                                   ),
                                                   child: ListView.builder(
@@ -2518,9 +2526,7 @@ class _ProductScreenState extends State<ProductScreen> {
     return countMap.values.fold(0, (a, b) => a + b);
   }
 
-
-
-/// submit rating dialog
+  /// submit rating dialog
 /*void submitRatingDialog(BuildContext context,
       {String? productImage,
       String? productName,

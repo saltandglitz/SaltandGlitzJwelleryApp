@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:saltandGlitz/core/utils/color_resources.dart';
@@ -44,21 +46,53 @@ class _BottomBarScreenState extends State<BottomBarScreen> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    return GetBuilder(
-      init: BottomBarController(),
-      builder: (controller) {
-        return Scaffold(
-          backgroundColor: ColorResources.scaffoldBackgroundColor,
-          body: pages[controller.selectedIndex.value],
-          bottomNavigationBar: CustomBottomNavigationBar(
-            size: size,
-            bottomBarController: controller,
-            icons: icons,
-            labels: labels,
-          ),
-        );
+    return PopScope(
+      onPopInvoked: (didPop) {
+        showExitConfirmationDialog(context);
       },
+      canPop: false,
+      child: GetBuilder(
+        init: BottomBarController(),
+        builder: (controller) {
+          return Scaffold(
+            backgroundColor: ColorResources.scaffoldBackgroundColor,
+            body: pages[controller.selectedIndex.value],
+            bottomNavigationBar: CustomBottomNavigationBar(
+              size: size,
+              bottomBarController: controller,
+              icons: icons,
+              labels: labels,
+            ),
+          );
+        },
+      ),
     );
+  }
+  /// Exit app dialogBox
+  Future<bool> showExitConfirmationDialog(BuildContext context) async {
+    return await showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title:  Text(LocalStrings.exitApp),
+        content:  Text(LocalStrings.askExit),
+        actions: [
+          TextButton(
+            onPressed: (){
+              Get.back();
+            },
+            child:  Text(LocalStrings.no),
+          ),
+          TextButton(
+            onPressed: () {
+              /// Kill App
+              exit(0);
+            },
+            child:  Text(LocalStrings.yes),
+          ),
+        ],
+      ),
+    ) ??
+        false;
   }
 }
 

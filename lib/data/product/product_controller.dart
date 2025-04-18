@@ -108,8 +108,7 @@ class ProductController extends GetxController {
     LocalStrings.ktSecond,
   ];
   List diamondWeightTableLst = [
-    LocalStrings.sizeText,
-    LocalStrings.colorText,
+    LocalStrings.unitWeight,
     LocalStrings.clarity,
     LocalStrings.shape,
     LocalStrings.noDiamonds,
@@ -198,6 +197,7 @@ class ProductController extends GetxController {
         await videoController!.initialize();
         videoController!.setLooping(true);
         await videoController!.play(); // Auto play on slide change
+        videoController?.setVolume(0.0);
         update();
       } catch (error) {
         print("Error initializing video: $error");

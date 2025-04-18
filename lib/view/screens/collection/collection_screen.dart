@@ -970,14 +970,14 @@ class _CollectionScreenState extends State<CollectionScreen> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            "${filterProductData[index].rating ?? 0.toInt()}",
+                            "${filterProductData[index].avgRating ?? 0.toInt()}",
                             style: semiBoldSmall.copyWith(
                                 color: ColorResources.conceptTextColor),
                           ),
                           const SizedBox(width: Dimensions.space3),
                           Icon(
                             Icons.star,
-                            color: filterProductData[index].rating == null
+                            color: filterProductData[index].avgRating == null || filterProductData[index].avgRating==0.0
                                 ? ColorResources.borderColor
                                 : ColorResources.updateCardColor,
                             size: 13,

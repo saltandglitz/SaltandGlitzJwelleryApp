@@ -22,7 +22,7 @@ class CachedCommonImage extends StatelessWidget {
       height: height,
       width: width,
       imageUrl: networkImageUrl ?? "",
-      fit: BoxFit.cover,
+      fit: BoxFit.fill,
       memCacheHeight: 460,
       memCacheWidth: 500,
       progressIndicatorBuilder: (context, url, downloadProgress) =>

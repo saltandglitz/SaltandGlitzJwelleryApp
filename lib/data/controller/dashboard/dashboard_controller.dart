@@ -452,7 +452,7 @@ class DashboardController extends GetxController {
         videoControllers[index]!.dataSource != media) {
       videoControllers[index]?.dispose();
 
-      videoControllers[index] = VideoPlayerController.network(media)
+      videoControllers[index] = VideoPlayerController.networkUrl(Uri.parse(media))
         ..initialize().then((_) {
           videoControllers[index]!.setLooping(true);
           videoControllers[index]!.play();
