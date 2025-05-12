@@ -33,10 +33,10 @@ class _GiftScreenState extends State<GiftScreen> {
         child: AppBar(
           automaticallyImplyLeading: false,
           titleSpacing: 0,
-          title:  Text(LocalStrings.appName),
+          title: Text(LocalStrings.appName),
           titleTextStyle: regularLarge.copyWith(
             fontWeight: FontWeight.w500,
-            color: ColorResources.conceptTextColor,
+            color: ColorResources.buttonColor,
           ),
           leading: IconButton(
             onPressed: () {
@@ -44,7 +44,7 @@ class _GiftScreenState extends State<GiftScreen> {
               Get.back();
             },
             icon: const Icon(Icons.arrow_back_outlined),
-            color: ColorResources.conceptTextColor,
+            color: ColorResources.buttonColor,
           ),
           backgroundColor: ColorResources.whiteColor,
           elevation: 0,
@@ -272,7 +272,7 @@ class _GiftScreenState extends State<GiftScreen> {
                         label: Text(
                           recipient,
                           style: semiBoldSmall.copyWith(
-                            color: ColorResources.conceptTextColor,
+                            color: ColorResources.buttonColor,
                           ),
                         ),
                         selected: selectedRecipient == recipient,
@@ -295,8 +295,8 @@ class _GiftScreenState extends State<GiftScreen> {
               CommonButton(
                 // gradientFirstColor: const Color(0xff6d9ebc),
                 // gradientSecondColor: const Color(0xff6d9ebc),
-                gradientFirstColor: ColorResources.conceptTextColor,
-                gradientSecondColor: ColorResources.conceptTextColor,
+                gradientFirstColor: ColorResources.buttonColor,
+                gradientSecondColor: ColorResources.buttonColor,
                 width: double.infinity,
                 onTap: () {
                   Get.toNamed(RouteHelper.paymentScreen);
@@ -328,7 +328,7 @@ class _GiftScreenState extends State<GiftScreen> {
               //         decoration: BoxDecoration(
               //           borderRadius: BorderRadius.circular(10),
               //           border:
-              //               Border.all(color: ColorResources.conceptTextColor),
+              //               Border.all(color: ColorResources.buttonColor),
               //           color: ColorResources.whiteColor,
               //           image: const DecorationImage(
               //             image: AssetImage(MyImages.ringOneImage),
@@ -471,7 +471,7 @@ class _GiftScreenState extends State<GiftScreen> {
               //       height: 40,
               //       width: 40,
               //       decoration: const BoxDecoration(
-              //         color: ColorResources.conceptTextColor,
+              //         color: ColorResources.buttonColor,
               //         shape: BoxShape.circle,
               //       ),
               //       child: Center(
@@ -486,7 +486,7 @@ class _GiftScreenState extends State<GiftScreen> {
               //       height: 40,
               //       width: 40,
               //       decoration: const BoxDecoration(
-              //         color: ColorResources.conceptTextColor,
+              //         color: ColorResources.buttonColor,
               //         shape: BoxShape.circle,
               //       ),
               //       child: Center(
@@ -501,7 +501,7 @@ class _GiftScreenState extends State<GiftScreen> {
               //       height: 40,
               //       width: 40,
               //       decoration: const BoxDecoration(
-              //         color: ColorResources.conceptTextColor,
+              //         color: ColorResources.buttonColor,
               //         shape: BoxShape.circle,
               //       ),
               //       child: Center(

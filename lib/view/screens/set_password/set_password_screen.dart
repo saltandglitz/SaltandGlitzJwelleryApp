@@ -71,16 +71,15 @@ class _SetPasswordState extends State<SetPassword> {
                 ),
                 const SizedBox(height: Dimensions.space15),
                 Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Expanded(
-                      child: Text(
-                        setPasswordController.email ?? "",
-                        maxLines: 2,
-                        textAlign: TextAlign.center,
-                        style: mediumLarge.copyWith(),
-                      ),
+                    Text(
+                      setPasswordController.email ?? "",
+                      maxLines: 2,
+                      textAlign: TextAlign.center,
+                      style: mediumLarge.copyWith(),
                     ),
+                    const SizedBox(width: Dimensions.space5),
                     RichText(
                       text: TextSpan(
                         children: [
@@ -100,59 +99,61 @@ class _SetPasswordState extends State<SetPassword> {
                   ],
                 ),
                 const SizedBox(height: Dimensions.space35),
-                GetBuilder(
-                  init: SetPasswordController(),
+                GetBuilder<SetPasswordController>(
                   builder: (controller) {
-                    return CommonTextField(
-                      controller: controller.passwordController,
-                      textFieldHeight: size.height * 0.065,
-                      obSecureText: controller.showPassword,
-                      suffixIcon: GestureDetector(
-                        onTap: () {
-                          setPasswordController.isShowPassword();
-                        },
-                        child: Icon(
-                          controller.showPassword == true
-                              ? Icons.visibility_off
-                              : Icons.visibility,
-                          color: ColorResources.blackColor,
-                          size: 22,
-                        ),
-                      ),
-                      hintText: LocalStrings.password,
-                      borderRadius: Dimensions.offersCardRadius,
-                      fillColor: Colors.transparent,
-                      textInputType: TextInputType.name,
-                      textInputAction: TextInputAction.next,
-                      onChange: (value) => print("Updated Password: $value"),
-                    );
-                  },
-                ),
-                const SizedBox(height: Dimensions.space25),
-                Obx(
-                  () {
-                    return CommonButton(
-                      onTap: () {
-                        /// Password empty or not checked & login api called
-                        setPasswordController.isValidatePasswordAndLogin(
-                            email: loginController.emailController.text.trim(),
-                            password: setPasswordController
-                                .passwordController.text
-                                .trim());
-                      },
-                      height: size.height * 0.065,
-                      width: double.infinity,
-                      child: setPasswordController.isLogin.value == true
-                          ? const CircularProgressIndicator(
-                              color: ColorResources.whiteColor)
-                          : Text(
-                              LocalStrings.login,
-                              style: mediumLarge.copyWith(
-                                  color: ColorResources.whiteColor),
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        CommonTextField(
+                          controller: controller.passwordController,
+                          textFieldHeight: size.height * 0.1,
+                          obSecureText: controller.showPassword,
+                          suffixIcon: GestureDetector(
+                            onTap: () {
+                              controller.isShowPassword();
+                            },
+                            child: Icon(
+                              controller.showPassword
+                                  ? Icons.visibility_off
+                                  : Icons.visibility,
+                              color: ColorResources.blackColor,
+                              size: 22,
                             ),
+                          ),
+                          hintText: LocalStrings.password,
+                          borderRadius: Dimensions.offersCardRadius,
+                          fillColor: Colors.transparent,
+                          textInputType: TextInputType.text,
+                          textInputAction: TextInputAction.done,
+                          onChange: (value) => controller.passwordError =
+                              null, // clear error on type
+                          errorText:
+                              controller.passwordError, // ✅ show inline error
+                        ),
+                      ],
                     );
                   },
                 ),
+                const SizedBox(height: Dimensions.space10),
+                Obx(() {
+                  return CommonButton(
+                    onTap: () {
+                      setPasswordController.isValidatePasswordAndLogin(
+                        email: loginController.emailController.text.trim(),
+                      );
+                    },
+                    height: size.height * 0.065,
+                    width: double.infinity,
+                    child: setPasswordController.isLogin.value
+                        ? const CircularProgressIndicator(
+                            color: ColorResources.whiteColor)
+                        : Text(
+                            LocalStrings.login,
+                            style: mediumLarge.copyWith(
+                                color: ColorResources.whiteColor),
+                          ),
+                  );
+                }),
                 const SizedBox(height: Dimensions.space25),
                 GetBuilder(
                   init: CreateAccountController(),
@@ -165,7 +166,7 @@ class _SetPasswordState extends State<SetPassword> {
                             recognizer: TapGestureRecognizer()
                               ..onTap = () {
                                 Get.toNamed(RouteHelper.forgetPasswordScreen);
-                               /* controller.resetPasswordApiMethod(
+                                /* controller.resetPasswordApiMethod(
                                   newPassword:
                                       controller.passwordController.text,
                                   otp: otp,

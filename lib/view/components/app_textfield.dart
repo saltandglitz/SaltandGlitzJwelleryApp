@@ -94,7 +94,7 @@ class AppTextFieldWidget extends StatelessWidget {
                   width: borderWidth ?? 1.5),
             ),
             hintStyle:
-                mediumDefault.copyWith(color: ColorResources.conceptTextColor),
+                mediumDefault.copyWith(color: ColorResources.buttonColor),
             disabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.all(
                 Radius.circular(borderRadius ?? Dimensions.offersCardRadius),
@@ -141,7 +141,7 @@ class AppTextFieldWidget extends StatelessWidget {
                         // optional. aligns the flag and the Text left
                         alignLeft: false,
                         textStyle: mediumDefault.copyWith(
-                            color: ColorResources.conceptTextColor),
+                            color: ColorResources.buttonColor),
                         flagWidth: 22,
                         flagDecoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(flagRadius ?? 3),
@@ -154,7 +154,7 @@ class AppTextFieldWidget extends StatelessWidget {
                       ),
                       const SizedBox(width: Dimensions.space5),
                       Container(
-                        color: ColorResources.conceptTextColor.withOpacity(0.3),
+                        color: ColorResources.buttonColor.withOpacity(0.3),
                         height: size.height * 0.030,
                         width: 1.5,
                       ),
@@ -173,7 +173,7 @@ class AppTextFieldWidget extends StatelessWidget {
           keyboardType: keyboardType,
           validator: numberValidator,
           onChanged: numberOnChanged,
-          style: semiBoldLarge.copyWith(color: ColorResources.conceptTextColor),
+          style: semiBoldLarge.copyWith(color: ColorResources.buttonColor),
         ),
       ),
     );

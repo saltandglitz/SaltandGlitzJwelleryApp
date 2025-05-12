@@ -2,15 +2,19 @@ import 'package:flutter/material.dart';
 
 class ColorResources {
   static const Color bottomSheetContainerColor = Color(0xFFf0f0f0);
-  static const Color scaffoldBackgroundColor = Color(0xFFffffff);
+  static const Color scaffoldBackgroundColor = Color(0xffffffff);
+
   static const Color blackColor = Color(0xff000000);
   static const Color shimmerEffectHighlightColor = Color(0xFFF5F5F5);
   static const Color shimmerEffectBaseColor = Color(0xFFE0E0E0);
   static const Color inactiveTabColor = Color(0xffaeaeae);
   static const Color iconColor = Color(0xFF3b3b3b);
   static const Color addressColor = Color(0xFFF0F4F7);
-  static const Color baseColor = Color(0xFFD2D8DC); // Light grey (previously grey[300])
-  static const Color highlightColor = Color(0xFFE1E8ED); // Very light grey (previously grey[100])
+
+  static const Color baseColor =
+      Color(0xFFD2D8DC); // Light grey (previously grey[300])
+  static const Color highlightColor =
+      Color(0xFFE1E8ED); // Very light grey (previously grey[100])
   static const Color splashFirstColor = Color(0xffE5733F);
   static const Color splashSecondColor = Color(0xffF95D47);
   static const Color activeCardColor = Color(0xff27B8DA);
@@ -18,12 +22,13 @@ class ColorResources {
   static const Color inactiveCardColor = Color(0xFFF9F9F9);
   static const Color whiteColor = Color(0xFFFFFFFF);
   static const Color buttonColor = Color(0xFF00362A); // Converted color
-  static const Color buttonSecondColor = Color(0xFF006D54); // Converted color
+  static const Color buttonSecondColor = Color(0xFF006D54);
+  static const Color buttonLightColor = Color(0xFFe1f1ea);
   static const Color cardBgColor = Color(0xFFFAFAFA);
   static const Color borderColor = Color(0xff777777);
   static const Color hintTextColor = Color(0xffB7B7B7);
   static const Color buttonColorDark = Color(0xff1F1F1F);
-  static const Color conceptTextColor = Color(0xFF41115B);
+  // static const Color conceptTextColor = Color(0xFF00362A);
   static const Color offerFirstColor = Color(0xFFFFD180);
   static const Color offerSecondColor = Color(0xFF604663);
   static const Color offerThirdTextColor = Color(0xFFCFBEF8);
@@ -35,7 +40,8 @@ class ColorResources {
   static const Color offerNineColor = Color(0xFFDD9EF3);
   static const Color offerTenColor = Color(0xFFAA60DD);
   static const Color deliveryColorColor = Color(0xFF536DFE);
-  static const Color offerColor = Color(0xFFD500F9);
+  // static const Color offerColor = Color(0xFFD500F9);
+  static const Color offerColor = Color(0xFF006600);
   static const Color buttonGradientColor = Color(0xFF3949AB);
   static const Color cardTabColor = Color(0xFF7E57C2);
   static const Color helpNeedFirstColor = Color(0xFFBBDEFB);
@@ -51,4 +57,5 @@ class ColorResources {
   static const Color whatsappColor = Color(0xFF36AB3B);
   static const Color notValidateColor = Color(0xFFDE1A31);
   static const Color backgroundDatePickerColor = Color(0xFFF8F3F9);
+  static const Color lightGreenColour = Color(0xFFabd7cd);
 }

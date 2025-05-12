@@ -101,9 +101,14 @@ class Media {
     this.mobileBannerImage,
   });
 
-  Media.fromJson(Map<String, dynamic> json)
-      : type = json['type'] as String?,
-        mobileBannerImage = json['mobileBannerImage'] as String?;
+  factory Media.fromJson(Map<String, dynamic> json) {
+    return Media(
+      type: json['type'] as String?,
+      mobileBannerImage: json['mobileBannerImage'] is String
+          ? json['mobileBannerImage'] as String
+          : null,
+    );
+  }
 
   Map<String, dynamic> toJson() => {
         'type': type,
@@ -127,7 +132,7 @@ class NewArrivals {
   final String? image05;
   final String? video;
   final String? category;
-  final String? subCategory;
+  final List<String>? subCategory;
   final String? material;
   final num? diamondprice;
   final num? makingCharge14KT;
@@ -197,7 +202,8 @@ class NewArrivals {
         image05 = json['image05'] as String?,
         video = json['video'] as String?,
         category = json['category'] as String?,
-        subCategory = json['subCategory'] as String?,
+        subCategory =
+            (json['subCategory'] as List?)?.map((e) => e.toString()).toList(),
         material = json['material'] as String?,
         diamondprice = (json['diamondprice'] as num?)?.toDouble(),
         makingCharge14KT = (json['makingCharge14KT'] as num?)?.toDouble(),

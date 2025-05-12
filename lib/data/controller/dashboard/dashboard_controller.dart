@@ -29,6 +29,9 @@ class DashboardController extends GetxController {
   var isDialogVisible = false.obs;
   var searchQuery = ''.obs;
   final ScrollController scrollController = ScrollController();
+  ScrollController listViewController = ScrollController();
+  ScrollController gridViewController = ScrollController();
+
   List<SearchProductsViewModel> searchProducts = [];
   List<VideoPlayerController?> videoControllers = [];
   VideoPlayerController? videoController;
@@ -81,6 +84,7 @@ class DashboardController extends GetxController {
     MyImages.iconThree,
     MyImages.iconFour
   ];
+
   final List imageSolitaireText = [
     LocalStrings.goldenRing,
     LocalStrings.diamondRingFirst,
@@ -332,7 +336,13 @@ class DashboardController extends GetxController {
         print('Search Product : ${response.data}');
         print('Search Product length : ${searchProducts.length}');
       } else {
-        showSnackBar(context: Get.context!, message: 'Something went wrong');
+        showSnackBar(
+          context: Get.context!,
+          title: 'Error',
+          message: 'Something went wrong',
+          icon: Icons.error,
+          iconColor: Colors.red,
+        );
       }
     } catch (e) {
       printActionError('Search Dashboard Error : $e');
@@ -452,16 +462,17 @@ class DashboardController extends GetxController {
         videoControllers[index]!.dataSource != media) {
       videoControllers[index]?.dispose();
 
-      videoControllers[index] = VideoPlayerController.networkUrl(Uri.parse(media))
-        ..initialize().then((_) {
-          videoControllers[index]!.setLooping(true);
-          videoControllers[index]!.play();
-          videoControllers[index]!.setVolume(0.0);
-          isVideoReadyList[index] = true;
-          isVideoReadyList.refresh(); // Notify Obx
-        }).catchError((e) {
-          print("Video Init Error: $e");
-        });
+      videoControllers[index] =
+          VideoPlayerController.networkUrl(Uri.parse(media))
+            ..initialize().then((_) {
+              videoControllers[index]!.setLooping(true);
+              videoControllers[index]!.play();
+              videoControllers[index]!.setVolume(0.0);
+              isVideoReadyList[index] = true;
+              isVideoReadyList.refresh(); // Notify Obx
+            }).catchError((e) {
+              print("Video Init Error: $e");
+            });
     } else {
       videoControllers[index]!.play();
     }
@@ -496,13 +507,13 @@ class DashboardController extends GetxController {
     }
   }
 
-
   //Todo  : Particular Products wishlist add
   Future wishlistAddApiMethod() async {
     try {} catch (e) {
       print("Products wishlist add error : $e");
     }
   }
+
   @override
   void onClose() {
     for (var controller in videoControllers) {

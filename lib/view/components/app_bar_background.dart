@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import '../../core/utils/color_resources.dart';
 
 class AppBarBackground extends StatelessWidget implements PreferredSizeWidget {
-  final PreferredSizeWidget child;
+  final AppBar child;
   final double additionalHeight;
   final bool isShowTabBar;
   final Widget? tabBarWidget;
+  final Widget? bottomWidget; // 👈 Added to include search or any widget
 
   const AppBarBackground({
     super.key,
@@ -13,14 +14,28 @@ class AppBarBackground extends StatelessWidget implements PreferredSizeWidget {
     this.additionalHeight = 0,
     this.isShowTabBar = false,
     this.tabBarWidget,
+    this.bottomWidget, // 👈 Added
   });
 
   @override
   Widget build(BuildContext context) {
-    return PreferredSize(
-      preferredSize: Size.fromHeight(
-        kToolbarHeight + (isShowTabBar ? additionalHeight : 0),
+    final AppBar appBarWithLogo = AppBar(
+      leading: child.leading,
+      actions: child.actions,
+      automaticallyImplyLeading: child.automaticallyImplyLeading,
+      backgroundColor: child.backgroundColor,
+      elevation: child.elevation,
+      titleSpacing: child.titleSpacing,
+      centerTitle: true,
+      title: Image.asset(
+        'assets/images/logo_website.png',
+        height: 18,
+        fit: BoxFit.contain,
       ),
+    );
+
+    return PreferredSize(
+      preferredSize: preferredSize,
       child: Container(
         decoration: BoxDecoration(
           boxShadow: [
@@ -34,7 +49,9 @@ class AppBarBackground extends StatelessWidget implements PreferredSizeWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            child,
+            appBarWithLogo,
+            if (bottomWidget != null)
+              bottomWidget!, // 👈 Add the bottom widget like a search bar
             if (isShowTabBar && tabBarWidget != null) tabBarWidget!,
           ],
         ),
@@ -44,6 +61,10 @@ class AppBarBackground extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Size get preferredSize => Size.fromHeight(
-        kToolbarHeight + (isShowTabBar ? additionalHeight : 0),
+        kToolbarHeight +
+            (isShowTabBar ? additionalHeight : 0) +
+            (bottomWidget != null
+                ? 60
+                : 0), // 👈 Adjust height if bottomWidget exists
       );
 }

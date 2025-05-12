@@ -47,17 +47,17 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               child: AppBar(
                 automaticallyImplyLeading: false,
                 titleSpacing: 0,
-                title:  Text(LocalStrings.myAccount),
+                title: Text(LocalStrings.myAccount),
                 titleTextStyle: regularLarge.copyWith(
                   fontWeight: FontWeight.w500,
-                  color: ColorResources.conceptTextColor,
+                  color: ColorResources.buttonColor,
                 ),
                 leading: IconButton(
                   onPressed: () {
                     Get.back();
                   },
                   icon: const Icon(Icons.arrow_back_outlined),
-                  color: ColorResources.conceptTextColor,
+                  color: ColorResources.buttonColor,
                 ),
                 actions: [
                   Padding(
@@ -73,7 +73,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         MyImages.whatsappImage,
                         height: size.height * 0.055,
                         width: size.width * 0.055,
-                        color: ColorResources.conceptTextColor,
+                        color: ColorResources.buttonColor,
                       ),
                     ),
                   ),
@@ -93,7 +93,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 height: size.height * 0.080,
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 decoration: const BoxDecoration(
-                  color: ColorResources.conceptTextColor,
+                  color: ColorResources.buttonColor,
                   boxShadow: [
                     BoxShadow(
                       color: ColorResources.borderColor,
@@ -144,14 +144,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             LocalStrings.editProfile,
                             style: regularLarge.copyWith(
                               fontWeight: FontWeight.w500,
-                              color: ColorResources.conceptTextColor,
+                              color: ColorResources.buttonColor,
                             ),
                           ),
                           const SizedBox(height: Dimensions.space5),
                           Text(
                             LocalStrings.specialOccasions,
                             style: regularDefault.copyWith(
-                              color: ColorResources.conceptTextColor,
+                              color: ColorResources.buttonColor,
                             ),
                           )
                         ],
@@ -171,6 +171,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       labelText: LocalStrings.lastNameStar,
                       boxConstraints: const BoxConstraints(minWidth: 15),
                     ),
+
                     const SizedBox(height: Dimensions.space35),
                     AppTextFieldWidget(
                       controller: controller.mobileNumber,
@@ -195,9 +196,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             fillColor:
                                 ColorResources.offerSixColor.withOpacity(0.3),
                             labelText: LocalStrings.emailId,
-                            boxConstraints: const BoxConstraints(minWidth: 15),
+                            contentPadding: const EdgeInsets.symmetric(
+                                vertical: 16.0, horizontal: 12.0),
                           ),
                         ),
+
                         const SizedBox(width: Dimensions.space20),
                         // Verify email
                         GestureDetector(
@@ -219,7 +222,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                               child: Text(
                                 LocalStrings.verify,
                                 style: mediumDefault.copyWith(
-                                  color: ColorResources.conceptTextColor,
+                                  color: ColorResources.buttonColor,
                                 ),
                               ),
                             ),
@@ -228,6 +231,17 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       ],
                     ),
                     const SizedBox(height: Dimensions.space35),
+
+                    AppTextFieldWidget(
+                      controller: controller.userSaltCash,
+                      isEnable: false,
+                      isShowCountryPicker: false,
+                      fillColor: ColorResources.offerSixColor.withOpacity(0.3),
+                      labelText: LocalStrings.userSaltCash,
+                      boxConstraints: const BoxConstraints(minWidth: 15),
+                    ),
+                    const SizedBox(height: Dimensions.space30),
+
                     AppTextFieldWidget(
                       controller: controller.pinCode,
                       isShowCountryPicker: false,
@@ -262,7 +276,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                 Text(
                                   LocalStrings.male,
                                   style: mediumDefault.copyWith(
-                                      color: ColorResources.conceptTextColor),
+                                      color: ColorResources.buttonColor),
                                 ),
                               ],
                             ),
@@ -292,7 +306,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                 Text(
                                   LocalStrings.female,
                                   style: mediumDefault.copyWith(
-                                      color: ColorResources.conceptTextColor),
+                                      color: ColorResources.buttonColor),
                                 ),
                               ],
                             ),
@@ -323,7 +337,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                 Text(
                                   LocalStrings.other,
                                   style: mediumDefault.copyWith(
-                                      color: ColorResources.conceptTextColor),
+                                      color: ColorResources.buttonColor),
                                 ),
                               ],
                             ),
@@ -363,7 +377,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             ],
                           ),
                           child: const Icon(Icons.calendar_month_rounded,
-                              size: 23, color: ColorResources.conceptTextColor),
+                              size: 23, color: ColorResources.buttonColor),
                         ),
                       ),
                     ),
@@ -401,8 +415,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                               ],
                             ),
                             child: const Icon(Icons.calendar_month_rounded,
-                                size: 23,
-                                color: ColorResources.conceptTextColor),
+                                size: 23, color: ColorResources.buttonColor),
                           ),
                         ),
                       ),
@@ -441,8 +454,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                               ],
                             ),
                             child: const Icon(Icons.keyboard_arrow_down_rounded,
-                                size: 30,
-                                color: ColorResources.conceptTextColor),
+                                size: 30, color: ColorResources.buttonColor),
                           ),
                         ),
                       ),
@@ -481,8 +493,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                               ],
                             ),
                             child: const Icon(Icons.calendar_month_rounded,
-                                size: 23,
-                                color: ColorResources.conceptTextColor),
+                                size: 23, color: ColorResources.buttonColor),
                           ),
                         ),
                       ),
@@ -495,7 +506,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           TextSpan(
                             text: LocalStrings.byClicking,
                             style: mediumDefault.copyWith(
-                                color: ColorResources.conceptTextColor),
+                                color: ColorResources.buttonColor),
                           ),
                           TextSpan(
                             text: LocalStrings.tAndC,
@@ -513,7 +524,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           TextSpan(
                             text: " ${LocalStrings.and} ",
                             style: mediumDefault.copyWith(
-                                color: ColorResources.conceptTextColor),
+                                color: ColorResources.buttonColor),
                           ),
                           TextSpan(
                             text: "${LocalStrings.privacyPolicy}.",
@@ -612,14 +623,14 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                               controller.email.text,
                               textAlign: TextAlign.center,
                               style: boldMediumLarge.copyWith(
-                                  color: ColorResources.conceptTextColor),
+                                  color: ColorResources.buttonColor),
                             ),
                             const SizedBox(height: Dimensions.space15),
                             Text(
                               LocalStrings.enterOtp,
                               textAlign: TextAlign.center,
                               style: regularLarge.copyWith(
-                                  color: ColorResources.conceptTextColor),
+                                  color: ColorResources.buttonColor),
                             ),
                             const SizedBox(height: Dimensions.space40),
                             // Otp field
@@ -650,7 +661,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                 borderColor: ColorResources.borderColor,
                                 keyboardType: TextInputType.number,
                                 textStyle: boldLarge.copyWith(
-                                    color: ColorResources.conceptTextColor),
+                                    color: ColorResources.buttonColor),
                                 inputFormatters: <TextInputFormatter>[
                                   FilteringTextInputFormatter.allow(
                                       RegExp(r'[0-9]')),
@@ -674,8 +685,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                       LocalStrings.resendText,
                                       textAlign: TextAlign.center,
                                       style: semiBoldSmall.copyWith(
-                                          color:
-                                              ColorResources.conceptTextColor),
+                                          color: ColorResources.buttonColor),
                                     ),
                                   )
                                 : RichText(
@@ -685,20 +695,20 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                         TextSpan(
                                           text: LocalStrings.resend,
                                           style: semiBoldSmall.copyWith(
-                                              color: ColorResources
-                                                  .conceptTextColor),
+                                              color:
+                                                  ColorResources.buttonColor),
                                         ),
                                         TextSpan(
                                           text: "${controller.startTime} ",
                                           style: semiBoldSmall.copyWith(
-                                              color: ColorResources
-                                                  .conceptTextColor),
+                                              color:
+                                                  ColorResources.buttonColor),
                                         ),
                                         TextSpan(
                                           text: LocalStrings.secs,
                                           style: semiBoldSmall.copyWith(
-                                              color: ColorResources
-                                                  .conceptTextColor),
+                                              color:
+                                                  ColorResources.buttonColor),
                                         ),
                                       ],
                                     )),
@@ -716,7 +726,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         child: Container(
                             height: size.height * 0.080,
                             decoration: const BoxDecoration(
-                              color: ColorResources.conceptTextColor,
+                              color: ColorResources.buttonColor,
                               boxShadow: [
                                 BoxShadow(
                                   color: ColorResources.borderColor,
@@ -786,7 +796,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         child: Text(
                           LocalStrings.selectOccupation,
                           style: boldDefault.copyWith(
-                              color: ColorResources.conceptTextColor),
+                              color: ColorResources.buttonColor),
                         ),
                       ),
                     ),
@@ -829,8 +839,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                                       index
                                                   ? ColorResources
                                                       .sortSelectedColor
-                                                  : ColorResources
-                                                      .conceptTextColor,
+                                                  : ColorResources.buttonColor,
                                             ),
                                           ),
                                           const Spacer(),
@@ -841,7 +850,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                             decoration: BoxDecoration(
                                                 border: Border.all(
                                                     color: ColorResources
-                                                        .conceptTextColor,
+                                                        .buttonColor,
                                                     width: 2),
                                                 shape: BoxShape.circle),
                                             child: controller
@@ -850,10 +859,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                                 ? Container(
                                                     decoration: BoxDecoration(
                                                         color: ColorResources
-                                                            .conceptTextColor,
+                                                            .buttonColor,
                                                         border: Border.all(
                                                             color: ColorResources
-                                                                .conceptTextColor,
+                                                                .buttonColor,
                                                             width: 2),
                                                         shape: BoxShape.circle),
                                                   )

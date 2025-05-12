@@ -30,10 +30,10 @@ class _PaymentScreenState extends State<PaymentScreen> {
         child: AppBar(
           automaticallyImplyLeading: false,
           titleSpacing: 0,
-          title:  Text(LocalStrings.appName),
+          title: Text(LocalStrings.appName),
           titleTextStyle: regularLarge.copyWith(
             fontWeight: FontWeight.w500,
-            color: ColorResources.conceptTextColor,
+            color: ColorResources.buttonColor,
           ),
           leading: IconButton(
             onPressed: () {
@@ -41,7 +41,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
               Get.back();
             },
             icon: const Icon(Icons.arrow_back_outlined),
-            color: ColorResources.conceptTextColor,
+            color: ColorResources.buttonColor,
           ),
           backgroundColor: ColorResources.whiteColor,
           elevation: 0,
@@ -60,7 +60,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                     LocalStrings.preferredPayment,
                     style: regularLarge.copyWith(
                       fontWeight: FontWeight.w900,
-                      color: ColorResources.conceptTextColor,
+                      color: ColorResources.buttonColor,
                     ),
                   ),
                 ],
@@ -113,7 +113,7 @@ class _PaymentScreenState extends State<PaymentScreen> {
                     LocalStrings.giftCard,
                     style: regularLarge.copyWith(
                       fontWeight: FontWeight.w900,
-                      color: ColorResources.conceptTextColor,
+                      color: ColorResources.buttonColor,
                     ),
                   ),
                 ],
@@ -129,8 +129,8 @@ class _PaymentScreenState extends State<PaymentScreen> {
               CommonButton(
                 // gradientFirstColor: const Color(0xff6d9ebc),
                 // gradientSecondColor: const Color(0xff6d9ebc),
-                gradientFirstColor: ColorResources.conceptTextColor,
-                gradientSecondColor: ColorResources.conceptTextColor,
+                gradientFirstColor: ColorResources.buttonColor,
+                gradientSecondColor: ColorResources.buttonColor,
                 width: double.infinity,
                 buttonName: LocalStrings.payNow,
                 textStyle: mediumLarge.copyWith(
@@ -167,28 +167,28 @@ class _PaymentScreenState extends State<PaymentScreen> {
             width: size.width * 0.14,
             height: size.width * 0.14,
             decoration: BoxDecoration(
-              color: ColorResources.conceptTextColor.withOpacity(0.1),
+              color: ColorResources.buttonColor.withOpacity(0.1),
               borderRadius: BorderRadius.circular(8),
             ),
-            child: Icon(icon, color: ColorResources.conceptTextColor, size: 25),
+            child: Icon(icon, color: ColorResources.buttonColor, size: 25),
           ),
           title: Text(
             title,
             style: mediumLarge.copyWith(
               fontWeight: FontWeight.bold,
-              color: ColorResources.conceptTextColor,
+              color: ColorResources.buttonColor,
             ),
           ),
           subtitle: Text(
             subtitle,
             style: mediumSmall.copyWith(
-              color: ColorResources.conceptTextColor,
+              color: ColorResources.buttonColor,
             ),
           ),
           trailing: Radio<int>(
             value: index,
             groupValue: selectedPaymentIndex,
-            activeColor: ColorResources.conceptTextColor,
+            activeColor: ColorResources.buttonColor,
             onChanged: (value) {
               setState(() {
                 selectedPaymentIndex = value!;
@@ -227,22 +227,22 @@ Widget _buildInfoTile(
           width: 30,
           height: 30,
           decoration: BoxDecoration(
-            color: ColorResources.conceptTextColor.withOpacity(0.1),
+            color: ColorResources.buttonColor.withOpacity(0.1),
             borderRadius: BorderRadius.circular(8),
           ),
-          child: Icon(icon, color: ColorResources.conceptTextColor, size: 18),
+          child: Icon(icon, color: ColorResources.buttonColor, size: 18),
         ),
         title: Text(
           title,
           style: mediumLarge.copyWith(
             fontWeight: FontWeight.bold,
-            color: ColorResources.conceptTextColor,
+            color: ColorResources.buttonColor,
           ),
         ),
         subtitle: Text(
           subtitle,
           style: mediumSmall.copyWith(
-            color: ColorResources.conceptTextColor,
+            color: ColorResources.buttonColor,
           ),
         ),
         trailing: RichText(
@@ -252,7 +252,7 @@ Widget _buildInfoTile(
             style: mediumLarge.copyWith(
               fontWeight: FontWeight.bold,
               fontSize: 12,
-              color: ColorResources.conceptTextColor,
+              color: ColorResources.buttonColor,
             ),
           ),
         ),

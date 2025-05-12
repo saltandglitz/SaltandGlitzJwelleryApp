@@ -18,6 +18,7 @@ class MainController extends GetxController {
   /// Whole app analysis instance
   final FirebaseAnalytics analytics = FirebaseAnalytics.instance;
   RxBool? isNetworkConnection;
+  RxString selectedCategory = 'Ring'.obs;
   final dashboardController = Get.put(DashboardController());
   Image? splashStarImage;
   Image? splashRingImage;
@@ -47,6 +48,12 @@ class MainController extends GetxController {
     return isNetworkConnection;
   }
 
+// Method to change selected category
+  void changeCategory(String category) {
+    selectedCategory.value = category;
+    update(); // to refresh UI widgets using GetBuilder
+  }
+
   Future getDashboardJewelleryData() async {
     try {
       Response response = await APIFunction().apiCall(
@@ -55,6 +62,7 @@ class MainController extends GetxController {
         isGet: true,
         isLoading: false,
       );
+      print("Get Home :${response.statusCode} ");
       if (response.statusCode == 200) {
         bottomBannerList = (response.data['bottomBanner'] as List)
             .map((banner) => BottomBanner.fromJson(banner))
@@ -65,6 +73,8 @@ class MainController extends GetxController {
         filterCategoryList = (response.data['filterCategory'] as List)
             .map((filterCategory) => FilterCategory.fromJson(filterCategory))
             .toList();
+        print("Get Home :${response.statusCode} ");
+
         newArrivalList = (response.data['newArrivals'] as List)
             .map((newArrivals) => NewArrivals.fromJson(newArrivals))
             .toList();
@@ -72,9 +82,12 @@ class MainController extends GetxController {
             .map((gifts) => Gifts.fromJson(gifts))
             .toList();
         mediaList = (response.data['media'] as List)
-            .where((media) => media.containsKey('mobileBannerImage'))
+            .whereType<Map<String, dynamic>>()
+            .where((media) => media['mobileBannerImage'] != null)
             .map((media) => Media.fromJson(media))
             .toList();
+        print("RAW MEDIA RESPONSE: ${response.data['media']}");
+        print("MEDIA LIST : ${mediaList.length}");
       } else {
         print("Something went wrong Home : ${response.data['message']}");
       }
@@ -285,12 +298,11 @@ class MainController extends GetxController {
       throw Exception('Error fetching data from Firebase: $e');
     }
   }
+
   @override
   void onInit() {
     // TODO: implement onInit
     super.onInit();
     print("Token : ${PrefManager.getString('token')}");
   }
-
-
 }

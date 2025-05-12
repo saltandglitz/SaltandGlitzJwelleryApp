@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:flutter/material.dart';
 import 'package:flutter_facebook_auth/flutter_facebook_auth.dart';
 import 'package:get/get.dart' hide FormData, Response;
 import 'package:google_sign_in/google_sign_in.dart';
@@ -122,30 +123,90 @@ class CreateAccountController extends GetxController {
   }) {
     if (CommonValidation().isValidationEmpty(mobileController.text)) {
       showSnackBar(
-          context: Get.context!, message: LocalStrings.enterMobileNumber);
+        context: Get.context!,
+        title: "Error", // or any appropriate title
+        message: LocalStrings.enterMobileNumber,
+        icon: Icons.error, // or Icons.warning, etc.
+        iconColor: Colors.red,
+      );
     } else if (!CommonValidation().phoneValidator(mobileController.text) ||
         mobileController.text.length <= 9) {
-      showSnackBar(context: Get.context!, message: LocalStrings.enterValidNumber);
+      showSnackBar(
+        context: Get.context!,
+        title: "Error",
+        message: LocalStrings.enterValidNumber,
+        icon: Icons.error,
+        iconColor: Colors.red,
+      );
     } else if (CommonValidation().isValidationEmpty(emailController.text)) {
-      showSnackBar(context: Get.context!, message: LocalStrings.enterEmailText);
+      showSnackBar(
+        context: Get.context!,
+        title: "Error",
+        message: LocalStrings.enterEmailText,
+        icon: Icons.error,
+        iconColor: Colors.red,
+      );
     } else if (!CommonValidation().emailValidator(emailController.text)) {
-      showSnackBar(context: Get.context!, message: LocalStrings.enterValidEmail);
+      showSnackBar(
+        context: Get.context!,
+        title: "Error",
+        message: LocalStrings.enterValidEmail,
+        icon: Icons.error,
+        iconColor: Colors.red,
+      );
     } else if (CommonValidation().isValidationEmpty(firstNameController.text)) {
-      showSnackBar(context: Get.context!, message: LocalStrings.enterFirstName);
+      showSnackBar(
+        context: Get.context!,
+        title: "Error",
+        message: LocalStrings.enterFirstName,
+        icon: Icons.error,
+        iconColor: Colors.red,
+      );
     } else if (CommonValidation().isValidationEmpty(lastNameController.text)) {
-      showSnackBar(context: Get.context!, message: LocalStrings.enterLastName);
+      showSnackBar(
+        context: Get.context!,
+        title: "Error",
+        message: LocalStrings.enterLastName,
+        icon: Icons.error,
+        iconColor: Colors.red,
+      );
     } else if (CommonValidation().isValidationEmpty(passwordController.text)) {
-      showSnackBar(context: Get.context!, message: LocalStrings.enterPassword);
+      showSnackBar(
+        context: Get.context!,
+        title: "Error",
+        message: LocalStrings.enterPassword,
+        icon: Icons.error,
+        iconColor: Colors.red,
+      );
     } else if (hasEightChars == false ||
         hasUppercase == false ||
         hasLowercase == false ||
         hasSymbol == false ||
         hasNumber == false) {
-      showSnackBar(context: Get.context!, message: LocalStrings.validPassword);
-    } else if (CommonValidation().isValidationEmpty(confirmPasswordController.text)) {
-      showSnackBar(context: Get.context!, message: LocalStrings.enterConfirmPassword);
+      showSnackBar(
+        context: Get.context!,
+        title: "Error",
+        message: LocalStrings.validPassword,
+        icon: Icons.error,
+        iconColor: Colors.red,
+      );
+    } else if (CommonValidation()
+        .isValidationEmpty(confirmPasswordController.text)) {
+      showSnackBar(
+        context: Get.context!,
+        title: "Error",
+        message: LocalStrings.enterConfirmPassword,
+        icon: Icons.error,
+        iconColor: Colors.red,
+      );
     } else if (passwordController.text != confirmPasswordController.text) {
-      showSnackBar(context: Get.context!, message: LocalStrings.validConfirmPassword);
+      showSnackBar(
+        context: Get.context!,
+        title: "Error", // You can change the title accordingly
+        message: LocalStrings.validConfirmPassword,
+        icon: Icons.error, // Or choose another icon based on the context
+        iconColor: Colors.red, // Or any other color
+      );
     } else {
       //Todo : New user create account
       createNewUserAccountApiMethod(
@@ -461,10 +522,23 @@ class CreateAccountController extends GetxController {
         print("TOKEN : ${PrefManager.getString("token")}");
         showToast(context: Get.context!, message: response.data['message']);
       } else if (response.statusCode == 400) {
-        showSnackBar(context: Get.context!, message: "User already exists");
+        showSnackBar(
+          context: Get.context!,
+          title: "Error", // You can adjust the title if needed
+          message: "User already exists",
+          icon: Icons.error, // You can use an error icon for this case
+          iconColor: Colors.red, // Red color for error
+        );
       } else {
         // Handle any other errors
-        showSnackBar(context: Get.context!, message: response.data['message']);
+        showSnackBar(
+          context: Get.context!,
+          title:
+              "Notification", // You can set a title like "Notification" or "Error"
+          message: response.data['message'],
+          icon: Icons.info, // You can use an info icon here
+          iconColor: Colors.blue, // Blue color for informational message
+        );
       }
       printAction("User_Create_Account : ${response.data['message']}");
     } catch (e) {
@@ -495,7 +569,14 @@ class CreateAccountController extends GetxController {
         showToast(context: Get.context!, message: response.data['message']);
       } else {
         // Handle any other errors
-        showSnackBar(context: Get.context!, message: response.data['message']);
+        showSnackBar(
+          context: Get.context!,
+          title:
+              "Notification", // Set an appropriate title here, like "Success" or "Error"
+          message: response.data['message'],
+          icon: Icons.info, // Choose an icon that suits the message
+          iconColor: Colors.blue, // Choose a color for the icon
+        );
       }
       printAction("OTP_Sent : ${response.data['message']}");
     } catch (e) {
@@ -544,10 +625,23 @@ class CreateAccountController extends GetxController {
         bottomBarController.selectedIndex = 2.obs;
       } else {
         // Handle any other errors
-        showSnackBar(context: Get.context!, message: response.data['message']);
+        showSnackBar(
+          context: Get.context!,
+          title: "Error", // or "Success", "Info" based on context
+          message: response.data['message'] ?? "Something went wrong",
+          icon: Icons.error,
+          iconColor: Colors.red,
+        );
       }
     } catch (e) {
-      showSnackBar(context: Get.context!, message: 'Invalid OTP');
+      showSnackBar(
+        context: Get.context!,
+        title: "Error",
+        message: 'Invalid OTP',
+        icon: Icons.error,
+        iconColor: Colors.red,
+      );
+
       printActionError("OTP_Get_Error : $e");
     } finally {
       isLogin.value = false;
@@ -577,7 +671,13 @@ class CreateAccountController extends GetxController {
         showToast(context: Get.context!, message: response.data['message']);
       } else {
         // Handle any other errors
-        showSnackBar(context: Get.context!, message: response.data['message']);
+        showSnackBar(
+          context: Get.context!,
+          title: "Error",
+          message: response.data['message'],
+          icon: Icons.error,
+          iconColor: Colors.red,
+        );
       }
       printAction("User_Create_Account : ${response.data['message']}");
     } catch (e) {
@@ -617,7 +717,13 @@ class CreateAccountController extends GetxController {
         showToast(context: Get.context!, message: response.data['message']);
       } else {
         // Handle any other errors
-        showSnackBar(context: Get.context!, message: response.data['message']);
+        showSnackBar(
+          context: Get.context!,
+          title: "Error",
+          message: response.data['message'],
+          icon: Icons.error,
+          iconColor: Colors.red,
+        );
       }
       printAction("User_Create_Account : ${response.data['message']}");
     } catch (e) {

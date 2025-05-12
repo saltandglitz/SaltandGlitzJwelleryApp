@@ -1,4 +1,5 @@
-import 'package:flutter/cupertino.dart';
+
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:saltandGlitz/core/utils/local_strings.dart';
@@ -28,10 +29,21 @@ class LoginController extends GetxController {
 
   emailValidation() {
     if (CommonValidation().isValidationEmpty(emailController.text)) {
-      showSnackBar(context: Get.context!, message: LocalStrings.enterEmailText);
+      showSnackBar(
+        context: Get.context!,
+        title: 'Error',
+        message: LocalStrings.enterEmailText,
+        icon: Icons.error,
+        iconColor: Colors.red,
+      );
     } else if (!CommonValidation().emailValidator(emailController.text)) {
       showSnackBar(
-          context: Get.context!, message: LocalStrings.enterValidEmail);
+        context: Get.context!,
+        title: 'Error',
+        message: LocalStrings.enterValidEmail,
+        icon: Icons.error,
+        iconColor: Colors.red,
+      );
     } else {
       /// Analysis log login click
       AppAnalytics().actionTriggerUserLogin(

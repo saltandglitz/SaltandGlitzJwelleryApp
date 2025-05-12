@@ -9,12 +9,15 @@ class CategoriesFilterViewModel {
 
   CategoriesFilterViewModel.fromJson(Map<String, dynamic> json)
       : message = json['message'] as String?,
-        updatedProducts = (json['updatedProducts'] as List?)?.map((dynamic e) => UpdatedProducts.fromJson(e as Map<String,dynamic>)).toList();
+        updatedProducts = (json['updatedProducts'] as List?)
+            ?.map((dynamic e) =>
+                UpdatedProducts.fromJson(e as Map<String, dynamic>))
+            .toList();
 
   Map<String, dynamic> toJson() => {
-    'message' : message,
-    'updatedProducts' : updatedProducts?.map((e) => e.toJson()).toList()
-  };
+        'message': message,
+        'updatedProducts': updatedProducts?.map((e) => e.toJson()).toList()
+      };
 }
 
 class UpdatedProducts {
@@ -31,7 +34,8 @@ class UpdatedProducts {
   final double? price14KT;
   final double? price18KT;
   final String? category;
-  final String? subCategory;
+  final List<String>? subCategory;
+
   final String? material;
   final double? diamondprice;
   final double? makingCharge14KT;
@@ -102,7 +106,9 @@ class UpdatedProducts {
         totalRatings = (json['totalRatings'] as num?)?.toDouble(),
         isAlready = json['isAlready'] ?? false,
         isCart = json['isCart'] as bool?,
-        media = (json['media'] as List?)?.map((dynamic e) => Media.fromJson(e as Map<String,dynamic>)).toList(),
+        media = (json['media'] as List?)
+            ?.map((dynamic e) => Media.fromJson(e as Map<String, dynamic>))
+            .toList(),
         id = json['id'] as String?,
         title = json['title'] as String?,
         gender = json['gender'] as String?,
@@ -110,7 +116,11 @@ class UpdatedProducts {
         price14KT = (json['price14KT'] as num?)?.toDouble(),
         price18KT = (json['price18KT'] as num?)?.toDouble(),
         category = json['category'] as String?,
-        subCategory = json['subCategory'] as String?,
+        subCategory = json['subCategory'] is List
+            ? (json['subCategory'] as List).map((e) => e.toString()).toList()
+            : json['subCategory'] is String
+                ? [json['subCategory'].toString()]
+                : [],
         material = json['material'] as String?,
         diamondprice = (json['diamondprice'] as num?)?.toDouble(),
         makingCharge14KT = (json['makingCharge14KT'] as num?)?.toDouble(),
@@ -126,54 +136,69 @@ class UpdatedProducts {
         createdAt = json['createdAt'] as String?,
         updatedAt = json['updatedAt'] as String?,
         v = json['__v'] as int?,
-        applicablePrice = (json['applicablePrice'] as List?)?.map((dynamic e) => e as String).toList(),
-        clarity = (json['clarity'] as List?)?.map((dynamic e) => e as String).toList(),
-        diamondQt = (json['diamondQt'] as List?)?.map((dynamic e) => e as String).toList(),
-        diamondShape = (json['diamondShape'] as List?)?.map((dynamic e) => e as String).toList(),
-        diamondWt = (json['diamondWt'] as List?)?.map((dynamic e) => e as String).toList(),
-        price = (json['price'] as List?)?.map((dynamic e) => e as String).toList(),
-        unitWt = (json['unitWt'] as List?)?.map((dynamic e) => e as String).toList(),
-        productRatings = (json['productRatings'] as List?)?.map((dynamic e) => ProductRatings.fromJson(e as Map<String,dynamic>)).toList();
+        applicablePrice = (json['applicablePrice'] as List?)
+            ?.map((dynamic e) => e as String)
+            .toList(),
+        clarity = (json['clarity'] as List?)
+            ?.map((dynamic e) => e as String)
+            .toList(),
+        diamondQt = (json['diamondQt'] as List?)
+            ?.map((dynamic e) => e as String)
+            .toList(),
+        diamondShape = (json['diamondShape'] as List?)
+            ?.map((dynamic e) => e as String)
+            .toList(),
+        diamondWt = (json['diamondWt'] as List?)
+            ?.map((dynamic e) => e as String)
+            .toList(),
+        price =
+            (json['price'] as List?)?.map((dynamic e) => e as String).toList(),
+        unitWt =
+            (json['unitWt'] as List?)?.map((dynamic e) => e as String).toList(),
+        productRatings = (json['productRatings'] as List?)
+            ?.map((dynamic e) =>
+                ProductRatings.fromJson(e as Map<String, dynamic>))
+            .toList();
 
   Map<String, dynamic> toJson() => {
-    'product_id' : productId,
-    'avgRating' : avgRating,
-    'totalRatings' : totalRatings,
-    'isAlready': isAlready,
-    'isCart' : isCart,
-    'media' : media?.map((e) => e.toJson()).toList(),
-    'id' : id,
-    'title' : title,
-    'gender' : gender,
-    'gift' : gift,
-    'price14KT' : price14KT,
-    'price18KT' : price18KT,
-    'category' : category,
-    'subCategory' : subCategory,
-    'material' : material,
-    'diamondprice' : diamondprice,
-    'makingCharge14KT' : makingCharge14KT,
-    'makingCharge18KT' : makingCharge18KT,
-    'grossWt' : grossWt,
-    'netWeight14KT' : netWeight14KT,
-    'netWeight18KT' : netWeight18KT,
-    'gst14KT' : gst14KT,
-    'gst18KT' : gst18KT,
-    'total14KT' : total14KT,
-    'total18KT' : total18KT,
-    'isFavourite' : isFavourite,
-    'createdAt' : createdAt,
-    'updatedAt' : updatedAt,
-    '__v' : v,
-    'applicablePrice' : applicablePrice,
-    'clarity' : clarity,
-    'diamondQt' : diamondQt,
-    'diamondShape' : diamondShape,
-    'diamondWt' : diamondWt,
-    'price' : price,
-    'unitWt' : unitWt,
-    'productRatings' : productRatings?.map((e) => e.toJson()).toList()
-  };
+        'product_id': productId,
+        'avgRating': avgRating,
+        'totalRatings': totalRatings,
+        'isAlready': isAlready,
+        'isCart': isCart,
+        'media': media?.map((e) => e.toJson()).toList(),
+        'id': id,
+        'title': title,
+        'gender': gender,
+        'gift': gift,
+        'price14KT': price14KT,
+        'price18KT': price18KT,
+        'category': category,
+        'subCategory': subCategory,
+        'material': material,
+        'diamondprice': diamondprice,
+        'makingCharge14KT': makingCharge14KT,
+        'makingCharge18KT': makingCharge18KT,
+        'grossWt': grossWt,
+        'netWeight14KT': netWeight14KT,
+        'netWeight18KT': netWeight18KT,
+        'gst14KT': gst14KT,
+        'gst18KT': gst18KT,
+        'total14KT': total14KT,
+        'total18KT': total18KT,
+        'isFavourite': isFavourite,
+        'createdAt': createdAt,
+        'updatedAt': updatedAt,
+        '__v': v,
+        'applicablePrice': applicablePrice,
+        'clarity': clarity,
+        'diamondQt': diamondQt,
+        'diamondShape': diamondShape,
+        'diamondWt': diamondWt,
+        'price': price,
+        'unitWt': unitWt,
+        'productRatings': productRatings?.map((e) => e.toJson()).toList()
+      };
 }
 
 class Media {
@@ -189,10 +214,7 @@ class Media {
       : type = json['type'] as String?,
         productAsset = json['productAsset'] as String?;
 
-  Map<String, dynamic> toJson() => {
-    'type' : type,
-    'productAsset' : productAsset
-  };
+  Map<String, dynamic> toJson() => {'type': type, 'productAsset': productAsset};
 }
 
 class ProductRatings {
@@ -218,10 +240,10 @@ class ProductRatings {
         rating = (json['rating'] as num?)?.toDouble();
 
   Map<String, dynamic> toJson() => {
-    '_id' : id,
-    'productId' : productId,
-    'ratings' : ratings,
-    '__v' : v,
-    'rating' : rating
-  };
+        '_id': id,
+        'productId': productId,
+        'ratings': ratings,
+        '__v': v,
+        'rating': rating
+      };
 }

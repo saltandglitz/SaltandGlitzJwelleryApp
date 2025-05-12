@@ -38,7 +38,6 @@ class _MenCategoriesScreenState extends State<MenCategoriesScreen> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-
     return Scaffold(
       backgroundColor: ColorResources.scaffoldBackgroundColor,
       body: GetBuilder(
@@ -173,223 +172,6 @@ class _MenCategoriesScreenState extends State<MenCategoriesScreen> {
                         },
                       ),
                       const SizedBox(height: Dimensions.space15),
-                      Align(
-                        alignment: Alignment.center,
-                        child: Text(LocalStrings.mostBrowsed,
-                            style: semiBoldLarge.copyWith(
-                                color: ColorResources.buttonColorDark
-                                    .withOpacity(0.7))),
-                      ),
-                      const SizedBox(height: Dimensions.space10),
-                      GetBuilder(
-                        init: CategoriesController(),
-                        builder: (controller) {
-                          // Calculate dynamic item width based on screen size
-                          final double itemWidth =
-                              (size.width - Dimensions.space30) /
-                                  2; // Adjust for spacing
-
-                          return ListView.builder(
-                            itemCount: getCategoryMostBrowsedMaleData.isEmpty
-                                ? (2 / 2).ceil()
-                                : (getCategoryMostBrowsedMaleData.length / 2)
-                                    .ceil(),
-                            physics: const NeverScrollableScrollPhysics(),
-                            shrinkWrap: true,
-                            itemBuilder: (context, rowIndex) {
-                              final firstIndex = rowIndex * 2;
-                              final secondIndex = firstIndex + 1;
-
-                              return Column(
-                                children: [
-                                  Row(
-                                    children: [
-                                      Flexible(
-                                        child: SizedBox(
-                                          width: itemWidth,
-                                          child: getCategoryMostBrowsedMaleData
-                                                  .isEmpty
-                                              ? mostBrowsedItemShimmer(
-                                                  controller, firstIndex, size)
-                                              : mostBrowsedItem(
-                                                  controller, firstIndex, size),
-                                        ),
-                                      ),
-                                      const SizedBox(width: Dimensions.space10),
-                                      if (secondIndex <
-                                          getCategoryMostBrowsedMaleData.length)
-                                        Flexible(
-                                          child: SizedBox(
-                                            width: itemWidth,
-                                            child:
-                                                getCategoryMostBrowsedMaleData
-                                                        .isEmpty
-                                                    ? mostBrowsedItemShimmer(
-                                                        controller,
-                                                        secondIndex,
-                                                        size)
-                                                    : mostBrowsedItem(
-                                                        controller,
-                                                        secondIndex,
-                                                        size),
-                                          ),
-                                        ),
-                                      if (secondIndex >=
-                                          getCategoryMostBrowsedMaleData.length)
-                                        // Placeholder to maintain spacing if only one item is present
-                                        Flexible(
-                                          child: SizedBox(width: itemWidth),
-                                        ),
-                                    ],
-                                  ),
-                                  if (controller
-                                              .menBrowsedExpandedIndex.value ==
-                                          firstIndex ||
-                                      controller
-                                              .menBrowsedExpandedIndex.value ==
-                                          secondIndex)
-                                    mostBrowsedExpandedContent(
-                                        controller,
-                                        controller
-                                            .menBrowsedExpandedIndex.value,
-                                        size,
-                                        controller.menBrowsedExpandedIndex
-                                                    .value ==
-                                                secondIndex
-                                            ? LocalStrings.giftsHim
-                                            : ''),
-                                ],
-                              );
-                            },
-                          );
-                        },
-                      ),
-                      const SizedBox(height: Dimensions.space5),
-                      Align(
-                        alignment: Alignment.center,
-                        child: Text(LocalStrings.silverJewellery,
-                            style: semiBoldLarge.copyWith(
-                                color: ColorResources.buttonColorDark
-                                    .withOpacity(0.7))),
-                      ),
-                      const SizedBox(height: Dimensions.space10),
-                      GetBuilder(
-                        init: CategoriesController(),
-                        builder: (controller) {
-                          return Stack(
-                            alignment: AlignmentDirectional.bottomCenter,
-                            children: [
-                              getCategoryBannerMaleData.isEmpty
-                                  ? CarouselSlider.builder(
-                                      key: const PageStorageKey(
-                                          'carousel_slider_key'),
-                                      // Add PageStorageKey
-                                      itemCount: 3,
-                                      options: CarouselOptions(
-                                        onPageChanged: controller
-                                            .onPageChangedWomenProducts,
-                                        autoPlay: true,
-                                        enlargeCenterPage: true,
-                                        aspectRatio: 4 / 1.4,
-                                        viewportFraction: 1,
-                                      ),
-                                      itemBuilder: (BuildContext context,
-                                          int index, int realIndex) {
-                                        return Shimmer.fromColors(
-                                          baseColor: ColorResources.baseColor,
-                                          highlightColor:
-                                              ColorResources.highlightColor,
-                                          child: ClipRRect(
-                                            borderRadius: BorderRadius.circular(
-                                                Dimensions.bottomSheetRadius),
-                                            child: Container(
-                                                color: ColorResources
-                                                    .highlightColor),
-                                          ),
-                                        );
-                                      },
-                                    )
-                                  : CarouselSlider.builder(
-                                      key: const PageStorageKey('carousel_slider_key'),
-                                      // Add PageStorageKey
-                                      itemCount:getCategoryBannerMaleData.length,
-                                      options: CarouselOptions(
-                                        onPageChanged:controller.onPageChangedMenProducts,
-                                        autoPlay: true,
-                                        enlargeCenterPage: true,
-                                        aspectRatio: 4 / 1.30,
-                                        viewportFraction: 1,
-                                      ),
-                                      itemBuilder: (BuildContext context,
-                                          int index, int realIndex) {
-                                        return ClipRRect(
-                                          borderRadius: BorderRadius.circular(
-                                              Dimensions.bottomSheetRadius),
-                                          child: CachedCommonImage(
-                                            networkImageUrl:
-                                                getCategoryBannerMaleData[index]
-                                                    .mobileBannerImage,
-                                            width: double.infinity,
-                                          ),
-                                        );
-                                      },
-                                    ),
-                              getCategoryBannerMaleData.isEmpty
-                                  ? Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: List.generate(
-                                        3,
-                                        (i) => const Padding(
-                                          padding: EdgeInsets.symmetric(
-                                              horizontal: 7, vertical: 15),
-                                          child: CircleAvatar(
-                                            radius: 5,
-                                            backgroundColor: ColorResources
-                                                .inactiveCardColor,
-                                            child: CircleAvatar(
-                                              radius: 4,
-                                              backgroundColor: ColorResources
-                                                  .inactiveCardColor,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    )
-                                  : Obx(
-                                      () => Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: List.generate(
-                                          getCategoryBannerMaleData.length,
-                                          (i) => Padding(
-                                            padding: const EdgeInsets.symmetric(
-                                                horizontal: 7, vertical: 15),
-                                            child: CircleAvatar(
-                                              radius: 5,
-                                              backgroundColor: ColorResources
-                                                  .inactiveCardColor,
-                                              child: CircleAvatar(
-                                                radius: 4,
-                                                backgroundColor: controller
-                                                            .currentMenIndex
-                                                            .value ==
-                                                        i
-                                                    ? ColorResources
-                                                        .buttonGradientColor
-                                                    : ColorResources
-                                                        .inactiveCardColor,
-                                              ),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                            ],
-                          );
-                        },
-                      ),
-                      const SizedBox(height: Dimensions.space25),
                       Align(
                         alignment: Alignment.center,
                         child: Text(
@@ -547,16 +329,15 @@ class _MenCategoriesScreenState extends State<MenCategoriesScreen> {
                                             controller
                                                 .needHelpHeadingLst[index],
                                             style: semiBoldDefault.copyWith(
-                                                color: ColorResources
-                                                    .conceptTextColor),
+                                                color:
+                                                    ColorResources.buttonColor),
                                           ),
                                           const SizedBox(
                                               height: Dimensions.space5),
                                           Text(
                                             controller.needHelpTitleLst[index],
                                             style: semiBoldSmall.copyWith(
-                                              color: ColorResources
-                                                  .conceptTextColor
+                                              color: ColorResources.buttonColor
                                                   .withOpacity(0.5),
                                             ),
                                           ),
@@ -588,8 +369,7 @@ class _MenCategoriesScreenState extends State<MenCategoriesScreen> {
                                         ),
                                         child: const Icon(
                                             Icons.arrow_forward_rounded,
-                                            color: ColorResources
-                                                .conceptTextColor),
+                                            color: ColorResources.buttonColor),
                                       ),
                                     ],
                                   ),
@@ -629,17 +409,16 @@ class _MenCategoriesScreenState extends State<MenCategoriesScreen> {
         controller.selectTab(1);
       },
       child: Container(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-        margin: const EdgeInsets.only(bottom: 17),
+        padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 5),
+        margin: const EdgeInsets.only(bottom: 10),
         decoration: BoxDecoration(
           color: isSelected
-              ? ColorResources.conceptTextColor.withOpacity(0.01)
+              ? ColorResources.buttonColor.withOpacity(0.01)
               : ColorResources.cardBgColor,
           borderRadius: BorderRadius.circular(Dimensions.bottomSheetRadius),
           border: Border.all(
-              color: isSelected
-                  ? ColorResources.conceptTextColor
-                  : Colors.transparent),
+              color:
+                  isSelected ? ColorResources.buttonColor : Colors.transparent),
           boxShadow: [
             BoxShadow(
               color: ColorResources.borderColor.withOpacity(0.1),
@@ -654,8 +433,8 @@ class _MenCategoriesScreenState extends State<MenCategoriesScreen> {
             Row(
               children: [
                 Container(
-                  height: size.height * 0.080,
-                  width: size.width * 0.17,
+                  height: size.height * 0.06,
+                  width: size.width * 0.15,
                   decoration: BoxDecoration(
                     borderRadius:
                         BorderRadius.circular(Dimensions.offersCardRadius),
@@ -671,19 +450,24 @@ class _MenCategoriesScreenState extends State<MenCategoriesScreen> {
                 ),
                 const SizedBox(width: Dimensions.space10),
                 Expanded(
-                  child: Text(getCategoryMaleData[index].category ?? '',
-                      softWrap: true,
-                      maxLines: 2,
-                      style: semiBoldDefault.copyWith(
-                          color: ColorResources.conceptTextColor)),
+                  child: Text(
+                    getCategoryMaleData[index].category ?? '',
+                    softWrap: true,
+                    maxLines: 2,
+                    style: mediumSmall.copyWith(
+                      color: ColorResources.buttonColor.withOpacity(0.75),
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
                 ),
                 Image.asset(
-                    controller.menExpandedIndex.value == index
-                        ? MyImages.downgradeArrowImage
-                        : MyImages.forwordArrowImage,
-                    height: 20,
-                    width: 20,
-                    color: ColorResources.conceptTextColor),
+                  controller.menExpandedIndex.value == index
+                      ? MyImages.downgradeArrowImage
+                      : MyImages.forwordArrowImage,
+                  height: 15,
+                  width: 15,
+                  color: ColorResources.buttonColor.withOpacity(0.5),
+                ),
               ],
             ),
           ],
@@ -702,13 +486,12 @@ class _MenCategoriesScreenState extends State<MenCategoriesScreen> {
       margin: const EdgeInsets.only(bottom: 17),
       decoration: BoxDecoration(
         color: isSelected
-            ? ColorResources.conceptTextColor.withOpacity(0.01)
+            ? ColorResources.buttonColor.withOpacity(0.01)
             : ColorResources.cardBgColor,
         borderRadius: BorderRadius.circular(Dimensions.bottomSheetRadius),
         border: Border.all(
-            color: isSelected
-                ? ColorResources.conceptTextColor
-                : Colors.transparent),
+            color:
+                isSelected ? ColorResources.buttonColor : Colors.transparent),
         boxShadow: [
           BoxShadow(
             color: ColorResources.borderColor.withOpacity(0.1),
@@ -751,9 +534,7 @@ class _MenCategoriesScreenState extends State<MenCategoriesScreen> {
                 baseColor: ColorResources.baseColor,
                 highlightColor: ColorResources.highlightColor,
                 child: Image.asset(MyImages.forwordArrowImage,
-                    height: 20,
-                    width: 20,
-                    color: ColorResources.conceptTextColor),
+                    height: 20, width: 20, color: ColorResources.buttonColor),
               ),
             ],
           ),
@@ -793,7 +574,9 @@ class _MenCategoriesScreenState extends State<MenCategoriesScreen> {
             Container(
               height: size.height * 0.14,
               decoration: BoxDecoration(
-                border: Border.all(color: ColorResources.offerSixColor),
+                border: Border.all(
+                  color: ColorResources.buttonSecondColor.withOpacity(0.15),
+                ),
                 borderRadius:
                     BorderRadius.circular(Dimensions.categoriesRadius),
               ),
@@ -809,27 +592,33 @@ class _MenCategoriesScreenState extends State<MenCategoriesScreen> {
             ),
             Container(
               height: size.height * 0.040,
-              decoration: const BoxDecoration(
-                color: ColorResources.offerSixColor,
-                borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(Dimensions.categoriesRadius),
-                    bottomRight: Radius.circular(Dimensions.categoriesRadius)),
+              decoration: BoxDecoration(
+                color: ColorResources.buttonSecondColor.withOpacity(0.15),
+                borderRadius: const BorderRadius.only(
+                  bottomLeft: Radius.circular(Dimensions.categoriesRadius),
+                  bottomRight: Radius.circular(Dimensions.categoriesRadius),
+                ),
               ),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const SizedBox(width: Dimensions.space10),
-                  Text(getCategoryMostBrowsedData[index].category ?? '',
-                      style: semiBoldDefault.copyWith(
-                          color: ColorResources.conceptTextColor)),
+                  Text(
+                    getCategoryMostBrowsedData[index].category ?? '',
+                    style: mediumSmall.copyWith(
+                      color: ColorResources.buttonColor.withOpacity(0.75),
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
                   const SizedBox(width: Dimensions.space10),
                   Image.asset(
-                      controller.menBrowsedExpandedIndex.value == index
-                          ? MyImages.downgradeArrowImage
-                          : MyImages.forwordArrowImage,
-                      height: 20,
-                      width: 20,
-                      color: ColorResources.conceptTextColor),
+                    controller.menBrowsedExpandedIndex.value == index
+                        ? MyImages.downgradeArrowImage
+                        : MyImages.forwordArrowImage,
+                    height: 15,
+                    width: 15,
+                    color: ColorResources.buttonColor.withOpacity(0.5),
+                  ),
                 ],
               ),
             ),
@@ -898,9 +687,7 @@ class _MenCategoriesScreenState extends State<MenCategoriesScreen> {
                   baseColor: ColorResources.baseColor,
                   highlightColor: ColorResources.highlightColor,
                   child: Image.asset(MyImages.forwordArrowImage,
-                      height: 20,
-                      width: 20,
-                      color: ColorResources.conceptTextColor),
+                      height: 20, width: 20, color: ColorResources.buttonColor),
                 ),
               ],
             ),
@@ -913,6 +700,29 @@ class _MenCategoriesScreenState extends State<MenCategoriesScreen> {
   Widget buildExpandedContent(
       CategoriesController controller, int index, Size size) {
     bool isLeftChevron = index % 2 == 0;
+    // 👇 Use this when user taps a main category tab
+// For example, this could be set by a tab or onTap in a ListView
+    int selectedIndex = controller.expandedIndex.value;
+    if (selectedIndex < 0 || selectedIndex >= getCategoryData.length) {
+      return const SizedBox(); // or show a placeholder/error widget
+    }
+    final selectedCategory = getCategoryData[selectedIndex];
+
+// ✅ Collect unique subcategories with image mapping
+    final Map<String, String> filteredInnerSubCategories = {};
+    for (final subCat in selectedCategory.subCategory ?? []) {
+      for (final inner in subCat.subCategory ?? []) {
+        if (!filteredInnerSubCategories.containsKey(inner)) {
+          filteredInnerSubCategories[inner] = subCat.image01 ?? '';
+        }
+      }
+    }
+
+// ✅ Convert to list for GridView and insert 'All' at position 0
+    final innerSubCategoryList = [
+      MapEntry('All', selectedCategory.categoryImage ?? ''),
+      ...filteredInnerSubCategories.entries
+    ];
     return GetBuilder(
         init: CategoriesController(),
         builder: (controller) {
@@ -926,11 +736,11 @@ class _MenCategoriesScreenState extends State<MenCategoriesScreen> {
                       left: 15, right: 15, top: 25, bottom: 10),
                   width: double.infinity,
                   decoration: BoxDecoration(
-                    color: ColorResources.conceptTextColor.withOpacity(0.01),
+                    color: ColorResources.buttonColor.withOpacity(0.01),
                     borderRadius:
                         BorderRadius.circular(Dimensions.bottomSheetRadius),
                     border: Border.all(
-                        color: ColorResources.conceptTextColor,
+                        color: ColorResources.buttonColor,
                         width: 1), // Set border color and thickness
                   ),
                   child: Column(
@@ -950,10 +760,9 @@ class _MenCategoriesScreenState extends State<MenCategoriesScreen> {
                               child: GestureDetector(
                                 onTap: () {
                                   controller.selectTab(1);
-
                                   AppAnalytics().actionTriggerWithProductsLogs(
                                       eventName: LocalStrings
-                                          .logCategoriesMenShopStyleView,
+                                          .logCategoriesWomenShopStyleView,
                                       index: 1);
                                 },
                                 child: Container(
@@ -962,23 +771,22 @@ class _MenCategoriesScreenState extends State<MenCategoriesScreen> {
                                         Dimensions.defaultRadius),
                                     color: controller.selectedTab.value == 0
                                         ? ColorResources.whiteColor
-                                        : ColorResources.cardTabColor,
+                                        : ColorResources.buttonSecondColor,
                                   ),
                                   child: Center(
-                                    child: Text(LocalStrings.shopStyle,
-                                        style: semiBoldDefault.copyWith(
-                                            color:
-                                                controller.selectedTab.value ==
-                                                        0
-                                                    ? ColorResources
-                                                        .buttonColorDark
-                                                        .withOpacity(0.7)
-                                                    : ColorResources.whiteColor,
-                                            fontWeight:
-                                                controller.selectedTab.value ==
-                                                        1
-                                                    ? FontWeight.w400
-                                                    : FontWeight.w600)),
+                                    child: Text(
+                                      LocalStrings.shopStyle,
+                                      style: semiBoldDefault.copyWith(
+                                          color: controller.selectedTab.value ==
+                                                  0
+                                              ? ColorResources.buttonColorDark
+                                                  .withOpacity(0.7)
+                                              : ColorResources.whiteColor,
+                                          fontWeight:
+                                              controller.selectedTab.value == 1
+                                                  ? FontWeight.w600
+                                                  : FontWeight.w400),
+                                    ),
                                   ),
                                 ),
                               ),
@@ -988,10 +796,9 @@ class _MenCategoriesScreenState extends State<MenCategoriesScreen> {
                               child: GestureDetector(
                                 onTap: () {
                                   controller.selectTab(0);
-
                                   AppAnalytics().actionTriggerWithProductsLogs(
                                       eventName: LocalStrings
-                                          .logCategoriesMenShopByPriceView,
+                                          .logCategoriesWomenShopByPriceView,
                                       index: 1);
                                 },
                                 child: Container(
@@ -1000,7 +807,7 @@ class _MenCategoriesScreenState extends State<MenCategoriesScreen> {
                                         Dimensions.defaultRadius),
                                     color: controller.selectedTab.value == 1
                                         ? ColorResources.whiteColor
-                                        : ColorResources.cardTabColor,
+                                        : ColorResources.buttonSecondColor,
                                   ),
                                   child: Center(
                                     child: Text(LocalStrings.shopByPrice,
@@ -1028,24 +835,43 @@ class _MenCategoriesScreenState extends State<MenCategoriesScreen> {
                       if (controller.selectedTab.value == 1) ...[
                         // Content for Tab Shop By Style
                         GridView.builder(
-                          itemCount:
-                              getCategoryMaleData[index].subCategory!.length,
+                          itemCount: innerSubCategoryList.length,
                           shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
                           gridDelegate:
                               const SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 4,
-                                  childAspectRatio: 7 / 13,
-                                  crossAxisSpacing: 10),
+                            crossAxisCount: 4,
+                            childAspectRatio: 7 / 13,
+                            crossAxisSpacing: 10,
+                            mainAxisSpacing: 10,
+                          ),
                           itemBuilder: (context, index) {
+                            final innerCategory =
+                                innerSubCategoryList[index].key;
+                            final imageUrl = innerSubCategoryList[index].value;
+
                             return GestureDetector(
                               onTap: () {
+                                final categoryName =
+                                    selectedCategory.category ?? '';
+                                final isAllButton = innerCategory == 'All';
+
                                 controller.filterCategoriesApiMethod(
-                                    occasionBy: getCategoryMaleData[
-                                            controller.menExpandedIndex.value]
-                                        .subCategory![index]
-                                        .subCategory,
-                                    priceLimit: '');
-                                Get.toNamed(RouteHelper.collectionScreen);
+                                  category: categoryName,
+                                  occasionBy:
+                                      isAllButton ? null : innerCategory,
+                                  priceLimit: '',
+                                  filterLocallyByCategory:
+                                      categoryName, // 👈 Always filter by selected category
+                                  filterLocallyBySubCategory: isAllButton
+                                      ? null
+                                      : innerCategory, // 👈 Only if subcategory is clicked
+                                );
+
+                                Get.toNamed(
+                                  RouteHelper.collectionScreen,
+                                  arguments: innerCategory,
+                                );
                               },
                               child: Column(
                                 children: [
@@ -1061,28 +887,22 @@ class _MenCategoriesScreenState extends State<MenCategoriesScreen> {
                                           Dimensions.categoriesRadius),
                                       child: CachedCommonImage(
                                         width: double.infinity,
-                                        networkImageUrl: getCategoryMaleData[
-                                                controller
-                                                    .menExpandedIndex.value]
-                                            .subCategory![index]
-                                            .image01,
+                                        networkImageUrl:
+                                            imageUrl, // Load image for the category
                                       ),
                                     ),
                                   ),
                                   const SizedBox(height: Dimensions.space5),
                                   Expanded(
                                     child: Text(
-                                        getCategoryMaleData[controller
-                                                    .menExpandedIndex.value]
-                                                .subCategory![index]
-                                                .title ??
-                                            '',
-                                        textAlign: TextAlign.center,
-                                        softWrap: true,
-                                        maxLines: 2,
-                                        style: semiBoldDefault.copyWith(
-                                            color: ColorResources
-                                                .conceptTextColor)),
+                                      innerCategory,
+                                      textAlign: TextAlign.center,
+                                      softWrap: true,
+                                      maxLines: 2,
+                                      style: semiBoldSmall.copyWith(
+                                        color: ColorResources.buttonColor,
+                                      ),
+                                    ),
                                   ),
                                 ],
                               ),
@@ -1104,8 +924,10 @@ class _MenCategoriesScreenState extends State<MenCategoriesScreen> {
                               onTap: () {
                                 controller.filterCategoriesApiMethod(
                                     priceLimit:
-                                    controller.shopPriceNameLst[index]);
-                                Get.toNamed(RouteHelper.collectionScreen);
+                                        controller.shopPriceNameLst[index]);
+                                Get.toNamed(
+                                  RouteHelper.collectionScreen,
+                                );
                               },
                               child: Column(
                                 children: [
@@ -1128,13 +950,13 @@ class _MenCategoriesScreenState extends State<MenCategoriesScreen> {
                                     ),
                                     child: Center(
                                       child: Text(
-                                          controller.shopPriceNameLst[index],
-                                          textAlign: TextAlign.center,
-                                          softWrap: true,
-                                          maxLines: 2,
-                                          style: mediumDefault.copyWith(
-                                              color: ColorResources
-                                                  .conceptTextColor)),
+                                        controller.shopPriceNameLst[index],
+                                        textAlign: TextAlign.center,
+                                        softWrap: true,
+                                        maxLines: 2,
+                                        style: semiBoldSmall.copyWith(
+                                            color: ColorResources.buttonColor),
+                                      ),
                                     ),
                                   ),
                                 ],
@@ -1181,11 +1003,11 @@ Widget mostBrowsedExpandedContent(CategoriesController controller, int index,
                   EdgeInsets.only(left: 15, right: 15, top: 25, bottom: 10),
               width: double.infinity,
               decoration: BoxDecoration(
-                color: ColorResources.conceptTextColor.withOpacity(0.01),
+                color: ColorResources.buttonColor.withOpacity(0.01),
                 borderRadius:
                     BorderRadius.circular(Dimensions.bottomSheetRadius),
                 border: Border.all(
-                    color: ColorResources.conceptTextColor,
+                    color: ColorResources.buttonColor,
                     width: 1), // Set border color and thickness
               ),
               child: Column(
@@ -1270,7 +1092,7 @@ Widget mostBrowsedExpandedContent(CategoriesController controller, int index,
                                             maxLines: 2,
                                             style: semiBoldDefault.copyWith(
                                                 color: ColorResources
-                                                    .conceptTextColor)),
+                                                    .buttonColor)),
                                       ),
                                     ),
                                   ),
@@ -1325,7 +1147,7 @@ Widget mostBrowsedExpandedContent(CategoriesController controller, int index,
                   //                 softWrap: true,
                   //                 maxLines: 2,
                   //                 style: mediumDefault.copyWith(
-                  //                     color: ColorResources.conceptTextColor)),
+                  //                     color: ColorResources.buttonColor)),
                   //           ),
                   //         ),
                   //       ],
@@ -1365,7 +1187,7 @@ class ChevronPainter extends CustomPainter {
       ..style = PaintingStyle.fill;
 
     final borderPaint = Paint()
-      ..color = ColorResources.conceptTextColor // Border color for sides
+      ..color = ColorResources.buttonColor // Border color for sides
       ..style = PaintingStyle.stroke
       ..strokeWidth = 1;
 

@@ -6,10 +6,11 @@ import 'package:saltandGlitz/core/utils/color_resources.dart';
 import 'package:saltandGlitz/core/utils/local_strings.dart';
 import 'package:saltandGlitz/data/controller/bottom_bar/bottom_bar_controller.dart';
 import 'package:saltandGlitz/view/screens/dashboard/dashboard_screen.dart';
+import 'package:saltandGlitz/view/screens/pop/pop_screen.dart';
 
 import '../../../core/utils/style.dart';
 import '../../../data/controller/categories/categories_controller.dart';
-import '../categories/categories_sccreen.dart';
+import '../categories/categories_screen.dart';
 import '../my_account/my_account_screen.dart';
 
 class BottomBarScreen extends StatefulWidget {
@@ -27,18 +28,22 @@ class _BottomBarScreenState extends State<BottomBarScreen> {
 
   final List<Widget> pages = [
     const DashboardScreen(),
+    const PopScreen(),
     CategoriesScreen(),
-    MyAccountScreen(), // Replace with actual screen
+    MyAccountScreen(),
+    // Replace with actual screen
   ];
 
   final List<IconData> icons = [
     Icons.home,
-    Icons.category,
+    Icons.flare,
+    Icons.grid_view,
     Icons.account_circle_outlined,
   ];
 
   final List<String> labels = [
     LocalStrings.home,
+    "pop",
     LocalStrings.categories,
     LocalStrings.you,
   ];
@@ -68,30 +73,31 @@ class _BottomBarScreenState extends State<BottomBarScreen> {
       ),
     );
   }
+
   /// Exit app dialogBox
   Future<bool> showExitConfirmationDialog(BuildContext context) async {
     return await showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title:  Text(LocalStrings.exitApp),
-        content:  Text(LocalStrings.askExit),
-        actions: [
-          TextButton(
-            onPressed: (){
-              Get.back();
-            },
-            child:  Text(LocalStrings.no),
+          context: context,
+          builder: (context) => AlertDialog(
+            title: Text(LocalStrings.exitApp),
+            content: Text(LocalStrings.askExit),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Get.back();
+                },
+                child: Text(LocalStrings.no),
+              ),
+              TextButton(
+                onPressed: () {
+                  /// Kill App
+                  exit(0);
+                },
+                child: Text(LocalStrings.yes),
+              ),
+            ],
           ),
-          TextButton(
-            onPressed: () {
-              /// Kill App
-              exit(0);
-            },
-            child:  Text(LocalStrings.yes),
-          ),
-        ],
-      ),
-    ) ??
+        ) ??
         false;
   }
 }
@@ -127,32 +133,35 @@ class CustomBottomNavigationBar extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.max,
         mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: List.generate(icons.length, (index) {
-          final isSelected = bottomBarController.selectedIndex.value == index;
-          final color = isSelected
-              ? ColorResources.blackColor
-              : ColorResources.inactiveTabColor;
-          return GestureDetector(
-            onTap: () {
-              bottomBarController.changeIndex(index);
-              if (bottomBarController.selectedIndex.value == 1) {
-                // Closed categories screen expanded items
-                categoriesController.setExpandedIndex(-1);
-                categoriesController.setMostBrowsedIndex(-1);
-              }
-            },
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Icon(icons[index], color: color),
-                Text(
-                  labels[index],
-                  style: mediumLarge.copyWith(color: color),
-                ),
-              ],
-            ),
-          );
-        }),
+        children: List.generate(
+          icons.length,
+          (index) {
+            final isSelected = bottomBarController.selectedIndex.value == index;
+            final color = isSelected
+                ? ColorResources.blackColor
+                : ColorResources.inactiveTabColor;
+            return GestureDetector(
+              onTap: () {
+                bottomBarController.changeIndex(index);
+                if (bottomBarController.selectedIndex.value == 1) {
+                  // Closed categories screen expanded items
+                  categoriesController.setExpandedIndex(-1);
+                  categoriesController.setMostBrowsedIndex(-1);
+                }
+              },
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(icons[index], color: color),
+                  Text(
+                    labels[index],
+                    style: mediumLarge.copyWith(color: color),
+                  ),
+                ],
+              ),
+            );
+          },
+        ),
       ),
     );
   }

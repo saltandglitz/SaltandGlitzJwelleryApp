@@ -61,11 +61,10 @@ class _AddToCartScreenState extends State<AddToCartScreen> {
         child: AppBar(
           automaticallyImplyLeading: false,
           titleSpacing: 0,
-          title: Text(
-              LocalStrings.shoppingCart),
+          title: Text(LocalStrings.shoppingCart),
           titleTextStyle: regularLarge.copyWith(
             fontWeight: FontWeight.w500,
-            color: ColorResources.conceptTextColor,
+            color: ColorResources.buttonColor,
           ),
           leading: IconButton(
             onPressed: () {
@@ -73,7 +72,7 @@ class _AddToCartScreenState extends State<AddToCartScreen> {
               Get.back();
             },
             icon: const Icon(Icons.arrow_back_outlined),
-            color: ColorResources.conceptTextColor,
+            color: ColorResources.buttonColor,
           ),
 
           backgroundColor: ColorResources.whiteColor,
@@ -121,7 +120,7 @@ class _AddToCartScreenState extends State<AddToCartScreen> {
                         : Text(
                             "₹${controller.getAddCartData?.totalPrice != null ? controller.getAddCartData?.totalPrice?.round() : 0}",
                             style: boldMediumLarge.copyWith(
-                                color: ColorResources.conceptTextColor),
+                                color: ColorResources.buttonColor),
                           );
                   },
                 ),
@@ -136,10 +135,19 @@ class _AddToCartScreenState extends State<AddToCartScreen> {
             CommonButton(
               onTap: () {
                 //Todo : If users not login this time show this snackBar message
-                if (PrefManager.getString('isLogin') == null || PrefManager.getString('isLogin')!="yes") {
-                  showSnackBar(context: context, message: LocalStrings.pleaseLogin);
+                if (PrefManager.getString('isLogin') == null ||
+                    PrefManager.getString('isLogin') != "yes") {
+                  showSnackBar(
+                    context: context,
+                    title: "Error",
+                    message: LocalStrings.pleaseLogin,
+                    icon: Icons.error,
+                    iconColor: Colors.red,
+                  );
                 } else {
-                  Get.toNamed(RouteHelper.placeOrder,arguments: addCartController.getAddCartData?.cart?.cartId);
+                  Get.toNamed(RouteHelper.placeOrder,
+                      arguments:
+                          addCartController.getAddCartData?.cart?.cartId);
                 }
               },
             ),
@@ -178,66 +186,6 @@ class _AddToCartScreenState extends State<AddToCartScreen> {
                     child: Column(
                       children: [
                         const SizedBox(height: Dimensions.space10),
-                        Container(
-                          height: size.height * 0.065,
-                          width: double.infinity,
-                          padding: const EdgeInsets.only(left: 20),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(
-                                Dimensions.offersCardRadius),
-                            gradient: const LinearGradient(
-                              colors: [
-                                ColorResources.offerFirstColor,
-                                ColorResources.offerNineColor,
-                                ColorResources.offerSixColor,
-                              ],
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                            ),
-                          ),
-                          child: AnimatedSwitcher(
-                            duration: const Duration(milliseconds: 400),
-                            transitionBuilder:
-                                (Widget child, Animation<double> animation) {
-                              return FadeTransition(
-                                opacity: animation,
-                                child: SlideTransition(
-                                  position: Tween<Offset>(
-                                    begin: const Offset(0.0, 0.2),
-                                    end: const Offset(0.0, 0.0),
-                                  ).animate(animation),
-                                  child: child,
-                                ),
-                              );
-                            },
-                            child: Column(
-                              key: ValueKey<int>(controller.currentIndex),
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: Text(
-                                    AddToCartController
-                                            .texts[controller.currentIndex]
-                                        ['title']!,
-                                    style: mediumLarge.copyWith(
-                                      color: ColorResources.conceptTextColor,
-                                    ),
-                                  ),
-                                ),
-                                Text(
-                                  AddToCartController
-                                          .texts[controller.currentIndex]
-                                      ['subtitle']!,
-                                  style: dateTextStyle.copyWith(
-                                    color: ColorResources.conceptTextColor,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
                         SizedBox(
                             height:
                                 (controller.getAddCartData?.cart!.quantity ==
@@ -357,7 +305,7 @@ class _AddToCartScreenState extends State<AddToCartScreen> {
                                                     "₹${controller.getAddCartData?.cart?.quantity?[index].productId?.price14KT}",
                                                     style: boldSmall.copyWith(
                                                       color: ColorResources
-                                                          .conceptTextColor,
+                                                          .buttonColor,
                                                     ),
                                                   ),
                                                   const SizedBox(
@@ -372,7 +320,7 @@ class _AddToCartScreenState extends State<AddToCartScreen> {
                                                         style:
                                                             boldSmall.copyWith(
                                                           color: ColorResources
-                                                              .conceptTextColor,
+                                                              .buttonColor,
                                                         ),
                                                       ),
                                                       //Todo : + , - & quantity set and size set only ring & bracelet
@@ -384,7 +332,7 @@ class _AddToCartScreenState extends State<AddToCartScreen> {
                                                                   style: semiBoldLarge
                                                                       .copyWith(
                                                                     color: ColorResources
-                                                                        .conceptTextColor,
+                                                                        .buttonColor,
                                                                   ),
                                                                   recognizer:
                                                                       TapGestureRecognizer()
@@ -414,7 +362,7 @@ class _AddToCartScreenState extends State<AddToCartScreen> {
                                                                     semiBoldLarge
                                                                         .copyWith(
                                                                   color: ColorResources
-                                                                      .conceptTextColor,
+                                                                      .buttonColor,
                                                                 ),
                                                               ),
                                                               TextSpan(
@@ -422,7 +370,7 @@ class _AddToCartScreenState extends State<AddToCartScreen> {
                                                                   style: semiBoldLarge
                                                                       .copyWith(
                                                                     color: ColorResources
-                                                                        .conceptTextColor,
+                                                                        .buttonColor,
                                                                   ),
                                                                   recognizer: TapGestureRecognizer()
                                                                     ..onTap = controller.getAddCartData?.cart?.quantity?[index].quantity == 1
@@ -449,7 +397,7 @@ class _AddToCartScreenState extends State<AddToCartScreen> {
                                                         style:
                                                             boldSmall.copyWith(
                                                           color: ColorResources
-                                                              .conceptTextColor,
+                                                              .buttonColor,
                                                         ),
                                                       ),
                                                       Text(
@@ -457,7 +405,7 @@ class _AddToCartScreenState extends State<AddToCartScreen> {
                                                         style: semiBoldLarge
                                                             .copyWith(
                                                           color: ColorResources
-                                                              .conceptTextColor,
+                                                              .buttonColor,
                                                         ),
                                                       ),
                                                     ],
@@ -521,7 +469,7 @@ class _AddToCartScreenState extends State<AddToCartScreen> {
                                                 decoration: const BoxDecoration(
                                                     shape: BoxShape.circle,
                                                     color: ColorResources
-                                                        .conceptTextColor),
+                                                        .buttonColor),
                                                 child: const Icon(
                                                   Icons.close,
                                                   size: 15,
@@ -591,7 +539,7 @@ class _AddToCartScreenState extends State<AddToCartScreen> {
                                     Text(
                                       LocalStrings.applyCoupon,
                                       style: boldLarge.copyWith(
-                                        color: ColorResources.conceptTextColor,
+                                        color: ColorResources.buttonColor,
                                       ),
                                     ),
                                     const Spacer(),
@@ -662,14 +610,12 @@ class _AddToCartScreenState extends State<AddToCartScreen> {
                                     Text(
                                       LocalStrings.subtotal,
                                       style: boldSmall.copyWith(
-                                          color:
-                                              ColorResources.conceptTextColor),
+                                          color: ColorResources.buttonColor),
                                     ),
                                     Text(
                                       "₹${controller.getAddCartData?.totalPrice != null ? controller.getAddCartData?.totalPrice?.round() : 0}",
                                       style: boldSmall.copyWith(
-                                          color:
-                                              ColorResources.conceptTextColor),
+                                          color: ColorResources.buttonColor),
                                     ),
                                   ],
                                 ),
@@ -685,8 +631,7 @@ class _AddToCartScreenState extends State<AddToCartScreen> {
                                     Text(
                                       LocalStrings.shippingCharge,
                                       style: boldSmall.copyWith(
-                                          color:
-                                              ColorResources.conceptTextColor),
+                                          color: ColorResources.buttonColor),
                                     ),
                                     Text(
                                       LocalStrings.free,
@@ -708,8 +653,7 @@ class _AddToCartScreenState extends State<AddToCartScreen> {
                                     Text(
                                       LocalStrings.shippingInsurance,
                                       style: boldSmall.copyWith(
-                                          color:
-                                              ColorResources.conceptTextColor),
+                                          color: ColorResources.buttonColor),
                                     ),
                                     Text(
                                       LocalStrings.free,
@@ -735,8 +679,7 @@ class _AddToCartScreenState extends State<AddToCartScreen> {
                                     Text(
                                       LocalStrings.grandTotal,
                                       style: boldLarge.copyWith(
-                                          color:
-                                              ColorResources.conceptTextColor),
+                                          color: ColorResources.buttonColor),
                                     ),
                                     Obx(
                                       () {
@@ -764,7 +707,7 @@ class _AddToCartScreenState extends State<AddToCartScreen> {
                                                 "₹${controller.getAddCartData?.totalPrice != null ? controller.getAddCartData?.totalPrice?.round() : 0}",
                                                 style: boldMediumLarge.copyWith(
                                                     color: ColorResources
-                                                        .conceptTextColor),
+                                                        .buttonColor),
                                               );
                                       },
                                     ),
@@ -882,7 +825,7 @@ class _AddToCartScreenState extends State<AddToCartScreen> {
                         Text(
                           '${LocalStrings.quantity} ',
                           style: boldSmall.copyWith(
-                            color: ColorResources.conceptTextColor,
+                            color: ColorResources.buttonColor,
                           ),
                         ),
                         //Todo : + , - & quantity set and size set only ring & bracelet
@@ -891,7 +834,7 @@ class _AddToCartScreenState extends State<AddToCartScreen> {
                             Text(
                               '+ ',
                               style: semiBoldLarge.copyWith(
-                                color: ColorResources.conceptTextColor,
+                                color: ColorResources.buttonColor,
                               ),
                             ),
                             Shimmer.fromColors(
@@ -909,7 +852,7 @@ class _AddToCartScreenState extends State<AddToCartScreen> {
                             Text(
                               ' -',
                               style: semiBoldLarge.copyWith(
-                                color: ColorResources.conceptTextColor,
+                                color: ColorResources.buttonColor,
                               ),
                             ),
                           ],
@@ -918,7 +861,7 @@ class _AddToCartScreenState extends State<AddToCartScreen> {
                         Text(
                           '${LocalStrings.size} ',
                           style: boldSmall.copyWith(
-                            color: ColorResources.conceptTextColor,
+                            color: ColorResources.buttonColor,
                           ),
                         ),
                         Shimmer.fromColors(
@@ -1027,7 +970,7 @@ class _AddToCartScreenState extends State<AddToCartScreen> {
           Text(
             contactName,
             style: boldLarge.copyWith(
-              color: ColorResources.conceptTextColor,
+              color: ColorResources.buttonColor,
             ),
           ),
         ],
@@ -1089,8 +1032,8 @@ class _AddToCartScreenState extends State<AddToCartScreen> {
               const SizedBox(height: Dimensions.space20),
               Text(
                 LocalStrings.moveDesign,
-                style: boldMediumLarge.copyWith(
-                    color: ColorResources.conceptTextColor),
+                style:
+                    boldMediumLarge.copyWith(color: ColorResources.buttonColor),
               ),
               const SizedBox(height: Dimensions.space10),
               Text(
@@ -1156,7 +1099,8 @@ class _AddToCartScreenState extends State<AddToCartScreen> {
                   const SizedBox(width: Dimensions.space25),
                   Expanded(
                     child: CommonButton(onTap: () {
-                      final productController = Get.put<ProductController>(ProductController());
+                      final productController =
+                          Get.put<ProductController>(ProductController());
 
                       //Todo : Move ro wishlist functionality api called & delay some millisecond back
                       collectionController.favoritesProducts(
@@ -1164,17 +1108,11 @@ class _AddToCartScreenState extends State<AddToCartScreen> {
                           productId: productId,
                           index: index,
                           isMoveWishlistText: LocalStrings.moveWishlist,
-                          size: controller
-                              .getAddCartData
-                              ?.cart
-                              ?.quantity?[index].productId
-                              ?.netWeight14KT?.toInt(),
-                          carat:
-                          productController
-                              .jewelleryKt(),
-                          color: productController
-                              .jewelleryColor()
-                      );
+                          size: controller.getAddCartData?.cart
+                              ?.quantity?[index].productId?.netWeight14KT
+                              ?.toInt(),
+                          carat: productController.jewelleryKt(),
+                          color: productController.jewelleryColor());
                       Future.delayed(const Duration(milliseconds: 1000), () {
                         Get.back();
                       });

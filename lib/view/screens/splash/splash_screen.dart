@@ -2,13 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:saltandGlitz/data/controller/categories/categories_controller.dart';
 import 'package:saltandGlitz/data/controller/dashboard/dashboard_controller.dart';
-
 import '../../../core/utils/app_const.dart';
 import '../../../core/utils/color_resources.dart';
 import '../../../core/utils/dimensions.dart';
 import '../../../core/utils/images.dart';
 import '../../../core/utils/local_strings.dart';
 import '../../../core/utils/style.dart';
+import '../../../data/product/product_controller.dart';
 import '../../../main_controller.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -24,6 +24,7 @@ class _SplashScreenState extends State<SplashScreen> {
       Get.put<DashboardController>(DashboardController());
   final categoriesController =
       Get.put<CategoriesController>(CategoriesController());
+  final productController = Get.put<ProductController>(ProductController());
 
   @override
   void initState() {
@@ -32,6 +33,9 @@ class _SplashScreenState extends State<SplashScreen> {
     //Todo : Banner data show api method
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await mainController.getDashboardJewelleryData();
+      print("Bottom banner length : ${mediaList.length}");
+      print("Bottom banner length : ${newArrivalList.length}");
+      print("Bottom banner length : ${giftElementList.length}");
       for (int i = 0; i < bottomBannerList.length; i++) {
         String? media = bottomBannerList[i].bannerImage;
         dashboardController.handleMediaPlayback(media: media!, index: i);
@@ -45,8 +49,12 @@ class _SplashScreenState extends State<SplashScreen> {
       // await mainController.getBottomBannerData();
       //Todo : Get by default women categories data api method
       await categoriesController.getFemaleCategories();
+      print("Bottom banner length : ${getCategoryData.length}");
       //Todo : Get men  categories data api method
       await categoriesController.getMaleCategories();
+      print("Bottom banner length : ${getCategoryMaleData.length}");
+
+      // await productController.youMayAlsoLike();
     });
     mainController.splashScreenNavigation();
   }

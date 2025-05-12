@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:get/get.dart';
 import 'package:saltandGlitz/view/components/common_message_show.dart';
 
@@ -24,6 +25,7 @@ class EditProfileController extends GetxController {
   TextEditingController verifyEmailSecond = TextEditingController();
   TextEditingController verifyEmailThird = TextEditingController();
   TextEditingController verifyEmailFor = TextEditingController();
+  TextEditingController userSaltCash = TextEditingController();
   int selectedValue = -1;
   Timer? timer;
   var currentIndex = (-1).obs;
@@ -107,13 +109,37 @@ class EditProfileController extends GetxController {
   /// Is validation
   isValidation() {
     if (CommonValidation().isValidationEmpty(firstName.text)) {
-      showSnackBar(context: Get.context!, message: LocalStrings.enterFirstName);
+      showSnackBar(
+        context: Get.context!,
+        title: 'Error',
+        message: LocalStrings.enterFirstName,
+        icon: Icons.error,
+        iconColor: Colors.red,
+      );
     } else if (CommonValidation().isValidationEmpty(pinCode.text)) {
-      showSnackBar(context: Get.context!, message: LocalStrings.enterPinCode);
+      showSnackBar(
+        context: Get.context!,
+        title: 'Error',
+        message: LocalStrings.enterPinCode,
+        icon: Icons.error,
+        iconColor: Colors.red,
+      );
     } else if (selectedValue == -1) {
-      showSnackBar(context: Get.context!, message: LocalStrings.selectGender);
+      showSnackBar(
+        context: Get.context!,
+        title: 'Error',
+        message: LocalStrings.selectGender,
+        icon: Icons.error,
+        iconColor: Colors.red,
+      );
     } else if (CommonValidation().isValidationEmpty(birthDay.text)) {
-      showSnackBar(context: Get.context!, message: LocalStrings.enterBirthday);
+      showSnackBar(
+        context: Get.context!,
+        title: 'Error',
+        message: LocalStrings.enterBirthday,
+        icon: Icons.error,
+        iconColor: Colors.red,
+      );
     } else {
       /// Analysis users edit profile
       AppAnalytics().actionEditProfileAccount(
@@ -121,6 +147,7 @@ class EditProfileController extends GetxController {
         firstName: firstName.text,
         lastName: lastName.text,
         mobileNo: mobileNumber.text,
+        userSaltCash: int.tryParse(userSaltCash.text) ?? 0,
         email: email.text,
         pinCode: pinCode.text,
         genderSelection: selectedValue == 1
@@ -145,6 +172,8 @@ class EditProfileController extends GetxController {
     lastName.text = PrefManager.getString('lastName') ?? '';
     email.text = PrefManager.getString('email') ?? '';
     mobileNumber.text = PrefManager.getString('phoneNumber') ?? '';
+    userSaltCash.text = PrefManager.getString('userSaltCash') ?? '0';
+
     genderApiSelection();
     update();
   }

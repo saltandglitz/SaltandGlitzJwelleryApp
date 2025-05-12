@@ -2,13 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:like_button/like_button.dart';
 import 'package:saltandGlitz/core/utils/dimensions.dart';
-import 'package:saltandGlitz/core/utils/images.dart';
 import 'package:saltandGlitz/data/controller/dashboard/dashboard_controller.dart';
-import 'package:saltandGlitz/data/controller/wishlist/wishlist_controller.dart';
 import 'package:saltandGlitz/data/product/product_controller.dart';
-import 'package:saltandGlitz/view/components/common_message_show.dart';
 import 'package:shimmer/shimmer.dart';
-
 import '../../../analytics/app_analytics.dart';
 import '../../../core/route/route.dart';
 import '../../../core/utils/app_const.dart';
@@ -52,6 +48,11 @@ class _CollectionScreenState extends State<CollectionScreen> {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+    final categoryName = ModalRoute.of(context)?.settings.arguments as String?;
+    final categoryFemale =
+        ModalRoute.of(context)?.settings.arguments as String?;
+    final categoryMale = ModalRoute.of(context)?.settings.arguments as String?;
+    print("Category Name: $categoryName");
     return PopScope(
       canPop: true,
       onPopInvoked: (didPop) {
@@ -102,7 +103,7 @@ class _CollectionScreenState extends State<CollectionScreen> {
                             dashboardController.hideSearchMethod();
                           },
                           icon: const Icon(Icons.search_rounded),
-                          color: ColorResources.conceptTextColor);
+                          color: ColorResources.iconColor);
                 },
               ),
               IconButton(
@@ -115,7 +116,7 @@ class _CollectionScreenState extends State<CollectionScreen> {
                     );
                   },
                   icon: const Icon(Icons.favorite_rounded),
-                  color: ColorResources.conceptTextColor),
+                  color: ColorResources.iconColor),
               Stack(
                 alignment: Alignment.bottomRight,
                 children: [
@@ -124,7 +125,7 @@ class _CollectionScreenState extends State<CollectionScreen> {
                         Get.toNamed(RouteHelper.addCartScreen);
                       },
                       icon: const Icon(Icons.shopping_cart),
-                      color: ColorResources.conceptTextColor),
+                      color: ColorResources.iconColor),
                   // Container(
                   //   height: 15,
                   //   width: 15,
@@ -154,10 +155,17 @@ class _CollectionScreenState extends State<CollectionScreen> {
           ),
         ),
         bottomSheet: Container(
-          height: size.height * 0.070,
+          height: size.height * 0.06,
           padding: const EdgeInsets.symmetric(horizontal: 20),
           decoration: const BoxDecoration(
-            color: ColorResources.buttonColor,
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.topRight,
+              colors: [
+                ColorResources.buttonColor,
+                ColorResources.buttonSecondColor,
+              ],
+            ),
             boxShadow: [
               BoxShadow(
                 color: ColorResources.borderColor,
@@ -237,7 +245,7 @@ class _CollectionScreenState extends State<CollectionScreen> {
             ],
           ),
         ),
-       /* floatingActionButton: GetBuilder(
+        /* floatingActionButton: GetBuilder(
             init: MainController(),
             builder: (mainController) {
               return GestureDetector(
@@ -262,8 +270,8 @@ class _CollectionScreenState extends State<CollectionScreen> {
                       ),
                     ],
                     color: mainController.isNetworkConnection?.value == false
-                        ? ColorResources.conceptTextColor.withOpacity(0.3)
-                        : ColorResources.conceptTextColor,
+                        ? ColorResources.buttonColor.withOpacity(0.3)
+                        : ColorResources.buttonColor,
                   ),
                   child: const Center(
                       child: Icon(
@@ -279,75 +287,135 @@ class _CollectionScreenState extends State<CollectionScreen> {
             collectionController.currentIndex.value = (-1);
           },
           child: GetBuilder(
-              init: MainController(),
-              builder: (mainController) {
-                return mainController.isNetworkConnection?.value == false
-                    ? NetworkConnectivityView(
-                        onTap: () async {
-                          RxBool? isEnableNetwork = await mainController
-                              .checkToAssignNetworkConnections();
-
-                          if (isEnableNetwork!.value == true) {
-                            collectionController.enableNetworkHideLoader();
-                            Future.delayed(
-                              const Duration(seconds: 3),
-                              () {
-                                Get.put<CategoriesController>(
-                                    CategoriesController());
-                                collectionController
-                                    .disableNetworkLoaderByDefault();
-                              },
-                            );
-                            collectionController.update();
-                          }
-                        },
-                        isLoading: collectionController.isEnableNetwork,
-                      )
-                    : GetBuilder(
-                        init: CollectionController(),
-                        builder: (controller) {
-                          // Calculate dynamic item width based on screen size
-                          final double itemWidth =
-                              (size.width - Dimensions.space30) /
-                                  2; // Adjust for spacing
-                          return GestureDetector(
-                            onTap: () {
-                              dashboardController.hideSearchMethod();
+            init: MainController(),
+            builder: (mainController) {
+              return mainController.isNetworkConnection?.value == false
+                  ? NetworkConnectivityView(
+                      onTap: () async {
+                        RxBool? isEnableNetwork = await mainController
+                            .checkToAssignNetworkConnections();
+                        if (isEnableNetwork!.value == true) {
+                          collectionController.enableNetworkHideLoader();
+                          Future.delayed(
+                            const Duration(seconds: 3),
+                            () {
+                              Get.put<CategoriesController>(
+                                  CategoriesController());
+                              collectionController
+                                  .disableNetworkLoaderByDefault();
                             },
-                            child: Stack(
-                              children: [
-                                Column(
-                                  children: [
-                                    CachedCommonImage(
-                                      height: size.height * 0.12,
-                                      width: double.infinity,
-                                      networkImageUrl: MyImages.rings,
+                          );
+                          collectionController.update();
+                        }
+                      },
+                      isLoading: collectionController.isEnableNetwork,
+                    )
+                  : GetBuilder(
+                      init: CollectionController(),
+                      builder: (controller) {
+                        // Calculate dynamic item width based on screen size
+                        final double itemWidth =
+                            (size.width - Dimensions.space30) / 2;
+                        return GestureDetector(
+                          onTap: () {
+                            dashboardController.hideSearchMethod();
+                          },
+                          child: Stack(
+                            children: [
+                              Column(
+                                children: [
+                                  Container(
+                                    height: size.height * 0.12,
+                                    width: double.infinity,
+                                    decoration: BoxDecoration(
+                                      color: ColorResources.lightGreenColour
+                                          .withOpacity(0.25),
                                     ),
-                                    Obx(
-                                      () {
-                                        return controller
-                                                    .isShowCategories.value ==
-                                                false
-                                            ? Expanded(
-                                                child: ListView.builder(
-                                                  itemCount: (controller
-                                                              .collectionDataImageLst
-                                                              .length /
-                                                          2)
-                                                      .ceil(),
-                                                  physics:
-                                                      const ClampingScrollPhysics(),
-                                                  shrinkWrap: true,
-                                                  itemBuilder:
-                                                      (context, index) {
-                                                    final firstIndex =
-                                                        index * 2;
-                                                    final secondIndex =
-                                                        firstIndex + 1;
-                                                    return Column(
-                                                      children: [
-                                                        Row(
-                                                          children: [
+                                    child: Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 15, vertical: 15),
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Row(
+                                            children: [
+                                              Text(
+                                                "${categoryName ?? categoryFemale ?? categoryMale ?? "All"} Designs",
+                                                style: semiBoldMediumLarge
+                                                    .copyWith(
+                                                        color: ColorResources
+                                                            .buttonColor),
+                                              ),
+                                              const SizedBox(
+                                                  width: Dimensions.space10),
+                                              Text(
+                                                "${filterProductData.length} Designs",
+                                                style: semiBoldDefault.copyWith(
+                                                  color: ColorResources
+                                                      .buttonColor
+                                                      .withOpacity(0.5),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          const SizedBox(
+                                              height: Dimensions.space5),
+                                          Text(
+                                            "HOME > JEWELLERY > ${categoryName ?? categoryFemale ?? categoryMale ?? "All"}"
+                                                .toUpperCase(),
+                                            style: mediumExtraSmall.copyWith(
+                                                color:
+                                                    ColorResources.buttonColor),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(height: Dimensions.space10),
+                                  Obx(
+                                    () {
+                                      return controller
+                                                  .isShowCategories.value ==
+                                              false
+                                          ? Expanded(
+                                              child: ListView.builder(
+                                                itemCount: (controller
+                                                            .collectionDataImageLst
+                                                            .length /
+                                                        2)
+                                                    .ceil(),
+                                                physics:
+                                                    const ClampingScrollPhysics(),
+                                                shrinkWrap: true,
+                                                itemBuilder: (context, index) {
+                                                  final firstIndex = index * 2;
+                                                  final secondIndex =
+                                                      firstIndex + 1;
+                                                  return Column(
+                                                    children: [
+                                                      Row(
+                                                        children: [
+                                                          Expanded(
+                                                            child: SizedBox(
+                                                              width: itemWidth,
+                                                              child: Padding(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                        .only(
+                                                                        right:
+                                                                            3,
+                                                                        bottom:
+                                                                            10),
+                                                                child: collectionItemsShimmerEffect(
+                                                                    firstIndex),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          if (secondIndex <
+                                                              controller
+                                                                  .collectionDataImageLst
+                                                                  .length)
                                                             Expanded(
                                                               child: SizedBox(
                                                                 width:
@@ -356,19 +424,75 @@ class _CollectionScreenState extends State<CollectionScreen> {
                                                                   padding:
                                                                       const EdgeInsets
                                                                           .only(
-                                                                          right:
+                                                                          left:
                                                                               3,
                                                                           bottom:
                                                                               10),
                                                                   child: collectionItemsShimmerEffect(
-                                                                      firstIndex),
+                                                                      secondIndex),
                                                                 ),
                                                               ),
                                                             ),
-                                                            if (secondIndex <
-                                                                controller
-                                                                    .collectionDataImageLst
-                                                                    .length)
+                                                          if (secondIndex >=
+                                                              controller
+                                                                  .collectionDataImageLst
+                                                                  .length)
+                                                            // Placeholder to maintain spacing if only one item is present
+                                                            Flexible(
+                                                              child: SizedBox(
+                                                                  width:
+                                                                      itemWidth),
+                                                            ),
+                                                        ],
+                                                      ),
+                                                    ],
+                                                  );
+                                                },
+                                              ),
+                                            )
+                                          : filterProductData.isEmpty
+                                              ? Padding(
+                                                  padding: EdgeInsets.only(
+                                                      top:
+                                                          MediaQuery.of(context)
+                                                                  .padding
+                                                                  .top *
+                                                              5),
+                                                  child: Text(
+                                                    LocalStrings
+                                                        .collectionEmpty,
+                                                    textAlign: TextAlign.center,
+                                                    softWrap: true,
+                                                    style:
+                                                        semiBoldLarge.copyWith(
+                                                      color: ColorResources
+                                                          .buttonColor,
+                                                    ),
+                                                  ),
+                                                )
+                                              : Expanded(
+                                                  child: ListView.builder(
+                                                    controller:
+                                                        dashboardController
+                                                            .listViewController,
+                                                    itemCount:
+                                                        (filterProductData
+                                                                    .length /
+                                                                2)
+                                                            .ceil(),
+                                                    physics:
+                                                        const ClampingScrollPhysics(),
+                                                    shrinkWrap: true,
+                                                    itemBuilder:
+                                                        (context, index) {
+                                                      final firstIndex =
+                                                          index * 2;
+                                                      final secondIndex =
+                                                          firstIndex + 1;
+                                                      return Column(
+                                                        children: [
+                                                          Row(
+                                                            children: [
                                                               Expanded(
                                                                 child: SizedBox(
                                                                   width:
@@ -377,75 +501,56 @@ class _CollectionScreenState extends State<CollectionScreen> {
                                                                       Padding(
                                                                     padding: const EdgeInsets
                                                                         .only(
-                                                                        left: 3,
+                                                                        right:
+                                                                            3,
                                                                         bottom:
                                                                             10),
-                                                                    child: collectionItemsShimmerEffect(
-                                                                        secondIndex),
+                                                                    child: filterProductData
+                                                                            .isEmpty
+                                                                        ? collectionItemsShimmerEffect(
+                                                                            firstIndex)
+                                                                        : GestureDetector(
+                                                                            onTap:
+                                                                                () {
+                                                                              // First index used stored data sqflite
+                                                                              controller.addProduct(
+                                                                                filterProductData[firstIndex].media![0].productAsset ?? '',
+                                                                                filterProductData[firstIndex].title ?? '',
+                                                                                "${filterProductData[firstIndex].price14KT}",
+                                                                                "${filterProductData[firstIndex].productId}",
+                                                                              );
+
+                                                                              //Todo : Id product detail using remove wishlist this time then using update screen
+                                                                              Get.toNamed(
+                                                                                RouteHelper.productScreen,
+                                                                                arguments: [
+                                                                                  filterProductData[firstIndex],
+                                                                                  firstIndex
+                                                                                ],
+                                                                              )!
+                                                                                  .then(
+                                                                                (value) {
+                                                                                  controller.update();
+                                                                                },
+                                                                              );
+
+                                                                              /// Product screen seen product analysis log
+                                                                              AppAnalytics().actionTriggerWithProductsLogs(
+                                                                                eventName: LocalStrings.logProductDetailView,
+                                                                                productName: filterProductData[firstIndex].title ?? '',
+                                                                                productImage: filterProductData[firstIndex].media![0].productAsset!,
+                                                                                index: 6,
+                                                                              );
+                                                                            },
+                                                                            child:
+                                                                                collectionItems(firstIndex),
+                                                                          ),
                                                                   ),
                                                                 ),
                                                               ),
-                                                            if (secondIndex >=
-                                                                controller
-                                                                    .collectionDataImageLst
-                                                                    .length)
-                                                              // Placeholder to maintain spacing if only one item is present
-                                                              Flexible(
-                                                                child: SizedBox(
-                                                                    width:
-                                                                        itemWidth),
-                                                              ),
-                                                          ],
-                                                        ),
-                                                      ],
-                                                    );
-                                                  },
-                                                ),
-                                              )
-                                            : filterProductData.isEmpty
-                                                ? Padding(
-                                                    padding: EdgeInsets.only(
-                                                        top: MediaQuery.of(
-                                                                    context)
-                                                                .padding
-                                                                .top *
-                                                            5),
-                                                    child: Text(
-                                                      LocalStrings
-                                                          .collectionEmpty,
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      softWrap: true,
-                                                      style: semiBoldLarge
-                                                          .copyWith(
-                                                        color: ColorResources
-                                                            .conceptTextColor,
-                                                      ),
-                                                    ),
-                                                  )
-                                                : Expanded(
-                                                    child: ListView.builder(
-                                                      controller:
-                                                          dashboardController
-                                                              .scrollController,
-                                                      itemCount:
-                                                          (filterProductData
-                                                                      .length /
-                                                                  2)
-                                                              .ceil(),
-                                                      physics:
-                                                          const ClampingScrollPhysics(),
-                                                      shrinkWrap: true,
-                                                      itemBuilder:
-                                                          (context, index) {
-                                                        final firstIndex =
-                                                            index * 2;
-                                                        final secondIndex =
-                                                            firstIndex + 1;
-                                                        return Column(
-                                                          children: [
-                                                            Row(
-                                                              children: [
+                                                              if (secondIndex <
+                                                                  filterProductData
+                                                                      .length)
                                                                 Expanded(
                                                                   child:
                                                                       SizedBox(
@@ -455,388 +560,371 @@ class _CollectionScreenState extends State<CollectionScreen> {
                                                                         Padding(
                                                                       padding: const EdgeInsets
                                                                           .only(
-                                                                          right:
+                                                                          left:
                                                                               3,
                                                                           bottom:
                                                                               10),
-                                                                      child: filterProductData
-                                                                              .isEmpty
-                                                                          ? collectionItemsShimmerEffect(
-                                                                              firstIndex)
-                                                                          : GestureDetector(
-                                                                              onTap: () {
-                                                                                // First index used stored data sqflite
-                                                                                controller.addProduct(
-                                                                                  filterProductData[firstIndex].media![0].productAsset ?? '',
-                                                                                  filterProductData[firstIndex].title ?? '',
-                                                                                  "${filterProductData[firstIndex].price14KT}",
-                                                                                  "${filterProductData[firstIndex].productId}",
-                                                                                );
-                                                                                //Todo : Id product detail using remove wishlist this time then using update screen
-                                                                                Get.toNamed(RouteHelper.productScreen, arguments: [filterProductData[firstIndex],firstIndex])!.then(
-                                                                                  (value) {
-                                                                                    controller.update();
-                                                                                  },
-                                                                                );
-
-                                                                                /// Product screen seen product analysis log
-                                                                                AppAnalytics().actionTriggerWithProductsLogs(
-                                                                                  eventName: LocalStrings.logProductDetailView,
-                                                                                  productName: filterProductData[firstIndex].title ?? '',
-                                                                                  productImage: filterProductData[firstIndex].media![0].productAsset!,
-                                                                                  index: 6,
-                                                                                );
-                                                                              },
-                                                                              child: collectionItems(firstIndex),
-                                                                            ),
+                                                                      child:
+                                                                          GestureDetector(
+                                                                        onTap:
+                                                                            () {
+                                                                          // Second index used stored data sqflite
+                                                                          controller
+                                                                              .addProduct(
+                                                                            filterProductData[secondIndex].media![0].productAsset ??
+                                                                                '',
+                                                                            filterProductData[secondIndex].title ??
+                                                                                '',
+                                                                            "${filterProductData[firstIndex].price14KT}",
+                                                                            "${filterProductData[firstIndex].productId}",
+                                                                          );
+                                                                          //Todo : Id product detail using remove wishlist this time then using update screen
+                                                                          Get.toNamed(
+                                                                            RouteHelper.productScreen,
+                                                                            arguments: [
+                                                                              filterProductData[secondIndex],
+                                                                              secondIndex
+                                                                            ],
+                                                                          )!
+                                                                              .then(
+                                                                            (value) {
+                                                                              controller.update();
+                                                                            },
+                                                                          );
+                                                                        },
+                                                                        child: collectionItems(
+                                                                            secondIndex),
+                                                                      ),
                                                                     ),
                                                                   ),
                                                                 ),
-                                                                if (secondIndex <
-                                                                    filterProductData
-                                                                        .length)
-                                                                  Expanded(
-                                                                    child:
-                                                                        SizedBox(
+                                                              if (secondIndex >=
+                                                                  filterProductData
+                                                                      .length)
+                                                                // Placeholder to maintain spacing if only one item is present
+                                                                Flexible(
+                                                                  child: SizedBox(
                                                                       width:
-                                                                          itemWidth,
+                                                                          itemWidth),
+                                                                ),
+                                                            ],
+                                                          ),
+                                                        ],
+                                                      );
+                                                    },
+                                                  ),
+                                                );
+                                    },
+                                  ),
+                                  SizedBox(
+                                    height: size.height * 0.085,
+                                  ),
+                                ],
+                              ),
+                              //Todo : Overlay search Box
+                              Obx(
+                                () => dashboardController.isDialogVisible.value
+                                    ? Padding(
+                                        padding: EdgeInsets.only(
+                                            top: MediaQuery.of(context)
+                                                    .size
+                                                    .height *
+                                                0.090),
+                                        child: Container(
+                                          height: dashboardController
+                                                      .searchProducts.length <
+                                                  3
+                                              ? size.height * 0.17
+                                              : (dashboardController
+                                                              .searchProducts
+                                                              .length >
+                                                          3 &&
+                                                      dashboardController
+                                                              .searchProducts
+                                                              .length <
+                                                          6)
+                                                  ? size.height * 0.33
+                                                  : size.height * 0.40,
+                                          margin: const EdgeInsets.symmetric(
+                                              horizontal: 10),
+                                          width: double.infinity,
+                                          decoration: BoxDecoration(
+                                            color: ColorResources.whiteColor,
+                                            boxShadow: const [
+                                              BoxShadow(
+                                                color: ColorResources
+                                                    .inactiveTabColor,
+                                                offset: Offset(0, 1),
+                                                blurRadius: 2,
+                                              ),
+                                            ],
+                                            borderRadius: BorderRadius.circular(
+                                                Dimensions.defaultRadius),
+                                          ),
+                                          child:
+                                              dashboardController
+                                                          .isSearchShimmer
+                                                          .value ==
+                                                      true
+                                                  ? GridView.builder(
+                                                      itemCount: 9,
+                                                      padding: const EdgeInsets
+                                                          .symmetric(
+                                                          horizontal: 10,
+                                                          vertical: 10),
+                                                      gridDelegate:
+                                                          const SliverGridDelegateWithFixedCrossAxisCount(
+                                                        crossAxisCount: 3,
+                                                        crossAxisSpacing: 11.0,
+                                                        mainAxisSpacing: 15.0,
+                                                      ),
+                                                      itemBuilder:
+                                                          (context, index) {
+                                                        return Container(
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            color: ColorResources
+                                                                .shimmerEffectBaseColor,
+                                                            borderRadius:
+                                                                BorderRadius.circular(
+                                                                    Dimensions
+                                                                        .defaultRadius),
+                                                            boxShadow: const [
+                                                              BoxShadow(
+                                                                color: ColorResources
+                                                                    .inactiveTabColor,
+                                                                offset: Offset(
+                                                                    0, 1),
+                                                                blurRadius: 2,
+                                                              ),
+                                                            ],
+                                                          ),
+                                                          child: Column(
+                                                            mainAxisSize:
+                                                                MainAxisSize
+                                                                    .min,
+                                                            children: [
+                                                              Shimmer
+                                                                  .fromColors(
+                                                                baseColor:
+                                                                    ColorResources
+                                                                        .baseColor,
+                                                                highlightColor:
+                                                                    ColorResources
+                                                                        .highlightColor,
+                                                                child:
+                                                                    ClipRRect(
+                                                                  borderRadius:
+                                                                      const BorderRadius
+                                                                          .only(
+                                                                    topLeft: Radius.circular(
+                                                                        Dimensions
+                                                                            .defaultRadius),
+                                                                    topRight: Radius.circular(
+                                                                        Dimensions
+                                                                            .defaultRadius),
+                                                                  ),
+                                                                  child:
+                                                                      Container(
+                                                                    height: 90,
+                                                                    decoration:
+                                                                        BoxDecoration(
+                                                                      color: ColorResources
+                                                                          .whiteColor,
+                                                                      borderRadius:
+                                                                          BorderRadius.circular(
+                                                                              3),
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                              Shimmer
+                                                                  .fromColors(
+                                                                baseColor:
+                                                                    ColorResources
+                                                                        .baseColor,
+                                                                highlightColor:
+                                                                    ColorResources
+                                                                        .highlightColor,
+                                                                child:
+                                                                    Container(
+                                                                  height:
+                                                                      size.height *
+                                                                          0.015,
+                                                                  decoration:
+                                                                      BoxDecoration(
+                                                                    color: ColorResources
+                                                                        .whiteColor,
+                                                                    borderRadius:
+                                                                        BorderRadius
+                                                                            .circular(3),
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        );
+                                                      },
+                                                    )
+                                                  : dashboardController
+                                                          .searchProducts
+                                                          .isEmpty
+                                                      ? Center(
+                                                          child: Text(
+                                                            LocalStrings
+                                                                .searchNotAvailable,
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                            overflow:
+                                                                TextOverflow
+                                                                    .ellipsis,
+                                                            softWrap: false,
+                                                            style: semiBoldLarge
+                                                                .copyWith(
+                                                              color: ColorResources
+                                                                  .buttonColor,
+                                                            ),
+                                                          ),
+                                                        )
+                                                      : GridView.builder(
+                                                          itemCount:
+                                                              dashboardController
+                                                                  .searchProducts
+                                                                  .length,
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .symmetric(
+                                                                  horizontal:
+                                                                      10,
+                                                                  vertical: 10),
+                                                          gridDelegate:
+                                                              const SliverGridDelegateWithFixedCrossAxisCount(
+                                                            crossAxisCount: 3,
+                                                            crossAxisSpacing:
+                                                                11.0,
+                                                            mainAxisSpacing:
+                                                                15.0,
+                                                          ),
+                                                          itemBuilder:
+                                                              (context, index) {
+                                                            return Container(
+                                                              decoration:
+                                                                  BoxDecoration(
+                                                                color: ColorResources
+                                                                    .shimmerEffectBaseColor,
+                                                                borderRadius:
+                                                                    BorderRadius.circular(
+                                                                        Dimensions
+                                                                            .defaultRadius),
+                                                                boxShadow: const [
+                                                                  BoxShadow(
+                                                                    color: ColorResources
+                                                                        .inactiveTabColor,
+                                                                    offset:
+                                                                        Offset(
+                                                                            0,
+                                                                            1),
+                                                                    blurRadius:
+                                                                        2,
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                              child:
+                                                                  GestureDetector(
+                                                                onTap: () {
+                                                                  Get.toNamed(
+                                                                      RouteHelper
+                                                                          .collectionScreen);
+                                                                  categoriesController.filterCategoriesApiMethod(
+                                                                      occasionBy: dashboardController
+                                                                          .searchProducts[
+                                                                              index]
+                                                                          .subCategory,
+                                                                      priceLimit:
+                                                                          '');
+                                                                  dashboardController
+                                                                      .hideSearchMethod();
+                                                                  //Todo : Search box hide
+                                                                  dashboardController
+                                                                      .isDialogVisible
+                                                                      .value = false;
+                                                                },
+                                                                child: Stack(
+                                                                  children: [
+                                                                    ClipRRect(
+                                                                      borderRadius:
+                                                                          const BorderRadius
+                                                                              .only(
+                                                                        topLeft:
+                                                                            Radius.circular(Dimensions.defaultRadius),
+                                                                        topRight:
+                                                                            Radius.circular(Dimensions.defaultRadius),
+                                                                      ),
+                                                                      child:
+                                                                          CachedCommonImage(
+                                                                        networkImageUrl: dashboardController
+                                                                            .searchProducts[index]
+                                                                            .image01,
+                                                                        // categoryList[index]
+                                                                        //         .images,
+                                                                        width: double
+                                                                            .infinity,
+                                                                        height: size.height *
+                                                                            0.11,
+                                                                      ),
+                                                                    ),
+                                                                    Align(
+                                                                      alignment:
+                                                                          Alignment
+                                                                              .bottomCenter,
                                                                       child:
                                                                           Padding(
                                                                         padding: const EdgeInsets
                                                                             .only(
-                                                                            left:
-                                                                                3,
                                                                             bottom:
-                                                                                10),
+                                                                                2),
                                                                         child:
-                                                                            GestureDetector(
-                                                                          onTap:
-                                                                              () {
-                                                                            // Second index used stored data sqflite
-                                                                            controller.addProduct(
-                                                                              filterProductData[secondIndex].media![0].productAsset ?? '',
-                                                                              filterProductData[secondIndex].title ?? '',
-                                                                              "${filterProductData[firstIndex].price14KT}",
-                                                                              "${filterProductData[firstIndex].productId}",
-                                                                            );
-                                                                            //Todo : Id product detail using remove wishlist this time then using update screen
-                                                                            Get.toNamed(RouteHelper.productScreen, arguments: [filterProductData[secondIndex],secondIndex])!.then(
-                                                                              (value) {
-                                                                                controller.update();
-                                                                              },
-                                                                            );
-                                                                          },
-                                                                          child:
-                                                                              collectionItems(secondIndex),
-                                                                        ),
-                                                                      ),
-                                                                    ),
-                                                                  ),
-                                                                if (secondIndex >=
-                                                                    filterProductData
-                                                                        .length)
-                                                                  // Placeholder to maintain spacing if only one item is present
-                                                                  Flexible(
-                                                                    child: SizedBox(
-                                                                        width:
-                                                                            itemWidth),
-                                                                  ),
-                                                              ],
-                                                            ),
-                                                          ],
-                                                        );
-                                                      },
-                                                    ),
-                                                  );
-                                      },
-                                    ),
-                                    SizedBox(
-                                      height: size.height * 0.085,
-                                    ),
-                                  ],
-                                ),
-                                //Todo : Overlay search Box
-                                Obx(
-                                  () =>
-                                      dashboardController.isDialogVisible.value
-                                          ? Padding(
-                                              padding: EdgeInsets.only(
-                                                  top: MediaQuery.of(context)
-                                                          .size
-                                                          .height *
-                                                      0.090),
-                                              child: Container(
-                                                height: dashboardController
-                                                            .searchProducts
-                                                            .length <
-                                                        3
-                                                    ? size.height * 0.17
-                                                    : (dashboardController
-                                                                    .searchProducts
-                                                                    .length >
-                                                                3 &&
-                                                            dashboardController
-                                                                    .searchProducts
-                                                                    .length <
-                                                                6)
-                                                        ? size.height * 0.33
-                                                        : size.height * 0.40,
-                                                margin:
-                                                    const EdgeInsets.symmetric(
-                                                        horizontal: 10),
-                                                width: double.infinity,
-                                                decoration: BoxDecoration(
-                                                  color:
-                                                      ColorResources.whiteColor,
-                                                  boxShadow: const [
-                                                    BoxShadow(
-                                                      color: ColorResources
-                                                          .inactiveTabColor,
-                                                      offset: Offset(0, 1),
-                                                      blurRadius: 2,
-                                                    ),
-                                                  ],
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          Dimensions
-                                                              .defaultRadius),
-                                                ),
-                                                child:
-                                                    dashboardController
-                                                                .isSearchShimmer
-                                                                .value ==
-                                                            true
-                                                        ? GridView.builder(
-                                                            itemCount: 9,
-                                                            padding:
-                                                                const EdgeInsets
-                                                                    .symmetric(
-                                                                    horizontal:
-                                                                        10,
-                                                                    vertical:
-                                                                        10),
-                                                            gridDelegate:
-                                                                const SliverGridDelegateWithFixedCrossAxisCount(
-                                                              crossAxisCount: 3,
-                                                              crossAxisSpacing:
-                                                                  11.0,
-                                                              mainAxisSpacing:
-                                                                  15.0,
-                                                            ),
-                                                            itemBuilder:
-                                                                (context,
-                                                                    index) {
-                                                              return Container(
-                                                                decoration:
-                                                                    BoxDecoration(
-                                                                  color: ColorResources
-                                                                      .shimmerEffectBaseColor,
-                                                                  borderRadius:
-                                                                      BorderRadius.circular(
-                                                                          Dimensions
-                                                                              .defaultRadius),
-                                                                  boxShadow: const [
-                                                                    BoxShadow(
-                                                                      color: ColorResources
-                                                                          .inactiveTabColor,
-                                                                      offset:
-                                                                          Offset(
-                                                                              0,
-                                                                              1),
-                                                                      blurRadius:
-                                                                          2,
-                                                                    ),
-                                                                  ],
-                                                                ),
-                                                                child: Column(
-                                                                  mainAxisSize:
-                                                                      MainAxisSize
-                                                                          .min,
-                                                                  children: [
-                                                                    Shimmer
-                                                                        .fromColors(
-                                                                      baseColor:
-                                                                          ColorResources
-                                                                              .baseColor,
-                                                                      highlightColor:
-                                                                          ColorResources
-                                                                              .highlightColor,
-                                                                      child:
-                                                                          ClipRRect(
-                                                                        borderRadius: const BorderRadius
-                                                                            .only(
-                                                                            topLeft:
-                                                                                Radius.circular(Dimensions.defaultRadius),
-                                                                            topRight: Radius.circular(Dimensions.defaultRadius)),
-                                                                        child:
-                                                                            Container(
-                                                                          height:
-                                                                              90,
-                                                                          decoration: BoxDecoration(
-                                                                              color: ColorResources.whiteColor,
-                                                                              borderRadius: BorderRadius.circular(3)),
-                                                                        ),
-                                                                      ),
-                                                                    ),
-                                                                    Shimmer
-                                                                        .fromColors(
-                                                                      baseColor:
-                                                                          ColorResources
-                                                                              .baseColor,
-                                                                      highlightColor:
-                                                                          ColorResources
-                                                                              .highlightColor,
-                                                                      child:
-                                                                          Container(
-                                                                        height: size.height *
-                                                                            0.015,
-                                                                        decoration: BoxDecoration(
+                                                                            Text(
+                                                                          dashboardController.searchProducts[index].title ??
+                                                                              '',
+                                                                          textAlign:
+                                                                              TextAlign.center,
+                                                                          overflow:
+                                                                              TextOverflow.ellipsis,
+                                                                          softWrap:
+                                                                              false,
+                                                                          style:
+                                                                              semiBoldLarge.copyWith(
                                                                             color:
-                                                                                ColorResources.whiteColor,
-                                                                            borderRadius: BorderRadius.circular(3)),
+                                                                                ColorResources.buttonColor,
+                                                                          ),
+                                                                        ),
                                                                       ),
                                                                     ),
                                                                   ],
                                                                 ),
-                                                              );
-                                                            },
-                                                          )
-                                                        : dashboardController
-                                                                .searchProducts
-                                                                .isEmpty
-                                                            ? Center(
-                                                                child: Text(
-                                                                  LocalStrings
-                                                                      .searchNotAvailable,
-                                                                  textAlign:
-                                                                      TextAlign
-                                                                          .center,
-                                                                  overflow:
-                                                                      TextOverflow
-                                                                          .ellipsis,
-                                                                  softWrap:
-                                                                      false,
-                                                                  style: semiBoldLarge
-                                                                      .copyWith(
-                                                                    color: ColorResources
-                                                                        .conceptTextColor,
-                                                                  ),
-                                                                ),
-                                                              )
-                                                            : GridView.builder(
-                                                                itemCount:
-                                                                    dashboardController
-                                                                        .searchProducts
-                                                                        .length,
-                                                                padding: const EdgeInsets
-                                                                    .symmetric(
-                                                                    horizontal:
-                                                                        10,
-                                                                    vertical:
-                                                                        10),
-                                                                gridDelegate:
-                                                                    const SliverGridDelegateWithFixedCrossAxisCount(
-                                                                  crossAxisCount:
-                                                                      3,
-                                                                  crossAxisSpacing:
-                                                                      11.0,
-                                                                  mainAxisSpacing:
-                                                                      15.0,
-                                                                ),
-                                                                itemBuilder:
-                                                                    (context,
-                                                                        index) {
-                                                                  return Container(
-                                                                    decoration:
-                                                                        BoxDecoration(
-                                                                      color: ColorResources
-                                                                          .shimmerEffectBaseColor,
-                                                                      borderRadius:
-                                                                          BorderRadius.circular(
-                                                                              Dimensions.defaultRadius),
-                                                                      boxShadow: const [
-                                                                        BoxShadow(
-                                                                          color:
-                                                                              ColorResources.inactiveTabColor,
-                                                                          offset: Offset(
-                                                                              0,
-                                                                              1),
-                                                                          blurRadius:
-                                                                              2,
-                                                                        ),
-                                                                      ],
-                                                                    ),
-                                                                    child:
-                                                                        GestureDetector(
-                                                                      onTap:
-                                                                          () {
-                                                                        Get.toNamed(
-                                                                            RouteHelper.collectionScreen);
-                                                                        categoriesController.filterCategoriesApiMethod(
-                                                                            occasionBy:
-                                                                                dashboardController.searchProducts[index].subCategory,
-                                                                            priceLimit: '');
-                                                                        dashboardController
-                                                                            .hideSearchMethod();
-                                                                        //Todo : Search box hide
-                                                                        dashboardController
-                                                                            .isDialogVisible
-                                                                            .value = false;
-                                                                      },
-                                                                      child:
-                                                                          Stack(
-                                                                        children: [
-                                                                          ClipRRect(
-                                                                            borderRadius:
-                                                                                const BorderRadius.only(topLeft: Radius.circular(Dimensions.defaultRadius), topRight: Radius.circular(Dimensions.defaultRadius)),
-                                                                            child:
-                                                                                CachedCommonImage(
-                                                                              networkImageUrl: dashboardController.searchProducts[index].image01,
-                                                                              // categoryList[index]
-                                                                              //         .images,
-                                                                              width: double.infinity,
-                                                                              height: size.height * 0.11,
-                                                                            ),
-                                                                          ),
-                                                                          Align(
-                                                                            alignment:
-                                                                                Alignment.bottomCenter,
-                                                                            child:
-                                                                                Padding(
-                                                                              padding: const EdgeInsets.only(bottom: 2),
-                                                                              child: Text(
-                                                                                dashboardController.searchProducts[index].title ?? '',
-                                                                                textAlign: TextAlign.center,
-                                                                                overflow: TextOverflow.ellipsis,
-                                                                                softWrap: false,
-                                                                                style: semiBoldLarge.copyWith(
-                                                                                  color: ColorResources.conceptTextColor,
-                                                                                ),
-                                                                              ),
-                                                                            ),
-                                                                          ),
-                                                                        ],
-                                                                      ),
-                                                                    ),
-                                                                  );
-                                                                },
                                                               ),
-                                                // Center(
-                                                //   child: Text(
-                                                //     'Search Results',
-                                                //     style: TextStyle(
-                                                //         color: Colors.black, fontSize: 18),
-                                                //   ),
-                                                // ),
-                                              ),
-                                            )
-                                          : const SizedBox.shrink(),
-                                ),
-                              ],
-                            ),
-                          );
-                        });
-              }),
+                                                            );
+                                                          },
+                                                        ),
+                                          // Center(
+                                          //   child: Text(
+                                          //     'Search Results',
+                                          //     style: TextStyle(
+                                          //         color: Colors.black, fontSize: 18),
+                                          //   ),
+                                          // ),
+                                        ),
+                                      )
+                                    : const SizedBox.shrink(),
+                              ),
+                            ],
+                          ),
+                        );
+                      },
+                    );
+            },
+          ),
         ),
       ),
     );
@@ -844,184 +932,193 @@ class _CollectionScreenState extends State<CollectionScreen> {
 
   Widget collectionItems(int index) {
     final size = MediaQuery.of(context).size;
-
-    return GetBuilder(
-      init: CollectionController(),
-      builder: (controller) {
-        // final isFavorite = controller.isFavorite(index);
-// Check if the index is within the valid range
-        if (index >= filterProductData.length) {
-          return const SizedBox(); // Or some other fallback widget
-        }
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Stack(
-              children: [
-                Container(
-                  height: size.height * 0.25,
-                  width: double.infinity,
-                  color: ColorResources.borderColor.withOpacity(0.050),
-                  child: CachedCommonImage(
-                    networkImageUrl:
-                        filterProductData[index].media![0].productAsset!,
-                    height: size.height * 0.17,
-                    width: double.infinity,
-                  ),
-                ),
-                Padding(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
-                  child: Row(
-                    children: [
-                      //Todo : Declared latest or not
-                      // controller.collectionPostUpdateLst[index] ==
-                      //     LocalStrings.blankText
-                      //     ? const SizedBox()
-                      //     : Container(
-                      //   height: size.height * 0.033,
-                      //   padding:
-                      //   const EdgeInsets.symmetric(horizontal: 10),
-                      //   decoration: BoxDecoration(
-                      //     color: ColorResources.updateCardColor,
-                      //     borderRadius: BorderRadius.circular(
-                      //         Dimensions.defaultRadius),
-                      //   ),
-                      //   child: Center(
-                      //     child: Text(
-                      //       controller.collectionPostUpdateLst[index],
-                      //       style: semiBoldExtraSmall.copyWith(
-                      //           color: ColorResources.conceptTextColor),
-                      //     ),
-                      //   ),
-                      // ),
-                      const Spacer(),
-                      // GestureDetector(
-                      //   onTap: () {
-                      //     controller.toggleFavorite(index);
-                      //   },
-                      //   child: Icon(
-                      //     isFavorite
-                      //         ? Icons.favorite_rounded
-                      //         : Icons.favorite_border_rounded,
-                      //     color: ColorResources.conceptTextColor,
-                      //   ),
-                      // ),
-                      LikeButton(
-                        circleColor: const CircleColor(
-                            start: Color(0xff00ddff), end: Color(0xff0099cc)),
-                        bubblesColor: const BubblesColor(
-                          dotPrimaryColor: ColorResources.notValidateColor,
-                          dotSecondaryColor: ColorResources.notValidateColor,
-                        ),
-                        likeBuilder: (bool isLiked) {
-                          // filterProductData[index].isAlready = isLiked;
-                          return Icon(
-                            filterProductData[index].isAlready == true
-                                ? Icons.favorite_rounded
-                                : Icons.favorite_border,
-                            color: filterProductData[index].isAlready == true
-                                ? ColorResources.notValidateColor
-                                : ColorResources.inactiveTabColor,
-                            // size: buttonSize,
-                          );
-                        },
-                        onTap: (isLiked) async {
-                          if (filterProductData[index].isAlready == true) {
-                            //Todo : Remove Wishlist particular products api method
-                            controller.removeWishlistApiMethod(
-                                productId: filterProductData[index].productId);
-                            filterProductData[index].isAlready = false;
-                            controller.update();
-                          } else {
-                            final productController =
-                                Get.put<ProductController>(ProductController());
-                            filterProductData[index].isAlready = true;
-                            controller.update();
-                            //Todo : Wishlist particular products api method
-                            controller.favoritesProducts(
-                                userId: PrefManager.getString('userId') ?? '',
-                                productId: filterProductData[index].productId,
-                                index: index,
-                                size: filterProductData[index].netWeight14KT?.toInt(),
-                                carat: productController.jewelleryKt(),
-                                color: productController.jewelleryColor());
-                          } // If user is logged in, proceed with like/unlike logic
-                          return !isLiked; // toggle like/unlike
-                        },
-                      ),
-                    ],
-                  ),
-                ),
-                Positioned(
-                  bottom: 0,
-                  child: Container(
-                    height: size.height * 0.025,
-                    width: size.width * 0.10,
-                    margin: const EdgeInsets.only(left: 15, bottom: 10),
-                    decoration: BoxDecoration(
-                      borderRadius:
-                          BorderRadius.circular(Dimensions.bottomSheetRadius),
-                      border:
-                          Border.all(color: ColorResources.conceptTextColor),
-                    ),
-                    child: Center(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            "${filterProductData[index].avgRating ?? 0.toInt()}",
-                            style: semiBoldSmall.copyWith(
-                                color: ColorResources.conceptTextColor),
-                          ),
-                          const SizedBox(width: Dimensions.space3),
-                          Icon(
-                            Icons.star,
-                            color: filterProductData[index].avgRating == null || filterProductData[index].avgRating==0.0
-                                ? ColorResources.borderColor
-                                : ColorResources.updateCardColor,
-                            size: 13,
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            Padding(
-              padding: const EdgeInsets.only(left: 15, top: 10),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 4.0),
+      child: GetBuilder(
+        init: CollectionController(),
+        builder: (controller) {
+          // Check if the index is within the valid range
+          if (index >= filterProductData.length) {
+            return const SizedBox(); // Or some other fallback widget
+          }
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Stack(
                 children: [
-                  Row(
-                    children: [
-                      Text(
-                        "₹${filterProductData[index].total14KT?.round()}",
-                        style: semiBoldDefault.copyWith(
-                            color: ColorResources.conceptTextColor),
+                  Container(
+                    height: size.height * 0.25,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      color: ColorResources.borderColor.withOpacity(0.050),
+                      borderRadius: BorderRadius.circular(12), // added radius
+                    ),
+                    child: ClipRRect(
+                      borderRadius:
+                          BorderRadius.circular(12), // apply radius to image
+                      child: CachedCommonImage(
+                        networkImageUrl:
+                            filterProductData[index].media![0].productAsset!,
+                        height: size.height * 0.17,
+                        width: double.infinity,
                       ),
-                      const SizedBox(width: Dimensions.space7),
-                      // Text(
-                      //   "₹${filterProductData[index].price14KT}",
-                      //   style: semiBoldSmall.copyWith(
-                      //       color: ColorResources.borderColor,
-                      //       decoration: TextDecoration.lineThrough),
-                      // ),
-                    ],
+                    ),
                   ),
-                  Text(
-                    filterProductData[index].title ?? '',
-                    maxLines: 2,
-                    style: semiBoldSmall.copyWith(
-                        color: ColorResources.buttonColor),
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 15, vertical: 10),
+                    child: Row(
+                      children: [
+                        // Todo : Declared latest or not
+                        // controller.collectionPostUpdateLst[index] ==
+                        //     LocalStrings.blankText
+                        //     ? const SizedBox()
+                        //     : Container(
+                        //   height: size.height * 0.033,
+                        //   padding:
+                        //   const EdgeInsets.symmetric(horizontal: 10),
+                        //   decoration: BoxDecoration(
+                        //     color: ColorResources.updateCardColor,
+                        //     borderRadius: BorderRadius.circular(
+                        //         Dimensions.defaultRadius),
+                        //   ),
+                        //   child: Center(
+                        //     child: Text(
+                        //       controller.collectionPostUpdateLst[index],
+                        //       style: semiBoldExtraSmall.copyWith(
+                        //           color: ColorResources.buttonColor),
+                        //     ),
+                        //   ),
+                        // ),
+                        const Spacer(),
+                        Padding(
+                          padding: const EdgeInsets.only(
+                              right: 8), // moved a bit left
+                          child: LikeButton(
+                            circleColor: const CircleColor(
+                              start: Color(0xff00ddff),
+                              end: Color(0xff0099cc),
+                            ),
+                            bubblesColor: const BubblesColor(
+                              dotPrimaryColor: ColorResources.notValidateColor,
+                              dotSecondaryColor:
+                                  ColorResources.notValidateColor,
+                            ),
+                            likeBuilder: (bool isLiked) {
+                              return Icon(
+                                filterProductData[index].isAlready == true
+                                    ? Icons.favorite_rounded
+                                    : Icons.favorite_border,
+                                color:
+                                    filterProductData[index].isAlready == true
+                                        ? ColorResources.notValidateColor
+                                        : ColorResources.inactiveTabColor,
+                              );
+                            },
+                            onTap: (isLiked) async {
+                              if (filterProductData[index].isAlready == true) {
+                                //Todo : Remove Wishlist particular products api method
+                                controller.removeWishlistApiMethod(
+                                  productId: filterProductData[index].productId,
+                                );
+                                filterProductData[index].isAlready = false;
+                                controller.update();
+                              } else {
+                                final productController =
+                                    Get.put<ProductController>(
+                                        ProductController());
+                                filterProductData[index].isAlready = true;
+                                controller.update();
+                                //Todo : Wishlist particular products api method
+                                controller.favoritesProducts(
+                                  userId: PrefManager.getString('userId') ?? '',
+                                  productId: filterProductData[index].productId,
+                                  index: index,
+                                  size: filterProductData[index]
+                                      .netWeight14KT
+                                      ?.toInt(),
+                                  carat: productController.jewelleryKt(),
+                                  color: productController.jewelleryColor(),
+                                );
+                              }
+                              return !isLiked; // toggle like/unlike
+                            },
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Positioned(
+                    bottom: 0,
+                    child: Container(
+                      height: size.height * 0.025,
+                      width: size.width * 0.12,
+                      margin: const EdgeInsets.only(left: 15, bottom: 10),
+                      decoration: BoxDecoration(
+                        borderRadius:
+                            BorderRadius.circular(Dimensions.bottomSheetRadius),
+                        border: Border.all(color: ColorResources.buttonColor),
+                      ),
+                      child: Center(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              "${filterProductData[index].avgRating ?? 0.toInt()}",
+                              style: semiBoldSmall.copyWith(
+                                  color: ColorResources.buttonColor),
+                            ),
+                            const SizedBox(width: Dimensions.space3),
+                            Icon(
+                              Icons.star,
+                              color: filterProductData[index].avgRating ==
+                                          null ||
+                                      filterProductData[index].avgRating == 0.0
+                                  ? ColorResources.borderColor
+                                  : ColorResources.updateCardColor,
+                              size: 13,
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
                   ),
                 ],
               ),
-            ),
-          ],
-        );
-      },
+              Padding(
+                padding: const EdgeInsets.only(left: 15, top: 10),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Text(
+                          "₹${filterProductData[index].total14KT?.round()}",
+                          style: semiBoldDefault.copyWith(
+                              color: ColorResources.buttonColor),
+                        ),
+                        const SizedBox(width: Dimensions.space7),
+                        // Text(
+                        //   "₹${filterProductData[index].price14KT}",
+                        //   style: semiBoldSmall.copyWith(
+                        //       color: ColorResources.borderColor,
+                        //       decoration: TextDecoration.lineThrough),
+                        // ),
+                      ],
+                    ),
+                    Text(
+                      filterProductData[index].title ?? '',
+                      maxLines: 2,
+                      style: semiBoldSmall.copyWith(
+                          color: ColorResources.buttonColor),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          );
+        },
+      ),
     );
   }
 
@@ -1067,7 +1164,7 @@ class _CollectionScreenState extends State<CollectionScreen> {
                       //     child: Text(
                       //       controller.collectionPostUpdateLst[index],
                       //       style: semiBoldExtraSmall.copyWith(
-                      //           color: ColorResources.conceptTextColor),
+                      //           color: ColorResources.buttonColor),
                       //     ),
                       //   ),
                       // ),
@@ -1080,7 +1177,7 @@ class _CollectionScreenState extends State<CollectionScreen> {
                       //     isFavorite
                       //         ? Icons.favorite_rounded
                       //         : Icons.favorite_border_rounded,
-                      //     color: ColorResources.conceptTextColor,
+                      //     color: ColorResources.buttonColor,
                       //   ),
                       // ),
                       Shimmer.fromColors(
@@ -1108,24 +1205,25 @@ class _CollectionScreenState extends State<CollectionScreen> {
                     decoration: BoxDecoration(
                       borderRadius:
                           BorderRadius.circular(Dimensions.bottomSheetRadius),
-                      border:
-                          Border.all(color: ColorResources.conceptTextColor),
+                      border: Border.all(color: ColorResources.buttonColor),
                     ),
                     child: Center(
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Shimmer.fromColors(
-                              baseColor: ColorResources.baseColor,
-                              highlightColor: ColorResources.highlightColor,
-                              child: Container(
-                                height: size.height * 0.010,
-                                width: size.width * 0.05,
-                                decoration: BoxDecoration(
-                                    color: ColorResources.whiteColor,
-                                    borderRadius: BorderRadius.circular(
-                                        Dimensions.smallRadius)),
-                              )),
+                            baseColor: ColorResources.baseColor,
+                            highlightColor: ColorResources.highlightColor,
+                            child: Container(
+                              height: size.height * 0.010,
+                              width: size.width * 0.05,
+                              decoration: BoxDecoration(
+                                color: ColorResources.whiteColor,
+                                borderRadius: BorderRadius.circular(
+                                    Dimensions.smallRadius),
+                              ),
+                            ),
+                          ),
                           const SizedBox(width: Dimensions.space3),
                           const Icon(
                             Icons.star,
@@ -1147,16 +1245,18 @@ class _CollectionScreenState extends State<CollectionScreen> {
                   Row(
                     children: [
                       Shimmer.fromColors(
-                          baseColor: ColorResources.baseColor,
-                          highlightColor: ColorResources.highlightColor,
-                          child: Container(
-                            height: 9,
-                            width: size.width * 0.20,
-                            decoration: BoxDecoration(
-                                color: ColorResources.whiteColor,
-                                borderRadius: BorderRadius.circular(
-                                    Dimensions.smallRadius)),
-                          )),
+                        baseColor: ColorResources.baseColor,
+                        highlightColor: ColorResources.highlightColor,
+                        child: Container(
+                          height: 9,
+                          width: size.width * 0.20,
+                          decoration: BoxDecoration(
+                            color: ColorResources.whiteColor,
+                            borderRadius:
+                                BorderRadius.circular(Dimensions.smallRadius),
+                          ),
+                        ),
+                      ),
                       const SizedBox(width: Dimensions.space7),
                       // Shimmer.fromColors(
                       //     baseColor: ColorResources.baseColor,
@@ -1173,16 +1273,18 @@ class _CollectionScreenState extends State<CollectionScreen> {
                   ),
                   const SizedBox(height: Dimensions.space7),
                   Shimmer.fromColors(
-                      baseColor: ColorResources.baseColor,
-                      highlightColor: ColorResources.highlightColor,
-                      child: Container(
-                        height: 10,
-                        width: size.width * 0.15,
-                        decoration: BoxDecoration(
-                            color: ColorResources.whiteColor,
-                            borderRadius:
-                                BorderRadius.circular(Dimensions.smallRadius)),
-                      )),
+                    baseColor: ColorResources.baseColor,
+                    highlightColor: ColorResources.highlightColor,
+                    child: Container(
+                      height: 10,
+                      width: size.width * 0.15,
+                      decoration: BoxDecoration(
+                        color: ColorResources.whiteColor,
+                        borderRadius:
+                            BorderRadius.circular(Dimensions.smallRadius),
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -1198,8 +1300,9 @@ class _CollectionScreenState extends State<CollectionScreen> {
       backgroundColor: ColorResources.cardBgColor,
       shape: const OutlineInputBorder(
         borderRadius: BorderRadius.only(
-            topRight: Radius.circular(Dimensions.bottomSheetRadius),
-            topLeft: Radius.circular(Dimensions.bottomSheetRadius)),
+          topRight: Radius.circular(Dimensions.bottomSheetRadius),
+          topLeft: Radius.circular(Dimensions.bottomSheetRadius),
+        ),
         borderSide: BorderSide(color: Colors.transparent),
       ),
       context: context,
@@ -1229,7 +1332,7 @@ class _CollectionScreenState extends State<CollectionScreen> {
                     Text(
                       LocalStrings.sortBy,
                       style: boldMediumLarge.copyWith(
-                          color: ColorResources.conceptTextColor),
+                          color: ColorResources.buttonColor),
                     ),
                   ],
                 ),
@@ -1268,7 +1371,8 @@ class _CollectionScreenState extends State<CollectionScreen> {
                             categoriesController.filterCategoriesApiMethod(
                                 priceOrder: sortProducts);
                             Get.put<CollectionController>(
-                                CollectionController());
+                              CollectionController(),
+                            );
                             controller.hideSearchField();
                             Get.back();
                           },
@@ -1280,7 +1384,7 @@ class _CollectionScreenState extends State<CollectionScreen> {
                                     color:
                                         controller.currentIndex.value == index
                                             ? ColorResources.sortSelectedColor
-                                            : ColorResources.conceptTextColor),
+                                            : ColorResources.buttonColor),
                               );
                             },
                           ),

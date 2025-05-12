@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart' hide Response;
 import 'package:get_storage/get_storage.dart';
 import 'package:saltandGlitz/api_repository/api_function.dart';
@@ -6,6 +7,7 @@ import 'package:saltandGlitz/core/utils/images.dart';
 import 'package:saltandGlitz/core/utils/local_strings.dart';
 import 'package:saltandGlitz/data/controller/add_to_cart/add_to_cart_controller.dart';
 import 'package:saltandGlitz/data/controller/wishlist/wishlist_controller.dart';
+import 'package:saltandGlitz/data/model/categories_filter_view_model.dart';
 import 'package:saltandGlitz/data/product/product_controller.dart';
 import 'package:saltandGlitz/view/components/common_message_show.dart';
 
@@ -263,7 +265,15 @@ class CollectionController extends GetxController {
           productController.productData.isAlready = true;
         }
       } else {
-        showSnackBar(context: Get.context!, message: response.data['message']);
+        showSnackBar(
+          context: Get.context!,
+          title: "Info", // You can change this to "Success", "Error", etc.
+          message: response.data['message'],
+          icon: Icons
+              .info, // Use Icons.check_circle, Icons.error, etc., as needed
+          iconColor:
+              Colors.blue, // Set based on the context: blue, green, red, etc.
+        );
       }
     } catch (e) {
       print("Favorites Products error  : $e");
@@ -271,6 +281,11 @@ class CollectionController extends GetxController {
       isMoveWishlist.value = false;
       update();
     }
+  }
+
+  void updateFilteredProducts(List<UpdatedProducts> products) {
+    filterProductData = products;
+    update(); // triggers UI refresh for GetBuilder
   }
 
 //Todo : Remove wishlist particular product

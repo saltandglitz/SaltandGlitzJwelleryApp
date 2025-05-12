@@ -32,6 +32,7 @@ class CategoriesController extends GetxController {
   final List<Tab> myTabs = <Tab>[
     Tab(text: LocalStrings.women),
     Tab(text: LocalStrings.men),
+    Tab(text: LocalStrings.kids),
   ];
 
   List womenTopCategoriesImage = [
@@ -224,6 +225,11 @@ class CategoriesController extends GetxController {
     update();
   }
 
+  void setKidsExpandedIndex(int index) {
+    menExpandedIndex.value = index;
+    update();
+  }
+
 // Method to show by default items
   byDefaultOpenTab() {
     selectedTab.value = 1;
@@ -241,6 +247,11 @@ class CategoriesController extends GetxController {
   }
 
   void setMenBrowsedIndex(int index) {
+    menBrowsedExpandedIndex.value = index;
+    update();
+  }
+
+  void setKidsBrowsedIndex(int index) {
     menBrowsedExpandedIndex.value = index;
     update();
   }
@@ -279,11 +290,12 @@ class CategoriesController extends GetxController {
         getCategoryData.clear();
         getCategoryMostBrowsedData.clear();
         getCategoryBannerData.clear();
-        log("Get Categories : ${response.data['categories']}");
+        log("Get Categories : ${response.data}");
         //Todo : add all jewellery style categories data
         getCategoryData = (response.data['categories'] as List)
             .map((categoryJson) => Categories.fromJson(categoryJson))
             .toList();
+
         //Todo : add all mostBrowsed categories data
         getCategoryMostBrowsedData = (response.data['mergedProducts'] as List)
             .map((categoryJson) => MergedProducts.fromJson(categoryJson))
@@ -294,12 +306,11 @@ class CategoriesController extends GetxController {
             .map((banners) => Banners.fromJson(banners))
             .where((banners) => banners.mobileBannerImage != null)
             .toList();
-        print("GETDATA: $getCategoryBannerData");
       } else {
         print("Something went wrong");
       }
     } catch (e) {
-      print("Get Categories Error : $e");
+      print("Get Categories Errorzzzzzzzzzz : $e");
     } finally {
       update();
     }
@@ -326,7 +337,6 @@ class CategoriesController extends GetxController {
             (response.data['mergedProducts'] as List)
                 .map((categoryJson) => MergedProducts.fromJson(categoryJson))
                 .toList();
-
         //Todo : Male add all jewellery banners categories data
         getCategoryBannerMaleData = (response.data['banners'] as List)
             .map((banners) => Banners.fromJson(banners))
@@ -343,29 +353,33 @@ class CategoriesController extends GetxController {
   }
 
   //Todo : Filter categories & price wise product api method
-  Future filterCategoriesApiMethod(
-      {String? occasionBy,
-      String? priceLimit,
-      String? priceOrder,
-      String? isFilterScreen,
-      String? wrappedBy,
-      String? giftFor,
-      String? title,
-      String? materialBy,
-      List<String>? priceLimitList,
-      List<String>? productTypeList,
-      List<String>? materialList,
-      List<String>? shopForList,
-      List<String>? occasionByList,
-      List<String>? giftsList}) async {
+  Future filterCategoriesApiMethod({
+    String? category, // 👈 Added
+    String? occasionBy,
+    String? priceLimit,
+    String? priceOrder,
+    String? isFilterScreen,
+    String? wrappedBy,
+    String? giftFor,
+    String? title,
+    String? materialBy,
+    List<String>? priceLimitList,
+    List<String>? productTypeList,
+    List<String>? materialList,
+    List<String>? shopForList,
+    List<String>? occasionByList,
+    List<String>? giftsList,
+    String? filterLocallyByCategory, // 👈 NEW
+    String? filterLocallyBySubCategory,
+  }) async {
     filterProductData.clear();
     final collectionController =
         Get.put<CollectionController>(CollectionController());
+
     try {
       print("Enter filter");
       collectionController.isShowCategories.value = false;
-      //Todo : IsFilterScreen == "YES" fill this time all {} params list format push in api
-      // If IsFilterScreen == "YES" parameter particular key value not available value take automatic null
+
       Map<String, dynamic> params = isFilterScreen == "YES"
           ? {
               "priceLimit": priceLimitList,
@@ -377,15 +391,14 @@ class CategoriesController extends GetxController {
               "userId": PrefManager.getString('userId') ?? '',
             }
           : {
+              // 'category': category ?? '', // 👈 Injected here
               'occasionBy': occasionBy ?? '',
               'priceLimit': priceLimit ?? '',
-              //Todo : Low to high / High to low
               'priceOrder':
                   priceOrder == "lowToHigh" || priceOrder == "highToLow"
                       ? priceOrder
                       : '',
               'userId': PrefManager.getString('userId') ?? '',
-              //Todo : Latest / Featured
               'sortBy': priceOrder == "newestFirst" ||
                       priceOrder == LocalStrings.featured
                   ? priceOrder
@@ -395,20 +408,51 @@ class CategoriesController extends GetxController {
               'title': title ?? '',
               'materialBy': materialBy ?? '',
             };
+
       Response response = await APIFunction().apiCall(
         apiName: LocalStrings.filterProductApi,
         context: Get.context,
         params: params,
         isLoading: false,
       );
+      print("RESPONSE : ${response.statusCode}");
       if (response.statusCode == 200) {
-        filterProductData = (response.data['updatedProducts'] as List)
-            .map((filterProduct) => UpdatedProducts.fromJson(filterProduct))
+        final List<dynamic> allProducts =
+            response.data['updatedProducts'] ?? [];
+
+        filterProductData = allProducts
+            .map((product) => UpdatedProducts.fromJson(product))
             .toList();
+
+// ✅ Step 1: Always filter by main category
+        if (filterLocallyByCategory != null &&
+            filterLocallyByCategory.isNotEmpty) {
+          filterProductData = filterProductData
+              .where((product) =>
+                  product.category?.toLowerCase() ==
+                  filterLocallyByCategory.toLowerCase())
+              .toList();
+        }
+
+// ✅ Step 2: If subcategory is tapped (not 'All'), filter further
+        if (filterLocallyBySubCategory != null &&
+            filterLocallyBySubCategory.isNotEmpty) {
+          filterProductData = filterProductData.where((product) {
+            final subCategories = product.subCategory ?? [];
+            return subCategories.any((sub) =>
+                sub.toLowerCase() == filterLocallyBySubCategory.toLowerCase());
+          }).toList();
+        }
+
         update();
       } else {
         showSnackBar(
-            context: Get.context!, message: "${response.data['message']}");
+          context: Get.context!,
+          title: "Info",
+          message: "${response.data['message']}",
+          icon: Icons.info,
+          iconColor: Colors.blue,
+        );
       }
     } catch (e) {
       print("Categories Filter : $e");

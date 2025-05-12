@@ -1,10 +1,8 @@
 import 'dart:io';
-import 'dart:math';
 
 import 'package:carousel_slider/carousel_controller.dart';
 import 'package:carousel_slider/carousel_options.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart' hide Response, FormData, MultipartFile;
 import 'package:image_picker/image_picker.dart';
@@ -24,7 +22,6 @@ import '../../core/utils/validation.dart';
 import '../../local_storage/pref_manager.dart';
 import '../controller/add_to_cart/add_to_cart_controller.dart';
 import '../controller/collection/collection_controller.dart';
-import '../model/categories_filter_view_model.dart';
 import '../model/get_rating_view_model.dart';
 
 class ProductController extends GetxController {
@@ -173,6 +170,11 @@ class ProductController extends GetxController {
     update();
   }
 
+  void resetRatingData() {
+    getRatingViewModel = null;
+    update();
+  }
+
   /// Rating users
   ratingUsers(double newRating) {
     ratingValue.value = newRating;
@@ -214,7 +216,14 @@ class ProductController extends GetxController {
 // Check if no file was picked
     if (pickFile == null) {
       showSnackBar(
-          context: Get.context!, message: LocalStrings.noSelectedImage);
+        context: Get.context!,
+        title: 'No Image Selected', // Customize the title as needed
+        message: LocalStrings.noSelectedImage,
+        icon: Icons
+            .image_not_supported, // You can use an icon that represents no image
+        iconColor: Colors.orange, // Orange color for the icon
+      );
+
       return;
     }
 
@@ -223,7 +232,14 @@ class ProductController extends GetxController {
       pickedImage.value = imageFile;
       update();
     } else {
-      showSnackBar(context: Get.context!, message: LocalStrings.invalidFile);
+      showSnackBar(
+        context: Get.context!,
+        title: 'Invalid File', // Customize the title as needed
+        message: LocalStrings.invalidFile,
+        icon: Icons.error, // You can use an error icon to indicate a problem
+        iconColor: Colors.red, // Red color for the icon, indicating an error
+      );
+
       update();
     }
     update();
@@ -236,7 +252,14 @@ class ProductController extends GetxController {
     // Check if no file was picked
     if (pickFile == null) {
       showSnackBar(
-          context: Get.context!, message: LocalStrings.noSelectedImage);
+        context: Get.context!,
+        title: 'No Image Selected', // Customize the title as needed
+        message: LocalStrings.noSelectedImage,
+        icon: Icons.image, // You can use an image icon or any other icon
+        iconColor:
+            Colors.orange, // Orange color for the icon (to indicate a warning)
+      );
+
       return;
     }
     imageFile = File(pickFile.path);
@@ -247,7 +270,15 @@ class ProductController extends GetxController {
       print("Pick file 111: ${pickedImage.value}");
       update();
     } else {
-      showSnackBar(context: Get.context!, message: LocalStrings.invalidFile);
+      showSnackBar(
+        context: Get.context!,
+        title: 'Invalid File', // Customize the title as needed
+        message: LocalStrings.invalidFile,
+        icon: Icons
+            .error, // You can use an error icon to indicate the invalid file
+        iconColor: Colors.red, // Red color for the icon to indicate an error
+      );
+
       update();
     }
     update();
@@ -267,51 +298,55 @@ class ProductController extends GetxController {
 
   /// Image pick ask options dialog gallery & camera.
   imagePickOptionsDialogBox() {
-    Get.dialog(StatefulBuilder(
-      builder: (context, setState) {
-        return Dialog(
-          backgroundColor: Colors.transparent,
-          insetPadding: const EdgeInsets.symmetric(horizontal: 25),
-          child: AnimatedOpacity(
-            opacity: 1.0,
-            duration: const Duration(milliseconds: 500),
-            child: Material(
-              color: ColorResources.whiteColor,
-              borderRadius: BorderRadius.circular(8),
-              elevation: 5.0,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 15),
-                child: SizedBox(
+    Get.dialog(
+      StatefulBuilder(
+        builder: (context, setState) {
+          return Dialog(
+            backgroundColor: Colors.transparent,
+            insetPadding: const EdgeInsets.symmetric(horizontal: 25),
+            child: AnimatedOpacity(
+              opacity: 1.0,
+              duration: const Duration(milliseconds: 500),
+              child: Material(
+                color: ColorResources.whiteColor,
+                borderRadius: BorderRadius.circular(8),
+                elevation: 5.0,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 15),
+                  child: SizedBox(
                     width: double.infinity,
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
                           LocalStrings.selectImage,
-                          style: semiBoldOverLarge.copyWith(),
+                          style: semiBoldExtraLarge.copyWith(),
                         ),
-                        const SizedBox(height: Dimensions.space15),
+                        const SizedBox(height: Dimensions.space40),
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
+                            const SizedBox(width: Dimensions.space30),
                             GestureDetector(
                               onTap: () {
                                 /// Camera pick image method
                                 imagePickCameraMethod();
                                 Future.delayed(
-                                    const Duration(milliseconds: 500), () {
-                                  Get.back();
-                                });
+                                  const Duration(milliseconds: 500),
+                                  () {
+                                    Get.back();
+                                  },
+                                );
                               },
                               child: Column(
                                 children: [
                                   const Icon(Icons.camera,
-                                      size: 35,
-                                      color: ColorResources.conceptTextColor),
+                                      size: 30,
+                                      color: ColorResources.buttonColor),
                                   const SizedBox(height: Dimensions.space5),
                                   Text(
                                     LocalStrings.camera,
-                                    style: semiBoldExtraLarge.copyWith(),
+                                    style: mediumLarge.copyWith(),
                                   ),
                                 ],
                               ),
@@ -322,33 +357,38 @@ class ProductController extends GetxController {
                                 /// Gallery pick image method
                                 imagePickGalleryMethod();
                                 Future.delayed(
-                                    const Duration(milliseconds: 500), () {
-                                  Get.back();
-                                });
+                                  const Duration(milliseconds: 500),
+                                  () {
+                                    Get.back();
+                                  },
+                                );
                               },
                               child: Column(
                                 children: [
                                   const Icon(Icons.photo,
                                       size: 35,
-                                      color: ColorResources.conceptTextColor),
+                                      color: ColorResources.buttonColor),
                                   const SizedBox(height: Dimensions.space5),
                                   Text(
                                     LocalStrings.gallery,
-                                    style: semiBoldExtraLarge.copyWith(),
+                                    style: mediumLarge.copyWith(),
                                   ),
                                 ],
                               ),
                             ),
+                            const SizedBox(width: Dimensions.space30),
                           ],
                         ),
                       ],
-                    )),
+                    ),
+                  ),
+                ),
               ),
             ),
-          ),
-        );
-      },
-    ));
+          );
+        },
+      ),
+    );
   }
 
   enableNetworkHideLoader() {
@@ -530,16 +570,16 @@ class ProductController extends GetxController {
         ...params,
         "productImage": imageFile?.path != null
             ? await MultipartFile.fromFile(imageFile?.path ?? '',
-            filename: imageFile!.path.split('.').last)
+                filename: imageFile!.path.split('.').last)
             : "",
       });
       // Use PUT method to update the rating
       Response response = await APIFunction().apiCall(
-        apiName: LocalStrings.updateRatingApi,  // Endpoint for updating rating
+        apiName: LocalStrings.updateRatingApi, // Endpoint for updating rating
         context: Get.context!,
-        params: formData,  // Data to update rating
+        params: formData, // Data to update rating
         isLoading: false,
-        isPut: true,  // Indicating it's a PUT request
+        isPut: true, // Indicating it's a PUT request
       );
 
       if (response.statusCode == 200) {
@@ -620,8 +660,12 @@ class ProductController extends GetxController {
           wishlistController.updateProductStatus(productId!, false);
           Get.toNamed(RouteHelper.addCartScreen);
         }
-        PrefManager.addCartAndWishlistProductToList('cartProductId', '$productId',
-            "${size ?? 6}", carat ?? jewelleryKt(), color ?? jewelleryColor());
+        PrefManager.addCartAndWishlistProductToList(
+            'cartProductId',
+            '$productId',
+            "${size ?? 6}",
+            carat ?? jewelleryKt(),
+            color ?? jewelleryColor());
         List<String>? cartData = PrefManager.getStringList('cartProductId');
         print("Stored Data cart : ${cartData?.toList()}");
         print("Get user id : ${PrefManager.getString('userId')}");
@@ -629,7 +673,12 @@ class ProductController extends GetxController {
             message: '${response.data['message']}', context: Get.context!);
       } else {
         showSnackBar(
-            context: Get.context!, message: '${response.data['message']}');
+          context: Get.context!,
+          title: 'Error', // You can customize the title here
+          message: '${response.data['message']}',
+          icon: Icons.error, // Choose an appropriate icon for the error
+          iconColor: Colors.red, // Red color for error indication
+        );
       }
     } catch (e) {
       print("Add to cart time issue : $e");
@@ -653,11 +702,23 @@ class ProductController extends GetxController {
     print("Enter rating 11");
     if (ratingValue.value == 0.0 && userId!.isNotEmpty) {
       print("Enter rating 22");
-      showSnackBar(context: Get.context!, message: LocalStrings.selectRating);
+      showSnackBar(
+        context: Get.context!,
+        title: 'Rating', // Customize the title as needed
+        message: LocalStrings.selectRating,
+        icon: Icons.star, // You can choose an icon that represents rating
+        iconColor: Colors.yellow, // Yellow color for the star icon
+      );
     } else if (CommonValidation().isValidationEmpty(userReview) &&
         userId!.isNotEmpty) {
       print("Enter rating 33");
-      showSnackBar(context: Get.context!, message: LocalStrings.enterFeedback);
+      showSnackBar(
+        context: Get.context!,
+        title: 'Feedback', // Customize the title as needed
+        message: LocalStrings.enterFeedback,
+        icon: Icons.feedback, // You can use a feedback icon
+        iconColor: Colors.blue, // Blue color for the feedback icon
+      );
     } else if (isRating.value == false &&
         userReview!.isNotEmpty &&
         ratingValue.value != 0.0 &&
@@ -681,7 +742,13 @@ class ProductController extends GetxController {
       }
     } else {
       print("Enter rating 55");
-      showSnackBar(context: Get.context!, message: LocalStrings.ratingLogin);
+      showSnackBar(
+        context: Get.context!,
+        title: 'Rating', // Customize the title as needed
+        message: LocalStrings.ratingLogin,
+        icon: Icons.star, // You can use a star icon for rating
+        iconColor: Colors.yellow, // Yellow color for the star icon
+      );
     }
     print("Enter rating 66");
   }
@@ -718,6 +785,37 @@ class ProductController extends GetxController {
       update();
     }
   }
+
+  // Future<void> youMayAlsoLike() async {
+  //   try {
+  //     Response response = await APIFunction().apiCall(
+  //       apiName: LocalStrings.youMayAlsoLikeApi,
+  //       context: Get.context!,
+  //       isGet: true,
+  //       isLoading: false,
+  //     );
+  //
+  //     if (response.statusCode == 200) {
+  //       final bannerData = response.data['banner'];
+  //
+  //       if (bannerData is List) {
+  //         youMayAlsoLikeData = bannerData
+  //             .map((item) => YouMayAlsoLikeModel.fromJson(item))
+  //             .toList();
+  //         print(
+  //             "Fetched You May Also Like Items: ${youMayAlsoLikeData.length}");
+  //       } else {
+  //         print("Unexpected format: 'banner' is not a List.");
+  //       }
+  //     } else {
+  //       print("API Error: ${response.statusCode}");
+  //     }
+  //   } catch (e) {
+  //     print("Get You May Also Like Error: $e");
+  //   } finally {
+  //     update();
+  //   }
+  // }
 
   @override
   void dispose() {

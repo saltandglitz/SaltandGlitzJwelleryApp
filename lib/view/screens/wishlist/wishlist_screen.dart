@@ -10,7 +10,6 @@ import 'package:saltandGlitz/data/controller/wishlist/wishlist_controller.dart';
 import 'package:saltandGlitz/data/product/product_controller.dart';
 import 'package:saltandGlitz/local_storage/pref_manager.dart';
 import 'package:shimmer/shimmer.dart';
-
 import '../../../analytics/app_analytics.dart';
 import '../../../core/utils/color_resources.dart';
 import '../../../core/utils/dimensions.dart';
@@ -62,10 +61,10 @@ class _WishlistScreenState extends State<WishlistScreen> {
             child: AppBar(
               automaticallyImplyLeading: false,
               titleSpacing: 0,
-              title:  Text(LocalStrings.wishlist),
+              title: Text(LocalStrings.wishlist),
               titleTextStyle: regularLarge.copyWith(
                 fontWeight: FontWeight.w500,
-                color: ColorResources.conceptTextColor,
+                color: ColorResources.buttonColor,
               ),
               leading: IconButton(
                 onPressed: () {
@@ -83,290 +82,285 @@ class _WishlistScreenState extends State<WishlistScreen> {
             ),
           ),
           body: GetBuilder(
-              init: WishlistController(),
-              builder: (controller) {
-                return mainController.isNetworkConnection?.value == false
-                    ? NetworkConnectivityView(
-                        onTap: () async {
-                          RxBool? isEnableNetwork = await mainController
-                              .checkToAssignNetworkConnections();
+            init: WishlistController(),
+            builder: (controller) {
+              return mainController.isNetworkConnection?.value == false
+                  ? NetworkConnectivityView(
+                      onTap: () async {
+                        RxBool? isEnableNetwork = await mainController
+                            .checkToAssignNetworkConnections();
 
-                          if (isEnableNetwork!.value == true) {
-                            controller.enableNetworkHideLoader();
-                            Future.delayed(
-                              const Duration(seconds: 3),
-                              () {
-                                Get.put<WishlistController>(
-                                    WishlistController());
-                                controller.disableNetworkLoaderByDefault();
-                              },
-                            );
-                            controller.update();
-                          }
-                        },
-                        isLoading: controller.isEnableNetwork,
-                      )
-                    : controller.isWishlistProduct.value == true
-                        ? wishlistProductsShimmerEffect()
-                        : controller.wishlistProducts.isEmpty
-                            ? Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 10),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Image.asset(MyImages.noWishlistItemImage,
-                                        height: size.height * 0.25,
-                                        width: 200,
-                                        fit: BoxFit.fill),
-                                    const SizedBox(height: Dimensions.space20),
-                                    Center(
-                                      child: Text(
-                                        LocalStrings.wishlistEmpty,
-                                        textAlign: TextAlign.center,
-                                        style: semiBoldLarge.copyWith(
-                                            color: ColorResources
-                                                .conceptTextColor),
+                        if (isEnableNetwork!.value == true) {
+                          controller.enableNetworkHideLoader();
+                          Future.delayed(
+                            const Duration(seconds: 3),
+                            () {
+                              Get.put<WishlistController>(WishlistController());
+                              controller.disableNetworkLoaderByDefault();
+                            },
+                          );
+                          controller.update();
+                        }
+                      },
+                      isLoading: controller.isEnableNetwork,
+                    )
+                  : controller.isWishlistProduct.value == true
+                      ? wishlistProductsShimmerEffect()
+                      : controller.wishlistProducts.isEmpty
+                          ? Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 10),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Image.asset(MyImages.noWishlistItemImage,
+                                      height: size.height * 0.25,
+                                      width: 200,
+                                      fit: BoxFit.fill),
+                                  const SizedBox(height: Dimensions.space20),
+                                  Center(
+                                    child: Text(
+                                      LocalStrings.wishlistEmpty,
+                                      textAlign: TextAlign.center,
+                                      style: semiBoldLarge.copyWith(
+                                          color: ColorResources.buttonColor),
+                                    ),
+                                  ),
+                                  const SizedBox(height: Dimensions.space70),
+                                ],
+                              ),
+                            )
+                          : ListView.builder(
+                              itemCount: controller.wishlistProducts.length,
+                              physics: const ClampingScrollPhysics(),
+                              padding: const EdgeInsets.only(
+                                  top: 15, left: 15, right: 15),
+                              shrinkWrap: true,
+                              itemBuilder: (context, index) {
+                                return Container(
+                                  padding: const EdgeInsets.symmetric(
+                                      horizontal: 15, vertical: 15),
+                                  margin: const EdgeInsets.only(bottom: 17),
+                                  decoration: BoxDecoration(
+                                    color: ColorResources.cardBgColor,
+                                    borderRadius: BorderRadius.circular(
+                                        Dimensions.offersCardRadius),
+                                    boxShadow: [
+                                      BoxShadow(
+                                        color: ColorResources.borderColor
+                                            .withOpacity(0.1),
+                                        spreadRadius: 1,
+                                        blurRadius: 2,
+                                        offset: const Offset(0, 2),
                                       ),
-                                    ),
-                                    const SizedBox(height: Dimensions.space70),
-                                  ],
-                                ),
-                              )
-                            : ListView.builder(
-                                itemCount: controller.wishlistProducts.length,
-                                physics: const ClampingScrollPhysics(),
-                                padding: const EdgeInsets.only(
-                                    top: 15, left: 15, right: 15),
-                                shrinkWrap: true,
-                                itemBuilder: (context, index) {
-                                  return Container(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 15, vertical: 15),
-                                    margin: const EdgeInsets.only(bottom: 17),
-                                    decoration: BoxDecoration(
-                                      color: ColorResources.cardBgColor,
-                                      borderRadius: BorderRadius.circular(
-                                          Dimensions.offersCardRadius),
-                                      boxShadow: [
-                                        BoxShadow(
-                                          color: ColorResources.borderColor
-                                              .withOpacity(0.1),
-                                          spreadRadius: 1,
-                                          blurRadius: 2,
-                                          offset: const Offset(0, 2),
+                                    ],
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Container(
+                                        height: size.height * 0.15,
+                                        width: size.width * 0.30,
+                                        decoration: BoxDecoration(
+                                          border: Border.all(
+                                              color:
+                                                  ColorResources.offerSixColor),
+                                          borderRadius: BorderRadius.circular(
+                                              Dimensions.offersCardRadius),
                                         ),
-                                      ],
-                                    ),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Container(
-                                          height: size.height * 0.15,
-                                          width: size.width * 0.30,
-                                          decoration: BoxDecoration(
-                                            border: Border.all(
-                                                color: ColorResources
-                                                    .offerSixColor),
-                                            borderRadius: BorderRadius.circular(
-                                                Dimensions.offersCardRadius),
-                                          ),
-                                          child: ClipRRect(
-                                            borderRadius: BorderRadius.circular(
-                                                Dimensions.offersCardRadius),
-                                            child: CachedCommonImage(
-                                              width: double.infinity,
-                                              networkImageUrl: controller
-                                                  .wishlistProducts[index]
-                                                  .productId!
-                                                  .image01,
-                                            ),
-                                          ),
-                                        ),
-                                        const SizedBox(
-                                            width: Dimensions.space20),
-                                        Expanded(
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Row(
-                                                children: [
-                                                  Expanded(
-                                                    child: Text(
-                                                      controller
-                                                              .wishlistProducts[
-                                                                  index]
-                                                              .productId!
-                                                              .title ??
-                                                          '',
-                                                      softWrap: true,
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
-                                                      style: mediumDefault
-                                                          .copyWith(),
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                              const SizedBox(
-                                                  height: Dimensions.space2),
-                                              Text(
-                                                "₹${controller.wishlistProducts[index].productId!.total14KT?.round()}",
-                                                style: boldSmall.copyWith(
-                                                    color: ColorResources
-                                                        .conceptTextColor),
-                                              ),
-                                              const SizedBox(
-                                                  height: Dimensions.space40),
-                                              Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                children: [
-                                                  GestureDetector(
-                                                    onTap: () {
-                                                      /// Move to cart product clicked analysis
-                                                      AppAnalytics().actionTriggerWithProductsLogs(
-                                                          eventName: LocalStrings
-                                                              .logWishListMoveCartProduct,
-                                                          productName: controller
-                                                              .wishlistProducts[
-                                                                  index]
-                                                              .productId!
-                                                              .title,
-                                                          productImage: controller
-                                                              .wishlistProducts[
-                                                                  index]
-                                                              .productId!
-                                                              .image01,
-                                                          index: 3);
-
-                                                      //Todo : Seen move to cart dialog box
-                                                      _showCustomIntegerPicker(
-                                                          context,
-                                                          controller,
-                                                          index);
-                                                    },
-                                                    child: Container(
-                                                      height:
-                                                          size.height * 0.045,
-                                                      width: size.width * 0.30,
-                                                      decoration: BoxDecoration(
-                                                        color: ColorResources
-                                                            .moveCartColor,
-                                                        borderRadius: BorderRadius
-                                                            .circular(Dimensions
-                                                                .defaultRadius),
-                                                      ),
-                                                      child: Center(
-                                                        child: Text(
-                                                          LocalStrings.moveCart,
-                                                          style: boldSmall.copyWith(
-                                                              color: ColorResources
-                                                                  .whiteColor),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  const Spacer(),
-                                                  GestureDetector(
-                                                    onTap: () {
-                                                      /// Share product clicked analysis
-                                                      AppAnalytics().actionTriggerWithProductsLogs(
-                                                          eventName: LocalStrings
-                                                              .logWishListShareProduct,
-                                                          productName: controller
-                                                              .wishlistProducts[
-                                                                  index]
-                                                              .productId!
-                                                              .title,
-                                                          productImage: controller
-                                                              .wishlistProducts[
-                                                                  index]
-                                                              .productId!
-                                                              .image01,
-                                                          index: 3);
-                                                    },
-                                                    child: Container(
-                                                      height:
-                                                          size.height * 0.040,
-                                                      width: size.width * 0.090,
-                                                      decoration: BoxDecoration(
-                                                        borderRadius: BorderRadius
-                                                            .circular(Dimensions
-                                                                .defaultRadius),
-                                                        border: Border.all(
-                                                            color: ColorResources
-                                                                .conceptTextColor,
-                                                            width: 1.5),
-                                                      ),
-                                                      child: const Center(
-                                                        child: Icon(Icons
-                                                            .share_rounded),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        GestureDetector(
-                                          onTap: () {
-                                            var productId = controller
+                                        child: ClipRRect(
+                                          borderRadius: BorderRadius.circular(
+                                              Dimensions.offersCardRadius),
+                                          child: CachedCommonImage(
+                                            width: double.infinity,
+                                            networkImageUrl: controller
                                                 .wishlistProducts[index]
                                                 .productId!
-                                                .productId;
-
-                                            /// Remove product clicked analysis
-                                            AppAnalytics()
-                                                .actionTriggerWithProductsLogs(
-                                                    eventName: LocalStrings
-                                                        .logWishListRemoveProduct,
-                                                    productName: controller
-                                                        .wishlistProducts[index]
-                                                        .productId!
-                                                        .title,
-                                                    productImage: controller
-                                                        .wishlistProducts[index]
-                                                        .productId!
-                                                        .image01,
-                                                    index: 3);
-                                            //Todo : Locally remove to wishlist screen
-                                            controller
-                                                .removeLocallyWishlist(index);
-                                            //Todo : Background workable remove api method
-                                            collectionController
-                                                .removeWishlistApiMethod(
-                                                    productId: productId);
-                                            //Todo : Collection & Wishlist screen wishlist match productId and remove locally
-                                            controller.updateProductStatus(
-                                                productId!, false);
-                                          },
-                                          child: Container(
-                                            height: 20,
-                                            width: 20,
-                                            decoration: const BoxDecoration(
-                                                shape: BoxShape.circle,
-                                                color: ColorResources
-                                                    .conceptTextColor),
-                                            child: const Icon(
-                                              Icons.close,
-                                              size: 15,
-                                              color: ColorResources.whiteColor,
-                                            ),
+                                                .image01,
                                           ),
                                         ),
-                                      ],
-                                    ),
-                                  );
-                                },
-                              );
-              }),
+                                      ),
+                                      const SizedBox(width: Dimensions.space20),
+                                      Expanded(
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Row(
+                                              children: [
+                                                Expanded(
+                                                  child: Text(
+                                                    controller
+                                                            .wishlistProducts[
+                                                                index]
+                                                            .productId!
+                                                            .title ??
+                                                        '',
+                                                    softWrap: true,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    style: mediumDefault
+                                                        .copyWith(),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                            const SizedBox(
+                                                height: Dimensions.space2),
+                                            Text(
+                                              "₹${controller.wishlistProducts[index].productId!.total14KT?.round()}",
+                                              style: boldSmall.copyWith(
+                                                  color: ColorResources
+                                                      .buttonColor),
+                                            ),
+                                            const SizedBox(
+                                                height: Dimensions.space40),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                GestureDetector(
+                                                  onTap: () {
+                                                    /// Move to cart product clicked analysis
+                                                    AppAnalytics().actionTriggerWithProductsLogs(
+                                                        eventName: LocalStrings
+                                                            .logWishListMoveCartProduct,
+                                                        productName: controller
+                                                            .wishlistProducts[
+                                                                index]
+                                                            .productId!
+                                                            .title,
+                                                        productImage: controller
+                                                            .wishlistProducts[
+                                                                index]
+                                                            .productId!
+                                                            .image01,
+                                                        index: 3);
+
+                                                    //Todo : Seen move to cart dialog box
+                                                    _showCustomIntegerPicker(
+                                                        context,
+                                                        controller,
+                                                        index);
+                                                  },
+                                                  child: Container(
+                                                    height: size.height * 0.045,
+                                                    width: size.width * 0.30,
+                                                    decoration: BoxDecoration(
+                                                      color: ColorResources
+                                                          .moveCartColor,
+                                                      borderRadius: BorderRadius
+                                                          .circular(Dimensions
+                                                              .defaultRadius),
+                                                    ),
+                                                    child: Center(
+                                                      child: Text(
+                                                        LocalStrings.moveCart,
+                                                        style: boldSmall.copyWith(
+                                                            color: ColorResources
+                                                                .whiteColor),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                                const Spacer(),
+                                                GestureDetector(
+                                                  onTap: () {
+                                                    /// Share product clicked analysis
+                                                    AppAnalytics().actionTriggerWithProductsLogs(
+                                                        eventName: LocalStrings
+                                                            .logWishListShareProduct,
+                                                        productName: controller
+                                                            .wishlistProducts[
+                                                                index]
+                                                            .productId!
+                                                            .title,
+                                                        productImage: controller
+                                                            .wishlistProducts[
+                                                                index]
+                                                            .productId!
+                                                            .image01,
+                                                        index: 3);
+                                                  },
+                                                  child: Container(
+                                                    height: size.height * 0.040,
+                                                    width: size.width * 0.090,
+                                                    decoration: BoxDecoration(
+                                                      borderRadius: BorderRadius
+                                                          .circular(Dimensions
+                                                              .defaultRadius),
+                                                      border: Border.all(
+                                                          color: ColorResources
+                                                              .buttonColor,
+                                                          width: 1.5),
+                                                    ),
+                                                    child: const Center(
+                                                      child: Icon(
+                                                          Icons.share_rounded),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      GestureDetector(
+                                        onTap: () {
+                                          var productId = controller
+                                              .wishlistProducts[index]
+                                              .productId!
+                                              .productId;
+
+                                          /// Remove product clicked analysis
+                                          AppAnalytics()
+                                              .actionTriggerWithProductsLogs(
+                                                  eventName: LocalStrings
+                                                      .logWishListRemoveProduct,
+                                                  productName: controller
+                                                      .wishlistProducts[index]
+                                                      .productId!
+                                                      .title,
+                                                  productImage: controller
+                                                      .wishlistProducts[index]
+                                                      .productId!
+                                                      .image01,
+                                                  index: 3);
+                                          //Todo : Locally remove to wishlist screen
+                                          controller
+                                              .removeLocallyWishlist(index);
+                                          //Todo : Background workable remove api method
+                                          collectionController
+                                              .removeWishlistApiMethod(
+                                                  productId: productId);
+                                          //Todo : Collection & Wishlist screen wishlist match productId and remove locally
+                                          controller.updateProductStatus(
+                                              productId!, false);
+                                        },
+                                        child: Container(
+                                          height: 20,
+                                          width: 20,
+                                          decoration: const BoxDecoration(
+                                              shape: BoxShape.circle,
+                                              color:
+                                                  ColorResources.buttonColor),
+                                          child: const Icon(
+                                            Icons.close,
+                                            size: 15,
+                                            color: ColorResources.whiteColor,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              },
+                            );
+            },
+          ),
         );
       },
     );
@@ -431,31 +425,34 @@ class _WishlistScreenState extends State<WishlistScreen> {
                     Row(
                       children: [
                         Shimmer.fromColors(
-                            baseColor: ColorResources.baseColor,
-                            highlightColor: ColorResources.highlightColor,
-                            child: Container(
-                                height: 10,
-                                width: 100,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(
-                                      Dimensions.minimumRadius),
-                                  color: ColorResources.highlightColor,
-                                ))),
+                          baseColor: ColorResources.baseColor,
+                          highlightColor: ColorResources.highlightColor,
+                          child: Container(
+                            height: 10,
+                            width: 100,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(
+                                  Dimensions.minimumRadius),
+                              color: ColorResources.highlightColor,
+                            ),
+                          ),
+                        ),
                       ],
                     ),
                     const SizedBox(height: Dimensions.space2),
                     Shimmer.fromColors(
-                        baseColor: ColorResources.baseColor,
-                        highlightColor: ColorResources.highlightColor,
-                        child: Container(
-                          height: 10,
-                          width: 50,
-                          decoration: BoxDecoration(
-                            borderRadius:
-                                BorderRadius.circular(Dimensions.minimumRadius),
-                            color: ColorResources.highlightColor,
-                          ),
-                        )),
+                      baseColor: ColorResources.baseColor,
+                      highlightColor: ColorResources.highlightColor,
+                      child: Container(
+                        height: 10,
+                        width: 50,
+                        decoration: BoxDecoration(
+                          borderRadius:
+                              BorderRadius.circular(Dimensions.minimumRadius),
+                          color: ColorResources.highlightColor,
+                        ),
+                      ),
+                    ),
                     const SizedBox(height: Dimensions.space45),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -484,7 +481,7 @@ class _WishlistScreenState extends State<WishlistScreen> {
                               borderRadius: BorderRadius.circular(
                                   Dimensions.defaultRadius),
                               border: Border.all(
-                                  color: ColorResources.conceptTextColor,
+                                  color: ColorResources.buttonColor,
                                   width: 1.5),
                             ),
                             child: const Center(
@@ -522,40 +519,45 @@ class _WishlistScreenState extends State<WishlistScreen> {
 
 //Todo : Move carat dialog show
   void moveCartDialog() {
-    Get.dialog(StatefulBuilder(
-      builder: (context, setState) {
-        return Dialog(
-          child: AnimatedOpacity(
-            opacity: 1.0,
-            duration: const Duration(milliseconds: 500),
-            child: Material(
-              color: ColorResources.whiteColor,
-              borderRadius: BorderRadius.circular(8.0),
-              elevation: 5.0,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    LocalStrings.size,
-                    style: mediumSmall.copyWith(
-                        decoration: TextDecoration.underline),
-                  ),
-                ],
+    Get.dialog(
+      StatefulBuilder(
+        builder: (context, setState) {
+          return Dialog(
+            child: AnimatedOpacity(
+              opacity: 1.0,
+              duration: const Duration(milliseconds: 500),
+              child: Material(
+                color: ColorResources.whiteColor,
+                borderRadius: BorderRadius.circular(8.0),
+                elevation: 5.0,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      LocalStrings.size,
+                      style: mediumSmall.copyWith(
+                          decoration: TextDecoration.underline),
+                    ),
+                  ],
+                ),
               ),
             ),
-          ),
-        );
-      },
-    ));
+          );
+        },
+      ),
+    );
   }
 }
 
 // Method to show the custom integer picker
 void _showCustomIntegerPicker(
     BuildContext context, WishlistController controller, int index) {
-  final productController = Get.put<ProductController>(ProductController());
-  final collectionController =
-      Get.put<CollectionController>(CollectionController());
+  final productController = Get.put<ProductController>(
+    ProductController(),
+  );
+  final collectionController = Get.put<CollectionController>(
+    CollectionController(),
+  );
   showCupertinoModalPopup(
     context: context,
     builder: (_) => CupertinoActionSheet(
@@ -573,16 +575,18 @@ void _showCustomIntegerPicker(
               // Update the selected number when an item is picked
               controller.updateSelectedNumber(6 + index);
             },
-            children: List<Widget>.generate(productController.ringSize.length,
-                (index) {
-              return Center(
-                child: Text(
-                  '${controller.selectedNumber.value + index}',
-                  // Generate numbers from 6 to 15
-                  style: const TextStyle(fontSize: 18),
-                ),
-              );
-            }),
+            children: List<Widget>.generate(
+              productController.ringSize.length,
+              (index) {
+                return Center(
+                  child: Text(
+                    '${controller.selectedNumber.value + index}',
+                    // Generate numbers from 6 to 15
+                    style: const TextStyle(fontSize: 18),
+                  ),
+                );
+              },
+            ),
           ),
         ),
       ),
@@ -591,16 +595,21 @@ void _showCustomIntegerPicker(
           () {
             return CupertinoActionSheetAction(
               child: RichText(
-                  text: TextSpan(children: [
-                TextSpan(
-                    text: LocalStrings.size,
-                    style: semiBoldLarge.copyWith(
-                        color: ColorResources.blackColor)),
-                TextSpan(
-                    text: ' ${controller.selectedNumber.value}',
-                    style:
-                        boldLarge.copyWith(color: ColorResources.blackColor)),
-              ])),
+                text: TextSpan(
+                  children: [
+                    TextSpan(
+                      text: LocalStrings.size,
+                      style: semiBoldLarge.copyWith(
+                          color: ColorResources.blackColor),
+                    ),
+                    TextSpan(
+                      text: ' ${controller.selectedNumber.value}',
+                      style:
+                          boldLarge.copyWith(color: ColorResources.blackColor),
+                    ),
+                  ],
+                ),
+              ),
               onPressed: () {},
             );
           },
@@ -610,8 +619,10 @@ void _showCustomIntegerPicker(
           onPressed: () {
             Get.back();
           },
-          child: Text(LocalStrings.cancel.toUpperCase(),
-              style: semiBoldLarge.copyWith()),
+          child: Text(
+            LocalStrings.cancel.toUpperCase(),
+            style: semiBoldLarge.copyWith(),
+          ),
         ),
         Obx(
           () {
@@ -623,8 +634,10 @@ void _showCustomIntegerPicker(
                         color: ColorResources.blackColor,
                       ),
                     )
-                  : Text(LocalStrings.moveCart,
-                      style: semiBoldLarge.copyWith()),
+                  : Text(
+                      LocalStrings.moveCart,
+                      style: semiBoldLarge.copyWith(),
+                    ),
               onPressed: () {
                 var productId =
                     controller.wishlistProducts[index].productId!.productId;

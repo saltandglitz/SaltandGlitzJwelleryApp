@@ -10,7 +10,8 @@ import 'package:saltandGlitz/view/screens/in_app_webview/in_app_webview_screen.d
 import 'package:saltandGlitz/view/screens/login/login_screen.dart';
 import 'package:saltandGlitz/view/screens/set_otp/set_otp_screen.dart';
 import 'package:saltandGlitz/view/screens/set_password/set_password_screen.dart';
-import '../../view/screens/categories/categories_sccreen.dart';
+import '../../view/screens/categories/categories_screen.dart';
+import '../../view/screens/categories/kids_categories.dart';
 import '../../view/screens/categories/men_categories_screen.dart';
 import '../../view/screens/categories/women_categories_screen.dart';
 import '../../view/screens/collection/collection_screen.dart';
@@ -19,6 +20,7 @@ import '../../view/screens/gift/gift_screen.dart';
 import '../../view/screens/my_account/my_account_screen.dart';
 import '../../view/screens/payment/payment_screen.dart';
 import '../../view/screens/place_order/place_order_screen.dart';
+import '../../view/screens/pop/pop_screen.dart';
 import '../../view/screens/product/product_screen.dart';
 import '../../view/screens/splash/splash_screen.dart';
 import '../../view/screens/wishlist/wishlist_screen.dart';
@@ -30,6 +32,7 @@ class RouteHelper {
   static const String categoriesScreen = "/categories_screen";
   static const String womenCategoriesScreen = "/women_categories_screen";
   static const String menCategoriesScreen = "/men_categories_screen";
+  static const String kidsCategoriesScreen = "/kids_categories_screen";
   static const String wishlistScreen = "/wishlist_screen";
   static const String collectionScreen = "/collection_screen";
   static const String collectionFilterScreen = "/collection_filter_screen";
@@ -46,6 +49,7 @@ class RouteHelper {
   static const String giftScreen = "/gift_screen";
   static const String paymentScreen = "/payment_screen";
   static const String inAppWebViewScreen = "/in_app_web_view_screen";
+  static const String popScreen = "/pop_screen";
 
   List<GetPage> routes = [
     GetPage(name: bottomBarScreen, page: () => const BottomBarScreen()),
@@ -55,6 +59,8 @@ class RouteHelper {
     GetPage(
         name: womenCategoriesScreen, page: () => const WomenCategoriesScreen()),
     GetPage(name: menCategoriesScreen, page: () => const MenCategoriesScreen()),
+    GetPage(
+        name: kidsCategoriesScreen, page: () => const KidsCategoriesScreen()),
     GetPage(name: wishlistScreen, page: () => const WishlistScreen()),
     GetPage(name: collectionScreen, page: () => const CollectionScreen()),
     GetPage(
@@ -72,6 +78,7 @@ class RouteHelper {
     GetPage(name: placeOrder, page: () => const PlaceOrderScreen()),
     GetPage(name: giftScreen, page: () => const GiftScreen()),
     GetPage(name: paymentScreen, page: () => const PaymentScreen()),
-    GetPage(name: inAppWebViewScreen, page: () =>  InAppWebViewScreen()),
+    GetPage(name: inAppWebViewScreen, page: () => InAppWebViewScreen()),
+    GetPage(name: popScreen, page: () => PopScreen()),
   ];
 }

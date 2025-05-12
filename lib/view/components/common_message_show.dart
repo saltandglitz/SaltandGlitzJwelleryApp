@@ -1,40 +1,25 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 
-import '../../core/utils/color_resources.dart';
-import '../../core/utils/style.dart';
-
 /// <<< To show snackBar massage  --------- >>>
 void showSnackBar({
   required BuildContext context,
+  required String title,
   required String message,
+  required IconData icon,
+  required Color iconColor,
 }) {
-  //AppColors appColors = AppColors();
   Get.snackbar(
-    "",
+    title,
     message,
-    messageText: Text(
-      message,
-      style: semiBoldMediumLarge.copyWith(color: ColorResources.whiteColor),
-    ),
+    icon: Icon(icon, color: iconColor),
     snackPosition: SnackPosition.TOP,
-    backgroundColor: const Color(0xFFD55959),
-    titleText: const SizedBox(),
-    borderRadius: 10,
-    margin: const EdgeInsets.all(12),
-    colorText: Colors.white,
+    backgroundColor: Colors.black12,
+    colorText: Colors.black,
     duration: const Duration(seconds: 3),
     isDismissible: true,
-    padding: const EdgeInsets.only(
-      bottom: 15,
-      top: 10,
-      left: 15,
-      right: 15,
-    ),
-    dismissDirection: DismissDirection.horizontal,
     forwardAnimationCurve: Curves.easeInOut,
   );
 }

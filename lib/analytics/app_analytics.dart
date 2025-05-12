@@ -103,6 +103,7 @@ class AppAnalytics {
     String? anniversary,
     String? occupation,
     String? spousBirthday,
+    int? userSaltCash,
     int? index,
   }) async {
     await mainController.analytics.logEvent(name: eventName, parameters: {
@@ -117,6 +118,7 @@ class AppAnalytics {
       'occupation': occupation ?? '',
       'spous_birthday': spousBirthday ?? '',
       'page_index': index ?? 0,
+      'user_salt_cash': userSaltCash ?? 0,
     });
   }
 }

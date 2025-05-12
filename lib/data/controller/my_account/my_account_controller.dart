@@ -16,25 +16,32 @@ import '../create_account/create_account_controller.dart';
 class MyAccountController extends GetxController {
   late AnimationController animationController;
   late Animation<Color?> borderColorAnimation;
+
   double profileCompleteProgress = 0.6;
   RxBool isEnableNetwork = false.obs;
   List accountServiceTitleLst = [
     LocalStrings.orders,
     LocalStrings.addCart,
     LocalStrings.wishlist,
-    LocalStrings.coins,
+    LocalStrings.userSaltCash,
   ];
   List accountServiceSubtitleLst = [
     LocalStrings.viewStatus,
     LocalStrings.viewCart,
     LocalStrings.viewWishlist,
-    LocalStrings.comingSoon,
+    LocalStrings.logInToViewUserSaltCase,
+  ];
+  List logInAccountServiceSubtitleLst = [
+    LocalStrings.logInViewStatus,
+    LocalStrings.logInViewCart,
+    LocalStrings.logInViewWishlist,
+    "0",
   ];
   List<Color> accountServiceColorLst = [
+    ColorResources.offerColor.withOpacity(0.1),
     ColorResources.offerFirstColor.withOpacity(0.2),
-    ColorResources.accountServiceColor.withOpacity(0.5),
-    ColorResources.helpNeedFirstColor.withOpacity(0.4),
-    ColorResources.sortSelectedColor.withOpacity(0.2),
+    ColorResources.activeCardColor.withOpacity(0.1),
+    ColorResources.buttonGradientColor.withOpacity(0.1),
   ];
   List<Color> accountServiceSubColorLst = [
     ColorResources.offerColor,
@@ -118,7 +125,13 @@ class MyAccountController extends GetxController {
         printAction("Logout Users");
       }
     } catch (e) {
-      showSnackBar(context: Get.context!, message: "$e");
+      showSnackBar(
+        context: Get.context!,
+        title: 'Error',
+        message: "$e",
+        icon: Icons.error,
+        iconColor: Colors.red,
+      );
     } finally {
       createAccountController.isLoading = false;
       update();
@@ -148,12 +161,12 @@ class MyAccountController extends GetxController {
                     children: [
                       Text(LocalStrings.logoutDialogText,
                           style: semiBoldMediumLarge.copyWith(
-                              color: ColorResources.conceptTextColor)),
+                              color: ColorResources.buttonColor)),
                       const SizedBox(height: Dimensions.space10),
                       Text(LocalStrings.askLogout,
                           textAlign: TextAlign.center,
                           style: semiBoldLarge.copyWith(
-                              color: ColorResources.conceptTextColor)),
+                              color: ColorResources.buttonColor)),
                       const SizedBox(height: Dimensions.space20),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -177,6 +190,7 @@ class MyAccountController extends GetxController {
                             child: CommonButton(
                               onTap: () {
                                 Get.back();
+
                                 /// Logout api method
                                 logoutApiMethod();
                               },

@@ -83,14 +83,14 @@ class SubCategory {
   final double? total14KT;
   final int? v;
   final double? total18KT;
-  final double? discount;
-  final String? subCategory;
+  // final double? discount;
+  final List<String>? subCategory;
   final String? image02;
   final String? image03;
   final String? updatedAt;
   final String? video;
   final String? gift;
-  final double? rating;
+  // final double? rating;
   final String? gender;
 
   SubCategory({
@@ -112,14 +112,14 @@ class SubCategory {
     this.total14KT,
     this.v,
     this.total18KT,
-    this.discount,
+    // this.discount,
     this.subCategory,
     this.image02,
     this.image03,
     this.updatedAt,
     this.video,
     this.gift,
-    this.rating,
+    // this.rating,
     this.gender,
   });
 
@@ -142,14 +142,14 @@ class SubCategory {
         total14KT = (json['total14KT'] as num?)?.toDouble(),
         v = json['__v'] as int?,
         total18KT = (json['total18KT'] as num?)?.toDouble(),
-        discount = (json['discount'] as num?)?.toDouble(),
-        subCategory = json['subCategory'] as String?,
+        subCategory = json['subCategory'] is List
+            ? (json['subCategory'] as List?)?.map((e) => e.toString()).toList()
+            : [],
         image02 = json['image02'] as String?,
         image03 = json['image03'] as String?,
         updatedAt = json['updatedAt'] as String?,
         video = json['video'] as String?,
         gift = json['gift'] as String?,
-        rating = (json['rating'] as num?)?.toDouble(),
         gender = json['gender'] as String?;
 
   Map<String, dynamic> toJson() => {
@@ -171,14 +171,14 @@ class SubCategory {
         'total14KT': total14KT,
         '__v': v,
         'total18KT': total18KT,
-        'discount': discount,
+        // 'discount': discount,
         'subCategory': subCategory,
         'image02': image02,
         'image03': image03,
         'updatedAt': updatedAt,
         'video': video,
         'gift': gift,
-        'rating': rating,
+        // 'rating': rating,
         'gender': gender
       };
 }
@@ -196,10 +196,8 @@ class Banners {
       : type = json['type'] as String?,
         mobileBannerImage = json['mobileBannerImage'] as String?;
 
-  Map<String, dynamic> toJson() => {
-    'type' : type,
-    'bannerImage' : mobileBannerImage
-  };
+  Map<String, dynamic> toJson() =>
+      {'type': type, 'bannerImage': mobileBannerImage};
 }
 
 class MergedProducts {
@@ -216,13 +214,16 @@ class MergedProducts {
   MergedProducts.fromJson(Map<String, dynamic> json)
       : category = json['category'] as String?,
         categoryImage = json['categoryImage'] as String?,
-        subCategory = (json['subCategory'] as List?)?.map((dynamic e) => SubCategoryBrowsed.fromJson(e as Map<String,dynamic>)).toList();
+        subCategory = (json['subCategory'] as List?)
+            ?.map((dynamic e) =>
+                SubCategoryBrowsed.fromJson(e as Map<String, dynamic>))
+            .toList();
 
   Map<String, dynamic> toJson() => {
-    'category' : category,
-    'categoryImage' : categoryImage,
-    'subCategory' : subCategory?.map((e) => e.toJson()).toList()
-  };
+        'category': category,
+        'categoryImage': categoryImage,
+        'subCategory': subCategory?.map((e) => e.toJson()).toList()
+      };
 }
 
 class SubCategoryBrowsed {
@@ -251,11 +252,11 @@ class SubCategoryBrowsed {
         subCategory = json['subCategory'] as String?;
 
   Map<String, dynamic> toJson() => {
-    'productId' : productId,
-    'title' : title,
-    'price14KT' : price14KT,
-    'image01' : image01,
-    'category' : category,
-    'subCategory' : subCategory
-  };
+        'productId': productId,
+        'title': title,
+        'price14KT': price14KT,
+        'image01': image01,
+        'category': category,
+        'subCategory': subCategory
+      };
 }

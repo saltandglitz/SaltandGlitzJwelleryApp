@@ -1,6 +1,8 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:saltandGlitz/data/controller/categories/categories_controller.dart';
+import 'package:saltandGlitz/view/screens/categories/kids_categories.dart';
 import 'package:saltandGlitz/view/screens/categories/women_categories_screen.dart';
 import '../../../analytics/app_analytics.dart';
 import '../../../core/route/route.dart';
@@ -54,16 +56,18 @@ class _CategoriesScreenState extends State<CategoriesScreen>
       init: CategoriesController(),
       builder: (controller) {
         return DefaultTabController(
-          length: 2,
+          length: 3,
           initialIndex: 0,
           child: Scaffold(
-            backgroundColor: ColorResources.scaffoldBackgroundColor,
+            backgroundColor: ColorResources.buttonSecondColor.withOpacity(0.05),
             appBar: AppBarBackground(
               additionalHeight: 48.0, // Height of TabBar
               isShowTabBar: true,
               tabBarWidget: Container(
                 color: ColorResources.whiteColor,
                 child: TabBar(
+                  indicatorColor: ColorResources.buttonSecondColor,
+                  labelColor: ColorResources.buttonSecondColor,
                   onTap: (value) async {
                     if (value == 0) {
                       /// Women categories analysis
@@ -72,17 +76,24 @@ class _CategoriesScreenState extends State<CategoriesScreen>
                           index: 1);
                       categoriesController.setExpandedIndex(-1);
                       categoriesController.setMostBrowsedIndex(-1);
-                    } else {
+                    } else if (value == 1) {
                       /// Men categories analysis
                       AppAnalytics().actionTriggerLogs(
                           eventName: LocalStrings.logCategoriesMenView,
                           index: 1);
                       categoriesController.setMenExpandedIndex(-1);
                       categoriesController.setMenBrowsedIndex(-1);
+                    } else {
+                      /// Kids categories analysis
+                      AppAnalytics().actionTriggerLogs(
+                          eventName: LocalStrings.logCategoriesKidsView,
+                          index: 1);
+                      categoriesController.setKidsExpandedIndex(-1);
+                      categoriesController.setKidsBrowsedIndex(-1);
                     }
                   },
                   tabs: controller.myTabs,
-                  unselectedLabelColor: ColorResources.conceptTextColor,
+                  unselectedLabelColor: ColorResources.termsColor,
                   labelStyle: semiBoldLarge.copyWith(),
                 ),
               ),
@@ -98,7 +109,7 @@ class _CategoriesScreenState extends State<CategoriesScreen>
                   icon: AnimatedIcon(
                     icon: AnimatedIcons.close_menu,
                     progress: dashboardController.animationController,
-                    color: ColorResources.conceptTextColor,
+                    color: ColorResources.iconColor,
                   ),
                 ),
                 actions: [
@@ -106,8 +117,8 @@ class _CategoriesScreenState extends State<CategoriesScreen>
                     onPressed: () {
                       Get.toNamed(RouteHelper.wishlistScreen);
                     },
-                    icon: const Icon(Icons.favorite_rounded),
-                    color: ColorResources.conceptTextColor,
+                    icon: const Icon(CupertinoIcons.heart),
+                    color: ColorResources.iconColor,
                   ),
                   Stack(
                     alignment: Alignment.bottomRight,
@@ -116,8 +127,8 @@ class _CategoriesScreenState extends State<CategoriesScreen>
                         onPressed: () {
                           Get.toNamed(RouteHelper.addCartScreen);
                         },
-                        icon: const Icon(Icons.shopping_cart),
-                        color: ColorResources.conceptTextColor,
+                        icon: const Icon(CupertinoIcons.shopping_cart),
+                        color: ColorResources.iconColor,
                       ),
                     ],
                   ),
@@ -132,6 +143,7 @@ class _CategoriesScreenState extends State<CategoriesScreen>
                 children: [
                   WomenCategoriesScreen(),
                   MenCategoriesScreen(),
+                  KidsCategoriesScreen(),
                 ],
               ),
             ),

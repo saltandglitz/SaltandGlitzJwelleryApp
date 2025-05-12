@@ -123,7 +123,7 @@ class _SetOtpState extends State<SetOtp> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      LocalStrings.xyzGmail,
+                      setPasswordController.email ?? '',
                       textAlign: TextAlign.center,
                       style: mediumLarge.copyWith(),
                     ),
@@ -135,8 +135,13 @@ class _SetOtpState extends State<SetOtp> {
                             text: LocalStrings.changeEmail,
                             recognizer: TapGestureRecognizer()
                               ..onTap = () {
-                                Get.back();
-                                Get.back();
+                                if (isForgot == 'forgot') {
+                                  Get.back();
+                                  Get.back();
+                                  Get.back();
+                                } else {
+                                  Get.back();
+                                }
                               },
                             style: mediumLarge.copyWith(
                               color: ColorResources.offerColor,

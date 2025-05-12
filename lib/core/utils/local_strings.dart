@@ -7,7 +7,7 @@ class LocalStrings {
   ///<<<------------------- API ------------------->>>
   static String getHomeViewApi = appStrings.isNotEmpty
       ? appStrings['getHomeViewApi']
-      : "https://saltandglitz-api-131827005467.asia-south2.run.app/v1/homePage/home";
+      : "http://api.saltandglitz.com/v1/homePage/home";
   static String resetPasswordApi = appStrings.isNotEmpty
       ? appStrings['resetPasswordApi']
       : "https://saltandglitz-api-131827005467.asia-south2.run.app/api/users/verifyOtpAndResetPassword";
@@ -188,6 +188,7 @@ class LocalStrings {
       appStrings.isNotEmpty ? appStrings['ourCompany'] : "Our Company";
   static String contact =
       appStrings.isNotEmpty ? appStrings['contact'] : "- Contact Us";
+  static String latestFromSalt = "Latest From Salt and Glitz";
   static String saltAndGlitz =
       appStrings.isNotEmpty ? appStrings['saltAndGlitz'] : "- Salt and Glitz";
   static String trackOrder =
@@ -259,9 +260,12 @@ class LocalStrings {
   static String email = appStrings.isNotEmpty ? appStrings['email'] : "Email";
   static String signUp =
       appStrings.isNotEmpty ? appStrings['signUp'] : "Sign Up";
-  static String yourCartWaiting = appStrings.isNotEmpty
-      ? appStrings['yourCartWaiting']
-      : "Your Cart is Waiting!";
+  // static String yourCartWaiting = appStrings.isNotEmpty
+  //     ? appStrings['yourCartWaiting']
+  //     : "Your Cart is Waiting!";
+  static String yourRecentlyViewedProducts = appStrings.isNotEmpty
+      ? appStrings['yourRecentlyViewedProducts']
+      : "Your Recently Viewed Products!";
   static String goToCart =
       appStrings.isNotEmpty ? appStrings['goToCart'] : "GO TO CART";
   static String
@@ -389,6 +393,7 @@ class LocalStrings {
   ///<<<------------------- Categories Screen ------------------->>>
   static String women = appStrings.isNotEmpty ? appStrings['women'] : "Women";
   static String men = appStrings.isNotEmpty ? appStrings['men'] : "Men";
+  static String kids = appStrings.isNotEmpty ? appStrings['kids'] : "Kids";
 
   ///<<<------------------- Women categories Screen ------------------->>>
   static String topCategories =
@@ -431,21 +436,21 @@ class LocalStrings {
   static String coupleRings =
       appStrings.isNotEmpty ? appStrings['coupleRings'] : "Couple Rings";
   static String itemFirstPrice =
-      appStrings.isNotEmpty ? appStrings['itemFirstPrice'] : "below20k";
+      appStrings.isNotEmpty ? appStrings['itemFirstPrice'] : "Under 20k";
   static String itemSecondPrice =
-      appStrings.isNotEmpty ? appStrings['itemSecondPrice'] : "20kTo30k";
+      appStrings.isNotEmpty ? appStrings['itemSecondPrice'] : "20k - 30k";
   static String itemThirdPrice =
-      appStrings.isNotEmpty ? appStrings['itemThirdPrice'] : "30kTo50k";
+      appStrings.isNotEmpty ? appStrings['itemThirdPrice'] : "30k - 50k";
   static String itemForPrice =
-      appStrings.isNotEmpty ? appStrings['itemForPrice'] : "50kTo100k";
+      appStrings.isNotEmpty ? appStrings['itemForPrice'] : "50k - 100k";
   static String itemFivePrice =
-      appStrings.isNotEmpty ? appStrings['itemFivePrice'] : "100kTo200k";
+      appStrings.isNotEmpty ? appStrings['itemFivePrice'] : "100k - 200k";
   static String itemSixPrice =
-      appStrings.isNotEmpty ? appStrings['itemSixPrice'] : "200kTo300k";
+      appStrings.isNotEmpty ? appStrings['itemSixPrice'] : "200k - 300k";
   static String itemSevenPrice =
-      appStrings.isNotEmpty ? appStrings['itemSevenPrice'] : "300kTo500k";
+      appStrings.isNotEmpty ? appStrings['itemSevenPrice'] : "300k - 500k";
   static String itemEightPrice =
-      appStrings.isNotEmpty ? appStrings['itemEightPrice'] : "above500k";
+      appStrings.isNotEmpty ? appStrings['itemEightPrice'] : "500k & Above";
   static String ringFilter =
       appStrings.isNotEmpty ? appStrings['ringFilter'] : "Ring";
   static String earringFilter =
@@ -706,8 +711,8 @@ class LocalStrings {
       appStrings.isNotEmpty ? appStrings['productsType'] : 'Product Type';
 
   // static  String weightRanges = 'Weight Ranges';
-  static String material =
-      appStrings.isNotEmpty ? appStrings['material'] : 'Material';
+  // static String material =
+  //     appStrings.isNotEmpty ? appStrings['material'] : 'Material';
 
   // static  String metal = 'Metal';
   static String shopFor =
@@ -735,8 +740,9 @@ class LocalStrings {
       appStrings.isNotEmpty ? appStrings['applyFilters'] : 'APPLY FILTERS';
 
   ///<<<---------------------------- Product screen String ---------------------------->>>
-  static String search =
-      appStrings.isNotEmpty ? appStrings['search'] : 'Search products...';
+  static String search = appStrings.isNotEmpty
+      ? appStrings['search']
+      : "What're you searching for?";
   static String priceInclusive = appStrings.isNotEmpty
       ? appStrings['priceInclusive']
       : 'Price inclusive of taxes. See the full';
@@ -751,14 +757,16 @@ class LocalStrings {
       appStrings.isNotEmpty ? appStrings['useJb'] : 'Use JB10';
   static String apply = appStrings.isNotEmpty ? appStrings['apply'] : 'Apply';
   static String sizeWithoutDots =
-      /*appStrings.isNotEmpty ? appStrings['sizeWithoutDots'] :*/ 'Size';
+      /*appStrings.isNotEmpty ? appStrings['sizeWithoutDots'] :*/ 'SIZE';
+  static String sizeGuide =
+      appStrings.isNotEmpty ? appStrings['sizeGuide'] : 'Size Guide';
   static String color = appStrings.isNotEmpty ? appStrings['color'] : 'COLOR';
   static String purity =
       appStrings.isNotEmpty ? appStrings['purity'] : 'PURITY';
   static String ktFirst =
-      appStrings.isNotEmpty ? appStrings['ktFirst'] : '14Kt';
+      appStrings.isNotEmpty ? appStrings['ktFirst'] : '14KT';
   static String ktSecond =
-      appStrings.isNotEmpty ? appStrings['ktSecond'] : '18Kt';
+      appStrings.isNotEmpty ? appStrings['ktSecond'] : '18KT';
   static String makingCharg =
       appStrings.isNotEmpty ? appStrings['makingCharg'] : 'Making Charg';
   static String chargFirst =
@@ -938,7 +946,7 @@ class LocalStrings {
       ratingLogin = /* appStrings.isNotEmpty
       ? appStrings['ratingLogin']
       :*/
-      'You want to rat this product, please log in first.';
+      'You want to rate this product, please log in first.';
   static String
       selectRating = /* appStrings.isNotEmpty
       ? appStrings['selectRating']
@@ -959,6 +967,14 @@ class LocalStrings {
       ? appStrings['adminApproval']
       :*/
       'Rating updated successfully';
+  static String youMayAlsoLike = appStrings.isNotEmpty
+      ? appStrings['youMayAlsoLike']
+      : 'You may also like';
+  static String recentlyViewed =
+      appStrings.isNotEmpty ? appStrings['recentlyViewed'] : 'Recently Viewed';
+  static String youMayAlsoLikeApi = appStrings.isNotEmpty
+      ? appStrings['youMayAlsoLikeApi']
+      : 'https://saltandglitz-api-131827005467.asia-south2.run.app/v1/upload/get_similar/67f4bfdfa036e7dcf58387b5';
 
   ///<<<---------------------------- My Account screen String ---------------------------->>>
   static String welcome =
@@ -971,17 +987,31 @@ class LocalStrings {
       appStrings.isNotEmpty ? appStrings['orders'] : 'Orders';
   static String viewStatus = appStrings.isNotEmpty
       ? appStrings['viewStatus']
-      : 'To view the status of your order,please log in ';
+      : 'To view the status of your order,please log in';
+  static String logInViewStatus = appStrings.isNotEmpty
+      ? appStrings['logInViewStatus']
+      : 'Place your order NOW!';
   static String addCart =
       appStrings.isNotEmpty ? appStrings['addCart'] : 'Add to cart';
-  static String viewCart =
-      appStrings.isNotEmpty ? appStrings['viewCart'] : 'To view cart list';
+  static String viewCart = appStrings.isNotEmpty
+      ? appStrings['viewCart']
+      : 'To view cart list,please log in';
+  static String logInViewCart = appStrings.isNotEmpty
+      ? appStrings['logInViewCart']
+      : 'View Your cart list';
   static String coins = appStrings.isNotEmpty ? appStrings['coins'] : 'Coins';
   static String comingSoon =
       appStrings.isNotEmpty ? appStrings['comingSoon'] : 'COMING SOON...';
+  static String logInToViewUserSaltCase = appStrings.isNotEmpty
+      ? appStrings['logInToViewUserSaltCase']
+      : 'Log in to view userSaltCase';
+
   static String viewWishlist = appStrings.isNotEmpty
       ? appStrings['viewWishlist']
-      : 'To view wishlist items';
+      : 'To view wishlist items,please log in';
+  static String logInViewWishlist = appStrings.isNotEmpty
+      ? appStrings['logInViewWishlist']
+      : 'View Your wishlist items';
   static String yourOffers =
       appStrings.isNotEmpty ? appStrings['yourOffers'] : 'Your Offers';
   static String viewOffers = appStrings.isNotEmpty
@@ -1172,6 +1202,8 @@ class LocalStrings {
       appStrings.isNotEmpty ? appStrings['firstNameStar'] : 'First Name*';
   static String lastNameStar =
       appStrings.isNotEmpty ? appStrings['lastNameStar'] : 'Last Name*';
+  static String userSaltCash =
+      appStrings.isNotEmpty ? appStrings['userSaltCash'] : 'UserSaltCash';
   static String mobileNumber =
       appStrings.isNotEmpty ? appStrings['mobileNumber'] : 'Mobile Number*';
   static String emailId =
@@ -1336,6 +1368,9 @@ class LocalStrings {
   static String logCategoriesMenView = appStrings.isNotEmpty
       ? appStrings['logCategoriesMenView']
       : 'Categories_Men_View';
+  static String logCategoriesKidsView = appStrings.isNotEmpty
+      ? appStrings['logCategoriesKidsView']
+      : 'Categories_Kids_View';
 
   ///<<<---------------------------- Analysis women categories screen log string ---------------------------->>>
   static String logCategoriesWomenShopStyleView = appStrings.isNotEmpty

@@ -69,7 +69,7 @@ class CollectionFilterController extends GetxController {
   final List<String> categories = [
     LocalStrings.price,
     LocalStrings.productsType,
-    LocalStrings.material,
+    // LocalStrings.material,
     LocalStrings.shopFor,
     LocalStrings.occasion,
     // LocalStrings.gemstone,
@@ -108,12 +108,12 @@ class CollectionFilterController extends GetxController {
       LocalStrings.earringFilter,
       LocalStrings.ladiesBraceletFilter,
     ],
-    LocalStrings.material: [
-      LocalStrings.gemstoneFilter,
-      LocalStrings.platinumFilter,
-      LocalStrings.solitaireFilter,
-      LocalStrings.goldFilter,
-    ],
+    // LocalStrings.material: [
+    //   LocalStrings.gemstoneFilter,
+    //   LocalStrings.platinumFilter,
+    //   LocalStrings.solitaireFilter,
+    //   LocalStrings.goldFilter,
+    // ],
     LocalStrings.shopFor: [
       LocalStrings.female,
       LocalStrings.male,

@@ -16,6 +16,7 @@ class CommonButton extends StatelessWidget {
   TextStyle? textStyle;
   Widget? child;
   Color? borderColor;
+  double? borderRadius;
 
   CommonButton({
     super.key,
@@ -29,6 +30,7 @@ class CommonButton extends StatelessWidget {
     this.textStyle,
     this.child,
     this.borderColor,
+    this.borderRadius,
   });
 
   @override
@@ -40,10 +42,12 @@ class CommonButton extends StatelessWidget {
         height: height ?? size.height * 0.055,
         width: width ?? size.width * 0.43,
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(Dimensions.offersCardRadius),
+          borderRadius: BorderRadius.circular(borderRadius ?? 10),
           gradient: LinearGradient(colors: [
-            gradientFirstColor ?? /*ColorResources.offerColor*/ColorResources.buttonColor,
-            gradientSecondColor ?? /*ColorResources.buttonGradientColor*/ColorResources.buttonSecondColor
+            gradientFirstColor ?? /*ColorResources.offerColor*/
+                ColorResources.buttonColor,
+            gradientSecondColor ?? /*ColorResources.buttonGradientColor*/
+                ColorResources.buttonSecondColor
           ], begin: Alignment.topLeft, end: Alignment.bottomRight),
           border: Border.all(color: borderColor ?? Colors.transparent),
         ),
