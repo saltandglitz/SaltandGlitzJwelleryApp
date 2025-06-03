@@ -1395,6 +1395,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                                         : CachedCommonImage(
                                             key: const PageStorageKey(
                                                 'silver_Gifts_Image'),
+                                            // height: size.height * 0.3,
                                             height: size.height * 0.6,
                                             width: double.infinity,
                                             networkImageUrl:
@@ -2407,7 +2408,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                 children: [
                   Container(
                     width: double.infinity,
-                    color: ColorResources.offerColor.withOpacity(0.2),
+                    color: ColorResources.lightGreenColour,
                     padding: const EdgeInsets.only(bottom: 15),
                     child: Column(
                       children: [
@@ -2469,43 +2470,46 @@ class _DashboardScreenState extends State<DashboardScreen>
                           ),
                           physics: const BouncingScrollPhysics(),
                           itemBuilder: (context, index) {
-                            return Padding(
-                              padding: const EdgeInsets.only(right: 35),
-                              child: Column(
-                                children: [
-                                  Container(
-                                    height: size.height * 0.18,
-                                    width: size.width * 0.35,
-                                    decoration: BoxDecoration(
-                                      // border: Border.all(color: Colors.black),
-                                      color: ColorResources
-                                          .bottomSheetContainerColor,
-                                      borderRadius: BorderRadius.circular(
-                                          Dimensions.offersCardRadius),
-                                    ),
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(
-                                          Dimensions.offersCardRadius),
-                                      child: CachedCommonImage(
-                                        networkImageUrl:
-                                            controller.products[index]['image'],
+                            return GestureDetector(
+                              child: Padding(
+                                padding: const EdgeInsets.only(right: 35),
+                                child: Column(
+                                  children: [
+                                    Container(
+                                      height: size.height * 0.18,
+                                      width: size.width * 0.35,
+                                      decoration: BoxDecoration(
+                                        // border: Border.all(color: Colors.black),
+                                        color: ColorResources
+                                            .bottomSheetContainerColor,
+                                        borderRadius: BorderRadius.circular(
+                                            Dimensions.offersCardRadius),
+                                      ),
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(
+                                            Dimensions.offersCardRadius),
+                                        child: CachedCommonImage(
+                                          networkImageUrl: controller
+                                              .products[index]['image'],
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  const SizedBox(height: Dimensions.space20),
-                                  Text(
-                                    controller.products[index]['name'],
-                                    style: regularDefault.copyWith(
-                                        color: ColorResources.buttonColorDark),
-                                  ),
-                                  const SizedBox(height: Dimensions.space1),
-                                  Text(
-                                    "₹${controller.products[index]['totalCost']}",
-                                    style: mediumDefault.copyWith(
-                                      color: ColorResources.buttonColorDark,
+                                    const SizedBox(height: Dimensions.space20),
+                                    Text(
+                                      controller.products[index]['name'],
+                                      style: regularDefault.copyWith(
+                                          color:
+                                              ColorResources.buttonColorDark),
                                     ),
-                                  ),
-                                ],
+                                    const SizedBox(height: Dimensions.space1),
+                                    Text(
+                                      "₹${controller.products[index]['totalCost']}",
+                                      style: mediumDefault.copyWith(
+                                        color: ColorResources.buttonColorDark,
+                                      ),
+                                    ),
+                                  ],
+                                ),
                               ),
                             );
                           },

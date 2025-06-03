@@ -28,23 +28,24 @@ class _BottomBarScreenState extends State<BottomBarScreen> {
 
   final List<Widget> pages = [
     const DashboardScreen(),
-    const PopScreen(),
+
     CategoriesScreen(),
+    const PopScreen(),
     MyAccountScreen(),
     // Replace with actual screen
   ];
 
   final List<IconData> icons = [
     Icons.home,
-    Icons.flare,
     Icons.grid_view,
+    Icons.flare,
     Icons.account_circle_outlined,
   ];
 
   final List<String> labels = [
     LocalStrings.home,
-    "pop",
     LocalStrings.categories,
+    "pop",
     LocalStrings.you,
   ];
 

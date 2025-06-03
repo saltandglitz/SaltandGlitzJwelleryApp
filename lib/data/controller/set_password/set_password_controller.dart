@@ -27,6 +27,54 @@ class SetPasswordController extends GetxController {
     update();
   }
 
+//isValidatePasswordAndLogin({String? email, String? password}) async {
+//     final enteredPassword = passwordController.text.trim();
+//
+//     if (CommonValidation().isValidationEmpty(enteredPassword)) {
+//       showSnackBar(
+//         context: Get.context!,
+//         title: "Error",
+//         message: LocalStrings.enterPassword,
+//         icon: Icons.error,
+//         iconColor: Colors.red,
+//       );
+//
+//       // showSnackBar(
+//       //   context: Get.context!,
+//       //   message: LocalStrings.enterPassword,
+//       // );
+//       return;
+//     }
+//
+//     // Call login API and handle success/failure
+//     try {
+//       final success = await loginUserApiMethod(
+//         email: email,
+//         password: enteredPassword,
+//       );
+//
+//       if (success) {
+//         showToast(message: "Login successful", context: Get.context!);
+//       } else {
+//         showSnackBar(
+//           context: Get.context!,
+//           title: "Login Failed",
+//           message: "Incorrect email or password.",
+//           icon: Icons.error,
+//           iconColor: Colors.red,
+//         );
+//       }
+//     } catch (e) {
+//       showSnackBar(
+//         context: Get.context!,
+//         title: "Error",
+//         message: "Something went wrong. Please try again.",
+//         icon: Icons.error,
+//         iconColor: Colors.red,
+//       );
+//     }
+//   }
+
   // Validate password and attempt login
   isValidatePasswordAndLogin({String? email}) async {
     final enteredPassword = passwordController.text.trim();

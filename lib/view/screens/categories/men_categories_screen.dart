@@ -482,8 +482,8 @@ class _MenCategoriesScreenState extends State<MenCategoriesScreen> {
     bool isSelected = controller.expandedIndex.value == index;
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-      margin: const EdgeInsets.only(bottom: 17),
+      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+      margin: const EdgeInsets.only(bottom: 15),
       decoration: BoxDecoration(
         color: isSelected
             ? ColorResources.buttonColor.withOpacity(0.01)
@@ -509,7 +509,7 @@ class _MenCategoriesScreenState extends State<MenCategoriesScreen> {
                 baseColor: ColorResources.baseColor,
                 highlightColor: ColorResources.highlightColor,
                 child: Container(
-                  height: size.height * 0.080,
+                  height: size.height * 0.062,
                   width: size.width * 0.17,
                   decoration: BoxDecoration(
                       borderRadius:
@@ -525,8 +525,9 @@ class _MenCategoriesScreenState extends State<MenCategoriesScreen> {
                   child: Container(
                     height: size.height * 0.015,
                     decoration: BoxDecoration(
-                        color: ColorResources.whiteColor,
-                        borderRadius: BorderRadius.circular(3)),
+                      color: ColorResources.whiteColor,
+                      borderRadius: BorderRadius.circular(3),
+                    ),
                   ),
                 ),
               ),
@@ -1081,18 +1082,18 @@ Widget mostBrowsedExpandedContent(CategoriesController controller, int index,
                                       ),
                                       child: Center(
                                         child: Text(
-                                            getCategoryMostBrowsedMaleData[
-                                                        index]
-                                                    .subCategory?[
-                                                        indexSubCategories]
-                                                    .title ??
-                                                '',
-                                            textAlign: TextAlign.center,
-                                            softWrap: true,
-                                            maxLines: 2,
-                                            style: semiBoldDefault.copyWith(
-                                                color: ColorResources
-                                                    .buttonColor)),
+                                          getCategoryMostBrowsedMaleData[index]
+                                                  .subCategory?[
+                                                      indexSubCategories]
+                                                  .title ??
+                                              '',
+                                          textAlign: TextAlign.center,
+                                          softWrap: true,
+                                          maxLines: 2,
+                                          style: semiBoldDefault.copyWith(
+                                              color:
+                                                  ColorResources.buttonColor),
+                                        ),
                                       ),
                                     ),
                                   ),

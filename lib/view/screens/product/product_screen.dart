@@ -1107,10 +1107,12 @@ class _ProductScreenState extends State<ProductScreen> {
                                               child: Text(
                                                 "ESTIMATED DELIVERY BY ${_formattedDeliveryDate()}",
                                                 style: mediumSmall.copyWith(
-                                                    decoration: TextDecoration
-                                                        .underline,
-                                                    color: ColorResources
-                                                        .buttonColor),
+                                                  decoration:
+                                                      TextDecoration.underline,
+                                                  color: ColorResources
+                                                      .offerColor
+                                                      .withOpacity(0.7),
+                                                ),
                                               ),
                                             ),
                                           ],

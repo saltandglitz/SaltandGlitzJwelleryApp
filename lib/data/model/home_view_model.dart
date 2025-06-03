@@ -132,7 +132,7 @@ class NewArrivals {
   final String? image05;
   final String? video;
   final String? category;
-  final List<String>? subCategory;
+  final String? subCategory;
   final String? material;
   final num? diamondprice;
   final num? makingCharge14KT;
@@ -202,8 +202,7 @@ class NewArrivals {
         image05 = json['image05'] as String?,
         video = json['video'] as String?,
         category = json['category'] as String?,
-        subCategory =
-            (json['subCategory'] as List?)?.map((e) => e.toString()).toList(),
+        subCategory = json['subCategory'] as String?,
         material = json['material'] as String?,
         diamondprice = (json['diamondprice'] as num?)?.toDouble(),
         makingCharge14KT = (json['makingCharge14KT'] as num?)?.toDouble(),

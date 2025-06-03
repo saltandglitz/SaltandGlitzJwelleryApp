@@ -73,11 +73,11 @@ class MainController extends GetxController {
         filterCategoryList = (response.data['filterCategory'] as List)
             .map((filterCategory) => FilterCategory.fromJson(filterCategory))
             .toList();
-        print("Get Home :${response.statusCode} ");
-
         newArrivalList = (response.data['newArrivals'] as List)
             .map((newArrivals) => NewArrivals.fromJson(newArrivals))
             .toList();
+        print("Get Home :${response.statusCode} ");
+
         giftElementList = (response.data['gifts'] as List)
             .map((gifts) => Gifts.fromJson(gifts))
             .toList();

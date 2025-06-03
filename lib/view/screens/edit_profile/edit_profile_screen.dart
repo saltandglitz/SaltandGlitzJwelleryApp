@@ -120,44 +120,44 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 padding: const EdgeInsets.only(left: 15, right: 15, top: 20),
                 child: Column(
                   children: [
-                    Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 15, vertical: 12),
-                      decoration: BoxDecoration(
-                        borderRadius:
-                            BorderRadius.circular(Dimensions.offersCardRadius),
-                        gradient: const LinearGradient(
-                          colors: [
-                            ColorResources.offerFirstColor,
-                            ColorResources.offerNineColor,
-                            ColorResources.offerSixColor,
-                          ],
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                        ),
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            LocalStrings.editProfile,
-                            style: regularLarge.copyWith(
-                              fontWeight: FontWeight.w500,
-                              color: ColorResources.buttonColor,
-                            ),
-                          ),
-                          const SizedBox(height: Dimensions.space5),
-                          Text(
-                            LocalStrings.specialOccasions,
-                            style: regularDefault.copyWith(
-                              color: ColorResources.buttonColor,
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                    const SizedBox(height: Dimensions.space30),
+                    // Container(
+                    //   width: double.infinity,
+                    //   padding: const EdgeInsets.symmetric(
+                    //       horizontal: 15, vertical: 12),
+                    //   decoration: BoxDecoration(
+                    //     borderRadius:
+                    //         BorderRadius.circular(Dimensions.offersCardRadius),
+                    //     gradient: const LinearGradient(
+                    //       colors: [
+                    //         ColorResources.offerFirstColor,
+                    //         ColorResources.offerNineColor,
+                    //         ColorResources.lightGreenColour,
+                    //       ],
+                    //       begin: Alignment.topLeft,
+                    //       end: Alignment.bottomRight,
+                    //     ),
+                    //   ),
+                    //   child: Column(
+                    //     crossAxisAlignment: CrossAxisAlignment.start,
+                    //     children: [
+                    //       Text(
+                    //         LocalStrings.editProfile,
+                    //         style: regularLarge.copyWith(
+                    //           fontWeight: FontWeight.w500,
+                    //           color: ColorResources.buttonColor,
+                    //         ),
+                    //       ),
+                    //       const SizedBox(height: Dimensions.space5),
+                    //       Text(
+                    //         LocalStrings.specialOccasions,
+                    //         style: regularDefault.copyWith(
+                    //           color: ColorResources.buttonColor,
+                    //         ),
+                    //       )
+                    //     ],
+                    //   ),
+                    // ),
+                    // const SizedBox(height: Dimensions.space30),
                     AppTextFieldWidget(
                       controller: controller.firstName,
                       isShowCountryPicker: false,
@@ -171,20 +171,21 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       labelText: LocalStrings.lastNameStar,
                       boxConstraints: const BoxConstraints(minWidth: 15),
                     ),
-
                     const SizedBox(height: Dimensions.space35),
                     AppTextFieldWidget(
                       controller: controller.mobileNumber,
                       isEnable: false,
-                      fillColor: ColorResources.offerSixColor.withOpacity(0.3),
+                      fillColor:
+                          ColorResources.lightGreenColour.withOpacity(0.3),
                       labelText: LocalStrings.mobileNumber,
                       suffixIcon: const Icon(
                         Icons.check_circle_rounded,
-                        color: ColorResources.videoCallColor,
+                        color: ColorResources.offerColor,
                         size: 25,
                       ),
                     ),
                     const SizedBox(height: Dimensions.space35),
+
                     // EmailId & verify
                     Row(
                       children: [
@@ -193,8 +194,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             controller: controller.email,
                             isShowCountryPicker: false,
                             isEnable: false,
-                            fillColor:
-                                ColorResources.offerSixColor.withOpacity(0.3),
+                            fillColor: ColorResources.lightGreenColour
+                                .withOpacity(0.3),
                             labelText: LocalStrings.emailId,
                             contentPadding: const EdgeInsets.symmetric(
                                 vertical: 16.0, horizontal: 12.0),
@@ -213,8 +214,8 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             height: size.height * 0.065,
                             width: size.width * 0.25,
                             decoration: BoxDecoration(
-                              color:
-                                  ColorResources.offerSixColor.withOpacity(0.3),
+                              color: ColorResources.lightGreenColour
+                                  .withOpacity(0.3),
                               borderRadius: BorderRadius.circular(
                                   Dimensions.offersCardRadius),
                             ),
@@ -231,17 +232,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                       ],
                     ),
                     const SizedBox(height: Dimensions.space35),
-
-                    AppTextFieldWidget(
-                      controller: controller.userSaltCash,
-                      isEnable: false,
-                      isShowCountryPicker: false,
-                      fillColor: ColorResources.offerSixColor.withOpacity(0.3),
-                      labelText: LocalStrings.userSaltCash,
-                      boxConstraints: const BoxConstraints(minWidth: 15),
-                    ),
-                    const SizedBox(height: Dimensions.space30),
-
                     AppTextFieldWidget(
                       controller: controller.pinCode,
                       isShowCountryPicker: false,
@@ -259,14 +249,15 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             height: size.height * 0.065,
                             width: size.width * 0.27,
                             decoration: BoxDecoration(
-                              color:
-                                  ColorResources.cardTabColor.withOpacity(0.1),
+                              color: ColorResources.lightGreenColour
+                                  .withOpacity(0.3),
                               borderRadius: BorderRadius.circular(
                                   Dimensions.offersCardRadius),
                             ),
                             child: Row(
                               children: [
                                 Radio(
+                                  activeColor: ColorResources.buttonColor,
                                   value: 1,
                                   groupValue: controller.selectedValue,
                                   onChanged: (value) {
@@ -289,14 +280,15 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                             height: size.height * 0.065,
                             width: size.width * 0.27,
                             decoration: BoxDecoration(
-                              color:
-                                  ColorResources.cardTabColor.withOpacity(0.1),
+                              color: ColorResources.lightGreenColour
+                                  .withOpacity(0.3),
                               borderRadius: BorderRadius.circular(
                                   Dimensions.offersCardRadius),
                             ),
                             child: Row(
                               children: [
                                 Radio(
+                                  activeColor: ColorResources.buttonColor,
                                   value: 2,
                                   groupValue: controller.selectedValue,
                                   onChanged: (value) {
@@ -313,21 +305,21 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                           ),
                         ),
                         const SizedBox(width: Dimensions.space20),
-
                         // Create a Radio Other
                         Flexible(
                           child: Container(
                             height: size.height * 0.065,
                             width: size.width * 0.27,
                             decoration: BoxDecoration(
-                              color:
-                                  ColorResources.cardTabColor.withOpacity(0.1),
+                              color: ColorResources.lightGreenColour
+                                  .withOpacity(0.3),
                               borderRadius: BorderRadius.circular(
                                   Dimensions.offersCardRadius),
                             ),
                             child: Row(
                               children: [
                                 Radio(
+                                  activeColor: ColorResources.buttonColor,
                                   value: 3,
                                   groupValue: controller.selectedValue,
                                   onChanged: (value) {
@@ -605,7 +597,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                                     Dimensions.emailIdRadius),
                                 gradient: const LinearGradient(
                                   colors: [
-                                    ColorResources.offerSixColor,
+                                    ColorResources.lightGreenColour,
                                     ColorResources.offerNineColor,
                                   ],
                                   stops: [0.2, 0.8],

@@ -991,9 +991,14 @@ class _CollectionScreenState extends State<CollectionScreen> {
                         //   ),
                         // ),
                         const Spacer(),
-                        Padding(
-                          padding: const EdgeInsets.only(
-                              right: 8), // moved a bit left
+                        Container(
+                          height: size.height * 0.05,
+                          width: size.width * 0.099,
+                          decoration: BoxDecoration(
+                            borderRadius:
+                                BorderRadius.circular(Dimensions.smallRadius),
+                            color: Colors.transparent,
+                          ),
                           child: LikeButton(
                             circleColor: const CircleColor(
                               start: Color(0xff00ddff),

@@ -677,8 +677,7 @@ class _WomenCategoriesScreenState extends State<WomenCategoriesScreen> {
       MapEntry('All', selectedCategory.categoryImage ?? ''),
       ...filteredInnerSubCategories.entries
     ];
-    return GetBuilder(
-      init: CategoriesController(),
+    return GetBuilder<CategoriesController>(
       builder: (controller) {
         return Padding(
           padding: const EdgeInsets.only(bottom: 15.0, top: 10),

@@ -87,7 +87,6 @@ class APIFunction {
       );
 
       return response; // This is the full Response object
-
     } catch (e) {
       printActionError('Error in DELETE API Call: $e');
       rethrow; // Propagate the error

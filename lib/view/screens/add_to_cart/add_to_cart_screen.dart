@@ -33,6 +33,24 @@ class _AddToCartScreenState extends State<AddToCartScreen> {
   final addCartController = Get.put<AddToCartController>(AddToCartController());
   final mainController = Get.put<MainController>(MainController());
   List<String>? wishlistData;
+  String _formattedDeliveryDate() {
+    DateTime date = DateTime.now().add(const Duration(days: 17));
+    List<String> monthNames = [
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December'
+    ];
+    return "${date.day} ${monthNames[date.month - 1]} ${date.year}";
+  }
 
   @override
   void initState() {
@@ -250,7 +268,7 @@ class _AddToCartScreenState extends State<AddToCartScreen> {
                                               decoration: BoxDecoration(
                                                 border: Border.all(
                                                   color: ColorResources
-                                                      .offerSixColor,
+                                                      .lightGreenColour,
                                                 ),
                                                 borderRadius:
                                                     BorderRadius.circular(
@@ -302,7 +320,7 @@ class _AddToCartScreenState extends State<AddToCartScreen> {
                                                     ],
                                                   ),
                                                   Text(
-                                                    "₹${controller.getAddCartData?.cart?.quantity?[index].productId?.price14KT}",
+                                                    "₹${controller.getAddCartData?.cart?.quantity?[index].productId?.total14KT}",
                                                     style: boldSmall.copyWith(
                                                       color: ColorResources
                                                           .buttonColor,
@@ -414,10 +432,14 @@ class _AddToCartScreenState extends State<AddToCartScreen> {
                                                       height:
                                                           Dimensions.space5),
                                                   Text(
-                                                    LocalStrings.deliveryDate,
-                                                    style: boldSmall.copyWith(
+                                                    "ESTIMATED DELIVERY BY ${_formattedDeliveryDate()}",
+                                                    style: mediumExtraSmall
+                                                        .copyWith(
+                                                      decoration: TextDecoration
+                                                          .underline,
                                                       color: ColorResources
-                                                          .deliveryColorColor,
+                                                          .offerColor
+                                                          .withOpacity(0.7),
                                                     ),
                                                   ),
                                                 ],
@@ -512,7 +534,7 @@ class _AddToCartScreenState extends State<AddToCartScreen> {
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(
                                   Dimensions.offersCardRadius),
-                              color: ColorResources.offerThirdTextColor,
+                              color: ColorResources.lightGreenColour,
                               boxShadow: [
                                 BoxShadow(
                                   color: ColorResources.borderColor
@@ -531,7 +553,7 @@ class _AddToCartScreenState extends State<AddToCartScreen> {
                                   children: [
                                     Image.asset(
                                       MyImages.discountImage,
-                                      color: ColorResources.offerColor,
+                                      color: ColorResources.blackColor,
                                       height: 25,
                                       width: 25,
                                     ),
@@ -539,7 +561,7 @@ class _AddToCartScreenState extends State<AddToCartScreen> {
                                     Text(
                                       LocalStrings.applyCoupon,
                                       style: boldLarge.copyWith(
-                                        color: ColorResources.buttonColor,
+                                        color: ColorResources.blackColor,
                                       ),
                                     ),
                                     const Spacer(),
@@ -550,8 +572,8 @@ class _AddToCartScreenState extends State<AddToCartScreen> {
                                         width: 30,
                                         decoration: const BoxDecoration(
                                           shape: BoxShape.circle,
-                                          color: ColorResources
-                                              .offerThirdTextColor,
+                                          color:
+                                              ColorResources.lightGreenColour,
                                           boxShadow: [
                                             BoxShadow(
                                               color: ColorResources.borderColor,
@@ -562,8 +584,10 @@ class _AddToCartScreenState extends State<AddToCartScreen> {
                                           ],
                                         ),
                                         child: const Center(
-                                          child:
-                                              Icon(Icons.arrow_forward_rounded),
+                                          child: Icon(
+                                            Icons.arrow_forward_rounded,
+                                            color: ColorResources.blackColor,
+                                          ),
                                         ),
                                       ),
                                     ),
@@ -636,8 +660,9 @@ class _AddToCartScreenState extends State<AddToCartScreen> {
                                     Text(
                                       LocalStrings.free,
                                       style: boldSmall.copyWith(
-                                          color: ColorResources
-                                              .deliveryColorColor),
+                                        color: ColorResources.offerColor
+                                            .withOpacity(0.7),
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -658,8 +683,9 @@ class _AddToCartScreenState extends State<AddToCartScreen> {
                                     Text(
                                       LocalStrings.free,
                                       style: boldSmall.copyWith(
-                                          color: ColorResources
-                                              .deliveryColorColor),
+                                        color: ColorResources.offerColor
+                                            .withOpacity(0.7),
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -765,7 +791,7 @@ class _AddToCartScreenState extends State<AddToCartScreen> {
                 width: size.width * 0.22,
                 decoration: BoxDecoration(
                   border: Border.all(
-                    color: ColorResources.offerSixColor,
+                    color: ColorResources.lightGreenColour,
                   ),
                   borderRadius: BorderRadius.circular(
                     Dimensions.offersCardRadius,
@@ -937,8 +963,8 @@ class _AddToCartScreenState extends State<AddToCartScreen> {
               gradient: LinearGradient(
                   colors: contactName == LocalStrings.whatsapp
                       ? [
-                          ColorResources.offerSixColor,
-                          ColorResources.offerSixColor.withOpacity(0.3),
+                          ColorResources.lightGreenColour,
+                          ColorResources.lightGreenColour.withOpacity(0.3),
                         ]
                       : contactName == LocalStrings.chat
                           ? [
@@ -1016,7 +1042,7 @@ class _AddToCartScreenState extends State<AddToCartScreen> {
                 height: size.height * 0.13,
                 width: size.width * 0.27,
                 decoration: BoxDecoration(
-                  border: Border.all(color: ColorResources.offerSixColor),
+                  border: Border.all(color: ColorResources.lightGreenColour),
                   borderRadius:
                       BorderRadius.circular(Dimensions.offersCardRadius),
                 ),
@@ -1068,8 +1094,8 @@ class _AddToCartScreenState extends State<AddToCartScreen> {
                             border: const GradientBoxBorder(
                               gradient: LinearGradient(
                                 colors: [
-                                  ColorResources.offerColor,
-                                  ColorResources.buttonGradientColor
+                                  ColorResources.buttonColor,
+                                  ColorResources.buttonSecondColor
                                 ],
                                 begin: Alignment.topLeft,
                                 end: Alignment.bottomRight,

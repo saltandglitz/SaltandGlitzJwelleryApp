@@ -24,7 +24,7 @@ class UpdatedProducts {
   final String? productId;
   final double? avgRating;
   final double? totalRatings;
-  bool? isAlready;
+  late final bool? isAlready;
   final bool? isCart;
   final List<Media>? media;
   final String? id;
@@ -34,8 +34,7 @@ class UpdatedProducts {
   final double? price14KT;
   final double? price18KT;
   final String? category;
-  final List<String>? subCategory;
-
+  final String? subCategory;
   final String? material;
   final double? diamondprice;
   final double? makingCharge14KT;
@@ -58,6 +57,9 @@ class UpdatedProducts {
   final List<String>? diamondWt;
   final List<String>? price;
   final List<String>? unitWt;
+  final double? grossWt14KT;
+  final double? grossWt18KT;
+  final String? description;
   final List<ProductRatings>? productRatings;
 
   UpdatedProducts({
@@ -97,6 +99,9 @@ class UpdatedProducts {
     this.diamondWt,
     this.price,
     this.unitWt,
+    this.grossWt14KT,
+    this.grossWt18KT,
+    this.description,
     this.productRatings,
   });
 
@@ -116,11 +121,12 @@ class UpdatedProducts {
         price14KT = (json['price14KT'] as num?)?.toDouble(),
         price18KT = (json['price18KT'] as num?)?.toDouble(),
         category = json['category'] as String?,
-        subCategory = json['subCategory'] is List
-            ? (json['subCategory'] as List).map((e) => e.toString()).toList()
-            : json['subCategory'] is String
-                ? [json['subCategory'].toString()]
-                : [],
+        subCategory = json['subCategory'] as String?,
+        // subCategory = json['subCategory'] is List
+        //     ? (json['subCategory'] as List).map((e) => e.toString()).toList()
+        //     : json['subCategory'] is String
+        //         ? [json['subCategory'].toString()]
+        //         : [],
         material = json['material'] as String?,
         diamondprice = (json['diamondprice'] as num?)?.toDouble(),
         makingCharge14KT = (json['makingCharge14KT'] as num?)?.toDouble(),
@@ -155,6 +161,9 @@ class UpdatedProducts {
             (json['price'] as List?)?.map((dynamic e) => e as String).toList(),
         unitWt =
             (json['unitWt'] as List?)?.map((dynamic e) => e as String).toList(),
+        grossWt14KT = (json['grossWt14KT'] as num?)?.toDouble(),
+        grossWt18KT = (json['grossWt18KT'] as num?)?.toDouble(),
+        description = json['description'] as String?,
         productRatings = (json['productRatings'] as List?)
             ?.map((dynamic e) =>
                 ProductRatings.fromJson(e as Map<String, dynamic>))
@@ -197,6 +206,9 @@ class UpdatedProducts {
         'diamondWt': diamondWt,
         'price': price,
         'unitWt': unitWt,
+        'grossWt14KT': grossWt14KT,
+        'grossWt18KT': grossWt18KT,
+        'description': description,
         'productRatings': productRatings?.map((e) => e.toJson()).toList()
       };
 }

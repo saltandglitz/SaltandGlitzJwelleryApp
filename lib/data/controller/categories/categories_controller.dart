@@ -286,6 +286,8 @@ class CategoriesController extends GetxController {
           context: Get.context!,
           isGet: true,
           isLoading: false);
+      log("Get Categories : ${response.data}");
+
       if (response.statusCode == 200) {
         getCategoryData.clear();
         getCategoryMostBrowsedData.clear();
@@ -295,12 +297,11 @@ class CategoriesController extends GetxController {
         getCategoryData = (response.data['categories'] as List)
             .map((categoryJson) => Categories.fromJson(categoryJson))
             .toList();
-
+        log("Get Categories : ${response.data}");
         //Todo : add all mostBrowsed categories data
         getCategoryMostBrowsedData = (response.data['mergedProducts'] as List)
             .map((categoryJson) => MergedProducts.fromJson(categoryJson))
             .toList();
-
         //Todo : add all jewellery banners categories data
         getCategoryBannerData = (response.data['banners'] as List)
             .map((banners) => Banners.fromJson(banners))
@@ -415,7 +416,7 @@ class CategoriesController extends GetxController {
         params: params,
         isLoading: false,
       );
-      print("RESPONSE : ${response.statusCode}");
+      print("RESPONSEEEEEE : ${response.statusCode}");
       if (response.statusCode == 200) {
         final List<dynamic> allProducts =
             response.data['updatedProducts'] ?? [];
@@ -439,8 +440,16 @@ class CategoriesController extends GetxController {
             filterLocallyBySubCategory.isNotEmpty) {
           filterProductData = filterProductData.where((product) {
             final subCategories = product.subCategory ?? [];
-            return subCategories.any((sub) =>
-                sub.toLowerCase() == filterLocallyBySubCategory.toLowerCase());
+            if (subCategories is List) {
+              return subCategories
+                  .map((e) => e.toString().toLowerCase())
+                  .contains(filterLocallyBySubCategory.toLowerCase());
+            } else if (subCategories is String) {
+              return subCategories.toLowerCase() ==
+                  filterLocallyBySubCategory.toLowerCase();
+            } else {
+              return false;
+            }
           }).toList();
         }
 

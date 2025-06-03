@@ -10,95 +10,95 @@ class LocalStrings {
       : "http://api.saltandglitz.com/v1/homePage/home";
   static String resetPasswordApi = appStrings.isNotEmpty
       ? appStrings['resetPasswordApi']
-      : "https://saltandglitz-api-131827005467.asia-south2.run.app/api/users/verifyOtpAndResetPassword";
+      : "https://api.saltandglitz.com/api/users/verifyOtpAndResetPassword";
   static String forgotPasswordApi = appStrings.isNotEmpty
       ? appStrings['forgotPasswordApi']
-      : "https://saltandglitz-api-131827005467.asia-south2.run.app/api/users/forgotPassword";
+      : "https://api.saltandglitz.com/api/users/forgotPassword";
   static String sendOtpApi = appStrings.isNotEmpty
       ? appStrings['sendOtpApi']
-      : "https://saltandglitz-api-131827005467.asia-south2.run.app/v1/otp/send-otp";
+      : "https://api.saltandglitz.com/v1/otp/send-otp";
   static String getOtpApi = appStrings.isNotEmpty
       ? appStrings['getOtpApi']
-      : "https://saltandglitz-api-131827005467.asia-south2.run.app/v1/otp/get-otp";
+      : "https://api.saltandglitz.com/v1/otp/get-otp";
   static String registerApi = appStrings.isNotEmpty
       ? appStrings['registerApi']
-      : "https://saltandglitz-api-131827005467.asia-south2.run.app/api/users/register";
+      : "https://api.saltandglitz.com/api/users/register";
   static String womenCategoriesApi = appStrings.isNotEmpty
       ? appStrings['womenCategoriesApi']
-      : "https://saltandglitz-api-131827005467.asia-south2.run.app/v1/category/categoryData";
+      : "https://api.saltandglitz.com/v1/category/categoryData";
   static String menCategoriesApi = appStrings.isNotEmpty
       ? appStrings['menCategoriesApi']
-      : "https://saltandglitz-api-131827005467.asia-south2.run.app/v1/category/categoryData/Male";
+      : "https://api.saltandglitz.com/v1/category/categoryData/Male";
   static String logoutApi = appStrings.isNotEmpty
       ? appStrings['logoutApi']
-      : "https://saltandglitz-api-131827005467.asia-south2.run.app/api/users/logout";
+      : "https://api.saltandglitz.com/api/users/logout";
   static String logInApi = appStrings.isNotEmpty
       ? appStrings['logInApi']
-      : "https://saltandglitz-api-131827005467.asia-south2.run.app/api/users/login";
+      : "https://api.saltandglitz.com/api/users/login";
   static String filterProductApi = appStrings.isNotEmpty
       ? appStrings['filterProductApi']
-      : "https://saltandglitz-api-131827005467.asia-south2.run.app/v1/upload/filterProduct";
+      : "https://api.saltandglitz.com/v1/upload/filterProduct";
   static String sendEmailOtpApi = appStrings.isNotEmpty
       ? appStrings['sendEmailOtpApi']
-      : "https://saltandglitz-api-131827005467.asia-south2.run.app/v1/otp/send-otp";
+      : "https://api.saltandglitz.com/v1/otp/send-otp";
   static String searchProductApi = appStrings.isNotEmpty
       ? appStrings['searchProductApi']
-      : "https://saltandglitz-api-131827005467.asia-south2.run.app/v1/search/searchProduct";
+      : "https://api.saltandglitz.com/v1/search/searchProduct";
   static String wishlistProductApi = appStrings.isNotEmpty
       ? appStrings['wishlistProductApi']
-      : "https://saltandglitz-api-131827005467.asia-south2.run.app/v1/wishlist/create_wishlist";
+      : "https://api.saltandglitz.com/v1/wishlist/create_wishlist";
   static String removeWishlistProductApi = appStrings.isNotEmpty
       ? appStrings['removeWishlistProductApi']
-      : "https://saltandglitz-api-131827005467.asia-south2.run.app/v1/wishlist/remove_wishlist/";
+      : "https://api.saltandglitz.com/v1/wishlist/remove_wishlist/";
   static String getWishlistProductApi = appStrings.isNotEmpty
       ? appStrings['getWishlistProductApi']
-      : "https://saltandglitz-api-131827005467.asia-south2.run.app/v1/wishlist/get_wishlist/";
+      : "https://api.saltandglitz.com/v1/wishlist/get_wishlist/";
   static String addToCartApi = appStrings.isNotEmpty
       ? appStrings['addToCartApi']
-      : "https://saltandglitz-api-131827005467.asia-south2.run.app/v1/cart/addCart";
+      : "https://api.saltandglitz.com/v1/cart/addCart";
   static String getCartApi = appStrings.isNotEmpty
       ? appStrings['getCartApi']
-      : "https://saltandglitz-api-131827005467.asia-south2.run.app/v1/cart/getCart/";
+      : "https://api.saltandglitz.com/v1/cart/getCart/";
   static String removeCartApi = appStrings.isNotEmpty
       ? appStrings['removeCartApi']
-      : "https://saltandglitz-api-131827005467.asia-south2.run.app/v1/cart/remove/";
+      : "https://api.saltandglitz.com/v1/cart/remove/";
   static String incrementCartItemQuantityApi = appStrings.isNotEmpty
       ? appStrings['incrementCartItemQuantityApi']
-      : "https://saltandglitz-api-131827005467.asia-south2.run.app/v1/cart/cartIncrement";
+      : "https://api.saltandglitz.com/v1/cart/cartIncrement";
   static String decrementCartItemQuantityApi = appStrings.isNotEmpty
       ? appStrings['decrementCartItemQuantityApi']
-      : "https://saltandglitz-api-131827005467.asia-south2.run.app/v1/cart/cartDecrement";
+      : "https://api.saltandglitz.com/v1/cart/cartDecrement";
   static String mergeProductApi = appStrings.isNotEmpty
       ? appStrings['mergeProductApi']
-      : "https://saltandglitz-api-131827005467.asia-south2.run.app/v1/merge/mergeCartAndWishlist";
+      : "https://api.saltandglitz.com/v1/merge/mergeCartAndWishlist";
   static String googleSigInApi = appStrings.isNotEmpty
       ? appStrings['googleSigInApi']
-      : "https://saltandglitz-api-131827005467.asia-south2.run.app/api/users/google-login";
+      : "https://api.saltandglitz.com/api/users/google-login";
   static String
       updateRatingApi = /*appStrings.isNotEmpty
       ? appStrings['updateRatingApi']
       :*/
-      "https://saltandglitz-api-131827005467.asia-south2.run.app/v1/rating/updateRating";
+      "https://api.saltandglitz.com/v1/rating/updateRating";
   static String
       getRatingApi = /*appStrings.isNotEmpty
       ? appStrings['getRatingApi']
       :*/
-      "https://saltandglitz-api-131827005467.asia-south2.run.app/v1/rating/getRating/";
+      "https://api.saltandglitz.com/v1/rating/getRating/";
   static String
       addRatingApi = /*appStrings.isNotEmpty
       ? appStrings['addRatingApi']
       :*/
-      "https://saltandglitz-api-131827005467.asia-south2.run.app/v1/rating/addRating";
+      "https://api.saltandglitz.com/v1/rating/addRating";
   static String
       createOrderApi = /*appStrings.isNotEmpty
       ? appStrings['createOrderApi']
       :*/
-      "https://saltandglitz-api-131827005467.asia-south2.run.app/v1/order/createOrder/";
+      "https://api.saltandglitz.com/v1/order/createOrder/";
   static String
       getAddressApi = /*appStrings.isNotEmpty
       ? appStrings['getAddressApi']
       :*/
-      "https://saltandglitz-api-131827005467.asia-south2.run.app/v1/address/getAddress/";
+      "https://api.saltandglitz.com/v1/address/getAddress/";
 
   ///<<<------------------- Dashboard Screen ------------------->>>
   static String solitaire =

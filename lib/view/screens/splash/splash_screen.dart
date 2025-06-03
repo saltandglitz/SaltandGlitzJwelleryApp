@@ -33,9 +33,7 @@ class _SplashScreenState extends State<SplashScreen> {
     //Todo : Banner data show api method
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await mainController.getDashboardJewelleryData();
-      print("Bottom banner length : ${mediaList.length}");
-      print("Bottom banner length : ${newArrivalList.length}");
-      print("Bottom banner length : ${giftElementList.length}");
+
       for (int i = 0; i < bottomBannerList.length; i++) {
         String? media = bottomBannerList[i].bannerImage;
         dashboardController.handleMediaPlayback(media: media!, index: i);
