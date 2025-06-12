@@ -24,7 +24,7 @@ class UpdatedProducts {
   final String? productId;
   final double? avgRating;
   final double? totalRatings;
-  late final bool? isAlready;
+  bool? isAlready;
   final bool? isCart;
   final List<Media>? media;
   final String? id;
@@ -34,7 +34,7 @@ class UpdatedProducts {
   final double? price14KT;
   final double? price18KT;
   final String? category;
-  final String? subCategory;
+  final List<String>? subCategory;
   final String? material;
   final double? diamondprice;
   final double? makingCharge14KT;
@@ -121,12 +121,11 @@ class UpdatedProducts {
         price14KT = (json['price14KT'] as num?)?.toDouble(),
         price18KT = (json['price18KT'] as num?)?.toDouble(),
         category = json['category'] as String?,
-        subCategory = json['subCategory'] as String?,
-        // subCategory = json['subCategory'] is List
-        //     ? (json['subCategory'] as List).map((e) => e.toString()).toList()
-        //     : json['subCategory'] is String
-        //         ? [json['subCategory'].toString()]
-        //         : [],
+        subCategory = json['subCategory'] is List
+            ? (json['subCategory'] as List).map((e) => e.toString()).toList()
+            : json['subCategory'] is String
+                ? [json['subCategory'].toString()]
+                : [],
         material = json['material'] as String?,
         diamondprice = (json['diamondprice'] as num?)?.toDouble(),
         makingCharge14KT = (json['makingCharge14KT'] as num?)?.toDouble(),

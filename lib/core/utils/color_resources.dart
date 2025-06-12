@@ -3,18 +3,15 @@ import 'package:flutter/material.dart';
 class ColorResources {
   static const Color bottomSheetContainerColor = Color(0xFFf0f0f0);
   static const Color scaffoldBackgroundColor = Color(0xffffffff);
-
   static const Color blackColor = Color(0xff000000);
   static const Color shimmerEffectHighlightColor = Color(0xFFF5F5F5);
   static const Color shimmerEffectBaseColor = Color(0xFFE0E0E0);
   static const Color inactiveTabColor = Color(0xffaeaeae);
   static const Color iconColor = Color(0xFF3b3b3b);
   static const Color addressColor = Color(0xFFF0F4F7);
-
-  static const Color baseColor =
-      Color(0xFFD2D8DC); // Light grey (previously grey[300])
+  static const Color baseColor = Color(0xFFD2D8DC); //(previously grey[300])
   static const Color highlightColor =
-      Color(0xFFE1E8ED); // Very light grey (previously grey[100])
+      Color(0xFFE1E8ED); //(previously grey[100])
   static const Color splashFirstColor = Color(0xffE5733F);
   static const Color splashSecondColor = Color(0xffF95D47);
   static const Color activeCardColor = Color(0xff27B8DA);

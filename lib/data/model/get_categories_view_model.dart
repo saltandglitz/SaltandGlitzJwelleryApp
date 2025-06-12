@@ -34,7 +34,7 @@ class GetCategoriesViewModel {
         'categories': categories?.map((e) => e.toJson()).toList(),
         'genders': genders,
         'banners': banners?.map((e) => e.toJson()).toList(),
-        'mergedProducts': mergedProducts?.map((e) => e.toJson()).toList()
+        'mergedProducts': mergedProducts?.map((e) => e.toJson()).toList(),
       };
 }
 
@@ -99,9 +99,11 @@ class SubCategories {
     this.subCategory,
     this.image,
   });
+
   SubCategories.fromJson(Map<String, dynamic> json)
       : subCategory = json['subCategory'] as String?,
         image = json['image'] as String?;
+
   Map<String, dynamic> toJson() => {
         'subCategory': subCategory,
         'image': image,

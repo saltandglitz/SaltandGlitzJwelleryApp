@@ -6,10 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart' hide Response;
 import 'package:saltandGlitz/data/controller/collection/collection_controller.dart';
 import 'package:saltandGlitz/view/components/common_message_show.dart';
-
-import '../../../analytics/app_analytics.dart';
 import '../../../api_repository/api_function.dart';
-import '../../../core/route/route.dart';
 import '../../../core/utils/app_const.dart';
 import '../../../core/utils/images.dart';
 import '../../../core/utils/local_strings.dart';
@@ -286,32 +283,33 @@ class CategoriesController extends GetxController {
           context: Get.context!,
           isGet: true,
           isLoading: false);
-      log("Get Categories : ${response.data}");
-
       if (response.statusCode == 200) {
         getCategoryData.clear();
         getCategoryMostBrowsedData.clear();
         getCategoryBannerData.clear();
+
         log("Get Categories : ${response.data}");
+
         //Todo : add all jewellery style categories data
         getCategoryData = (response.data['categories'] as List)
             .map((categoryJson) => Categories.fromJson(categoryJson))
             .toList();
-        log("Get Categories : ${response.data}");
+
         //Todo : add all mostBrowsed categories data
-        getCategoryMostBrowsedData = (response.data['mergedProducts'] as List)
-            .map((categoryJson) => MergedProducts.fromJson(categoryJson))
-            .toList();
+        // getCategoryMostBrowsedData = (response.data['mergedProducts'] as List)
+        //     .map((categoryJson) => MergedProducts.fromJson(categoryJson))
+        //     .toList();
+
         //Todo : add all jewellery banners categories data
-        getCategoryBannerData = (response.data['banners'] as List)
-            .map((banners) => Banners.fromJson(banners))
-            .where((banners) => banners.mobileBannerImage != null)
-            .toList();
+        // getCategoryBannerData = (response.data['banners'] as List)
+        //     .map((banners) => Banners.fromJson(banners))
+        //     .where((banners) => banners.mobileBannerImage != null)
+        //     .toList();
       } else {
         print("Something went wrong");
       }
     } catch (e) {
-      print("Get Categories Errorzzzzzzzzzz : $e");
+      print("Get Categories Error : $e");
     } finally {
       update();
     }
@@ -329,20 +327,23 @@ class CategoriesController extends GetxController {
         getCategoryMaleData.clear();
         getCategoryMostBrowsedMaleData.clear();
         getCategoryBannerMaleData.clear();
+
         //Todo : Male add all jewellery style categories data
         getCategoryMaleData = (response.data['categories'] as List)
             .map((categoryJson) => Categories.fromJson(categoryJson))
             .toList();
+
         //Todo : Male add all mostBrowsed categories data
-        getCategoryMostBrowsedMaleData =
-            (response.data['mergedProducts'] as List)
-                .map((categoryJson) => MergedProducts.fromJson(categoryJson))
-                .toList();
+        // getCategoryMostBrowsedMaleData =
+        //     (response.data['mergedProducts'] as List)
+        //         .map((categoryJson) => MergedProducts.fromJson(categoryJson))
+        //         .toList();
+
         //Todo : Male add all jewellery banners categories data
-        getCategoryBannerMaleData = (response.data['banners'] as List)
-            .map((banners) => Banners.fromJson(banners))
-            .where((banners) => banners.mobileBannerImage != null)
-            .toList();
+        // getCategoryBannerMaleData = (response.data['banners'] as List)
+        //     .map((banners) => Banners.fromJson(banners))
+        //     .where((banners) => banners.mobileBannerImage != null)
+        //     .toList();
       } else {
         print("Something went wrong");
       }
@@ -416,7 +417,7 @@ class CategoriesController extends GetxController {
         params: params,
         isLoading: false,
       );
-      print("RESPONSEEEEEE : ${response.statusCode}");
+      print("RESPONSE : ${response.statusCode}");
       if (response.statusCode == 200) {
         final List<dynamic> allProducts =
             response.data['updatedProducts'] ?? [];
@@ -440,16 +441,8 @@ class CategoriesController extends GetxController {
             filterLocallyBySubCategory.isNotEmpty) {
           filterProductData = filterProductData.where((product) {
             final subCategories = product.subCategory ?? [];
-            if (subCategories is List) {
-              return subCategories
-                  .map((e) => e.toString().toLowerCase())
-                  .contains(filterLocallyBySubCategory.toLowerCase());
-            } else if (subCategories is String) {
-              return subCategories.toLowerCase() ==
-                  filterLocallyBySubCategory.toLowerCase();
-            } else {
-              return false;
-            }
+            return subCategories.any((sub) =>
+                sub.toLowerCase() == filterLocallyBySubCategory.toLowerCase());
           }).toList();
         }
 
