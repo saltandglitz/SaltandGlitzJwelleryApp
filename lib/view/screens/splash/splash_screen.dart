@@ -30,7 +30,7 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     //TODO: implement initState
     super.initState();
-    //Todo : Banner data show api method
+    //TODO : Banner data show api method
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await mainController.getDashboardJewelleryData();
       for (int i = 0; i < bottomBannerList.length; i++) {
@@ -44,10 +44,10 @@ class _SplashScreenState extends State<SplashScreen> {
       // await mainController.getGiftElementData();
       // await mainController.getSolitaireData();
       // await mainController.getBottomBannerData();
-      //Todo : Get by default women categories data api method
+      //TODO : Get by default women categories data api method
       await categoriesController.getFemaleCategories();
       print("Bottom banner length : ${getCategoryData.length}");
-      //Todo : Get men categories data api method
+      //TODO : Get men categories data api method
       await categoriesController.getMaleCategories();
       print("Bottom banner length : ${getCategoryMaleData.length}");
       // await productController.youMayAlsoLike();
