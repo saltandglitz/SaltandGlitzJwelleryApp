@@ -1057,7 +1057,7 @@ Widget mostBrowsedExpandedContent(CategoriesController controller, int index,
                                                     index]
                                                 .subCategory?[
                                                     indexSubCategories]
-                                                .image01,
+                                                .image,
                                       ),
                                     ),
                                   ),
@@ -1085,7 +1085,7 @@ Widget mostBrowsedExpandedContent(CategoriesController controller, int index,
                                           getCategoryMostBrowsedMaleData[index]
                                                   .subCategory?[
                                                       indexSubCategories]
-                                                  .title ??
+                                                  .subCategory ??
                                               '',
                                           textAlign: TextAlign.center,
                                           softWrap: true,

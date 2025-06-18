@@ -723,7 +723,7 @@ class ProductController extends GetxController {
         userReview!.isNotEmpty &&
         ratingValue.value != 0.0 &&
         userId!.isNotEmpty) {
-      if (userRatingValue == null && userRatingValue!.isEmpty) {
+      if (userRatingValue?.isEmpty ?? true) {
         /// Add new rating
         addRatingUsers(
           userId: userId,

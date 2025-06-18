@@ -289,36 +289,36 @@ class MergedProducts {
 }
 
 class SubCategoryBrowsed {
-  final String? productId;
-  final String? title;
-  final double? price14KT;
-  final String? image01;
-  final String? category;
+  // final String? productId;
+  // final String? title;
+  // final double? price14KT;
+  final String? image;
+  // final String? category;
   final String? subCategory;
 
   SubCategoryBrowsed({
-    this.productId,
-    this.title,
-    this.price14KT,
-    this.image01,
-    this.category,
+    // this.productId,
+    // this.title,
+    // this.price14KT,
+    this.image,
+    // this.category,
     this.subCategory,
   });
 
   SubCategoryBrowsed.fromJson(Map<String, dynamic> json)
-      : productId = json['productId'] as String?,
-        title = json['title'] as String?,
-        price14KT = (json['price14KT'] as num?)?.toDouble(),
-        image01 = json['image01'] as String?,
-        category = json['category'] as String?,
+      // : productId = json['productId'] as String?,
+      //   title = json['title'] as String?,
+      //   price14KT = (json['price14KT'] as num?)?.toDouble(),
+      : image = json['image'] as String?,
+        // category = json['category'] as String?,
         subCategory = json['subCategory'] as String?;
 
   Map<String, dynamic> toJson() => {
-        'productId': productId,
-        'title': title,
-        'price14KT': price14KT,
-        'image01': image01,
-        'category': category,
+        // 'productId': productId,
+        // 'title': title,
+        // 'price14KT': price14KT,
+        'image': image,
+        // 'category': category,
         'subCategory': subCategory
       };
 }

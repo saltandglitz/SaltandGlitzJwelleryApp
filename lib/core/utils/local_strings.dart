@@ -816,9 +816,9 @@ class LocalStrings {
       ? appStrings['diamondGemstone']
       : 'Diamond & Gemstones';
   static String weightCt =
-      appStrings.isNotEmpty ? appStrings['weightCt'] : 'Weight 0.688Ct';
+      appStrings.isNotEmpty ? appStrings['weightCt'] : 'Weight';
   static String diamondSecond =
-      appStrings.isNotEmpty ? appStrings['diamondSecond'] : 'Diamond 25';
+      appStrings.isNotEmpty ? appStrings['diamondSecond'] : 'Diamond';
   static String unitWeight =
       /*appStrings.isNotEmpty ? appStrings['unitWeight'] :*/ 'Unit Weight';
   static String sizeGold =

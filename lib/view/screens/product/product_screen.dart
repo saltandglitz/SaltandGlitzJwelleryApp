@@ -1299,20 +1299,48 @@ class _ProductScreenState extends State<ProductScreen> {
                                                       MainAxisAlignment
                                                           .spaceBetween,
                                                   children: [
-                                                    Text(
-                                                      LocalStrings.weightCt,
-                                                      style: semiBoldDefault
-                                                          .copyWith(
-                                                              color: ColorResources
-                                                                  .buttonColor),
+                                                    Row(
+                                                      children: [
+                                                        Text(
+                                                          LocalStrings.weightCt,
+                                                          style: semiBoldDefault
+                                                              .copyWith(
+                                                                  color: ColorResources
+                                                                      .buttonColor),
+                                                        ),
+                                                        const SizedBox(
+                                                            width: Dimensions
+                                                                .space7),
+                                                        Text(
+                                                          "${controller.productData?.diamondWt}",
+                                                          style: semiBoldDefault
+                                                              .copyWith(
+                                                                  color: ColorResources
+                                                                      .buttonColor),
+                                                        ),
+                                                      ],
                                                     ),
-                                                    Text(
-                                                      LocalStrings
-                                                          .diamondSecond,
-                                                      style: semiBoldDefault
-                                                          .copyWith(
-                                                              color: ColorResources
-                                                                  .buttonColor),
+                                                    Row(
+                                                      children: [
+                                                        Text(
+                                                          LocalStrings
+                                                              .diamondSecond,
+                                                          style: semiBoldDefault
+                                                              .copyWith(
+                                                                  color: ColorResources
+                                                                      .buttonColor),
+                                                        ),
+                                                        const SizedBox(
+                                                            width: Dimensions
+                                                                .space7),
+                                                        Text(
+                                                          "${controller.productData?.diamondQt}",
+                                                          style: semiBoldDefault
+                                                              .copyWith(
+                                                                  color: ColorResources
+                                                                      .buttonColor),
+                                                        ),
+                                                      ],
                                                     ),
                                                   ],
                                                 ),
@@ -2800,280 +2828,285 @@ class _ProductScreenState extends State<ProductScreen> {
             child: AnimatedOpacity(
               opacity: 1.0,
               duration: const Duration(milliseconds: 500),
-              child: Material(
-                color: ColorResources.whiteColor,
-                borderRadius: BorderRadius.circular(8),
-                elevation: 5.0,
-                child: GetBuilder<ProductController>(
-                  init: ProductController(),
-                  builder: (controller) {
-                    return SizedBox(
-                      width: double.infinity,
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                            vertical: 20, horizontal: 10),
-                        child: Column(
-                          mainAxisSize: MainAxisSize.min,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              children: [
-                                Text(
-                                  LocalStrings.howItem,
-                                  style: mediumOverLarge.copyWith(),
-                                ),
-                                const Spacer(),
-                                GestureDetector(
-                                  onTap: () {
-                                    Get.back();
-                                    controller.feedBack.clear();
-                                  },
-                                  child:
-                                      const Icon(Icons.close_rounded, size: 25),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: Dimensions.space20),
-                            Row(
-                              children: [
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(
-                                      Dimensions.defaultRadius),
-                                  child: Card(
-                                    margin: EdgeInsets.zero,
-                                    elevation: 5.0,
-                                    shape: OutlineInputBorder(
-                                      borderRadius: BorderRadius.circular(
-                                          Dimensions.defaultRadius),
-                                      borderSide: const BorderSide(
-                                          color: ColorResources
-                                              .shimmerEffectBaseColor),
-                                    ),
-                                    child: CachedCommonImage(
-                                      height: 60,
-                                      width: 60,
-                                      networkImageUrl: productImage,
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(width: Dimensions.space15),
-                                Expanded(
-                                  child: Text(
-                                    productName ?? '',
-                                    softWrap: true,
-                                    overflow: TextOverflow.ellipsis,
-                                    maxLines: 2,
-                                    style: mediumMediumLarge.copyWith(),
-                                  ),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: Dimensions.space30),
-                            // Wrap only the widget dependent on the rating value
-                            Obx(
-                              () {
-                                return Theme(
-                                  data: ThemeData(
-                                    splashColor: Colors.transparent,
-                                  ),
-                                  child: StarRating(
-                                    rating: controller.ratingValue.value,
-                                    // Use the .value to access the observable
-                                    size: 30,
-                                    starCount: 5,
-                                    borderColor: ColorResources.blackColor,
-                                    color: ColorResources.updateCardColor,
-                                    onRatingChanged: (rating) {
-                                      controller.ratingUsers(
-                                          rating); // Update the rating when it changes
-                                    },
-                                  ),
-                                );
-                              },
-                            ),
-                            const SizedBox(height: Dimensions.space30),
-                            RichText(
-                              text: TextSpan(
+              child: SingleChildScrollView(
+                child: Material(
+                  color: ColorResources.whiteColor,
+                  borderRadius: BorderRadius.circular(8),
+                  elevation: 5.0,
+                  child: GetBuilder<ProductController>(
+                    init: ProductController(),
+                    builder: (controller) {
+                      return SizedBox(
+                        width: double.infinity,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 20, horizontal: 10),
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
                                 children: [
-                                  TextSpan(
-                                    text: LocalStrings.feedback,
-                                    style: semiBoldMediumLarge.copyWith(
-                                        color: ColorResources.blackColor),
+                                  Text(
+                                    LocalStrings.howItem,
+                                    style: mediumOverLarge.copyWith(),
                                   ),
-                                  TextSpan(
-                                    text: LocalStrings.feedbackStar,
-                                    style: semiBoldMediumLarge.copyWith(
-                                        color: ColorResources.notValidateColor),
+                                  const Spacer(),
+                                  GestureDetector(
+                                    onTap: () {
+                                      Get.back();
+                                      controller.feedBack.clear();
+                                    },
+                                    child: const Icon(Icons.close_rounded,
+                                        size: 25),
                                   ),
                                 ],
                               ),
-                            ),
-                            const SizedBox(height: Dimensions.space5),
-                            SizedBox(
-                              height:
-                                  MediaQuery.of(context).size.height * 0.080,
-                              child: CommonTextField(
-                                controller: controller.feedBack,
-                                hintText: LocalStrings.feedback,
-                                hintTexStyle: mediumDefault,
-                                borderColor: ColorResources.buttonColor,
-                                fillColor:
-                                    ColorResources.buttonColor.withOpacity(0.1),
-                                maxLines: 5,
-                                textColor: ColorResources.blackColor,
-                              ),
-                            ),
-                            const SizedBox(height: Dimensions.space20),
-                            Container(
-                              height: controller.pickedImage.value != null
-                                  ? MediaQuery.of(context).size.height * 0.16
-                                  : MediaQuery.of(context).size.height * 0.13,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(
-                                    Dimensions.defaultRadius),
-                                border: Border.all(
-                                    color: ColorResources.borderColor,
-                                    width: 1),
-                              ),
-                              child: Center(
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    GestureDetector(
-                                      onTap: () {
-                                        controller.imagePickOptionsDialogBox();
-                                      },
-                                      child: Container(
-                                        height: 40,
-                                        width: 80,
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(
-                                              Dimensions.defaultRadius),
-                                          color: ColorResources
-                                              .deliveryColorColor
-                                              .withOpacity(0.1),
-                                        ),
-                                        child: Center(
-                                          child: Text(
-                                            LocalStrings.addFiles,
-                                            style: semiBoldLarge.copyWith(),
-                                          ),
-                                        ),
+                              const SizedBox(height: Dimensions.space20),
+                              Row(
+                                children: [
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(
+                                        Dimensions.defaultRadius),
+                                    child: Card(
+                                      margin: EdgeInsets.zero,
+                                      elevation: 5.0,
+                                      shape: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(
+                                            Dimensions.defaultRadius),
+                                        borderSide: const BorderSide(
+                                            color: ColorResources
+                                                .shimmerEffectBaseColor),
+                                      ),
+                                      child: CachedCommonImage(
+                                        height: 60,
+                                        width: 60,
+                                        networkImageUrl: productImage,
                                       ),
                                     ),
-                                    const SizedBox(height: Dimensions.space5),
-                                    controller.pickedImage.value != null
-                                        ? const SizedBox()
-                                        : Text(
-                                            LocalStrings.acceptsImageFormat,
-                                            style: semiBoldSmall.copyWith(
-                                                color: ColorResources
-                                                    .inactiveTabColor),
-                                          ),
-                                    const SizedBox(height: Dimensions.space5),
-                                    controller.pickedImage.value != null
-                                        ? Stack(
-                                            alignment: Alignment.topRight,
-                                            clipBehavior: Clip.none,
-                                            children: [
-                                              Card(
-                                                margin: EdgeInsets.zero,
-                                                elevation: 5.0,
-                                                child: Container(
-                                                  height: 80,
-                                                  width: 80,
-                                                  decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            Dimensions
-                                                                .defaultRadius),
-                                                  ),
-                                                  child: ClipRRect(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            Dimensions
-                                                                .defaultRadius),
-                                                    child: Image.file(
-                                                      controller
-                                                          .pickedImage.value!,
-                                                      fit: BoxFit.cover,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                              Positioned(
-                                                top: -7,
-                                                right: -7,
-                                                child: GestureDetector(
-                                                  onTap: () {
-                                                    controller.clearImage();
-                                                  },
-                                                  child: Container(
-                                                    decoration: const BoxDecoration(
-                                                        shape: BoxShape.circle,
-                                                        color: ColorResources
-                                                            .notValidateColor),
-                                                    child: const Icon(
-                                                      Icons.close_rounded,
-                                                      size: 22,
-                                                      color: ColorResources
-                                                          .whiteColor,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          )
-                                        : const SizedBox(),
+                                  ),
+                                  const SizedBox(width: Dimensions.space15),
+                                  Expanded(
+                                    child: Text(
+                                      productName ?? '',
+                                      softWrap: true,
+                                      overflow: TextOverflow.ellipsis,
+                                      maxLines: 2,
+                                      style: mediumMediumLarge.copyWith(),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: Dimensions.space30),
+                              // Wrap only the widget dependent on the rating value
+                              Obx(
+                                () {
+                                  return Theme(
+                                    data: ThemeData(
+                                      splashColor: Colors.transparent,
+                                    ),
+                                    child: StarRating(
+                                      rating: controller.ratingValue.value,
+                                      // Use the .value to access the observable
+                                      size: 30,
+                                      starCount: 5,
+                                      borderColor: ColorResources.blackColor,
+                                      color: ColorResources.updateCardColor,
+                                      onRatingChanged: (rating) {
+                                        controller.ratingUsers(
+                                            rating); // Update the rating when it changes
+                                      },
+                                    ),
+                                  );
+                                },
+                              ),
+                              const SizedBox(height: Dimensions.space30),
+                              RichText(
+                                text: TextSpan(
+                                  children: [
+                                    TextSpan(
+                                      text: LocalStrings.feedback,
+                                      style: semiBoldMediumLarge.copyWith(
+                                          color: ColorResources.blackColor),
+                                    ),
+                                    TextSpan(
+                                      text: LocalStrings.feedbackStar,
+                                      style: semiBoldMediumLarge.copyWith(
+                                          color:
+                                              ColorResources.notValidateColor),
+                                    ),
                                   ],
                                 ),
                               ),
-                            ),
-                            const SizedBox(height: Dimensions.space20),
-                            Obx(
-                              () {
-                                return CommonButton(
-                                  width: double.infinity,
-                                  onTap: () {
-                                    String? userId =
-                                        PrefManager.getString('userId');
-
-                                    /// All validate field after submit params api if user not login then show message.
-                                    controller.isValidateRating(
-                                      userId: userId,
-                                      productId: productId,
-                                      userRating:
-                                          "${controller.ratingValue.value}",
-                                      userReview:
-                                          controller.feedBack.text.trim(),
-                                    );
-                                  },
-                                  child: controller.isRating.value == true
-                                      ? const Center(
-                                          child: Padding(
-                                            padding: EdgeInsets.all(8.0),
-                                            child: CircularProgressIndicator(
-                                                color: ColorResources
-                                                    .bottomSheetContainerColor),
+                              const SizedBox(height: Dimensions.space5),
+                              SizedBox(
+                                height:
+                                    MediaQuery.of(context).size.height * 0.080,
+                                child: CommonTextField(
+                                  controller: controller.feedBack,
+                                  hintText: LocalStrings.feedback,
+                                  hintTexStyle: mediumDefault,
+                                  borderColor: ColorResources.buttonColor,
+                                  fillColor: ColorResources.buttonColor
+                                      .withOpacity(0.1),
+                                  maxLines: 5,
+                                  textColor: ColorResources.blackColor,
+                                ),
+                              ),
+                              const SizedBox(height: Dimensions.space20),
+                              Container(
+                                height: controller.pickedImage.value != null
+                                    ? MediaQuery.of(context).size.height * 0.18
+                                    : MediaQuery.of(context).size.height * 0.13,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(
+                                      Dimensions.defaultRadius),
+                                  border: Border.all(
+                                      color: ColorResources.borderColor,
+                                      width: 1),
+                                ),
+                                child: Center(
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      GestureDetector(
+                                        onTap: () {
+                                          controller
+                                              .imagePickOptionsDialogBox();
+                                        },
+                                        child: Container(
+                                          height: 40,
+                                          width: 80,
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(
+                                                Dimensions.defaultRadius),
+                                            color: ColorResources
+                                                .deliveryColorColor
+                                                .withOpacity(0.1),
                                           ),
-                                        )
-                                      : Text(
-                                          controller.userRatingValue != null &&
-                                                  controller.userRatingValue!
-                                                      .isNotEmpty
-                                              ? LocalStrings.update
-                                              : LocalStrings.next,
-                                          style: semiBoldDefault.copyWith(
-                                              color: ColorResources.whiteColor),
+                                          child: Center(
+                                            child: Text(
+                                              LocalStrings.addFiles,
+                                              style: semiBoldLarge.copyWith(),
+                                            ),
+                                          ),
                                         ),
-                                );
-                              },
-                            ),
-                          ],
+                                      ),
+                                      const SizedBox(height: Dimensions.space5),
+                                      controller.pickedImage.value != null
+                                          ? const SizedBox()
+                                          : Text(
+                                              LocalStrings.acceptsImageFormat,
+                                              style: semiBoldSmall.copyWith(
+                                                  color: ColorResources
+                                                      .inactiveTabColor),
+                                            ),
+                                      const SizedBox(height: Dimensions.space5),
+                                      controller.pickedImage.value != null
+                                          ? Stack(
+                                              alignment: Alignment.topRight,
+                                              clipBehavior: Clip.none,
+                                              children: [
+                                                Card(
+                                                  margin: EdgeInsets.zero,
+                                                  elevation: 5.0,
+                                                  child: Container(
+                                                    height: 80,
+                                                    width: 80,
+                                                    decoration: BoxDecoration(
+                                                      borderRadius: BorderRadius
+                                                          .circular(Dimensions
+                                                              .defaultRadius),
+                                                    ),
+                                                    child: ClipRRect(
+                                                      borderRadius: BorderRadius
+                                                          .circular(Dimensions
+                                                              .defaultRadius),
+                                                      child: Image.file(
+                                                        controller
+                                                            .pickedImage.value!,
+                                                        fit: BoxFit.cover,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                                Positioned(
+                                                  top: -7,
+                                                  right: -7,
+                                                  child: GestureDetector(
+                                                    onTap: () {
+                                                      controller.clearImage();
+                                                    },
+                                                    child: Container(
+                                                      decoration: const BoxDecoration(
+                                                          shape:
+                                                              BoxShape.circle,
+                                                          color: ColorResources
+                                                              .notValidateColor),
+                                                      child: const Icon(
+                                                        Icons.close_rounded,
+                                                        size: 22,
+                                                        color: ColorResources
+                                                            .whiteColor,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            )
+                                          : const SizedBox(),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: Dimensions.space20),
+                              Obx(
+                                () {
+                                  return CommonButton(
+                                    width: double.infinity,
+                                    onTap: () {
+                                      String? userId =
+                                          PrefManager.getString('userId');
+
+                                      /// All validate field after submit params api if user not login then show message.
+                                      controller.isValidateRating(
+                                        userId: userId,
+                                        productId: productId,
+                                        userRating:
+                                            "${controller.ratingValue.value}",
+                                        userReview:
+                                            controller.feedBack.text.trim(),
+                                      );
+                                    },
+                                    child: controller.isRating.value == true
+                                        ? const Center(
+                                            child: Padding(
+                                              padding: EdgeInsets.all(8.0),
+                                              child: CircularProgressIndicator(
+                                                  color: ColorResources
+                                                      .bottomSheetContainerColor),
+                                            ),
+                                          )
+                                        : Text(
+                                            controller.userRatingValue !=
+                                                        null &&
+                                                    controller.userRatingValue!
+                                                        .isNotEmpty
+                                                ? LocalStrings.update
+                                                : LocalStrings.next,
+                                            style: semiBoldDefault.copyWith(
+                                                color:
+                                                    ColorResources.whiteColor),
+                                          ),
+                                  );
+                                },
+                              ),
+                            ],
+                          ),
                         ),
-                      ),
-                    );
-                  },
+                      );
+                    },
+                  ),
                 ),
               ),
             ),

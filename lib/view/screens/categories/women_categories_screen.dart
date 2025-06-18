@@ -665,9 +665,16 @@ class _WomenCategoriesScreenState extends State<WomenCategoriesScreen> {
 // ✅ Collect unique subcategories with image mapping
     final Map<String, String> filteredInnerSubCategories = {};
     for (final subCat in selectedCategory.subCategory ?? []) {
-      for (final inner in subCat.subCategory ?? []) {
+      if (subCat.subCategory is List) {
+        for (final inner in subCat.subCategory!) {
+          if (!filteredInnerSubCategories.containsKey(inner)) {
+            filteredInnerSubCategories[inner] = subCat.image ?? '';
+          }
+        }
+      } else if (subCat.subCategory is String) {
+        final inner = subCat.subCategory as String;
         if (!filteredInnerSubCategories.containsKey(inner)) {
-          filteredInnerSubCategories[inner] = subCat.image01 ?? '';
+          filteredInnerSubCategories[inner] = subCat.image ?? '';
         }
       }
     }
@@ -698,7 +705,7 @@ class _WomenCategoriesScreenState extends State<WomenCategoriesScreen> {
                 ),
                 child: Column(
                   children: [
-                    // Button style show tab bar animation type so 0 index ontap send 1 index so swap set condition 0 =1 index and 1=0 index
+                    // Button style show tab bar animation type so 0 index onTap send 1 index so swap set condition 0 =1 index and 1=0 index
                     Container(
                       height: size.height * 0.050,
                       padding: const EdgeInsets.symmetric(
@@ -1009,9 +1016,10 @@ Widget mostBrowsedExpandedContent(CategoriesController controller, int index,
                                           width: double.infinity,
                                           networkImageUrl:
                                               getCategoryMostBrowsedData[index]
-                                                  .subCategory?[
-                                                      indexSubCategories]
-                                                  .image01,
+                                                      .subCategory?[
+                                                          indexSubCategories]
+                                                      .image ??
+                                                  '',
                                         ),
                                       ),
                                     ),
@@ -1039,7 +1047,7 @@ Widget mostBrowsedExpandedContent(CategoriesController controller, int index,
                                             getCategoryMostBrowsedData[index]
                                                     .subCategory?[
                                                         indexSubCategories]
-                                                    .title ??
+                                                    .subCategory ??
                                                 '',
                                             textAlign: TextAlign.center,
                                             softWrap: true,
