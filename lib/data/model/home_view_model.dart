@@ -148,6 +148,9 @@ class NewArrivals {
   final String? createdAt;
   final String? updatedAt;
   final int? v;
+  final List<String>? diamondQt;
+  final List<String>? diamondWt;
+  final String? description;
 
   NewArrivals({
     this.productId,
@@ -181,6 +184,9 @@ class NewArrivals {
     this.createdAt,
     this.updatedAt,
     this.v,
+    this.diamondQt,
+    this.diamondWt,
+    this.description,
   });
 
   NewArrivals.fromJson(Map<String, dynamic> json)
@@ -217,7 +223,14 @@ class NewArrivals {
         isFavourite = json['isFavourite'] as bool?,
         createdAt = json['createdAt'] as String?,
         updatedAt = json['updatedAt'] as String?,
-        v = json['__v'] as int?;
+        v = json['__v'] as int?,
+        diamondQt = (json['diamondQt'] as List?)
+            ?.map((dynamic e) => e as String)
+            .toList(),
+        diamondWt = (json['diamondWt'] as List?)
+            ?.map((dynamic e) => e as String)
+            .toList(),
+        description = json['description'] as String?;
 
   Map<String, dynamic> toJson() => {
         'product_id': productId,
@@ -250,7 +263,10 @@ class NewArrivals {
         'isFavourite': isFavourite,
         'createdAt': createdAt,
         'updatedAt': updatedAt,
-        '__v': v
+        '__v': v,
+        'diamondQt': diamondQt,
+        'diamondWt': diamondWt,
+        'description': description
       };
 }
 

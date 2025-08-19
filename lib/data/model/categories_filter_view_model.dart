@@ -36,7 +36,7 @@ class UpdatedProducts {
   final String? category;
   final List<String>? subCategory;
   final String? material;
-  final double? diamondprice;
+  final double? diamondPrice;
   final double? makingCharge14KT;
   final double? makingCharge18KT;
   final double? grossWt;
@@ -78,7 +78,7 @@ class UpdatedProducts {
     this.category,
     this.subCategory,
     this.material,
-    this.diamondprice,
+    this.diamondPrice,
     this.makingCharge14KT,
     this.makingCharge18KT,
     this.grossWt,
@@ -124,10 +124,13 @@ class UpdatedProducts {
         subCategory = json['subCategory'] is List
             ? (json['subCategory'] as List).map((e) => e.toString()).toList()
             : json['subCategory'] is String
-                ? [json['subCategory'].toString()]
+                ? (json['subCategory'] as String)
+                    .split(',')
+                    .map((e) => e.trim())
+                    .toList()
                 : [],
         material = json['material'] as String?,
-        diamondprice = (json['diamondprice'] as num?)?.toDouble(),
+        diamondPrice = (json['diamondPrice'] as num?)?.toDouble(),
         makingCharge14KT = (json['makingCharge14KT'] as num?)?.toDouble(),
         makingCharge18KT = (json['makingCharge18KT'] as num?)?.toDouble(),
         grossWt = (json['grossWt'] as num?)?.toDouble(),
@@ -184,7 +187,7 @@ class UpdatedProducts {
         'category': category,
         'subCategory': subCategory,
         'material': material,
-        'diamondprice': diamondprice,
+        'diamondPrice': diamondPrice,
         'makingCharge14KT': makingCharge14KT,
         'makingCharge18KT': makingCharge18KT,
         'grossWt': grossWt,

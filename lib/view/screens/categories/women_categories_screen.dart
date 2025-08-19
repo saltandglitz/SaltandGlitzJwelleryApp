@@ -655,35 +655,32 @@ class _WomenCategoriesScreenState extends State<WomenCategoriesScreen> {
   Widget buildExpandedContent(
       CategoriesController controller, int index, Size size) {
     bool isLeftChevron = index % 2 == 0;
-    // 👇 Use this when user taps a main category tab
-// For example, this could be set by a tab or onTap in a ListView
     int selectedIndex = controller.expandedIndex.value;
-
-// Filter only subcategories for selected category
     final selectedCategory = getCategoryData[selectedIndex];
 
-// ✅ Collect unique subcategories with image mapping
-    final Map<String, String> filteredInnerSubCategories = {};
+    // ✅ Unique subcategories with image map
+    final Map<String, String> uniqueSubCategories = {};
     for (final subCat in selectedCategory.subCategory ?? []) {
       if (subCat.subCategory is List) {
-        for (final inner in subCat.subCategory!) {
-          if (!filteredInnerSubCategories.containsKey(inner)) {
-            filteredInnerSubCategories[inner] = subCat.image ?? '';
+        for (final inner in subCat.subCategory ?? []) {
+          final innerName = inner.toString();
+          if (!uniqueSubCategories.containsKey(innerName)) {
+            uniqueSubCategories[innerName] = subCat.image ?? '';
           }
         }
       } else if (subCat.subCategory is String) {
-        final inner = subCat.subCategory as String;
-        if (!filteredInnerSubCategories.containsKey(inner)) {
-          filteredInnerSubCategories[inner] = subCat.image ?? '';
+        final innerName = subCat.subCategory.toString();
+        if (!uniqueSubCategories.containsKey(innerName)) {
+          uniqueSubCategories[innerName] = subCat.image ?? '';
         }
       }
     }
 
-// ✅ Convert to list for GridView and insert 'All' at position 0
     final innerSubCategoryList = [
       MapEntry('All', selectedCategory.categoryImage ?? ''),
-      ...filteredInnerSubCategories.entries
+      ...uniqueSubCategories.entries
     ];
+
     return GetBuilder<CategoriesController>(
       builder: (controller) {
         return Padding(
@@ -699,13 +696,12 @@ class _WomenCategoriesScreenState extends State<WomenCategoriesScreen> {
                   color: ColorResources.buttonColor.withOpacity(0.01),
                   borderRadius:
                       BorderRadius.circular(Dimensions.bottomSheetRadius),
-                  border: Border.all(
-                      color: ColorResources.buttonColor,
-                      width: 1), // Set border color and thickness
+                  border:
+                      Border.all(color: ColorResources.buttonColor, width: 1),
                 ),
                 child: Column(
                   children: [
-                    // Button style show tab bar animation type so 0 index onTap send 1 index so swap set condition 0 =1 index and 1=0 index
+                    // 👇 Tab Switcher
                     Container(
                       height: size.height * 0.050,
                       padding: const EdgeInsets.symmetric(
@@ -716,6 +712,7 @@ class _WomenCategoriesScreenState extends State<WomenCategoriesScreen> {
                       ),
                       child: Row(
                         children: [
+                          // 👉 Shop by Style
                           Expanded(
                             child: GestureDetector(
                               onTap: () {
@@ -751,6 +748,7 @@ class _WomenCategoriesScreenState extends State<WomenCategoriesScreen> {
                             ),
                           ),
                           const SizedBox(width: Dimensions.space20),
+                          // 👉 Shop by Price
                           Expanded(
                             child: GestureDetector(
                               onTap: () {
@@ -790,7 +788,7 @@ class _WomenCategoriesScreenState extends State<WomenCategoriesScreen> {
                     ),
                     const SizedBox(height: Dimensions.space20),
                     if (controller.selectedTab.value == 1) ...[
-                      // Content for Tab Shop By Style
+                      // 👇 Shop by Style Grid
                       GridView.builder(
                         itemCount: innerSubCategoryList.length,
                         shrinkWrap: true,
@@ -810,6 +808,7 @@ class _WomenCategoriesScreenState extends State<WomenCategoriesScreen> {
                               final categoryName =
                                   selectedCategory.category ?? '';
                               final isAllButton = innerCategory == 'All';
+
                               controller.filterCategoriesApiMethod(
                                 category: categoryName,
                                 occasionBy: isAllButton ? null : innerCategory,
@@ -818,10 +817,8 @@ class _WomenCategoriesScreenState extends State<WomenCategoriesScreen> {
                                 filterLocallyBySubCategory:
                                     isAllButton ? null : innerCategory,
                               );
-                              Get.toNamed(
-                                RouteHelper.collectionScreen,
-                                arguments: innerCategory,
-                              );
+                              Get.toNamed(RouteHelper.collectionScreen,
+                                  arguments: innerCategory);
                             },
                             child: Column(
                               children: [
@@ -837,8 +834,7 @@ class _WomenCategoriesScreenState extends State<WomenCategoriesScreen> {
                                         Dimensions.categoriesRadius),
                                     child: CachedCommonImage(
                                       width: double.infinity,
-                                      networkImageUrl:
-                                          imageUrl, // Load image for the category
+                                      networkImageUrl: imageUrl,
                                     ),
                                   ),
                                 ),
@@ -847,7 +843,6 @@ class _WomenCategoriesScreenState extends State<WomenCategoriesScreen> {
                                   child: Text(
                                     innerCategory,
                                     textAlign: TextAlign.center,
-                                    softWrap: true,
                                     maxLines: 2,
                                     style: semiBoldSmall.copyWith(
                                       color: ColorResources.buttonColor,
@@ -860,24 +855,23 @@ class _WomenCategoriesScreenState extends State<WomenCategoriesScreen> {
                         },
                       ),
                     ] else ...[
-                      // Content for Tab shop by price
+                      // 👇 Shop by Price Grid
                       GridView.builder(
                         itemCount: controller.shopPriceNameLst.length,
                         shrinkWrap: true,
                         gridDelegate:
                             const SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 3,
-                                childAspectRatio: 7 / 5,
-                                crossAxisSpacing: 10),
+                          crossAxisCount: 3,
+                          childAspectRatio: 7 / 5,
+                          crossAxisSpacing: 10,
+                        ),
                         itemBuilder: (context, index) {
                           return GestureDetector(
                             onTap: () {
                               controller.filterCategoriesApiMethod(
                                   priceLimit:
                                       controller.shopPriceNameLst[index]);
-                              Get.toNamed(
-                                RouteHelper.collectionScreen,
-                              );
+                              Get.toNamed(RouteHelper.collectionScreen);
                             },
                             child: Column(
                               children: [
@@ -902,7 +896,6 @@ class _WomenCategoriesScreenState extends State<WomenCategoriesScreen> {
                                     child: Text(
                                       controller.shopPriceNameLst[index],
                                       textAlign: TextAlign.center,
-                                      softWrap: true,
                                       maxLines: 2,
                                       style: semiBoldSmall.copyWith(
                                           color: ColorResources.buttonColor),

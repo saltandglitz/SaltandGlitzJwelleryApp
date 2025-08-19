@@ -2,6 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_rating/flutter_rating.dart';
 import 'package:get/get.dart';
 import 'package:like_button/like_button.dart';
@@ -43,6 +44,7 @@ class _ProductScreenState extends State<ProductScreen> {
       Get.put<CollectionController>(CollectionController());
   final dashboardController =
       Get.put<DashboardController>(DashboardController());
+  int expandedTileIndex = -1;
 
   String _formattedDeliveryDate() {
     DateTime date = DateTime.now().add(const Duration(days: 17));
@@ -68,6 +70,9 @@ class _ProductScreenState extends State<ProductScreen> {
     // TODO: implement initState
     super.initState();
     mainController.checkToAssignNetworkConnections();
+    productController.resetRingSize(); // 👈 force reset to 6 every time
+    productController.resetKaratSelection(); // 👈 this resets KT to 14KT
+
     // if (Get.arguments != null) {
     //   productController.productData = Get.arguments[0];
     //   productController.collectionIndex = Get.arguments[1];
@@ -165,14 +170,46 @@ class _ProductScreenState extends State<ProductScreen> {
                     //       color: ColorResources.iconColor),
                     // ),
                     const SizedBox(width: Dimensions.space15),
-                    GestureDetector(
-                      onTap: () {
-                        Get.toNamed(RouteHelper.addCartScreen);
+
+                    GetBuilder<CollectionController>(
+                      builder: (controller) {
+                        return Stack(
+                          alignment: Alignment.bottomRight,
+                          children: [
+                            IconButton(
+                              onPressed: () {
+                                Get.toNamed(RouteHelper.addCartScreen);
+                              },
+                              icon: const Icon(Icons.shopping_cart),
+                              color: ColorResources.iconColor,
+                            ),
+                            if (controller.cartItemCount > 0)
+                              Container(
+                                height: 15,
+                                width: 15,
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  color: ColorResources.buttonColor,
+                                  borderRadius: BorderRadius.circular(5),
+                                ),
+                                constraints: const BoxConstraints(
+                                  minWidth: 10,
+                                  minHeight: 10,
+                                ),
+                                child: Text(
+                                  '${controller.cartItemCount}',
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 8,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                              ),
+                          ],
+                        );
                       },
-                      child: const Icon(Icons.shopping_cart_rounded,
-                          color: ColorResources.iconColor),
                     ),
-                    const SizedBox(width: Dimensions.space15),
+                    const SizedBox(width: Dimensions.space3),
                   ],
                   leading: IconButton(
                     onPressed: () {
@@ -214,12 +251,24 @@ class _ProductScreenState extends State<ProductScreen> {
                         onTap: () {
                           List<String>? getCartListProductId =
                               PrefManager.getStringList('cartProductId');
-                          if (getCartListProductId != null &&
+
+                          if ((getCartListProductId != null &&
                                   getCartListProductId.contains(
-                                      controller.productData!.productId) ||
+                                      controller.productData!.productId)) ||
                               controller.productData.isCart == true) {
                             Get.toNamed(RouteHelper.addCartScreen);
                           } else {
+                            // Call the addToCart method in your controller to update local cart state
+                            collectionController.addToCart(
+                              productId: controller.productData!.productId,
+                              quantity: 1,
+                              carat: controller.jewelleryKt(),
+                              size:
+                                  controller.byDefaultRingSize.value.toString(),
+                              color: controller.jewelleryColor(),
+                            );
+
+                            // Call your existing API method if you want
                             controller.addToCartApiMethod(
                               productId: controller.productData!.productId,
                               quantity: 1,
@@ -419,7 +468,6 @@ class _ProductScreenState extends State<ProductScreen> {
                                   },
                                 ),
                               ),
-
                               const SizedBox(height: Dimensions.space10),
 
                               // Indicator Row showing either the circle for image or play icon for video
@@ -681,12 +729,16 @@ class _ProductScreenState extends State<ProductScreen> {
                                                       null
                                                   ? Dimensions.space10
                                                   : 0),
-                                      Text(
-                                        "₹${controller.productData?.total14KT.round()}",
-                                        maxLines: 2,
-                                        softWrap: true,
-                                        style: mediumExtraLarge.copyWith(),
-                                      ),
+                                      Obx(() {
+                                        final price = controller
+                                            .calculateAdjustedPrice()
+                                            .round();
+                                        return Text(
+                                          "₹$price",
+                                          style: mediumExtraLarge.copyWith(),
+                                        );
+                                      }),
+
                                       const SizedBox(
                                           height: Dimensions.space10),
                                       RichText(
@@ -727,7 +779,7 @@ class _ProductScreenState extends State<ProductScreen> {
                                                     await Scrollable
                                                         .ensureVisible(
                                                       context,
-                                                      duration: Duration(
+                                                      duration: const Duration(
                                                           milliseconds: 500),
                                                       curve: Curves.easeInOut,
                                                     );
@@ -859,87 +911,129 @@ class _ProductScreenState extends State<ProductScreen> {
                                           const Spacer(),
                                           SizedBox(
                                             height: size.height * 0.040,
-                                            child: ListView.builder(
-                                              itemCount:
-                                                  controller.ctLst.length,
-                                              shrinkWrap: true,
-                                              padding: EdgeInsets.zero,
-                                              scrollDirection: Axis.horizontal,
-                                              physics:
-                                                  const NeverScrollableScrollPhysics(),
-                                              itemBuilder: (context, index) {
-                                                return GestureDetector(
+                                            child: Row(
+                                              children: [
+                                                // Button 1: 14KT
+                                                GestureDetector(
                                                   onTap: () {
                                                     controller
                                                         .ktSelectionJewellery(
-                                                            index);
+                                                            0);
                                                   },
-                                                  child: Tooltip(
-                                                    message: controller
-                                                            .ktTypeMessageLst[
-                                                        index],
-                                                    verticalOffset: -50,
-                                                    child: Container(
-                                                      height:
-                                                          size.height * 0.040,
-                                                      width: size.width * 0.13,
-                                                      margin: EdgeInsets.only(
-                                                          right: index !=
-                                                                  controller
-                                                                          .ctLst
-                                                                          .length -
-                                                                      1
-                                                              ? 10
-                                                              : 0),
-                                                      decoration: BoxDecoration(
-                                                        gradient: controller
-                                                                    .ktCurrentIndex
-                                                                    .value ==
-                                                                index
-                                                            ? const LinearGradient(
-                                                                colors: [
-                                                                  ColorResources
-                                                                      .buttonColor,
-                                                                  ColorResources
-                                                                      .buttonSecondColor,
-                                                                  // gradient second color
-                                                                ],
-                                                              )
-                                                            : LinearGradient(
-                                                                colors: [
-                                                                  ColorResources
-                                                                      .borderColor
-                                                                      .withOpacity(
-                                                                          0.2),
-                                                                  ColorResources
-                                                                      .borderColor
-                                                                      .withOpacity(
-                                                                          0.2),
-                                                                ],
-                                                              ),
-                                                        borderRadius: BorderRadius
-                                                            .circular(Dimensions
-                                                                .smallRadius),
-                                                      ),
-                                                      child: Center(
-                                                        child: Text(
-                                                          controller
-                                                              .ctLst[index],
-                                                          style: mediumSmall.copyWith(
-                                                              color: controller
-                                                                          .ktCurrentIndex
-                                                                          .value ==
-                                                                      index
-                                                                  ? ColorResources
-                                                                      .whiteColor
-                                                                  : ColorResources
-                                                                      .buttonColorDark),
+                                                  child: Container(
+                                                    height: size.height * 0.040,
+                                                    width: size.width * 0.13,
+                                                    margin:
+                                                        const EdgeInsets.only(
+                                                            right: 10),
+                                                    decoration: BoxDecoration(
+                                                      gradient: controller
+                                                                  .ktCurrentIndex
+                                                                  .value ==
+                                                              0
+                                                          ? const LinearGradient(
+                                                              colors: [
+                                                                ColorResources
+                                                                    .buttonColor,
+                                                                ColorResources
+                                                                    .buttonSecondColor,
+                                                              ],
+                                                            )
+                                                          : LinearGradient(
+                                                              colors: [
+                                                                ColorResources
+                                                                    .borderColor
+                                                                    .withOpacity(
+                                                                        0.2),
+                                                                ColorResources
+                                                                    .borderColor
+                                                                    .withOpacity(
+                                                                        0.2),
+                                                              ],
+                                                            ),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              Dimensions
+                                                                  .smallRadius),
+                                                    ),
+                                                    child: Center(
+                                                      child: Text(
+                                                        "14KT",
+                                                        style: mediumSmall
+                                                            .copyWith(
+                                                          color: controller
+                                                                      .ktCurrentIndex
+                                                                      .value ==
+                                                                  0
+                                                              ? ColorResources
+                                                                  .whiteColor
+                                                              : ColorResources
+                                                                  .buttonColorDark,
                                                         ),
                                                       ),
                                                     ),
                                                   ),
-                                                );
-                                              },
+                                                ),
+
+                                                // Button 2: 18KT
+                                                GestureDetector(
+                                                  onTap: () {
+                                                    controller
+                                                        .ktSelectionJewellery(
+                                                            1);
+                                                  },
+                                                  child: Container(
+                                                    height: size.height * 0.040,
+                                                    width: size.width * 0.13,
+                                                    decoration: BoxDecoration(
+                                                      gradient: controller
+                                                                  .ktCurrentIndex
+                                                                  .value ==
+                                                              1
+                                                          ? const LinearGradient(
+                                                              colors: [
+                                                                ColorResources
+                                                                    .buttonColor,
+                                                                ColorResources
+                                                                    .buttonSecondColor,
+                                                              ],
+                                                            )
+                                                          : LinearGradient(
+                                                              colors: [
+                                                                ColorResources
+                                                                    .borderColor
+                                                                    .withOpacity(
+                                                                        0.2),
+                                                                ColorResources
+                                                                    .borderColor
+                                                                    .withOpacity(
+                                                                        0.2),
+                                                              ],
+                                                            ),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              Dimensions
+                                                                  .smallRadius),
+                                                    ),
+                                                    child: Center(
+                                                      child: Text(
+                                                        "18KT",
+                                                        style: mediumSmall
+                                                            .copyWith(
+                                                          color: controller
+                                                                      .ktCurrentIndex
+                                                                      .value ==
+                                                                  1
+                                                              ? ColorResources
+                                                                  .whiteColor
+                                                              : ColorResources
+                                                                  .buttonColorDark,
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
                                             ),
                                           ),
                                         ],
@@ -948,130 +1042,149 @@ class _ProductScreenState extends State<ProductScreen> {
                                           height: Dimensions.space15),
                                       //Ring & Bracelet size selection
                                       Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
                                         children: [
-                                          Row(
-                                            children: [
-                                              Text(
-                                                LocalStrings.sizeWithoutDots,
-                                                style: mediumDefault.copyWith(),
-                                              ),
-                                              const Spacer(),
-                                              Obx(
-                                                () {
-                                                  return Container(
-                                                    height: 40,
-                                                    decoration: BoxDecoration(
-                                                        borderRadius:
-                                                            const BorderRadius
-                                                                .all(
-                                                          Radius.circular(
-                                                            Dimensions
-                                                                .smallRadius,
-                                                          ),
-                                                        ),
-                                                        color: ColorResources
-                                                            .borderColor
-                                                            .withOpacity(0.2),
-                                                        shape:
-                                                            BoxShape.rectangle),
-                                                    child: Theme(
-                                                      data: ThemeData(
-                                                        splashColor:
-                                                            Colors.transparent,
-                                                        // Used to drop down selection splash color remover
-                                                        highlightColor: Colors
-                                                            .transparent, // Used to drop down selection splash color remover
-                                                      ),
-                                                      child:
-                                                          DropdownButton<int>(
-                                                        elevation: 0,
-                                                        underline:
-                                                            const SizedBox(),
-                                                        borderRadius: BorderRadius
-                                                            .circular(Dimensions
-                                                                .smallRadius),
-                                                        padding:
-                                                            const EdgeInsets
-                                                                .symmetric(
-                                                                horizontal: 10),
-                                                        style: boldMediumLarge.copyWith(
+                                          if (controller.productData.category ==
+                                                  'Ring' ||
+                                              controller.productData.category ==
+                                                  'Bracelet' ||
+                                              controller.productData.category ==
+                                                  'Bangle')
+                                            Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              children: [
+                                                Row(
+                                                  children: [
+                                                    Text(
+                                                      LocalStrings
+                                                          .sizeWithoutDots,
+                                                      style: mediumDefault
+                                                          .copyWith(),
+                                                    ),
+                                                    const Spacer(),
+                                                    Obx(
+                                                      () {
+                                                        return Container(
+                                                          height: 40,
+                                                          decoration:
+                                                              const BoxDecoration(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .all(
+                                                              Radius.circular(
+                                                                  Dimensions
+                                                                      .smallRadius),
+                                                            ),
                                                             color: ColorResources
-                                                                .buttonColorDark),
-                                                        value: controller
-                                                            .byDefaultRingSize
-                                                            .value,
-                                                        // Default value is 6
-                                                        items: controller
-                                                            .ringSize
-                                                            .map(
-                                                          (value) {
-                                                            return DropdownMenuItem<
-                                                                int>(
-                                                              value: value,
-                                                              child: Padding(
-                                                                padding: const EdgeInsets
-                                                                    .symmetric(
-                                                                    horizontal:
-                                                                        5,
-                                                                    vertical:
-                                                                        3),
-                                                                child: Center(
-                                                                  child: Text(
-                                                                    '$value',
-                                                                    style: mediumExtraLarge
-                                                                        .copyWith(
+                                                                .lightGreenBackgroundColour,
+                                                            shape: BoxShape
+                                                                .rectangle,
+                                                          ),
+                                                          child: Theme(
+                                                            data: ThemeData(
+                                                              splashColor: Colors
+                                                                  .transparent,
+                                                              highlightColor:
+                                                                  Colors
+                                                                      .transparent,
+                                                            ),
+                                                            child:
+                                                                DropdownButton<
+                                                                    int>(
+                                                              elevation: 0,
+                                                              underline:
+                                                                  const SizedBox(),
+                                                              borderRadius:
+                                                                  BorderRadius.circular(
+                                                                      Dimensions
+                                                                          .smallRadius),
+                                                              padding:
+                                                                  const EdgeInsets
+                                                                      .symmetric(
+                                                                      horizontal:
+                                                                          10),
+                                                              style: boldMediumLarge
+                                                                  .copyWith(
+                                                                      color: ColorResources
+                                                                          .buttonColorDark),
+                                                              value: controller
+                                                                  .byDefaultRingSize
+                                                                  .value,
+                                                              items: controller
+                                                                  .ringSize
+                                                                  .map((value) {
+                                                                return DropdownMenuItem<
+                                                                    int>(
+                                                                  value: value,
+                                                                  child:
+                                                                      Padding(
+                                                                    padding: const EdgeInsets
+                                                                        .symmetric(
+                                                                        horizontal:
+                                                                            5,
+                                                                        vertical:
+                                                                            3),
+                                                                    child:
+                                                                        Center(
+                                                                      child:
+                                                                          Text(
+                                                                        '$value',
+                                                                        style: mediumExtraLarge.copyWith(
                                                                             color:
                                                                                 ColorResources.buttonColorDark),
+                                                                      ),
+                                                                    ),
                                                                   ),
-                                                                ),
-                                                              ),
+                                                                );
+                                                              }).toList(),
+                                                              onChanged:
+                                                                  (value) {
+                                                                print(
+                                                                    "Ring Size00: $value");
+                                                                controller
+                                                                    .ringSizeOnChangValue(
+                                                                        value);
+                                                              },
+                                                              iconEnabledColor:
+                                                                  Colors.black,
+                                                              iconDisabledColor:
+                                                                  Colors.grey,
+                                                            ),
+                                                          ),
+                                                        );
+                                                      },
+                                                    ),
+                                                  ],
+                                                ),
+                                                RichText(
+                                                  text: TextSpan(
+                                                    text: "Size Guide",
+                                                    style: mediumSmall.copyWith(
+                                                      decoration: TextDecoration
+                                                          .underline,
+                                                      color: ColorResources
+                                                          .buttonColor,
+                                                    ),
+                                                    recognizer:
+                                                        TapGestureRecognizer()
+                                                          ..onTap = () {
+                                                            showDialog(
+                                                              context: context,
+                                                              builder: (context) =>
+                                                                  buildSizeGuideDialog(
+                                                                      context),
                                                             );
                                                           },
-                                                        ).toList(),
-                                                        onChanged: (value) {
-                                                          print(
-                                                              "Ring Size00: $value");
-                                                          // Update the ring size value when changed
-                                                          controller
-                                                              .ringSizeOnChangValue(
-                                                                  value);
-                                                        },
-                                                        iconEnabledColor:
-                                                            Colors.black,
-                                                        // Dropdown icon color
-                                                        iconDisabledColor: Colors
-                                                            .grey, // Disabled state color
-                                                      ),
-                                                    ),
-                                                  );
-                                                },
-                                              ),
-                                            ],
-                                          ),
-                                          RichText(
-                                            text: TextSpan(
-                                              text: "Size Guide",
-                                              style: mediumSmall.copyWith(
-                                                decoration:
-                                                    TextDecoration.underline,
-                                                color:
-                                                    ColorResources.buttonColor,
-                                              ),
-                                              recognizer: TapGestureRecognizer()
-                                                ..onTap = () {
-                                                  showDialog(
-                                                    context: context,
-                                                    builder: (context) =>
-                                                        buildSizeGuideDialog(
-                                                            context),
-                                                  );
-                                                },
-                                            ),
-                                          )
+                                                  ),
+                                                ),
+                                              ],
+                                            )
+                                          else
+                                            SizedBox
+                                                .shrink(), // Show nothing if not ring/bracelet/bangle
                                         ],
                                       ),
+
                                       // const SizedBox(
                                       //     height: Dimensions.space5),
                                       // Text(
@@ -1120,12 +1233,174 @@ class _ProductScreenState extends State<ProductScreen> {
                                       ),
                                       const SizedBox(
                                           height: Dimensions.space15),
+                                      Container(
+                                        padding: const EdgeInsets.all(13),
+                                        decoration: BoxDecoration(
+                                          color: ColorResources
+                                              .lightGreenBackgroundColour,
+                                          borderRadius:
+                                              BorderRadius.circular(12),
+                                          boxShadow: [
+                                            BoxShadow(
+                                              color:
+                                                  Colors.grey.withOpacity(0.2),
+                                              blurRadius: 8,
+                                              offset: const Offset(0, 2),
+                                            ),
+                                          ],
+                                        ),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              LocalStrings.additionalOffers,
+                                              style: boldLarge.copyWith(
+                                                fontSize: 16,
+                                              ),
+                                            ),
+                                            const SizedBox(
+                                                height: Dimensions.space12),
+                                            // First Expansion Tile in its own Card
+                                            Container(
+                                              color: ColorResources.whiteColor,
+                                              child: ExpansionTile(
+                                                backgroundColor: Colors.white,
+                                                tilePadding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 16),
+                                                leading: const Icon(
+                                                  Icons.local_offer,
+                                                  size: 19,
+                                                  color:
+                                                      const Color(0xff00362A),
+                                                ),
+                                                trailing: const Icon(
+                                                  Icons.add,
+                                                  color:
+                                                      const Color(0xff00362A),
+                                                ),
+                                                title: Text(
+                                                  "Flat 10% off on diamond above 1 carat",
+                                                  style: semiBoldSmall.copyWith(
+                                                    color:
+                                                        const Color(0xff00362A),
+                                                  ),
+                                                ),
+                                                children: [
+                                                  Container(
+                                                    padding: const EdgeInsets
+                                                        .symmetric(
+                                                        horizontal: 16,
+                                                        vertical: 10),
+                                                    child: Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceBetween,
+                                                      children: [
+                                                        const Text(
+                                                          "NATURE10",
+                                                          style: TextStyle(
+                                                              fontSize: 16),
+                                                        ),
+                                                        InkWell(
+                                                          onTap: () {
+                                                            Clipboard.setData(
+                                                              const ClipboardData(
+                                                                text:
+                                                                    "NATURE10",
+                                                              ),
+                                                            );
+                                                          },
+                                                          child: Text(
+                                                            "Copy",
+                                                            style: mediumSmall
+                                                                .copyWith(
+                                                              color: const Color(
+                                                                  0xff00362A),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            const SizedBox(
+                                                height: Dimensions.space10),
+                                            // Second Expansion Tile in its own Card
+                                            Container(
+                                              color: ColorResources.whiteColor,
+                                              child: ExpansionTile(
+                                                tilePadding:
+                                                    const EdgeInsets.symmetric(
+                                                        horizontal: 16),
+                                                leading: const Icon(
+                                                  Icons.local_offer,
+                                                  size: 19,
+                                                  color:
+                                                      const Color(0xff00362A),
+                                                ),
+                                                trailing: const Icon(
+                                                  Icons.add,
+                                                  color:
+                                                      const Color(0xff00362A),
+                                                ),
+                                                title: Text(
+                                                  "Flat 20% off on making charges",
+                                                  style: semiBoldSmall.copyWith(
+                                                    color:
+                                                        const Color(0xff00362A),
+                                                  ),
+                                                ),
+                                                children: [
+                                                  Container(
+                                                    padding: const EdgeInsets
+                                                        .symmetric(
+                                                        horizontal: 16,
+                                                        vertical: 10),
+                                                    child: Row(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .spaceBetween,
+                                                      children: [
+                                                        const Text("CRAFT20",
+                                                            style: TextStyle(
+                                                                fontSize: 16)),
+                                                        InkWell(
+                                                          onTap: () {
+                                                            Clipboard.setData(
+                                                              const ClipboardData(
+                                                                  text:
+                                                                      "CRAFT20"),
+                                                            );
+                                                          },
+                                                          child: Text(
+                                                            "Copy",
+                                                            style: mediumSmall
+                                                                .copyWith(
+                                                              color: const Color(
+                                                                  0xff00362A),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      const SizedBox(
+                                          height: Dimensions.space20),
                                       ExpansionTile(
                                         initiallyExpanded: true,
                                         tilePadding: EdgeInsets.zero,
                                         collapsedBackgroundColor: ColorResources
-                                            .borderColor
-                                            .withOpacity(0.1),
+                                            .lightGreenBackgroundColour,
                                         trailing: const Padding(
                                           padding: EdgeInsets.all(8.0),
                                           child: Icon(
@@ -1312,7 +1587,7 @@ class _ProductScreenState extends State<ProductScreen> {
                                                             width: Dimensions
                                                                 .space7),
                                                         Text(
-                                                          "${controller.productData?.diamondWt}",
+                                                          "${controller.productData?.diamondQt} CT",
                                                           style: semiBoldDefault
                                                               .copyWith(
                                                                   color: ColorResources
@@ -1441,8 +1716,7 @@ class _ProductScreenState extends State<ProductScreen> {
                                         key: expansionTileKey,
                                         tilePadding: EdgeInsets.zero,
                                         collapsedBackgroundColor: ColorResources
-                                            .borderColor
-                                            .withOpacity(0.1),
+                                            .lightGreenBackgroundColour,
                                         trailing: const Padding(
                                           padding: EdgeInsets.all(8.0),
                                           child: Icon(
@@ -1505,7 +1779,7 @@ class _ProductScreenState extends State<ProductScreen> {
                                                     : controller
                                                         .productData?.price18KT,
                                                 controller
-                                                    .productData?.diamondprice,
+                                                    .productData?.diamondPrice,
                                                 controller.ktCurrentIndex
                                                             .value ==
                                                         0
@@ -1582,8 +1856,7 @@ class _ProductScreenState extends State<ProductScreen> {
                                       ExpansionTile(
                                         tilePadding: EdgeInsets.zero,
                                         collapsedBackgroundColor: ColorResources
-                                            .borderColor
-                                            .withOpacity(0.1),
+                                            .lightGreenBackgroundColour,
                                         trailing: const Padding(
                                           padding: EdgeInsets.all(8.0),
                                           child: Icon(
@@ -1607,10 +1880,14 @@ class _ProductScreenState extends State<ProductScreen> {
                                             padding: const EdgeInsets.symmetric(
                                                 horizontal: 15, vertical: 10),
                                             child: Text(
-                                              "No description available.",
+                                              "${controller.productData?.description ?? "No description available."}",
                                               style: mediumDefault.copyWith(
-                                                color:
-                                                    ColorResources.borderColor,
+                                                color: controller.productData
+                                                            ?.description ==
+                                                        null
+                                                    ? ColorResources.borderColor
+                                                    : ColorResources
+                                                        .buttonColor,
                                               ),
                                             ),
                                           ),
@@ -1623,8 +1900,7 @@ class _ProductScreenState extends State<ProductScreen> {
                                       ExpansionTile(
                                         tilePadding: EdgeInsets.zero,
                                         collapsedBackgroundColor: ColorResources
-                                            .borderColor
-                                            .withOpacity(0.1),
+                                            .lightGreenBackgroundColour,
                                         trailing: const Padding(
                                           padding: EdgeInsets.all(8.0),
                                           child: Icon(
@@ -1704,8 +1980,7 @@ class _ProductScreenState extends State<ProductScreen> {
                                                   height: size.height * 0.095,
                                                   decoration: BoxDecoration(
                                                     color: ColorResources
-                                                        .shimmerEffectBaseColor
-                                                        .withOpacity(0.3),
+                                                        .lightGreenBackgroundColour,
                                                     borderRadius:
                                                         BorderRadius.circular(
                                                             Dimensions
@@ -1722,16 +1997,16 @@ class _ProductScreenState extends State<ProductScreen> {
                                                         starCount: 1,
                                                         allowHalfRating: true,
                                                         borderColor:
-                                                            ColorResources
-                                                                .blackColor,
+                                                            const Color(
+                                                                0xff00362A),
                                                         color: controller
                                                                     .getRatingViewModel
                                                                     ?.averageRating !=
                                                                 null
                                                             ? ColorResources
                                                                 .updateCardColor
-                                                            : ColorResources
-                                                                .inactiveTabColor,
+                                                            : const Color(
+                                                                0xff00362A),
                                                       ),
                                                       /* controller.getRatingViewModel
                                                                     ?.averageRating !=
@@ -1753,9 +2028,13 @@ class _ProductScreenState extends State<ProductScreen> {
                                                                 .averageRating!
                                                             : LocalStrings
                                                                 .byDefaultRating,
-                                                        style: boldOverLarge.copyWith(
-                                                            fontSize: Dimensions
-                                                                .fontOverSmallLarge),
+                                                        style: boldOverLarge
+                                                            .copyWith(
+                                                          fontSize: Dimensions
+                                                              .fontOverSmallLarge,
+                                                          color: const Color(
+                                                              0xff00362A),
+                                                        ),
                                                       ),
                                                       const SizedBox(
                                                           width: Dimensions
@@ -1785,13 +2064,19 @@ class _ProductScreenState extends State<ProductScreen> {
                                                                     .byDefaultRating,
                                                             style:
                                                                 boldMediumLarge
-                                                                    .copyWith(),
+                                                                    .copyWith(
+                                                              color: const Color(
+                                                                  0xff00362A),
+                                                            ),
                                                           ),
                                                           Text(
                                                             LocalStrings.review,
                                                             style:
                                                                 mediumMediumLarge
-                                                                    .copyWith(),
+                                                                    .copyWith(
+                                                              color: const Color(
+                                                                  0xff00362A),
+                                                            ),
                                                           ),
                                                         ],
                                                       ),
@@ -1803,8 +2088,7 @@ class _ProductScreenState extends State<ProductScreen> {
                                                 Container(
                                                   decoration: BoxDecoration(
                                                     color: ColorResources
-                                                        .shimmerEffectBaseColor
-                                                        .withOpacity(0.3),
+                                                        .lightGreenBackgroundColour,
                                                     borderRadius:
                                                         BorderRadius.circular(
                                                             Dimensions
@@ -1855,15 +2139,18 @@ class _ProductScreenState extends State<ProductScreen> {
                                                                     Text(
                                                                       "$star",
                                                                       style: boldMediumLarge
-                                                                          .copyWith(),
+                                                                          .copyWith(
+                                                                        color: const Color(
+                                                                            0xff00362A),
+                                                                      ),
                                                                     ),
                                                                     const Icon(
-                                                                        Icons
-                                                                            .star,
-                                                                        size:
-                                                                            20,
-                                                                        color: ColorResources
-                                                                            .blackColor),
+                                                                      Icons
+                                                                          .star,
+                                                                      size: 20,
+                                                                      color: const Color(
+                                                                          0xff00362A),
+                                                                    ),
                                                                     Expanded(
                                                                       child:
                                                                           Padding(
@@ -1878,7 +2165,7 @@ class _ProductScreenState extends State<ProductScreen> {
                                                                           color:
                                                                               ColorResources.blackColor,
                                                                           backgroundColor:
-                                                                              Colors.grey[300],
+                                                                              const Color(0xffCFE7E2),
                                                                           minHeight:
                                                                               9,
                                                                           borderRadius:
@@ -1889,7 +2176,10 @@ class _ProductScreenState extends State<ProductScreen> {
                                                                     Text(
                                                                       "$count",
                                                                       style: boldMediumLarge
-                                                                          .copyWith(),
+                                                                          .copyWith(
+                                                                        color: const Color(
+                                                                            0xff00362A),
+                                                                      ),
                                                                     ),
                                                                   ],
                                                                 ),
@@ -1910,8 +2200,7 @@ class _ProductScreenState extends State<ProductScreen> {
                                                   height: size.height * 0.10,
                                                   decoration: BoxDecoration(
                                                     color: ColorResources
-                                                        .shimmerEffectBaseColor
-                                                        .withOpacity(0.3),
+                                                        .lightGreenBackgroundColour,
                                                     borderRadius:
                                                         BorderRadius.circular(
                                                             Dimensions
@@ -1928,7 +2217,10 @@ class _ProductScreenState extends State<ProductScreen> {
                                                               .clickReview,
                                                           style:
                                                               mediumMediumLarge
-                                                                  .copyWith(),
+                                                                  .copyWith(
+                                                            color: const Color(
+                                                                0xff00362A),
+                                                          ),
                                                         ),
                                                         const SizedBox(
                                                             height: Dimensions
@@ -1954,10 +2246,10 @@ class _ProductScreenState extends State<ProductScreen> {
                                                             size: 35,
                                                             starCount: 5,
                                                             borderColor:
-                                                                ColorResources
-                                                                    .blackColor,
-                                                            color: ColorResources
-                                                                .updateCardColor,
+                                                                const Color(
+                                                                    0xffCFE8E2),
+                                                            color: const Color(
+                                                                0xffCFE8E2),
                                                             onRatingChanged:
                                                                 (rating) {
                                                               if (controller

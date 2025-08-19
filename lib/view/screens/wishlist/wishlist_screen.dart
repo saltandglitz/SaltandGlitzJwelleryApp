@@ -1,10 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get_storage/get_storage.dart';
-import 'package:saltandGlitz/core/route/route.dart';
 import 'package:saltandGlitz/core/utils/images.dart';
-import 'package:saltandGlitz/data/controller/add_to_cart/add_to_cart_controller.dart';
 import 'package:saltandGlitz/data/controller/collection/collection_controller.dart';
 import 'package:saltandGlitz/data/controller/wishlist/wishlist_controller.dart';
 import 'package:saltandGlitz/data/product/product_controller.dart';
@@ -75,7 +72,6 @@ class _WishlistScreenState extends State<WishlistScreen> {
                   Icons.arrow_back_rounded,
                 ),
               ),
-
               backgroundColor: ColorResources.whiteColor,
               // Set the background color of the AppBar
               elevation: 0, // Remove default shadow
@@ -239,7 +235,6 @@ class _WishlistScreenState extends State<WishlistScreen> {
                                                             .productId!
                                                             .image01,
                                                         index: 3);
-
                                                     //Todo : Seen move to cart dialog box
                                                     _showCustomIntegerPicker(
                                                         context,
@@ -266,43 +261,43 @@ class _WishlistScreenState extends State<WishlistScreen> {
                                                     ),
                                                   ),
                                                 ),
-                                                const Spacer(),
-                                                GestureDetector(
-                                                  onTap: () {
-                                                    /// Share product clicked analysis
-                                                    AppAnalytics().actionTriggerWithProductsLogs(
-                                                        eventName: LocalStrings
-                                                            .logWishListShareProduct,
-                                                        productName: controller
-                                                            .wishlistProducts[
-                                                                index]
-                                                            .productId!
-                                                            .title,
-                                                        productImage: controller
-                                                            .wishlistProducts[
-                                                                index]
-                                                            .productId!
-                                                            .image01,
-                                                        index: 3);
-                                                  },
-                                                  child: Container(
-                                                    height: size.height * 0.040,
-                                                    width: size.width * 0.090,
-                                                    decoration: BoxDecoration(
-                                                      borderRadius: BorderRadius
-                                                          .circular(Dimensions
-                                                              .defaultRadius),
-                                                      border: Border.all(
-                                                          color: ColorResources
-                                                              .buttonColor,
-                                                          width: 1.5),
-                                                    ),
-                                                    child: const Center(
-                                                      child: Icon(
-                                                          Icons.share_rounded),
-                                                    ),
-                                                  ),
-                                                ),
+                                                // const Spacer(),
+                                                // GestureDetector(
+                                                //   onTap: () {
+                                                //     /// Share product clicked analysis
+                                                //     AppAnalytics().actionTriggerWithProductsLogs(
+                                                //         eventName: LocalStrings
+                                                //             .logWishListShareProduct,
+                                                //         productName: controller
+                                                //             .wishlistProducts[
+                                                //                 index]
+                                                //             .productId!
+                                                //             .title,
+                                                //         productImage: controller
+                                                //             .wishlistProducts[
+                                                //                 index]
+                                                //             .productId!
+                                                //             .image01,
+                                                //         index: 3);
+                                                //   },
+                                                //   child: Container(
+                                                //     height: size.height * 0.040,
+                                                //     width: size.width * 0.090,
+                                                //     decoration: BoxDecoration(
+                                                //       borderRadius: BorderRadius
+                                                //           .circular(Dimensions
+                                                //               .defaultRadius),
+                                                //       border: Border.all(
+                                                //           color: ColorResources
+                                                //               .buttonColor,
+                                                //           width: 1.5),
+                                                //     ),
+                                                //     child: const Center(
+                                                //       child: Icon(
+                                                //           Icons.share_rounded),
+                                                //     ),
+                                                //   ),
+                                                // ),
                                               ],
                                             ),
                                           ],
@@ -344,9 +339,9 @@ class _WishlistScreenState extends State<WishlistScreen> {
                                           height: 20,
                                           width: 20,
                                           decoration: const BoxDecoration(
-                                              shape: BoxShape.circle,
-                                              color:
-                                                  ColorResources.buttonColor),
+                                            shape: BoxShape.circle,
+                                            color: ColorResources.buttonColor,
+                                          ),
                                           child: const Icon(
                                             Icons.close,
                                             size: 15,

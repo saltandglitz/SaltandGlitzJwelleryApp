@@ -72,7 +72,9 @@ dependencies:
   flutter_inappwebview: ^6.0.0
   permission_handler: ^11.2.0
   http: any
-
+  url_launcher: ^6.2.5
+  font_awesome_flutter: any
+  flutter_svg: any
 
 dev_dependencies:
   flutter_test:

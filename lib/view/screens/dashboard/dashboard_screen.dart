@@ -2,6 +2,8 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:saltandGlitz/core/route/route.dart';
 import 'package:saltandGlitz/core/utils/dimensions.dart';
@@ -13,6 +15,7 @@ import 'package:saltandGlitz/view/components/cached_image.dart';
 import 'package:saltandGlitz/view/components/common_button.dart';
 import 'package:saltandGlitz/view/components/common_textfield.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:video_player/video_player.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 import '../../../analytics/app_analytics.dart';
@@ -75,6 +78,10 @@ class _DashboardScreenState extends State<DashboardScreen>
     );
   }
 
+  bool isKnowExpanded = false;
+  bool isCustomerServiceExpanded = false;
+  bool isContactUsExpanded = false;
+
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
@@ -110,7 +117,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                 Get.toNamed(RouteHelper.wishlistScreen);
                 // bottomSheetWidget();
               },
-              icon: const Icon(Icons.favorite_rounded),
+              icon: const Icon(CupertinoIcons.heart),
               color: ColorResources.iconColor,
             ),
             Stack(
@@ -120,7 +127,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                   onPressed: () {
                     Get.toNamed(RouteHelper.addCartScreen);
                   },
-                  icon: const Icon(Icons.shopping_cart),
+                  icon: const Icon(CupertinoIcons.shopping_cart),
                   color: ColorResources.iconColor,
                 ),
                 // Container(
@@ -333,323 +340,400 @@ class _DashboardScreenState extends State<DashboardScreen>
                             ),
                             const SizedBox(height: Dimensions.space8),
                             /* Show jewellery products auto loop method */
-                            Padding(
-                              padding: const EdgeInsets.all(13),
-                              child: GetBuilder<MainController>(
-                                builder: (ctrl) {
-                                  return Stack(
-                                    alignment:
-                                        AlignmentDirectional.bottomCenter,
-                                    children: [
-                                      ClipRRect(
-                                        borderRadius: BorderRadius.circular(10),
-                                        child: mediaList.isEmpty
+                            GestureDetector(
+                              onTap: () {
+                                categoriesController.filterCategoriesApiMethod(
+                                    priceOrder: 'newestFirst');
+                                Get.toNamed(RouteHelper.collectionScreen);
+                              },
+                              child: Padding(
+                                padding: const EdgeInsets.all(13),
+                                child: GetBuilder<MainController>(
+                                  builder: (ctrl) {
+                                    return Stack(
+                                      alignment:
+                                          AlignmentDirectional.bottomCenter,
+                                      children: [
+                                        ClipRRect(
+                                          borderRadius:
+                                              BorderRadius.circular(10),
+                                          child: mediaList.isEmpty
+                                              ? Shimmer.fromColors(
+                                                  baseColor: ColorResources
+                                                      .shimmerEffectBaseColor,
+                                                  highlightColor: ColorResources
+                                                      .shimmerEffectHighlightColor,
+                                                  child: AspectRatio(
+                                                    aspectRatio: 0.8,
+                                                    child: Container(
+                                                      width: double.infinity,
+                                                      color: ColorResources
+                                                          .whiteColor,
+                                                    ),
+                                                  ),
+                                                )
+                                              : CarouselSlider.builder(
+                                                  key: const PageStorageKey(
+                                                      'carousel_slider_key'),
+                                                  itemCount: mediaList.length,
+                                                  carouselController: controller
+                                                      .carouselController,
+                                                  options: CarouselOptions(
+                                                    onPageChanged:
+                                                        (index, reason) {
+                                                      controller.onPageChanged(
+                                                          index, reason);
+                                                      controller.currentIndex
+                                                          .value = index;
+                                                      controller
+                                                          .handleMediaPlay(
+                                                              index);
+                                                    },
+                                                    autoPlay: true,
+                                                    enlargeCenterPage: true,
+                                                    aspectRatio: 0.8,
+                                                    viewportFraction: 1,
+                                                  ),
+                                                  itemBuilder:
+                                                      (BuildContext context,
+                                                          int index,
+                                                          int realIndex) {
+                                                    final media =
+                                                        mediaList[index];
+                                                    final mediaType =
+                                                        media.type;
+
+                                                    if (mediaType ==
+                                                        'goldImage') {
+                                                      return CachedCommonImage(
+                                                        networkImageUrl: media
+                                                                .mobileBannerImage ??
+                                                            '',
+                                                        width: double.infinity,
+                                                      );
+                                                    } else if (mediaType ==
+                                                        'goldVideo') {
+                                                      return controller
+                                                                  .currentIndex
+                                                                  .value ==
+                                                              index
+                                                          ? Obx(
+                                                              () {
+                                                                if (controller
+                                                                        .isVideoReady
+                                                                        .value &&
+                                                                    controller
+                                                                            .videoController
+                                                                            ?.value
+                                                                            .isInitialized ==
+                                                                        true) {
+                                                                  return SizedBox(
+                                                                    width: double
+                                                                        .infinity,
+                                                                    child:
+                                                                        LayoutBuilder(
+                                                                      builder:
+                                                                          (context,
+                                                                              constraints) {
+                                                                        return _buildVideoPlayer(
+                                                                            controller.videoController);
+                                                                      },
+                                                                    ),
+                                                                  );
+                                                                } else {
+                                                                  return Shimmer
+                                                                      .fromColors(
+                                                                    baseColor:
+                                                                        ColorResources
+                                                                            .shimmerEffectBaseColor,
+                                                                    highlightColor:
+                                                                        ColorResources
+                                                                            .shimmerEffectHighlightColor,
+                                                                    child:
+                                                                        Container(
+                                                                      height: size
+                                                                              .height *
+                                                                          0.40,
+                                                                      width: double
+                                                                          .infinity,
+                                                                      color: ColorResources
+                                                                          .inactiveTabColor,
+                                                                    ),
+                                                                  );
+                                                                }
+                                                              },
+                                                            )
+                                                          : Container();
+                                                    }
+
+                                                    return Container(); // Fallback
+                                                  },
+                                                ),
+                                        ),
+                                        mediaList.isEmpty
                                             ? Shimmer.fromColors(
                                                 baseColor: ColorResources
                                                     .shimmerEffectBaseColor,
                                                 highlightColor: ColorResources
                                                     .shimmerEffectHighlightColor,
-                                                child: AspectRatio(
-                                                  aspectRatio: 0.8,
-                                                  child: Container(
-                                                    width: double.infinity,
-                                                    color: ColorResources
-                                                        .whiteColor,
+                                                child: Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: List.generate(
+                                                    5,
+                                                    (i) => const Padding(
+                                                      padding:
+                                                          EdgeInsets.symmetric(
+                                                              horizontal: 7,
+                                                              vertical: 15),
+                                                      child: CircleAvatar(
+                                                        radius: 3.5,
+                                                        backgroundColor:
+                                                            ColorResources
+                                                                .whiteColor,
+                                                      ),
+                                                    ),
                                                   ),
                                                 ),
                                               )
-                                            : CarouselSlider.builder(
-                                                key: const PageStorageKey(
-                                                    'carousel_slider_key'),
-                                                itemCount: mediaList.length,
-                                                carouselController: controller
-                                                    .carouselController,
-                                                options: CarouselOptions(
-                                                  onPageChanged:
-                                                      (index, reason) {
-                                                    controller.onPageChanged(
-                                                        index, reason);
-                                                    controller.currentIndex
-                                                        .value = index;
-                                                    controller
-                                                        .handleMediaPlay(index);
-                                                  },
-                                                  autoPlay: true,
-                                                  enlargeCenterPage: true,
-                                                  aspectRatio: 0.8,
-                                                  viewportFraction: 1,
-                                                ),
-                                                itemBuilder:
-                                                    (BuildContext context,
-                                                        int index,
-                                                        int realIndex) {
-                                                  final media =
-                                                      mediaList[index];
-                                                  final mediaType = media.type;
-
-                                                  if (mediaType ==
-                                                      'goldImage') {
-                                                    return CachedCommonImage(
-                                                      networkImageUrl: media
-                                                              .mobileBannerImage ??
-                                                          '',
-                                                      width: double.infinity,
-                                                    );
-                                                  } else if (mediaType ==
-                                                      'goldVideo') {
-                                                    return controller
-                                                                .currentIndex
-                                                                .value ==
-                                                            index
-                                                        ? Obx(
-                                                            () {
-                                                              if (controller
-                                                                      .isVideoReady
-                                                                      .value &&
-                                                                  controller
-                                                                          .videoController
-                                                                          ?.value
-                                                                          .isInitialized ==
-                                                                      true) {
-                                                                return SizedBox(
-                                                                  width: double
-                                                                      .infinity,
-                                                                  child:
-                                                                      LayoutBuilder(
-                                                                    builder:
-                                                                        (context,
-                                                                            constraints) {
-                                                                      return _buildVideoPlayer(
-                                                                          controller
-                                                                              .videoController);
-                                                                    },
-                                                                  ),
-                                                                );
-                                                              } else {
-                                                                return Shimmer
-                                                                    .fromColors(
-                                                                  baseColor:
-                                                                      ColorResources
-                                                                          .shimmerEffectBaseColor,
-                                                                  highlightColor:
-                                                                      ColorResources
-                                                                          .shimmerEffectHighlightColor,
-                                                                  child:
-                                                                      Container(
-                                                                    height: size
-                                                                            .height *
-                                                                        0.40,
-                                                                    width: double
-                                                                        .infinity,
-                                                                    color: ColorResources
-                                                                        .inactiveTabColor,
-                                                                  ),
-                                                                );
-                                                              }
-                                                            },
-                                                          )
-                                                        : Container();
-                                                  }
-
-                                                  return Container(); // Fallback
-                                                },
-                                              ),
-                                      ),
-                                      mediaList.isEmpty
-                                          ? Shimmer.fromColors(
-                                              baseColor: ColorResources
-                                                  .shimmerEffectBaseColor,
-                                              highlightColor: ColorResources
-                                                  .shimmerEffectHighlightColor,
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: List.generate(
-                                                  5,
-                                                  (i) => const Padding(
-                                                    padding:
-                                                        EdgeInsets.symmetric(
-                                                            horizontal: 7,
-                                                            vertical: 15),
-                                                    child: CircleAvatar(
-                                                      radius: 3.5,
-                                                      backgroundColor:
-                                                          ColorResources
-                                                              .whiteColor,
+                                            : Obx(
+                                                () => Row(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: List.generate(
+                                                    mediaList.length,
+                                                    (i) => Padding(
+                                                      padding: const EdgeInsets
+                                                          .symmetric(
+                                                          horizontal: 7,
+                                                          vertical: 15),
+                                                      child: CircleAvatar(
+                                                        radius: 3.5,
+                                                        backgroundColor: controller
+                                                                    .currentIndex
+                                                                    .value ==
+                                                                i
+                                                            ? ColorResources
+                                                                .activeCardColor
+                                                            : ColorResources
+                                                                .inactiveCardColor,
+                                                      ),
                                                     ),
                                                   ),
                                                 ),
                                               ),
-                                            )
-                                          : Obx(
-                                              () => Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: List.generate(
-                                                  mediaList.length,
-                                                  (i) => Padding(
-                                                    padding: const EdgeInsets
-                                                        .symmetric(
-                                                        horizontal: 7,
-                                                        vertical: 15),
-                                                    child: CircleAvatar(
-                                                      radius: 3.5,
-                                                      backgroundColor: controller
-                                                                  .currentIndex
-                                                                  .value ==
-                                                              i
-                                                          ? ColorResources
-                                                              .activeCardColor
-                                                          : ColorResources
-                                                              .inactiveCardColor,
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                    ],
-                                  );
-                                },
+                                      ],
+                                    );
+                                  },
+                                ),
                               ),
                             ),
                             const SizedBox(height: Dimensions.space30),
                             /* Banner images */
                             bottomBannerList.isEmpty
                                 ? const SizedBox()
-                                : GetBuilder(
-                                    init: MainController(),
-                                    builder: (ctrl) {
-                                      String? media = bottomBannerList[0]
-                                          .bannerImage; // Get the media URL
-                                      // Trigger the media playback for this index
-                                      dashboardController.handleMediaPlayback(
-                                          media: media!, index: 0);
-                                      // bool isLoading = bottomBannerList.isEmpty;
-                                      return Padding(
-                                        padding: const EdgeInsets.symmetric(
-                                            horizontal: 13),
-                                        child: ClipRRect(
-                                          borderRadius:
-                                              BorderRadius.circular(12),
-                                          child: bottomBannerList.isEmpty
-                                              ? Shimmer.fromColors(
-                                                  baseColor: ColorResources
-                                                      .shimmerEffectBaseColor,
-                                                  highlightColor: ColorResources
-                                                      .shimmerEffectHighlightColor,
-                                                  child: Container(
-                                                    height: size.height * 0.46,
-                                                    width: double.infinity,
-                                                    decoration: BoxDecoration(
-                                                      color: ColorResources
-                                                          .whiteColor,
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              12),
-                                                    ),
-                                                  ),
-                                                )
-                                              : SizedBox(
+                                : GestureDetector(
+                                    onTap: () {
+                                      categoriesController
+                                          .filterCategoriesApiMethod(
+                                        priceOrder: 'newestFirst',
+                                        filterLocallyBySubCategory:
+                                            'ICONIC', // 👈 logic for 'Iconic' filter
+                                      );
+                                      Get.toNamed(RouteHelper.collectionScreen);
+                                    },
+                                    child: GetBuilder(
+                                      init: MainController(),
+                                      builder: (ctrl) {
+                                        if (bottomBannerList.isEmpty) {
+                                          return Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                                horizontal: 13),
+                                            child: ClipRRect(
+                                              borderRadius:
+                                                  BorderRadius.circular(12),
+                                              child: Shimmer.fromColors(
+                                                baseColor: ColorResources
+                                                    .shimmerEffectBaseColor,
+                                                highlightColor: ColorResources
+                                                    .shimmerEffectHighlightColor,
+                                                child: Container(
                                                   height: size.height * 0.46,
-                                                  child: LayoutBuilder(
-                                                    builder:
-                                                        (context, constraints) {
-                                                      // Ensure the video player is only built once the layout is done
-                                                      return _buildVideoPlayer(
-                                                          dashboardController
-                                                              .videoControllers[0]);
-                                                    },
+                                                  width: double.infinity,
+                                                  decoration: BoxDecoration(
+                                                    color: ColorResources
+                                                        .whiteColor,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            12),
                                                   ),
                                                 ),
-                                        ),
-                                      );
-                                    },
-                                  ),
-                            const SizedBox(height: Dimensions.space10),
-                            GetBuilder(
-                              init: MainController(),
-                              builder: (ctrl) {
-                                // bool isLoading = bottomBannerList.isEmpty ||
-                                //     bottomBannerList.length < 2;
-                                return Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 13),
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(
-                                        Dimensions.defaultRadius),
-                                    child: bottomBannerList.isEmpty
-                                        ? Shimmer.fromColors(
-                                            baseColor: ColorResources
-                                                .shimmerEffectBaseColor,
-                                            highlightColor: ColorResources
-                                                .shimmerEffectHighlightColor,
-                                            child: Container(
-                                              height: size.height * 0.23,
-                                              width: double.infinity,
-                                              decoration: BoxDecoration(
-                                                color:
-                                                    ColorResources.whiteColor,
-                                                borderRadius:
-                                                    BorderRadius.circular(
-                                                        Dimensions
-                                                            .defaultRadius),
                                               ),
                                             ),
-                                          )
-                                        : CachedCommonImage(
-                                            key: const PageStorageKey(
-                                                'summer_Rings_Image'),
-                                            height: size.height * 0.23,
-                                            width: double.infinity,
-                                            networkImageUrl:
-                                                bottomBannerList[1].bannerImage,
+                                          );
+                                        }
+
+                                        return Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                              horizontal: 13),
+                                          child: ClipRRect(
+                                            borderRadius:
+                                                BorderRadius.circular(12),
+                                            child: Obx(() {
+                                              return dashboardController
+                                                              .videoControllers
+                                                              .length >
+                                                          0 &&
+                                                      dashboardController
+                                                                  .videoControllers[
+                                                              0] !=
+                                                          null &&
+                                                      dashboardController
+                                                          .isVideoReadyList[0]
+                                                  ? SizedBox(
+                                                      height:
+                                                          size.height * 0.46,
+                                                      child: LayoutBuilder(
+                                                        builder: (context,
+                                                            constraints) {
+                                                          return AspectRatio(
+                                                            aspectRatio:
+                                                                dashboardController
+                                                                    .videoControllers[
+                                                                        0]!
+                                                                    .value
+                                                                    .aspectRatio,
+                                                            child: VideoPlayer(
+                                                                dashboardController
+                                                                        .videoControllers[
+                                                                    0]!),
+                                                          );
+                                                        },
+                                                      ),
+                                                    )
+                                                  : Container(
+                                                      height:
+                                                          size.height * 0.46,
+                                                      width: double.infinity,
+                                                      decoration: BoxDecoration(
+                                                        color: ColorResources
+                                                            .whiteColor,
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(12),
+                                                      ),
+                                                    );
+                                            }),
                                           ),
+                                        );
+                                      },
+                                    ),
                                   ),
-                                );
+                            const SizedBox(height: Dimensions.space10),
+                            GestureDetector(
+                              onTap: () async {
+                                await categoriesController
+                                    .filterCategoriesApiMethod(
+                                        priceOrder: 'newestFirst');
+                                categoriesController.filterProductsUnder29999();
+                                Get.toNamed(RouteHelper.collectionScreen);
                               },
+                              child: GetBuilder(
+                                init: MainController(),
+                                builder: (ctrl) {
+                                  // bool isLoading = bottomBannerList.isEmpty ||
+                                  //     bottomBannerList.length < 2;
+                                  return Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 13),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(
+                                          Dimensions.defaultRadius),
+                                      child: bottomBannerList.isEmpty
+                                          ? Shimmer.fromColors(
+                                              baseColor: ColorResources
+                                                  .shimmerEffectBaseColor,
+                                              highlightColor: ColorResources
+                                                  .shimmerEffectHighlightColor,
+                                              child: Container(
+                                                height: size.height * 0.23,
+                                                width: double.infinity,
+                                                decoration: BoxDecoration(
+                                                  color:
+                                                      ColorResources.whiteColor,
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          Dimensions
+                                                              .defaultRadius),
+                                                ),
+                                              ),
+                                            )
+                                          : CachedCommonImage(
+                                              key: const PageStorageKey(
+                                                  'summer_Rings_Image'),
+                                              height: size.height * 0.23,
+                                              width: double.infinity,
+                                              networkImageUrl:
+                                                  bottomBannerList[1]
+                                                      .bannerImage,
+                                            ),
+                                    ),
+                                  );
+                                },
+                              ),
                             ),
                             const SizedBox(height: Dimensions.space10),
-                            GetBuilder(
-                              init: MainController(),
-                              builder: (ctrl) {
-                                // bool isLoading = bottomBannerList.isEmpty ||
-                                //     bottomBannerList.length < 2;
-                                return Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 13),
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(
-                                        Dimensions.defaultRadius),
-                                    child: bottomBannerList.isEmpty
-                                        ? Shimmer.fromColors(
-                                            baseColor: ColorResources
-                                                .shimmerEffectBaseColor,
-                                            highlightColor: ColorResources
-                                                .shimmerEffectHighlightColor,
-                                            child: Container(
+                            GestureDetector(
+                              onTap: () async {
+                                await categoriesController
+                                    .filterCategoriesApiMethod(
+                                        priceOrder: 'newestFirst');
+                                categoriesController.filterOnlyOfficeWear();
+                                Get.toNamed(RouteHelper.collectionScreen);
+                              },
+                              child: GetBuilder(
+                                init: MainController(),
+                                builder: (ctrl) {
+                                  // bool isLoading = bottomBannerList.isEmpty ||
+                                  //     bottomBannerList.length < 2;
+                                  return Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 13),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(
+                                          Dimensions.defaultRadius),
+                                      child: bottomBannerList.isEmpty
+                                          ? Shimmer.fromColors(
+                                              baseColor: ColorResources
+                                                  .shimmerEffectBaseColor,
+                                              highlightColor: ColorResources
+                                                  .shimmerEffectHighlightColor,
+                                              child: Container(
+                                                height: size.height * 0.23,
+                                                width: double.infinity,
+                                                decoration: BoxDecoration(
+                                                  color:
+                                                      ColorResources.whiteColor,
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          Dimensions
+                                                              .defaultRadius),
+                                                ),
+                                              ),
+                                            )
+                                          : CachedCommonImage(
+                                              key: const PageStorageKey(
+                                                  'summer_Rings_Image'),
                                               height: size.height * 0.23,
                                               width: double.infinity,
-                                              decoration: BoxDecoration(
-                                                color:
-                                                    ColorResources.whiteColor,
-                                                borderRadius:
-                                                    BorderRadius.circular(
-                                                        Dimensions
-                                                            .defaultRadius),
-                                              ),
+                                              networkImageUrl:
+                                                  bottomBannerList[2]
+                                                      .bannerImage,
                                             ),
-                                          )
-                                        : CachedCommonImage(
-                                            key: const PageStorageKey(
-                                                'summer_Rings_Image'),
-                                            height: size.height * 0.23,
-                                            width: double.infinity,
-                                            networkImageUrl:
-                                                bottomBannerList[2].bannerImage,
-                                          ),
-                                  ),
-                                );
-                              },
+                                    ),
+                                  );
+                                },
+                              ),
                             ),
                             const SizedBox(height: Dimensions.space50),
                             /* The Salt Promise */
@@ -853,7 +937,6 @@ class _DashboardScreenState extends State<DashboardScreen>
                                           fontWeight: FontWeight.bold),
                                     ),
                                     const SizedBox(height: Dimensions.space10),
-
                                     // === GridView (Shimmer or Items) ===
                                     GetBuilder(
                                       init: MainController(),
@@ -1053,9 +1136,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                                         );
                                       },
                                     ),
-
                                     const SizedBox(height: Dimensions.space8),
-
                                     // === View All Button ===
                                     Padding(
                                       padding: const EdgeInsets.symmetric(
@@ -1087,140 +1168,205 @@ class _DashboardScreenState extends State<DashboardScreen>
                                 ),
                               ),
                             ),
-
                             const SizedBox(height: Dimensions.space20),
                             /* Banner images */
-                            GetBuilder(
-                              init: MainController(),
-                              builder: (ctrl) {
-                                String? media = bottomBannerList[3].bannerImage;
-                                dashboardController.handleMediaPlayback(
-                                    media: media!,
-                                    index:
-                                        3); // bool isLoading = bottomBannerList.isEmpty;
-                                return Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 13),
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(12),
-                                    child: bottomBannerList.isEmpty
-                                        ? Shimmer.fromColors(
-                                            baseColor: ColorResources
-                                                .shimmerEffectBaseColor,
-                                            highlightColor: ColorResources
-                                                .shimmerEffectHighlightColor,
-                                            child: Container(
-                                              height: size.height * 0.46,
-                                              width: double.infinity,
-                                              decoration: BoxDecoration(
-                                                color:
-                                                    ColorResources.whiteColor,
-                                                borderRadius:
-                                                    BorderRadius.circular(12),
-                                              ),
-                                            ),
-                                          )
-                                        : SizedBox(
+                            GestureDetector(
+                              onTap: () {
+                                categoriesController.filterCategoriesApiMethod(
+                                  priceOrder: 'newestFirst',
+                                  filterLocallyBySubCategory:
+                                      'COURTSHIP', // 👈 logic for 'Iconic' filter
+                                );
+                                Get.toNamed(RouteHelper.collectionScreen);
+                              },
+                              child: GetBuilder(
+                                init: MainController(),
+                                builder: (ctrl) {
+                                  if (bottomBannerList.isEmpty) {
+                                    return Padding(
+                                      padding: const EdgeInsets.symmetric(
+                                          horizontal: 13),
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(12),
+                                        child: Shimmer.fromColors(
+                                          baseColor: ColorResources
+                                              .shimmerEffectBaseColor,
+                                          highlightColor: ColorResources
+                                              .shimmerEffectHighlightColor,
+                                          child: Container(
                                             height: size.height * 0.46,
-                                            child: LayoutBuilder(
-                                              builder: (context, constraints) {
-                                                // Ensure the video player is only built once the layout is done
-                                                return _buildVideoPlayer(
-                                                  dashboardController
-                                                      .videoControllers[3],
-                                                );
-                                              },
+                                            width: double.infinity,
+                                            decoration: BoxDecoration(
+                                              color: ColorResources.whiteColor,
+                                              borderRadius:
+                                                  BorderRadius.circular(12),
                                             ),
                                           ),
-                                  ),
-                                );
-                              },
+                                        ),
+                                      ),
+                                    );
+                                  }
+
+                                  String? media =
+                                      bottomBannerList[3].bannerImage;
+                                  dashboardController.handleMediaPlayback(
+                                      media: media!, index: 3);
+
+                                  return Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 13),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(12),
+                                      child: Obx(() {
+                                        return dashboardController
+                                                        .videoControllers
+                                                        .length >
+                                                    3 &&
+                                                dashboardController
+                                                        .videoControllers[3] !=
+                                                    null &&
+                                                dashboardController
+                                                        .isVideoReadyList
+                                                        .length >
+                                                    3 &&
+                                                dashboardController
+                                                    .isVideoReadyList[3]
+                                            ? SizedBox(
+                                                height: size.height * 0.46,
+                                                child: LayoutBuilder(
+                                                  builder:
+                                                      (context, constraints) {
+                                                    return AspectRatio(
+                                                      aspectRatio:
+                                                          dashboardController
+                                                              .videoControllers[
+                                                                  3]!
+                                                              .value
+                                                              .aspectRatio,
+                                                      child: VideoPlayer(
+                                                          dashboardController
+                                                                  .videoControllers[
+                                                              3]!),
+                                                    );
+                                                  },
+                                                ),
+                                              )
+                                            : Container(
+                                                height: size.height * 0.46,
+                                                width: double.infinity,
+                                                decoration: BoxDecoration(
+                                                  color:
+                                                      ColorResources.whiteColor,
+                                                  borderRadius:
+                                                      BorderRadius.circular(12),
+                                                ),
+                                              );
+                                      }),
+                                    ),
+                                  );
+                                },
+                              ),
                             ),
                             const SizedBox(height: Dimensions.space10),
-                            GetBuilder(
-                              init: MainController(),
-                              builder: (ctrl) {
-                                // bool isLoading = bottomBannerList.isEmpty ||
-                                //     bottomBannerList.length < 2;
-                                return Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 13),
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(
-                                        Dimensions.defaultRadius),
-                                    child: bottomBannerList.isEmpty
-                                        ? Shimmer.fromColors(
-                                            baseColor: ColorResources
-                                                .shimmerEffectBaseColor,
-                                            highlightColor: ColorResources
-                                                .shimmerEffectHighlightColor,
-                                            child: Container(
+                            GestureDetector(
+                              onTap: () async {
+                                final Uri url = Uri.parse(
+                                    'https://saltandglitz.com/plan-of-purchaes');
+                                if (await canLaunchUrl(url)) {
+                                  await launchUrl(url,
+                                      mode: LaunchMode.externalApplication);
+                                } else {
+                                  // Optionally show error if URL can't be opened
+                                  print("Could not launch $url");
+                                }
+                              },
+                              child: GetBuilder(
+                                init: MainController(),
+                                builder: (ctrl) {
+                                  return Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 13),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(
+                                          Dimensions.defaultRadius),
+                                      child: bottomBannerList.isEmpty
+                                          ? Shimmer.fromColors(
+                                              baseColor: ColorResources
+                                                  .shimmerEffectBaseColor,
+                                              highlightColor: ColorResources
+                                                  .shimmerEffectHighlightColor,
+                                              child: Container(
+                                                height: size.height * 0.23,
+                                                width: double.infinity,
+                                                decoration: BoxDecoration(
+                                                  color:
+                                                      ColorResources.whiteColor,
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          Dimensions
+                                                              .defaultRadius),
+                                                ),
+                                              ),
+                                            )
+                                          : CachedCommonImage(
+                                              key: const PageStorageKey(
+                                                  'summer_Rings_Image'),
                                               height: size.height * 0.23,
                                               width: double.infinity,
-                                              decoration: BoxDecoration(
-                                                color:
-                                                    ColorResources.whiteColor,
-                                                borderRadius:
-                                                    BorderRadius.circular(
-                                                        Dimensions
-                                                            .defaultRadius),
-                                              ),
+                                              networkImageUrl:
+                                                  bottomBannerList[4]
+                                                      .bannerImage,
                                             ),
-                                          )
-                                        : CachedCommonImage(
-                                            key: const PageStorageKey(
-                                                'summer_Rings_Image'),
-                                            height: size.height * 0.23,
-                                            width: double.infinity,
-                                            networkImageUrl:
-                                                bottomBannerList[4].bannerImage,
-                                          ),
-                                  ),
-                                );
-                              },
+                                    ),
+                                  );
+                                },
+                              ),
                             ),
                             const SizedBox(height: Dimensions.space10),
-                            GetBuilder(
-                              init: MainController(),
-                              builder: (ctrl) {
-                                // bool isLoading = bottomBannerList.isEmpty ||
-                                //     bottomBannerList.length < 2;
-                                return Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 13),
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(
-                                        Dimensions.defaultRadius),
-                                    child: bottomBannerList.isEmpty
-                                        ? Shimmer.fromColors(
-                                            baseColor: ColorResources
-                                                .shimmerEffectBaseColor,
-                                            highlightColor: ColorResources
-                                                .shimmerEffectHighlightColor,
-                                            child: Container(
+                            GestureDetector(
+                              child: GetBuilder(
+                                init: MainController(),
+                                builder: (ctrl) {
+                                  // bool isLoading = bottomBannerList.isEmpty ||
+                                  //     bottomBannerList.length < 2;
+                                  return Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 13),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(
+                                          Dimensions.defaultRadius),
+                                      child: bottomBannerList.isEmpty
+                                          ? Shimmer.fromColors(
+                                              baseColor: ColorResources
+                                                  .shimmerEffectBaseColor,
+                                              highlightColor: ColorResources
+                                                  .shimmerEffectHighlightColor,
+                                              child: Container(
+                                                height: size.height * 0.23,
+                                                width: double.infinity,
+                                                decoration: BoxDecoration(
+                                                  color:
+                                                      ColorResources.whiteColor,
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          Dimensions
+                                                              .defaultRadius),
+                                                ),
+                                              ),
+                                            )
+                                          : CachedCommonImage(
+                                              key: const PageStorageKey(
+                                                  'summer_Rings_Image'),
                                               height: size.height * 0.23,
                                               width: double.infinity,
-                                              decoration: BoxDecoration(
-                                                color:
-                                                    ColorResources.whiteColor,
-                                                borderRadius:
-                                                    BorderRadius.circular(
-                                                        Dimensions
-                                                            .defaultRadius),
-                                              ),
+                                              networkImageUrl:
+                                                  bottomBannerList[5]
+                                                      .bannerImage,
                                             ),
-                                          )
-                                        : CachedCommonImage(
-                                            key: const PageStorageKey(
-                                                'summer_Rings_Image'),
-                                            height: size.height * 0.23,
-                                            width: double.infinity,
-                                            networkImageUrl:
-                                                bottomBannerList[5].bannerImage,
-                                          ),
-                                  ),
-                                );
-                              },
+                                    ),
+                                  );
+                                },
+                              ),
                             ),
                             const SizedBox(height: Dimensions.space40),
                             /* Wrapped with love */
@@ -1312,12 +1458,67 @@ class _DashboardScreenState extends State<DashboardScreen>
                                               var item =
                                                   filterCategoryList[itemIndex];
                                               return GestureDetector(
-                                                onTap: () {
-                                                  categoriesController
-                                                      .filterCategoriesApiMethod(
-                                                    wrappedBy:
-                                                        item.filterCategoryName,
-                                                  );
+                                                onTap: () async {
+                                                  String categoryName = item
+                                                          .filterCategoryName
+                                                          ?.trim()
+                                                          .toLowerCase() ??
+                                                      '';
+
+                                                  if (categoryName ==
+                                                      'more jewellery') {
+                                                    // Replace with Men's Collection logic
+                                                    await categoriesController
+                                                        .filterCategoriesApiMethod(
+                                                      title:
+                                                          'Men', // Assuming "Men" is the title for men's products
+                                                    );
+                                                  } else if (categoryName ==
+                                                      'engagement ring') {
+                                                    await categoriesController
+                                                        .filterCategoriesApiMethod(
+                                                      title: 'Ring',
+                                                      filterLocallyBySubCategory:
+                                                          'Engagement',
+                                                    );
+                                                  } else if (categoryName ==
+                                                      'best seller') {
+                                                    await categoriesController
+                                                        .filterCategoriesApiMethod(
+                                                      filterLocallyBySubCategory:
+                                                          'BEST SELLER',
+                                                    );
+                                                  } else if (categoryName ==
+                                                      'new arrivals') {
+                                                    await categoriesController
+                                                        .filterCategoriesApiMethod(
+                                                      priceOrder: 'newestFirst',
+                                                    );
+                                                  } else if (categoryName ==
+                                                      'dailywear') {
+                                                    await categoriesController
+                                                        .filterCategoriesApiMethod(
+                                                      filterLocallyBySubCategory:
+                                                          'Daily Wear',
+                                                    );
+                                                  } else if (categoryName ==
+                                                      'special offers') {
+                                                    await categoriesController
+                                                        .filterCategoriesApiMethod(
+                                                      priceLimit:
+                                                          '29999', // Example logic: show products under ₹29999
+                                                    );
+                                                    categoriesController
+                                                        .filterProductsUnder29999(); // You already have this method
+                                                  } else {
+                                                    // Default fallback
+                                                    await categoriesController
+                                                        .filterCategoriesApiMethod(
+                                                      wrappedBy: item
+                                                          .filterCategoryName,
+                                                    );
+                                                  }
+
                                                   Get.toNamed(RouteHelper
                                                       .collectionScreen);
                                                 },
@@ -1363,64 +1564,71 @@ class _DashboardScreenState extends State<DashboardScreen>
                             ),
                             const SizedBox(height: Dimensions.space40),
                             /* Banner Image */
-                            GetBuilder(
-                              init: MainController(),
-                              builder: (ctrl) {
-                                // bool isLoading = bottomBannerList.isEmpty;
-                                return Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 13),
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(
-                                        Dimensions.defaultRadius),
-                                    child: bottomBannerList.isEmpty
-                                        ? Shimmer.fromColors(
-                                            baseColor: ColorResources
-                                                .shimmerEffectBaseColor,
-                                            highlightColor: ColorResources
-                                                .shimmerEffectHighlightColor,
-                                            child: Container(
-                                              height: size.height * 0.33,
-                                              width: double.infinity,
-                                              decoration: BoxDecoration(
-                                                color:
-                                                    ColorResources.whiteColor,
-                                                borderRadius:
-                                                    BorderRadius.circular(
-                                                        Dimensions
-                                                            .defaultRadius),
-                                              ),
-                                            ),
-                                          )
-                                        : CachedCommonImage(
-                                            key: const PageStorageKey(
-                                                'silver_Gifts_Image'),
-                                            // height: size.height * 0.3,
-                                            height: size.height * 0.6,
-                                            width: double.infinity,
-                                            networkImageUrl:
-                                                bottomBannerList[7].bannerImage,
-                                          ),
-                                  ),
+                            GestureDetector(
+                              onTap: () async {
+                                // Step 1: Call your API with 'newestFirst'
+                                await categoriesController
+                                    .filterCategoriesApiMethod(
+                                  priceOrder: 'newestFirst',
                                 );
+
+                                // Step 2: Navigate to collection screen
+                                Get.toNamed(RouteHelper.collectionScreen);
                               },
+                              child: GetBuilder(
+                                init: MainController(),
+                                builder: (ctrl) {
+                                  return Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 13),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(
+                                          Dimensions.defaultRadius),
+                                      child: bottomBannerList.isEmpty
+                                          ? Shimmer.fromColors(
+                                              baseColor: ColorResources
+                                                  .shimmerEffectBaseColor,
+                                              highlightColor: ColorResources
+                                                  .shimmerEffectHighlightColor,
+                                              child: Container(
+                                                height: size.height * 0.33,
+                                                width: double.infinity,
+                                                decoration: BoxDecoration(
+                                                  color:
+                                                      ColorResources.whiteColor,
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          Dimensions
+                                                              .defaultRadius),
+                                                ),
+                                              ),
+                                            )
+                                          : CachedCommonImage(
+                                              key: const PageStorageKey(
+                                                  'silver_Gifts_Image'),
+                                              height: size.height * 0.6,
+                                              width: double.infinity,
+                                              networkImageUrl:
+                                                  bottomBannerList[7]
+                                                      .bannerImage,
+                                            ),
+                                    ),
+                                  );
+                                },
+                              ),
                             ),
                             const SizedBox(height: Dimensions.space40),
                             /* Gifts for the graduate\him\her */
-                            GetBuilder(
-                              init: MainController(),
-                              builder: (ctrl) {
-                                bool isLoading = giftElementList
-                                    .isEmpty; // Check if the list is empty
+                            GetBuilder<CategoriesController>(
+                              builder: (controller) {
+                                bool isLoading = giftElementList.isEmpty;
 
                                 return Container(
-                                  height: size.height *
-                                      0.51, // Increased overall height
+                                  height: size.height * 0.51,
                                   child: Padding(
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 13.0),
-                                    child: giftElementList.isEmpty
-                                        // Show shimmer effect when list is empty
+                                    child: isLoading
                                         ? GridView.builder(
                                             gridDelegate:
                                                 const SliverGridDelegateWithFixedCrossAxisCount(
@@ -1448,8 +1656,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                                                       highlightColor: ColorResources
                                                           .shimmerEffectHighlightColor,
                                                       child: Container(
-                                                        height:
-                                                            330, // Increased from 300
+                                                        height: 330,
                                                         decoration:
                                                             BoxDecoration(
                                                           color: ColorResources
@@ -1486,7 +1693,6 @@ class _DashboardScreenState extends State<DashboardScreen>
                                               );
                                             },
                                           )
-                                        // Display actual items when list is not empty
                                         : GridView.builder(
                                             gridDelegate:
                                                 const SliverGridDelegateWithFixedCrossAxisCount(
@@ -1500,18 +1706,49 @@ class _DashboardScreenState extends State<DashboardScreen>
                                                 const BouncingScrollPhysics(),
                                             itemCount: giftElementList.length,
                                             itemBuilder: (context, index) {
+                                              final giftItem =
+                                                  giftElementList[index];
                                               return Padding(
                                                 padding:
                                                     const EdgeInsets.symmetric(
                                                         horizontal: 5.0),
                                                 child: GestureDetector(
                                                   onTap: () {
+                                                    String genderFilter = '';
+                                                    List<String> giftForFilter =
+                                                        [];
+
+                                                    final giftNameLower =
+                                                        (giftItem.giftName ??
+                                                                '')
+                                                            .toLowerCase();
+
+                                                    if (giftNameLower ==
+                                                        "superwomen") {
+                                                      genderFilter = "Female";
+                                                      giftForFilter = [
+                                                        "Gift for Her"
+                                                      ];
+                                                    } else if (giftNameLower ==
+                                                        "supermen") {
+                                                      genderFilter = "Male";
+                                                      giftForFilter = [
+                                                        "Gift for Him"
+                                                      ];
+                                                    } else if (giftNameLower ==
+                                                        "grandlove") {
+                                                      genderFilter = "";
+                                                      giftForFilter = [
+                                                        "Gift for Grandparents"
+                                                      ];
+                                                    }
+
                                                     categoriesController
                                                         .filterCategoriesApiMethod(
-                                                      giftFor:
-                                                          giftElementList[index]
-                                                              .giftName,
+                                                      giftFor: giftForFilter,
+                                                      gender: genderFilter,
                                                     );
+
                                                     Get.toNamed(RouteHelper
                                                         .collectionScreen);
                                                   },
@@ -1540,61 +1777,17 @@ class _DashboardScreenState extends State<DashboardScreen>
                                                                   BorderRadius
                                                                       .circular(
                                                                           12),
-                                                              child: giftElementList[
-                                                                              index]
+                                                              child: giftItem
                                                                           .type ==
                                                                       "goldImage"
                                                                   ? CachedCommonImage(
                                                                       networkImageUrl:
-                                                                          giftElementList[index]
-                                                                              .giftImage,
+                                                                          giftItem.giftImage ??
+                                                                              '',
                                                                       width: double
                                                                           .infinity,
                                                                     )
-                                                                  : VisibilityDetector(
-                                                                      key: Key(
-                                                                          "video_$index"),
-                                                                      onVisibilityChanged:
-                                                                          (info) {
-                                                                        if (info.visibleFraction >
-                                                                            0.5) {
-                                                                          controller
-                                                                              .handleMediaPlayback(
-                                                                            media:
-                                                                                giftElementList[index].giftImage ?? "",
-                                                                            index:
-                                                                                index,
-                                                                          );
-                                                                        }
-                                                                      },
-                                                                      child:
-                                                                          Obx(
-                                                                        () {
-                                                                          bool
-                                                                              isReady =
-                                                                              controller.isVideoReadyList.length > index && controller.isVideoReadyList[index] == true;
-                                                                          var videoController = controller.videoControllers.length > index
-                                                                              ? controller.videoControllers[index]
-                                                                              : null;
-
-                                                                          if (isReady &&
-                                                                              videoController != null &&
-                                                                              videoController.value.isInitialized) {
-                                                                            return _buildVideoPlayer(videoController);
-                                                                          } else {
-                                                                            return Shimmer.fromColors(
-                                                                              baseColor: ColorResources.shimmerEffectBaseColor,
-                                                                              highlightColor: ColorResources.shimmerEffectHighlightColor,
-                                                                              child: Container(
-                                                                                height: size.height * 0.30,
-                                                                                width: double.infinity,
-                                                                                color: ColorResources.inactiveTabColor,
-                                                                              ),
-                                                                            );
-                                                                          }
-                                                                        },
-                                                                      ),
-                                                                    ),
+                                                                  : Container(), // Add your video handling here if needed
                                                             ),
                                                           ),
                                                         ),
@@ -1604,8 +1797,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                                                               .space5),
                                                       Expanded(
                                                         child: Text(
-                                                          giftElementList[index]
-                                                                  .giftName ??
+                                                          giftItem.giftName ??
                                                               '',
                                                           maxLines: 2,
                                                           softWrap: true,
@@ -1627,56 +1819,77 @@ class _DashboardScreenState extends State<DashboardScreen>
                                 );
                               },
                             ),
-
                             const SizedBox(height: Dimensions.space20),
                             /* Banner images */
-                            GetBuilder(
-                              init: MainController(),
-                              builder: (ctrl) {
-                                // bool isLoading = bottomBannerList.isEmpty;
-                                return Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 13),
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(
-                                        Dimensions.defaultRadius),
-                                    child: bottomBannerList.isEmpty
-                                        ? Shimmer.fromColors(
-                                            baseColor: ColorResources
-                                                .shimmerEffectBaseColor,
-                                            highlightColor: ColorResources
-                                                .shimmerEffectHighlightColor,
-                                            child: Container(
+                            GestureDetector(
+                              onTap: () async {
+                                final Uri url = Uri.parse(
+                                    'https://saltandglitz.com/privilege');
+                                if (await canLaunchUrl(url)) {
+                                  await launchUrl(url,
+                                      mode: LaunchMode.externalApplication);
+                                } else {
+                                  // Optionally show error if URL can't be opened
+                                  print("Could not launch $url");
+                                }
+                              },
+                              child: GetBuilder(
+                                init: MainController(),
+                                builder: (ctrl) {
+                                  // bool isLoading = bottomBannerList.isEmpty;
+                                  return Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 13),
+                                    child: ClipRRect(
+                                      borderRadius: BorderRadius.circular(
+                                          Dimensions.defaultRadius),
+                                      child: bottomBannerList.isEmpty
+                                          ? Shimmer.fromColors(
+                                              baseColor: ColorResources
+                                                  .shimmerEffectBaseColor,
+                                              highlightColor: ColorResources
+                                                  .shimmerEffectHighlightColor,
+                                              child: Container(
+                                                height: size.height * 0.52,
+                                                width: double.infinity,
+                                                decoration: BoxDecoration(
+                                                  color:
+                                                      ColorResources.whiteColor,
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          Dimensions
+                                                              .defaultRadius),
+                                                ),
+                                              ),
+                                            )
+                                          : CachedCommonImage(
+                                              key: const PageStorageKey(
+                                                  'silver_Gifts_Image'),
                                               height: size.height * 0.52,
                                               width: double.infinity,
-                                              decoration: BoxDecoration(
-                                                color:
-                                                    ColorResources.whiteColor,
-                                                borderRadius:
-                                                    BorderRadius.circular(
-                                                        Dimensions
-                                                            .defaultRadius),
-                                              ),
+                                              networkImageUrl:
+                                                  bottomBannerList[9]
+                                                      .bannerImage,
                                             ),
-                                          )
-                                        : CachedCommonImage(
-                                            key: const PageStorageKey(
-                                                'silver_Gifts_Image'),
-                                            height: size.height * 0.52,
-                                            width: double.infinity,
-                                            networkImageUrl:
-                                                bottomBannerList[9].bannerImage,
-                                          ),
-                                  ),
-                                );
-                              },
+                                    ),
+                                  );
+                                },
+                              ),
                             ),
-                            const SizedBox(height: Dimensions.space40),
+                            const SizedBox(height: Dimensions.space50),
+                            Center(
+                              child: Text(
+                                LocalStrings.sAndg2025,
+                                style: mediumExtraLarge.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 16,
+                                ),
+                              ),
+                            ),
                             const Divider(
                               color: ColorResources.buttonColor,
                               thickness: 1.5,
                             ),
-                            const SizedBox(height: Dimensions.space20),
                             /* POP Card */
                             // Text(
                             //   LocalStrings.planOfPurchase,
@@ -1841,7 +2054,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                             // ),
                             // const SizedBox(height: Dimensions.space30),
                             /* Client care */
-                            Column(
+                            /* Column(
                               children: [
                                 ExpansionTile(
                                   backgroundColor: ColorResources.cardBgColor,
@@ -2007,8 +2220,320 @@ class _DashboardScreenState extends State<DashboardScreen>
                                   ],
                                 ),
                               ],
+                            ),*/
+                            Container(
+                              color: const Color(0xFFEFF9F8),
+                              child: Column(
+                                children: [
+                                  const SizedBox(height: 10),
+                                  // App Download Section
+                                  Container(
+                                    margin: const EdgeInsets.symmetric(
+                                        horizontal: 15, vertical: 10),
+                                    padding: const EdgeInsets.all(15),
+                                    decoration: BoxDecoration(
+                                      color: ColorResources.lightGreenColour
+                                          .withOpacity(0.2),
+                                      borderRadius: BorderRadius.circular(12),
+                                    ),
+                                    child: Column(
+                                      children: [
+                                        Text(
+                                          LocalStrings.downloadTheSAndGApp,
+                                          style: mediumMediumLarge.copyWith(
+                                              fontWeight: FontWeight.bold,
+                                              color:
+                                                  ColorResources.buttonColor),
+                                        ),
+                                        const SizedBox(height: 5),
+                                        const Text(
+                                          'Shop & Save more on app by redeeming SaltCash',
+                                          style: TextStyle(
+                                              fontSize: 12,
+                                              color: Colors.black54),
+                                        ),
+                                        const SizedBox(height: 10),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            SvgPicture.network(
+                                              'https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg',
+                                              height: 40,
+                                            ),
+                                            const SizedBox(width: 10),
+                                            SvgPicture.network(
+                                              'https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg',
+                                              height: 40,
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  // Expansion Sections
+                                  ExpansionTile(
+                                    tilePadding: const EdgeInsets.symmetric(
+                                        horizontal: 15),
+                                    title: Text(
+                                      LocalStrings.knowYourJewellery,
+                                      style: mediumMediumLarge.copyWith(
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 14,
+                                        color: ColorResources.buttonColor,
+                                      ),
+                                    ),
+                                    trailing: Icon(
+                                      isKnowExpanded ? Icons.remove : Icons.add,
+                                      color: ColorResources.buttonColor,
+                                    ),
+                                    onExpansionChanged: (expanded) {
+                                      setState(() {
+                                        isKnowExpanded = expanded;
+                                      });
+                                    },
+                                    children: [
+                                      Container(
+                                        width: double.infinity,
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 10, horizontal: 15),
+                                        margin: const EdgeInsets.symmetric(
+                                            horizontal: 10, vertical: 5),
+                                        decoration: const BoxDecoration(
+                                          color: Color(
+                                              0xFFEFF9F8), // Light bluish background
+                                          border: Border(
+                                            left: BorderSide(
+                                              color: ColorResources.buttonColor,
+                                              width: 2,
+                                            ),
+                                          ),
+                                        ),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              LocalStrings.diamondGuide,
+                                              style: mediumLarge.copyWith(),
+                                            ),
+                                            const SizedBox(height: 8),
+                                            Text(
+                                              LocalStrings.jewelleryGuide,
+                                              style: mediumLarge.copyWith(),
+                                            ),
+                                            const SizedBox(height: 8),
+                                            Text(
+                                              LocalStrings.gemstonesGuide,
+                                              style: mediumLarge.copyWith(),
+                                            ),
+                                            const SizedBox(height: 8),
+                                            Text(
+                                              LocalStrings.goldRate,
+                                              style: mediumLarge.copyWith(),
+                                            ),
+                                            const SizedBox(height: 8),
+                                            Text(
+                                              LocalStrings.saltMine,
+                                              style: mediumLarge.copyWith(),
+                                            ),
+                                            const SizedBox(height: 8),
+                                            Text(
+                                              LocalStrings.glossary,
+                                              style: mediumLarge.copyWith(),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  ExpansionTile(
+                                    tilePadding: const EdgeInsets.symmetric(
+                                        horizontal: 15),
+                                    title: Text(
+                                      LocalStrings.customerService,
+                                      style: mediumMediumLarge.copyWith(
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 14,
+                                        color: ColorResources.buttonColor,
+                                      ),
+                                    ),
+                                    trailing: Icon(
+                                      isCustomerServiceExpanded
+                                          ? Icons.remove
+                                          : Icons.add,
+                                      color: ColorResources.buttonColor,
+                                    ),
+                                    onExpansionChanged: (expanded) {
+                                      setState(() {
+                                        isCustomerServiceExpanded = expanded;
+                                      });
+                                    },
+                                    children: [
+                                      Container(
+                                        width: double.infinity,
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 10, horizontal: 15),
+                                        margin: const EdgeInsets.symmetric(
+                                            horizontal: 10, vertical: 5),
+                                        decoration: const BoxDecoration(
+                                          color: Color(
+                                              0xFFEFF9F8), // Light bluish background
+                                          border: Border(
+                                            left: BorderSide(
+                                              color: ColorResources.buttonColor,
+                                              width: 2,
+                                            ),
+                                          ),
+                                        ),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              LocalStrings.returnPolicy,
+                                              style: mediumLarge.copyWith(),
+                                            ),
+                                            const SizedBox(height: 8),
+                                            Text(
+                                              LocalStrings.shippingPolicy,
+                                              style: mediumLarge.copyWith(),
+                                            ),
+                                            const SizedBox(height: 8),
+                                            Text(
+                                              LocalStrings.cancellationPolicy,
+                                              style: mediumLarge.copyWith(),
+                                            ),
+                                            const SizedBox(height: 8),
+                                            Text(
+                                              LocalStrings.orderStatus,
+                                              style: mediumLarge.copyWith(),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  ExpansionTile(
+                                    tilePadding: const EdgeInsets.symmetric(
+                                        horizontal: 15),
+                                    title: Text(
+                                      LocalStrings.contactUSCapital,
+                                      style: mediumMediumLarge.copyWith(
+                                        fontWeight: FontWeight.w600,
+                                        fontSize: 14,
+                                        color: ColorResources.buttonColor,
+                                      ),
+                                    ),
+                                    trailing: Icon(
+                                      isContactUsExpanded
+                                          ? Icons.remove
+                                          : Icons.add,
+                                      color: ColorResources.buttonColor,
+                                    ),
+                                    onExpansionChanged: (expanded) {
+                                      setState(() {
+                                        isContactUsExpanded = expanded;
+                                      });
+                                    },
+                                    children: [
+                                      Container(
+                                        width: double.infinity,
+                                        padding: const EdgeInsets.symmetric(
+                                            vertical: 10, horizontal: 15),
+                                        margin: const EdgeInsets.symmetric(
+                                            horizontal: 10, vertical: 5),
+                                        decoration: const BoxDecoration(
+                                          color: Color(
+                                              0xFFEFF9F8), // Light bluish background
+                                          border: Border(
+                                            left: BorderSide(
+                                              color: ColorResources.buttonColor,
+                                              width: 2,
+                                            ),
+                                          ),
+                                        ),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              LocalStrings.companyName,
+                                              style: mediumLarge.copyWith(
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            const SizedBox(height: 8),
+                                            Text(
+                                              LocalStrings.companyAddress,
+                                              style: mediumLarge.copyWith(),
+                                            ),
+                                            const SizedBox(height: 15),
+                                            Text(
+                                              LocalStrings.supportAvailability,
+                                              style: mediumLarge.copyWith(
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                            const SizedBox(height: 8),
+                                            Text(
+                                              LocalStrings.generalEmail,
+                                              style: mediumLarge.copyWith(),
+                                            ),
+                                            const SizedBox(height: 8),
+                                            Text(
+                                              LocalStrings.corporateEmail,
+                                              style: mediumLarge.copyWith(),
+                                            ),
+                                            const SizedBox(height: 8),
+                                            Text(
+                                              LocalStrings.hrEmail,
+                                              style: mediumLarge.copyWith(),
+                                            ),
+                                            const SizedBox(height: 8),
+                                            Text(
+                                              LocalStrings.grievance,
+                                              style: mediumLarge.copyWith(),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 20),
+                                  // Social Icons Row
+                                  const Padding(
+                                    padding:
+                                        EdgeInsets.symmetric(horizontal: 15),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        Icon(FontAwesomeIcons.instagram,
+                                            size: 20),
+                                        Icon(FontAwesomeIcons.facebookF,
+                                            size: 20),
+                                        Icon(FontAwesomeIcons.pinterestP,
+                                            size: 20),
+                                        Icon(FontAwesomeIcons.xTwitter,
+                                            size: 20),
+                                        Icon(FontAwesomeIcons.youtube,
+                                            size: 20),
+                                      ],
+                                    ),
+                                  ),
+                                  const SizedBox(height: 20),
+                                  Center(
+                                    child: Text(
+                                      LocalStrings.sAndg2025,
+                                      style: mediumExtraLarge.copyWith(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16,
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(height: 20),
+                                ],
+                              ),
                             ),
-                            const SizedBox(height: Dimensions.space30),
                             // Text(
                             //   LocalStrings.latestSaltAndGlitz,
                             //   textAlign: TextAlign.center,
@@ -2072,18 +2597,6 @@ class _DashboardScreenState extends State<DashboardScreen>
                             //   ),
                             // ),
                             // const SizedBox(height: Dimensions.space20),
-                            /* Set social media share icon */
-                            const Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(Icons.facebook),
-                                SizedBox(width: Dimensions.space25),
-                                Icon(Icons.face),
-                                SizedBox(width: Dimensions.space25),
-                                Icon(Icons.web),
-                              ],
-                            ),
-                            const SizedBox(height: Dimensions.space5),
                           ],
                         ),
                         //Todo : Overlay search Box
@@ -2433,13 +2946,13 @@ class _DashboardScreenState extends State<DashboardScreen>
                           children: [
                             Text(
                               "${LocalStrings.hi}, ",
-                              style: semiBoldMediumLarge.copyWith(
+                              style: mediumMediumLarge.copyWith(
                                 color: ColorResources.buttonColor,
                               ),
                             ),
                             Text(
                               "${PrefManager.getString("firstName")} ${PrefManager.getString("lastName")}",
-                              style: semiBoldMediumLarge.copyWith(
+                              style: mediumMediumLarge.copyWith(
                                 color: ColorResources.buttonColor,
                               ),
                             ),
@@ -2451,7 +2964,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                   const SizedBox(height: Dimensions.space3),
                   Text(
                     LocalStrings.yourRecentlyViewedProducts,
-                    style: semiBoldMediumLarge.copyWith(
+                    style: mediumMediumLarge.copyWith(
                       color: ColorResources.buttonColor,
                     ),
                   ),
@@ -2581,7 +3094,7 @@ Widget _buildVideoPlayer(VideoPlayerController? controller) {
         baseColor: ColorResources.shimmerEffectBaseColor,
         highlightColor: ColorResources.shimmerEffectHighlightColor,
         child: Container(
-          height: 250,
+          height: 360,
           width: double.infinity,
           decoration: BoxDecoration(
             color: ColorResources.whiteColor,

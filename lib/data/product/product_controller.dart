@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:carousel_slider/carousel_controller.dart';
 import 'package:carousel_slider/carousel_options.dart';
 import 'package:dio/dio.dart';
@@ -27,7 +26,7 @@ import '../model/get_rating_view_model.dart';
 class ProductController extends GetxController {
   var currentIndex = 0.obs;
   var colorCurrentIndex = (2).obs;
-  var ktCurrentIndex = (0).obs;
+  RxInt ktCurrentIndex = 0.obs; // 0 for 14KT, 1 for 18KT
   bool isFavorites = false;
   RxBool isAddToCart = false.obs;
   RxBool isBuyNowCart = false.obs;
@@ -73,10 +72,6 @@ class ProductController extends GetxController {
     24,
     25,
     26,
-    27,
-    28,
-    29,
-    30
   ];
   List<String> imageUrls = [];
   List<String> ratingList = [
@@ -87,9 +82,9 @@ class ProductController extends GetxController {
     LocalStrings.firstRating,
   ];
   List<Color> colorLst = [
-    ColorResources.offerNineColor,
-    ColorResources.borderColor.withOpacity(0.2),
-    ColorResources.updateCardColor,
+    ColorResources.roseGoldColour,
+    ColorResources.silverColour,
+    ColorResources.goldColour,
   ];
   List ctLst = [
     LocalStrings.ktFirst,
@@ -164,11 +159,53 @@ class ProductController extends GetxController {
   //     productImage
   //   ];
   // }
-  ringSizeOnChangValue(value) {
-    byDefaultRingSize.value = value!.toInt();
-    print("Ring Size:${byDefaultRingSize.value}");
-    update();
+
+  double calculateAdjustedPrice() {
+    final size = byDefaultRingSize.value;
+    final is18KT = ktCurrentIndex.value == 1;
+    final product = productData;
+
+    if (product == null) return 0;
+
+    // Base price from API
+    double basePrice =
+        is18KT ? (product.total18KT ?? 0) : (product.total14KT ?? 0);
+
+    // Return base price for sizes 6–10
+    if (size <= 10) {
+      return basePrice;
+    }
+
+    // Apply custom price logic for sizes > 10
+    int steps = size - 10; // number of increments after size 10
+    int a = 127; // first increment
+    int d = 3; // common difference
+
+    // Use arithmetic progression sum formula
+    int increment = (steps * (2 * a + (steps - 1) * d)) ~/ 2;
+
+    return basePrice + increment;
   }
+
+  void resetRingSize() {
+    byDefaultRingSize.value = 6;
+  }
+
+  void ringSizeOnChangValue(int? value) {
+    if (value != null) {
+      byDefaultRingSize.value = value;
+    }
+  }
+
+  void resetKaratSelection() {
+    ktCurrentIndex.value = 0; // 0 = 14KT, 1 = 18KT
+  }
+
+  // ringSizeOnChangValue(value) {
+  //   byDefaultRingSize.value = value!.toInt();
+  //   print("Ring Size:${byDefaultRingSize.value}");
+  //   update();
+  // }
 
   void resetRatingData() {
     getRatingViewModel = null;
@@ -619,23 +656,22 @@ class ProductController extends GetxController {
       }
       String currentUserId = PrefManager.getString('userId') ?? '';
 
-      Map<String, dynamic> params =
-          currentUserId == null || currentUserId.trim().isEmpty
-              ? {
-                  "product": productId ?? "",
-                  "quantity": quantity ?? 1,
-                  "size": size ?? 6,
-                  "caratBy": carat ?? jewelleryKt(),
-                  "colorBy": color ?? jewelleryColor()
-                }
-              : {
-                  "user": currentUserId ?? "",
-                  "product": productId ?? "",
-                  "quantity": quantity ?? 1,
-                  "size": size ?? 6,
-                  "caratBy": carat ?? jewelleryKt(),
-                  "colorBy": color ?? jewelleryColor()
-                };
+      Map<String, dynamic> params = currentUserId.trim().isEmpty
+          ? {
+              "product": productId ?? "",
+              "quantity": quantity ?? 1,
+              "size": size ?? 6,
+              "caratBy": carat ?? jewelleryKt(),
+              "colorBy": color ?? jewelleryColor()
+            }
+          : {
+              "user": currentUserId,
+              "product": productId ?? "",
+              "quantity": quantity ?? 1,
+              "size": size ?? 6,
+              "caratBy": carat ?? jewelleryKt(),
+              "colorBy": color ?? jewelleryColor()
+            };
       print("Get UserId : $currentUserId");
       print("Add to cart params : $params");
       Response response = await APIFunction().apiCall(
@@ -645,9 +681,9 @@ class ProductController extends GetxController {
           isLoading: false);
 
       if (response.statusCode == 201 || response.statusCode == 200) {
-        if (currentUserId == null || currentUserId.trim().isEmpty) {
+        if (currentUserId.trim().isEmpty) {
           PrefManager.setString(
-              'userId', "${response.data['newCart']['userId']}" ?? '');
+              'userId', "${response.data['newCart']['userId']}");
         }
         if (type == LocalStrings.moveCart) {
           //Todo : Remove to the wishlist

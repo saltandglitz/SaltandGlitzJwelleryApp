@@ -22,11 +22,11 @@ class AddToCartController extends GetxController {
   RxBool isGetCartData = false.obs;
   RxBool isRemoveCart = false.obs;
 
-  // List<RxInt>? isQuantity;
   GetAddCartViewModel? getAddCartData;
   final bottomBarController =
       Get.put<BottomBarController>(BottomBarController());
-  static  List<Map<String, String>> texts = [
+
+  static List<Map<String, String>> texts = [
     {"title": LocalStrings.pointsOrder, "subtitle": LocalStrings.nextOrder},
     {"title": LocalStrings.oderOnline, "subtitle": LocalStrings.sameDay},
   ];
@@ -37,7 +37,6 @@ class AddToCartController extends GetxController {
     MyImages.chainProductsImage
   ];
 
-  // =List.generate(productsImage.length, (_) => 1.obs);
   List productsName = [
     LocalStrings.rings,
     LocalStrings.earrings,
@@ -54,7 +53,6 @@ class AddToCartController extends GetxController {
     LocalStrings.sizeThird,
   ];
 
-  // animation text show offers
   implementAnimationOffersMethod() {
     timer = Timer.periodic(const Duration(seconds: 3), (Timer timer) {
       currentIndex = (currentIndex + 1) % texts.length;
@@ -62,9 +60,7 @@ class AddToCartController extends GetxController {
     });
   }
 
-  /// Remove products
   removeProduct(int index) {
-    // productsImage.removeAt(index);
     getAddCartData?.cart?.quantity?.removeAt(index);
     update();
   }
@@ -83,6 +79,45 @@ class AddToCartController extends GetxController {
     update();
   }
 
+  // Total for 14KT items
+  double calculateTotal14KTPrice() {
+    double total = 0;
+    final cartItems = getAddCartData?.cart?.quantity ?? [];
+
+    for (var item in cartItems) {
+      if (item.caratBy == "14KT") {
+        final price =
+            double.tryParse(item.productId?.total14KT.toString() ?? '') ?? 0;
+        final qty = item.quantity ?? 1;
+        total += price * qty;
+      }
+    }
+
+    return total;
+  }
+
+// Total for 18KT items
+  double calculateTotal18KTPrice() {
+    double total = 0;
+    final cartItems = getAddCartData?.cart?.quantity ?? [];
+
+    for (var item in cartItems) {
+      if (item.caratBy == "18KT") {
+        final price =
+            double.tryParse(item.productId?.total18KT.toString() ?? '') ?? 0;
+        final qty = item.quantity ?? 1;
+        total += price * qty;
+      }
+    }
+
+    return total;
+  }
+
+// Combined total
+  double calculateTotalPrice() {
+    return calculateTotal14KTPrice() + calculateTotal18KTPrice();
+  }
+
   //Todo : Get cart using api method
   Future getCartDataApiMethod() async {
     try {
@@ -96,7 +131,7 @@ class AddToCartController extends GetxController {
       );
       if (response.statusCode == 200) {
         getAddCartData = GetAddCartViewModel.fromJson(response.data);
-        print("get_cart_data : $getAddCartData");
+        print("Parsed Total Price: ${getAddCartData?.totalPrice}");
       }
     } catch (e) {
       print("Get cart data error :$e");
@@ -113,15 +148,13 @@ class AddToCartController extends GetxController {
 
       String apiName = "${LocalStrings.removeCartApi}$userId/$itemId";
 
-      // Make the API call to delete the item from the cart
       Response response = await APIFunction().delete(
         apiName: apiName,
         context: Get.context!,
-        token: PrefManager.getString('token'), // Use the token if necessary
-        isLoading: false, // If you need loading behavior
+        token: PrefManager.getString('token'),
+        isLoading: false,
       );
 
-      // Handle the response based on the status code
       if (response.statusCode == 200) {
         PrefManager.removeCartWishlistListItem('cartProductId', '$itemId');
         List<String>? wishlistData = PrefManager.getStringList('cartProductId');
@@ -136,11 +169,10 @@ class AddToCartController extends GetxController {
     } finally {
       isRemoveCart.value = false;
       update();
-      // Perform any cleanup if necessary
     }
   }
 
-  //Todo : Increment product items api method
+  // ✅ Increment item
   Future incrementProductApiMethod({
     String? cartId,
     String? productId,
@@ -167,14 +199,12 @@ class AddToCartController extends GetxController {
         isGet: false,
       );
       if (response.statusCode == 200) {
-        //Todo : Increment productId matched both then assign new quantity
         for (var product in response.data['updatedCart']['quantity']) {
           if (product['productId'] == productId) {
             getAddCartData?.cart?.quantity?[index!].quantity =
                 product['quantity'];
-            double updatedTotalPrice = getAddCartData!.totalPrice + product['totalPrice'];
-            // Update the total price of the cart
-            getAddCartData!.totalPrice = updatedTotalPrice;
+            getAddCartData?.cart?.quantity?[index!].totalPrice =
+                product['totalPrice'];
           }
         }
       }
@@ -185,7 +215,7 @@ class AddToCartController extends GetxController {
     }
   }
 
-  //Todo : Decrement product items api method
+  // ✅ Decrement item
   Future decrementProductApiMethod({
     String? cartId,
     String? productId,
@@ -203,7 +233,7 @@ class AddToCartController extends GetxController {
         "colorBy": colorJewellery ?? "Yellow Gold",
         "quantity": 1
       };
-      print("Increment params : $params");
+      print("Decrement params : $params");
       Response response = await APIFunction().apiCall(
         apiName: LocalStrings.decrementCartItemQuantityApi,
         context: Get.context,
@@ -212,14 +242,12 @@ class AddToCartController extends GetxController {
         isGet: false,
       );
       if (response.statusCode == 200) {
-        //Todo : Increment productId matched both then assign new quantity
         for (var product in response.data['updatedCart']['quantity']) {
           if (product['productId'] == productId) {
             getAddCartData?.cart?.quantity?[index!].quantity =
                 product['quantity'];
-            double updatedTotalPrice = getAddCartData!.totalPrice - product['totalPrice'];
-            // Update the total price of the cart
-            getAddCartData!.totalPrice = updatedTotalPrice;
+            getAddCartData?.cart?.quantity?[index!].totalPrice =
+                product['totalPrice'];
           }
         }
       }

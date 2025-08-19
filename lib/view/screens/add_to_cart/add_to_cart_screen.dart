@@ -11,7 +11,6 @@ import 'package:saltandGlitz/view/components/common_message_show.dart';
 import 'package:shimmer/shimmer.dart';
 import '../../../analytics/app_analytics.dart';
 import '../../../core/route/route.dart';
-import '../../../core/utils/app_const.dart';
 import '../../../core/utils/color_resources.dart';
 import '../../../core/utils/dimensions.dart';
 import '../../../core/utils/style.dart';
@@ -136,15 +135,18 @@ class _AddToCartScreenState extends State<AddToCartScreen> {
                             ),
                           )
                         : Text(
-                            "₹${controller.getAddCartData?.totalPrice != null ? controller.getAddCartData?.totalPrice?.round() : 0}",
+                            "₹${controller.calculateTotalPrice().round()}",
                             style: boldMediumLarge.copyWith(
-                                color: ColorResources.buttonColor),
+                              color: ColorResources.buttonColor,
+                            ),
                           );
                   },
                 ),
                 Text(
                   LocalStrings.viewOrder,
-                  style: boldSmall.copyWith(color: ColorResources.offerColor),
+                  style: boldSmall.copyWith(
+                    color: ColorResources.offerColor,
+                  ),
                 ),
               ],
             ),
@@ -225,7 +227,7 @@ class _AddToCartScreenState extends State<AddToCartScreen> {
                                       LocalStrings.addToCartEmpty,
                                       softWrap: true,
                                       textAlign: TextAlign.center,
-                                      style: semiBoldLarge.copyWith(),
+                                      style: mediumLarge.copyWith(),
                                     ),
                                   )
                                 : ListView.builder(
@@ -320,12 +322,13 @@ class _AddToCartScreenState extends State<AddToCartScreen> {
                                                     ],
                                                   ),
                                                   Text(
-                                                    "₹${controller.getAddCartData?.cart?.quantity?[index].productId?.total14KT}",
+                                                    "₹${(((controller.getAddCartData?.cart?.quantity?[index].caratBy == "14KT" ? double.tryParse(controller.getAddCartData?.cart?.quantity?[index].productId?.total14KT.toString() ?? '') : double.tryParse(controller.getAddCartData?.cart?.quantity?[index].productId?.total18KT.toString() ?? '')) ?? 0) * (controller.getAddCartData?.cart?.quantity?[index].quantity ?? 1)).round()}",
                                                     style: boldSmall.copyWith(
                                                       color: ColorResources
                                                           .buttonColor,
                                                     ),
                                                   ),
+
                                                   const SizedBox(
                                                       height:
                                                           Dimensions.space15),
@@ -637,9 +640,10 @@ class _AddToCartScreenState extends State<AddToCartScreen> {
                                           color: ColorResources.buttonColor),
                                     ),
                                     Text(
-                                      "₹${controller.getAddCartData?.totalPrice != null ? controller.getAddCartData?.totalPrice?.round() : 0}",
-                                      style: boldSmall.copyWith(
-                                          color: ColorResources.buttonColor),
+                                      "₹${controller.calculateTotalPrice().round()}",
+                                      style: boldMediumLarge.copyWith(
+                                        color: ColorResources.buttonColor,
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -728,9 +732,10 @@ class _AddToCartScreenState extends State<AddToCartScreen> {
                                                     color: ColorResources
                                                         .highlightColor,
                                                   ),
-                                                ))
+                                                ),
+                                              )
                                             : Text(
-                                                "₹${controller.getAddCartData?.totalPrice != null ? controller.getAddCartData?.totalPrice?.round() : 0}",
+                                                "₹${controller.calculateTotalPrice().round()}",
                                                 style: boldMediumLarge.copyWith(
                                                     color: ColorResources
                                                         .buttonColor),
@@ -1086,40 +1091,41 @@ class _AddToCartScreenState extends State<AddToCartScreen> {
                         Get.back();
                       },
                       child: Container(
-                          height: size.height * 0.055,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(
-                              Dimensions.offersCardRadius,
-                            ),
-                            border: const GradientBoxBorder(
-                              gradient: LinearGradient(
-                                colors: [
-                                  ColorResources.buttonColor,
-                                  ColorResources.buttonSecondColor
-                                ],
-                                begin: Alignment.topLeft,
-                                end: Alignment.bottomRight,
-                              ),
+                        height: size.height * 0.055,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(
+                            Dimensions.offersCardRadius,
+                          ),
+                          border: const GradientBoxBorder(
+                            gradient: LinearGradient(
+                              colors: [
+                                ColorResources.buttonColor,
+                                ColorResources.buttonSecondColor
+                              ],
+                              begin: Alignment.topLeft,
+                              end: Alignment.bottomRight,
                             ),
                           ),
-                          child: Obx(
-                            () {
-                              return Center(
-                                child: controller.isRemoveCart.value == true
-                                    ? const Padding(
-                                        padding: EdgeInsets.all(8.0),
-                                        child: CircularProgressIndicator(
-                                          color: ColorResources.blackColor,
-                                        ),
-                                      )
-                                    : Text(
-                                        LocalStrings.remove,
-                                        style: mediumLarge.copyWith(
-                                            fontWeight: FontWeight.w500),
+                        ),
+                        child: Obx(
+                          () {
+                            return Center(
+                              child: controller.isRemoveCart.value == true
+                                  ? const Padding(
+                                      padding: EdgeInsets.all(8.0),
+                                      child: CircularProgressIndicator(
+                                        color: ColorResources.blackColor,
                                       ),
-                              );
-                            },
-                          )),
+                                    )
+                                  : Text(
+                                      LocalStrings.remove,
+                                      style: mediumLarge.copyWith(
+                                          fontWeight: FontWeight.w500),
+                                    ),
+                            );
+                          },
+                        ),
+                      ),
                     ),
                   ),
                   const SizedBox(width: Dimensions.space25),

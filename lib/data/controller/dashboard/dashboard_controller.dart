@@ -8,12 +8,14 @@ import 'package:saltandGlitz/api_repository/api_function.dart';
 import 'package:saltandGlitz/core/utils/local_strings.dart';
 import 'package:saltandGlitz/data/controller/bottom_bar/bottom_bar_controller.dart';
 import 'package:saltandGlitz/data/controller/collection/collection_controller.dart';
+import 'package:saltandGlitz/data/model/home_view_model.dart';
 import 'package:saltandGlitz/view/components/common_message_show.dart';
 import 'package:video_player/video_player.dart';
 import '../../../analytics/app_analytics.dart';
 import '../../../core/utils/app_const.dart';
 import '../../../core/utils/images.dart';
 import '../../../local_storage/sqflite_local_storage.dart';
+import '../../model/categories_filter_view_model.dart';
 import '../../model/search_product_view_model.dart';
 
 class DashboardController extends GetxController {
@@ -234,6 +236,26 @@ class DashboardController extends GetxController {
     currentGiftsIndex.value = index;
     update();
   }
+
+  List<UpdatedProducts> bestSellerList = newArrivalList
+      .where((product) {
+        List<String> subList;
+
+        if (product.subCategory is List<String>) {
+          subList = product.subCategory! as List<String>;
+        } else if (product.subCategory is String) {
+          subList = product.subCategory!
+              .split(',')
+              .map((e) => e.trim().toLowerCase())
+              .toList();
+        } else {
+          subList = [];
+        }
+
+        return subList.contains('bestseller');
+      })
+      .cast<UpdatedProducts>()
+      .toList();
 
   void goToPreviousSolitaire() {
     if (currentSolitaireIndex.value > 0) {

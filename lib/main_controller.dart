@@ -67,20 +67,28 @@ class MainController extends GetxController {
         bottomBannerList = (response.data['bottomBanner'] as List)
             .map((banner) => BottomBanner.fromJson(banner))
             .toList();
+        print("Get Home 1:${response.statusCode} ");
+
         categoryList = (response.data['categoryImage'] as List)
             .map((category) => CategoryImage.fromJson(category))
             .toList();
+        print("Get Home 2:${response.statusCode} ");
+
         filterCategoryList = (response.data['filterCategory'] as List)
             .map((filterCategory) => FilterCategory.fromJson(filterCategory))
             .toList();
+        print("Get Home 3:${response.statusCode} ");
+
         newArrivalList = (response.data['newArrivals'] as List)
             .map((newArrivals) => NewArrivals.fromJson(newArrivals))
             .toList();
-        print("Get Home :${response.statusCode} ");
+        print("Get Home 4:${response.statusCode} ");
 
         giftElementList = (response.data['gifts'] as List)
             .map((gifts) => Gifts.fromJson(gifts))
             .toList();
+        print("Get Home 5:${response.statusCode} ");
+
         mediaList = (response.data['media'] as List)
             .whereType<Map<String, dynamic>>()
             .where((media) => media['mobileBannerImage'] != null)

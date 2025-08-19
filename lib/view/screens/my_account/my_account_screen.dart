@@ -18,6 +18,7 @@ import '../../../main_controller.dart';
 import '../../components/app_circular_loader.dart';
 import '../../components/common_button.dart';
 import '../../components/network_connectivity_view.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class MyAccountScreen extends StatefulWidget {
   const MyAccountScreen({super.key});
@@ -729,7 +730,7 @@ class _MyAccountScreenState extends State<MyAccountScreen>
                                 children: [
                                   // Whatsapp
                                   GestureDetector(
-                                    onTap: () {
+                                    onTap: () async {
                                       //Todo : Only testing purpose set this method
                                       PrefManager.setString('isLogin', '');
                                       controller.update();
@@ -738,6 +739,18 @@ class _MyAccountScreenState extends State<MyAccountScreen>
                                       //     eventName: LocalStrings
                                       //         .logMyAccountWhatsappClick,
                                       //     index: 2);
+                                      final Uri whatsappUrl = Uri.parse(
+                                          'https://wa.me/+917984369890');
+
+                                      if (await canLaunchUrl(whatsappUrl)) {
+                                        await launchUrl(whatsappUrl,
+                                            mode:
+                                                LaunchMode.externalApplication);
+                                      }
+
+                                      // Optional testing code
+                                      PrefManager.setString('isLogin', '');
+                                      controller.update();
                                     },
                                     child: Column(
                                       crossAxisAlignment:
@@ -748,8 +761,7 @@ class _MyAccountScreenState extends State<MyAccountScreen>
                                           width: 40,
                                           decoration: BoxDecoration(
                                             color: ColorResources
-                                                .offerThirdTextColor
-                                                .withOpacity(0.7),
+                                                .lightGreenBackgroundColour,
                                             borderRadius:
                                                 BorderRadius.circular(13),
                                           ),
@@ -790,8 +802,7 @@ class _MyAccountScreenState extends State<MyAccountScreen>
                                           width: 40,
                                           decoration: BoxDecoration(
                                             color: ColorResources
-                                                .offerThirdTextColor
-                                                .withOpacity(0.7),
+                                                .lightGreenBackgroundColour,
                                             borderRadius:
                                                 BorderRadius.circular(13),
                                           ),

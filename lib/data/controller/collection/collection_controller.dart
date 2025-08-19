@@ -206,6 +206,38 @@ class CollectionController extends GetxController {
     update();
   }
 
+  var cartItemCountRx = 0.obs;
+
+  void incrementCartCount() {
+    cartItemCountRx++;
+    update(); // optional if using GetBuilder, mostly needed if you call update()
+  }
+
+  void removeFromCart(String productId) {
+    if (cartProductIds.contains(productId)) {
+      cartProductIds.remove(productId);
+      update(); // important to update GetBuilder or GetX listeners
+    }
+  }
+
+  // You can track cart product IDs or cart items list
+  List<String> cartProductIds = [];
+
+  int get cartItemCount => cartProductIds.length;
+
+  void addToCart({
+    required String productId,
+    required int quantity,
+    required String carat,
+    required String size,
+    required String color,
+  }) {
+    if (!cartProductIds.contains(productId)) {
+      cartProductIds.add(productId);
+    }
+    update();
+  }
+
   //Todo : Favorites products api method
   Future favoritesProducts(
       {String? userId,

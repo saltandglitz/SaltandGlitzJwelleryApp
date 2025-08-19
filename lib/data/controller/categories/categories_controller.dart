@@ -354,15 +354,33 @@ class CategoriesController extends GetxController {
     }
   }
 
+  void filterProductsUnder29999() {
+    filterProductData = filterProductData.where((product) {
+      return (product.total14KT ?? 0) < 29999;
+    }).toList();
+  }
+
+  void filterOnlyOfficeWear() {
+    filterProductData = filterProductData.where((product) {
+      final subs = product.subCategory ?? [];
+
+      // Convert all values to lowercase and trim
+      final normalized = subs.map((e) => e.trim().toLowerCase()).toList();
+
+      return normalized.contains('office wear');
+    }).toList();
+  }
+
   //Todo : Filter categories & price wise product api method
   Future filterCategoriesApiMethod({
-    String? category, // 👈 Added
+    String? category,
     String? occasionBy,
     String? priceLimit,
     String? priceOrder,
     String? isFilterScreen,
     String? wrappedBy,
-    String? giftFor,
+    List<String>? giftFor,
+    String? gender, // ✅ NEW
     String? title,
     String? materialBy,
     List<String>? priceLimitList,
@@ -371,7 +389,7 @@ class CategoriesController extends GetxController {
     List<String>? shopForList,
     List<String>? occasionByList,
     List<String>? giftsList,
-    String? filterLocallyByCategory, // 👈 NEW
+    String? filterLocallyByCategory,
     String? filterLocallyBySubCategory,
   }) async {
     filterProductData.clear();
@@ -382,34 +400,45 @@ class CategoriesController extends GetxController {
       print("Enter filter");
       collectionController.isShowCategories.value = false;
 
-      Map<String, dynamic> params = isFilterScreen == "YES"
-          ? {
-              "priceLimit": priceLimitList,
-              "title": productTypeList,
-              "materialBy": materialList,
-              "typeBy": shopForList,
-              "occasionBy": occasionByList,
-              "giftFor": giftsList,
-              "userId": PrefManager.getString('userId') ?? '',
-            }
-          : {
-              // 'category': category ?? '', // 👈 Injected here
-              'occasionBy': occasionBy ?? '',
-              'priceLimit': priceLimit ?? '',
-              'priceOrder':
-                  priceOrder == "lowToHigh" || priceOrder == "highToLow"
-                      ? priceOrder
-                      : '',
-              'userId': PrefManager.getString('userId') ?? '',
-              'sortBy': priceOrder == "newestFirst" ||
-                      priceOrder == LocalStrings.featured
-                  ? priceOrder
-                  : '',
-              'wrappedBy': wrappedBy ?? '',
-              'giftFor': giftFor ?? '',
-              'title': title ?? '',
-              'materialBy': materialBy ?? '',
-            };
+      Map<String, dynamic> params;
+
+      final userId = PrefManager.getString('userId')?.trim();
+
+      if (isFilterScreen == "YES") {
+        params = {
+          "priceLimit": priceLimitList,
+          "title": productTypeList,
+          "materialBy": materialList,
+          "typeBy": shopForList,
+          "occasionBy": occasionByList,
+          "giftFor": giftFor ?? [],
+        };
+
+        if (userId != null && userId.isNotEmpty) {
+          params['userId'] = userId;
+        }
+      } else {
+        params = {
+          'occasionBy': occasionBy ?? '',
+          'priceLimit': priceLimit ?? '',
+          'priceOrder': (priceOrder == "lowToHigh" || priceOrder == "highToLow")
+              ? priceOrder
+              : '',
+          'sortBy': (priceOrder == "newestFirst" ||
+                  priceOrder == LocalStrings.featured)
+              ? priceOrder
+              : '',
+          'wrappedBy': wrappedBy ?? '',
+          'giftFor': giftFor ?? [],
+          'gender': gender ?? '', // ✅ add to request
+          'title': title ?? '',
+          'materialBy': materialBy ?? '',
+        };
+
+        if (userId != null && userId.isNotEmpty) {
+          params['userId'] = userId;
+        }
+      }
 
       Response response = await APIFunction().apiCall(
         apiName: LocalStrings.filterProductApi,
@@ -417,6 +446,7 @@ class CategoriesController extends GetxController {
         params: params,
         isLoading: false,
       );
+
       print("RESPONSE : ${response.statusCode}");
       if (response.statusCode == 200) {
         final List<dynamic> allProducts =
@@ -426,7 +456,7 @@ class CategoriesController extends GetxController {
             .map((product) => UpdatedProducts.fromJson(product))
             .toList();
 
-// ✅ Step 1: Always filter by main category
+        // Filter locally by category or subCategory if needed
         if (filterLocallyByCategory != null &&
             filterLocallyByCategory.isNotEmpty) {
           filterProductData = filterProductData
@@ -436,7 +466,6 @@ class CategoriesController extends GetxController {
               .toList();
         }
 
-// ✅ Step 2: If subcategory is tapped (not 'All'), filter further
         if (filterLocallyBySubCategory != null &&
             filterLocallyBySubCategory.isNotEmpty) {
           filterProductData = filterProductData.where((product) {

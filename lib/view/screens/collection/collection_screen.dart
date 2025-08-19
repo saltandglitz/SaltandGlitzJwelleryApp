@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:like_button/like_button.dart';
@@ -36,6 +39,8 @@ class _CollectionScreenState extends State<CollectionScreen> {
   final dashboardController =
       Get.put<DashboardController>(DashboardController());
 
+  Timer? _waitForListTimer;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -43,6 +48,19 @@ class _CollectionScreenState extends State<CollectionScreen> {
     mainController.checkToAssignNetworkConnections();
     AppAnalytics()
         .actionTriggerLogs(eventName: LocalStrings.logCollectionView, index: 5);
+    _waitForListTimer =
+        Timer.periodic(const Duration(milliseconds: 300), (timer) {
+      if (filterProductData.isNotEmpty) {
+        setState(() {}); // Rebuild to show count
+        timer.cancel(); // Stop the timer after list is filled
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _waitForListTimer?.cancel(); // Clean up
+    super.dispose();
   }
 
   @override
@@ -115,7 +133,7 @@ class _CollectionScreenState extends State<CollectionScreen> {
                       },
                     );
                   },
-                  icon: const Icon(Icons.favorite_rounded),
+                  icon: const Icon(CupertinoIcons.heart),
                   color: ColorResources.iconColor),
               Stack(
                 alignment: Alignment.bottomRight,
@@ -124,28 +142,29 @@ class _CollectionScreenState extends State<CollectionScreen> {
                       onPressed: () {
                         Get.toNamed(RouteHelper.addCartScreen);
                       },
-                      icon: const Icon(Icons.shopping_cart),
+                      icon: const Icon(CupertinoIcons.shopping_cart),
                       color: ColorResources.iconColor),
                   // Container(
                   //   height: 15,
                   //   width: 15,
-                  //   decoration: new BoxDecoration(
+                  //   alignment: Alignment.center,
+                  //   decoration: BoxDecoration(
                   //     color: Colors.red,
                   //     borderRadius: BorderRadius.circular(5),
                   //   ),
-                  //   constraints: BoxConstraints(
-                  //     minWidth: 17,
-                  //     minHeight: 17,
+                  //   constraints: const BoxConstraints(
+                  //     minWidth: 10,
+                  //     minHeight: 10,
                   //   ),
-                  //   child: new Text(
+                  //   child: const Text(
                   //     '1',
-                  //     style: new TextStyle(
+                  //     style: TextStyle(
                   //       color: Colors.white,
                   //       fontSize: 8,
                   //     ),
                   //     textAlign: TextAlign.center,
                   //   ),
-                  // )
+                  // ),
                 ],
               ),
             ],
@@ -907,13 +926,6 @@ class _CollectionScreenState extends State<CollectionScreen> {
                                                             );
                                                           },
                                                         ),
-                                          // Center(
-                                          //   child: Text(
-                                          //     'Search Results',
-                                          //     style: TextStyle(
-                                          //         color: Colors.black, fontSize: 18),
-                                          //   ),
-                                          // ),
                                         ),
                                       )
                                     : const SizedBox.shrink(),
@@ -1337,13 +1349,14 @@ class _CollectionScreenState extends State<CollectionScreen> {
                     Text(
                       LocalStrings.sortBy,
                       style: boldMediumLarge.copyWith(
-                          color: ColorResources.buttonColor),
+                        color: ColorResources.buttonColor,
+                      ),
                     ),
                   ],
                 ),
               ),
               const SizedBox(height: Dimensions.space20),
-              GetBuilder(
+              GetBuilder<CollectionController>(
                 init: CollectionController(),
                 builder: (controller) {
                   return ListView.builder(
@@ -1359,25 +1372,31 @@ class _CollectionScreenState extends State<CollectionScreen> {
                           onTap: () {
                             String sortProducts = '';
                             controller.sortCurrentIndex(index);
-                            if (controller.sortProductsLst[index] ==
-                                LocalStrings.latest) {
+
+                            final selectedSort =
+                                controller.sortProductsLst[index];
+
+                            if (selectedSort == LocalStrings.latest) {
                               sortProducts = "newestFirst";
-                            } else if (controller.sortProductsLst[index] ==
-                                LocalStrings.featured) {
+                            } else if (selectedSort == LocalStrings.featured) {
                               sortProducts = LocalStrings.featured;
-                            } else if (controller.sortProductsLst[index] ==
-                                LocalStrings.priceLow) {
+                            } else if (selectedSort == LocalStrings.priceLow) {
                               sortProducts = "lowToHigh";
-                            } else if (controller.sortProductsLst[index] ==
-                                LocalStrings.priceHigh) {
+                            } else if (selectedSort == LocalStrings.priceHigh) {
                               sortProducts = "highToLow";
                             }
-                            // controller.sortCurrentIndex(index);
+
+                            // ✅ Get current category from existing product list
+                            final currentCategory = filterProductData.isNotEmpty
+                                ? filterProductData.first.category
+                                : null;
+
+                            // ✅ Apply filter with sorting and category preserved
                             categoriesController.filterCategoriesApiMethod(
-                                priceOrder: sortProducts);
-                            Get.put<CollectionController>(
-                              CollectionController(),
+                              priceOrder: sortProducts,
+                              filterLocallyByCategory: currentCategory,
                             );
+
                             controller.hideSearchField();
                             Get.back();
                           },
@@ -1386,10 +1405,10 @@ class _CollectionScreenState extends State<CollectionScreen> {
                               return Text(
                                 controller.sortProductsLst[index],
                                 style: boldDefault.copyWith(
-                                    color:
-                                        controller.currentIndex.value == index
-                                            ? ColorResources.sortSelectedColor
-                                            : ColorResources.buttonColor),
+                                  color: controller.currentIndex.value == index
+                                      ? ColorResources.sortSelectedColor
+                                      : ColorResources.buttonColor,
+                                ),
                               );
                             },
                           ),
@@ -1398,7 +1417,7 @@ class _CollectionScreenState extends State<CollectionScreen> {
                     },
                   );
                 },
-              )
+              ),
             ],
           ),
         );

@@ -3,7 +3,7 @@ class GetAddCartViewModel {
   final dynamic message;
   final Cart? cart;
   final dynamic totalQuantity;
-   dynamic totalPrice;
+  dynamic totalPrice;
 
   GetAddCartViewModel({
     this.status,
@@ -16,17 +16,19 @@ class GetAddCartViewModel {
   GetAddCartViewModel.fromJson(Map<String, dynamic> json)
       : status = json['status'],
         message = json['message'],
-        cart = (json['cart'] as Map<String, dynamic>?) != null ? Cart.fromJson(json['cart'] as Map<String, dynamic>) : null,
+        cart = (json['cart'] as Map<String, dynamic>?) != null
+            ? Cart.fromJson(json['cart'])
+            : null,
         totalQuantity = json['totalQuantity'],
         totalPrice = json['totalPrice'];
 
   Map<String, dynamic> toJson() => {
-    'status': status,
-    'message': message,
-    'cart': cart?.toJson(),
-    'totalQuantity': totalQuantity,
-    'totalPrice': totalPrice,
-  };
+        'status': status,
+        'message': message,
+        'cart': cart?.toJson(),
+        'totalQuantity': totalQuantity,
+        'totalPrice': totalPrice,
+      };
 }
 
 class Cart {
@@ -49,28 +51,30 @@ class Cart {
   Cart.fromJson(Map<String, dynamic> json)
       : cartId = json['cart_id'],
         userId = json['userId'],
-        quantity = (json['quantity'] as List?)?.map((dynamic e) => Quantity.fromJson(e as Map<String, dynamic>)).toList(),
+        quantity = (json['quantity'] as List?)
+            ?.map((e) => Quantity.fromJson(e))
+            .toList(),
         createdAt = json['createdAt'],
         updatedAt = json['updatedAt'],
         v = json['__v'];
 
   Map<String, dynamic> toJson() => {
-    'cart_id': cartId,
-    'userId': userId,
-    'quantity': quantity?.map((e) => e.toJson()).toList(),
-    'createdAt': createdAt,
-    'updatedAt': updatedAt,
-    '__v': v,
-  };
+        'cart_id': cartId,
+        'userId': userId,
+        'quantity': quantity?.map((e) => e.toJson()).toList(),
+        'createdAt': createdAt,
+        'updatedAt': updatedAt,
+        '__v': v,
+      };
 }
 
 class Quantity {
   final ProductId? productId;
-   dynamic quantity;
+  dynamic quantity;
   final dynamic size;
   final dynamic caratBy;
   final dynamic colorBy;
-  final dynamic totalPriceOfProduct;
+  dynamic totalPrice; // ✅ Changed from totalPriceOfProduct
 
   Quantity({
     this.productId,
@@ -78,25 +82,28 @@ class Quantity {
     this.size,
     this.caratBy,
     this.colorBy,
-    this.totalPriceOfProduct,
+    this.totalPrice,
   });
 
   Quantity.fromJson(Map<String, dynamic> json)
-      : productId = (json['productId'] as Map<String, dynamic>?) != null ? ProductId.fromJson(json['productId'] as Map<String, dynamic>) : null,
+      : productId = (json['productId'] != null)
+            ? ProductId.fromJson(json['productId'])
+            : null,
         quantity = json['quantity'],
         size = json['size'],
         caratBy = json['caratBy'],
         colorBy = json['colorBy'],
-        totalPriceOfProduct = json['totalPriceOfProduct'];
+        totalPrice =
+            json['totalPriceOfProduct']; // ✅ Parse from totalPriceOfProduct
 
   Map<String, dynamic> toJson() => {
-    'productId': productId?.toJson(),
-    'quantity': quantity,
-    'size': size,
-    'caratBy': caratBy,
-    'colorBy': colorBy,
-    'totalPriceOfProduct': totalPriceOfProduct,
-  };
+        'productId': productId?.toJson(),
+        'quantity': quantity,
+        'size': size,
+        'caratBy': caratBy,
+        'colorBy': colorBy,
+        'totalPriceOfProduct': totalPrice, // ✅ Keep key same as API field
+      };
 }
 
 class ProductId {
@@ -197,35 +204,35 @@ class ProductId {
         featured = json['featured'];
 
   Map<String, dynamic> toJson() => {
-    'product_id': productId,
-    'id': id,
-    'title': title,
-    'gender': gender,
-    'price14KT': price14KT,
-    'price18KT': price18KT,
-    'image01': image01,
-    'image02': image02,
-    'image03': image03,
-    'image04': image04,
-    'image05': image05,
-    'video': video,
-    'category': category,
-    'subCategory': subCategory,
-    'material': material,
-    'gift': gift,
-    'diamondprice': diamondprice,
-    'makingCharge14KT': makingCharge14KT,
-    'makingCharge18KT': makingCharge18KT,
-    'grossWt': grossWt,
-    'netWeight14KT': netWeight14KT,
-    'netWeight18KT': netWeight18KT,
-    'gst14KT': gst14KT,
-    'gst18KT': gst18KT,
-    'total14KT': total14KT,
-    'total18KT': total18KT,
-    'createdAt': createdAt,
-    'updatedAt': updatedAt,
-    '__v': v,
-    'featured': featured,
-  };
+        'product_id': productId,
+        'id': id,
+        'title': title,
+        'gender': gender,
+        'price14KT': price14KT,
+        'price18KT': price18KT,
+        'image01': image01,
+        'image02': image02,
+        'image03': image03,
+        'image04': image04,
+        'image05': image05,
+        'video': video,
+        'category': category,
+        'subCategory': subCategory,
+        'material': material,
+        'gift': gift,
+        'diamondprice': diamondprice,
+        'makingCharge14KT': makingCharge14KT,
+        'makingCharge18KT': makingCharge18KT,
+        'grossWt': grossWt,
+        'netWeight14KT': netWeight14KT,
+        'netWeight18KT': netWeight18KT,
+        'gst14KT': gst14KT,
+        'gst18KT': gst18KT,
+        'total14KT': total14KT,
+        'total18KT': total18KT,
+        'createdAt': createdAt,
+        'updatedAt': updatedAt,
+        '__v': v,
+        'featured': featured,
+      };
 }

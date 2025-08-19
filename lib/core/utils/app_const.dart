@@ -1,6 +1,5 @@
 //Todo : App const Globally set Data
 import '../../data/model/categories_filter_view_model.dart' hide Media;
-import '../../data/model/get_add_cart_view_model.dart';
 import '../../data/model/get_categories_view_model.dart';
 import '../../data/model/get_you_may_also_like_model.dart';
 import '../../data/model/home_view_model.dart';
@@ -16,7 +15,6 @@ List<NewArrivals> newArrivalList = [];
 List<FilterCategory> filterCategoryList = [];
 List<Gifts> giftElementList = [];
 List<Media> mediaList = [];
-
 List<Solitire> solitaireList = [];
 List<dynamic> advertiseBanner = [];
 List<Categories> getCategoryData = [];

@@ -55,4 +55,8 @@ class ColorResources {
   static const Color notValidateColor = Color(0xFFDE1A31);
   static const Color backgroundDatePickerColor = Color(0xFFF8F3F9);
   static const Color lightGreenColour = Color(0xFFabd7cd);
+  static const Color roseGoldColour = Color(0xffFFCCCC);
+  static const Color silverColour = Color(0xffCCCCCC);
+  static const Color goldColour = Color(0xffFFCC66);
+  static const Color lightGreenBackgroundColour = Color(0xffF1F8F7);
 }

@@ -260,6 +260,63 @@ class LocalStrings {
   static String email = appStrings.isNotEmpty ? appStrings['email'] : "Email";
   static String signUp =
       appStrings.isNotEmpty ? appStrings['signUp'] : "Sign Up";
+  static String sAndg2025 =
+      appStrings.isNotEmpty ? appStrings['sAndg2025'] : "© S&G 2025";
+  static String downloadTheSAndGApp = appStrings.isNotEmpty
+      ? appStrings['downloadTheSAndGApp']
+      : "Download the Salt&Glitz App";
+  static String shopAndSaveMoreOnApp = appStrings.isNotEmpty
+      ? appStrings['shopAndSaveMoreOnApp']
+      : "Shop & Save more on app by redeeming SaltCash";
+  static String knowYourJewellery = appStrings.isNotEmpty
+      ? appStrings['knowYourJewellery']
+      : "KNOW YOUR JEWELLERY";
+  static String diamondGuide =
+      appStrings.isNotEmpty ? appStrings['diamondGuide'] : "Diamond guide";
+  static String jewelleryGuide =
+      appStrings.isNotEmpty ? appStrings['jewelleryGuide'] : "Jewellery guide";
+  static String gemstonesGuide =
+      appStrings.isNotEmpty ? appStrings['gemstonesGuide'] : "Gemstones guide";
+  static String goldRate =
+      appStrings.isNotEmpty ? appStrings['goldRate'] : "Gold rate";
+  static String saltMine =
+      appStrings.isNotEmpty ? appStrings['saltMine'] : "Salt Mine";
+  static String glossary =
+      appStrings.isNotEmpty ? appStrings['glossary'] : "Glossary";
+  static String customerService = appStrings.isNotEmpty
+      ? appStrings['customerService']
+      : "CUSTOMER SERVICE";
+  static String returnPolicy =
+      appStrings.isNotEmpty ? appStrings['returnPolicy'] : "Return policy";
+  static String shippingPolicy =
+      appStrings.isNotEmpty ? appStrings['shippingPolicy'] : "Shipping Policy";
+  static String cancellationPolicy = appStrings.isNotEmpty
+      ? appStrings['cancellationPolicy']
+      : "Cancellation policy";
+  static String orderStatus =
+      appStrings.isNotEmpty ? appStrings['orderStatus'] : "Order status";
+  static String contactUSCapital =
+      appStrings.isNotEmpty ? appStrings['contactUs'] : "CONTACT US";
+  static String companyName = appStrings.isNotEmpty
+      ? appStrings['companyName']
+      : "Salt & Glitz Trading Pvt Ltd";
+  static String companyAddress = appStrings.isNotEmpty
+      ? appStrings['companyAddress']
+      : "No:727, 1st Floor, TIL Park Anna Salai Pathari Road, Thousand Lights, Chennai, Tamil Nadu 600006.";
+  static String supportAvailability = appStrings.isNotEmpty
+      ? appStrings['supportAvailability']
+      : "24X7 Enquiry Support ( ALL Days )";
+  static String generalEmail = appStrings.isNotEmpty
+      ? appStrings['generalEmail']
+      : "General : contactus@salt.com";
+  static String corporateEmail = appStrings.isNotEmpty
+      ? appStrings['corporateEmail']
+      : "Corporate : b2b@salt.com";
+  static String hrEmail =
+      appStrings.isNotEmpty ? appStrings['hrEmail'] : "Hr : Careers@salt.com";
+  static String grievance = appStrings.isNotEmpty
+      ? appStrings['grievance']
+      : "Grievance : Click here";
   // static String yourCartWaiting = appStrings.isNotEmpty
   //     ? appStrings['yourCartWaiting']
   //     : "Your Cart is Waiting!";
@@ -743,6 +800,7 @@ class LocalStrings {
   static String search = appStrings.isNotEmpty
       ? appStrings['search']
       : "What're you searching for?";
+  static String additionalOffers = 'Additional Offers for you';
   static String priceInclusive = appStrings.isNotEmpty
       ? appStrings['priceInclusive']
       : 'Price inclusive of taxes. See the full';
@@ -1024,8 +1082,7 @@ class LocalStrings {
       /*appStrings.isNotEmpty ? appStrings['warrantyAccount'] :*/ 'Warranty';
   static String cancellation =
       /*appStrings.isNotEmpty ? appStrings['cancellation'] :*/ 'cancellation';
-  static String shippingPolicy =
-      /*appStrings.isNotEmpty ? appStrings['shipping'] :*/ 'shippingPolicy';
+
   static String exchangeText =
       appStrings.isNotEmpty ? appStrings['exchangeText'] : 'Exchange';
   static String returnText =
