@@ -120,48 +120,55 @@ class CustomBottomNavigationBar extends StatelessWidget {
   Widget build(BuildContext context) {
     final categoriesController =
         Get.put<CategoriesController>(CategoriesController());
+    final bottomPadding = MediaQuery.of(context).padding.bottom;
     return Container(
-      height: size.height * 0.080,
-      decoration: const BoxDecoration(
-        color: ColorResources.whiteColor,
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black12,
-            blurRadius: 10.0,
-          ),
-        ],
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
-        children: List.generate(
-          icons.length,
-          (index) {
-            final isSelected = bottomBarController.selectedIndex.value == index;
-            final color = isSelected
-                ? ColorResources.blackColor
-                : ColorResources.inactiveTabColor;
-            return GestureDetector(
-              onTap: () {
-                bottomBarController.changeIndex(index);
-                if (bottomBarController.selectedIndex.value == 1) {
-                  // Closed categories screen expanded items
-                  categoriesController.setExpandedIndex(-1);
-                  categoriesController.setMostBrowsedIndex(-1);
-                }
-              },
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(icons[index], color: color),
-                  Text(
-                    labels[index],
-                    style: mediumLarge.copyWith(color: color),
-                  ),
-                ],
+      height: size.height * 0.080 + bottomPadding,
+      child: Padding(
+        padding: EdgeInsets.only(bottom: bottomPadding),
+        child: Container(
+          decoration: const BoxDecoration(
+            color: ColorResources.whiteColor,
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black12,
+                blurRadius: 10.0,
               ),
-            );
-          },
+            ],
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
+            children: List.generate(
+              icons.length,
+              (index) {
+                final isSelected =
+                    bottomBarController.selectedIndex.value == index;
+                final color = isSelected
+                    ? ColorResources.blackColor
+                    : ColorResources.inactiveTabColor;
+                return GestureDetector(
+                  onTap: () {
+                    bottomBarController.changeIndex(index);
+                    if (bottomBarController.selectedIndex.value == 1) {
+                      // Closed categories screen expanded items
+                      categoriesController.setExpandedIndex(-1);
+                      categoriesController.setMostBrowsedIndex(-1);
+                    }
+                  },
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(icons[index], color: color),
+                      Text(
+                        labels[index],
+                        style: mediumLarge.copyWith(color: color),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
+          ),
         ),
       ),
     );
