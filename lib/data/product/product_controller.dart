@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:carousel_slider/carousel_controller.dart' as slider;
+import 'package:carousel_slider/carousel_slider.dart' as slider;
 import 'package:carousel_slider/carousel_options.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -36,8 +36,8 @@ class ProductController extends GetxController {
   TextEditingController email = TextEditingController();
   RxDouble ratingValue = 0.0.obs;
   var pickedImage = Rx<File?>(null);
-  final slider.CarouselController carouselController =
-      slider.CarouselController(); // Add CarouselController
+  final slider.CarouselSliderController carouselController =
+      slider.CarouselSliderController(); // Add CarouselController
   VideoPlayerController? videoController;
   GetRatingViewModel? getRatingViewModel;
   String? userRatingValue;
@@ -465,7 +465,9 @@ class ProductController extends GetxController {
   }
 
   void goToPage(int index) {
-    carouselController.animateToPage(index); // Add method to change page
+    carouselController.animateToPage(index,
+        duration: Duration(milliseconds: 300),
+        curve: Curves.linear); // Add method to change page
   }
 
   void isFavoritesMethod() {

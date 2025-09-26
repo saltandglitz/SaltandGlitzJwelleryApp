@@ -1,4 +1,4 @@
-import 'package:carousel_slider/carousel_controller.dart' as slider;
+import 'package:carousel_slider/carousel_slider.dart' as slider;
 import 'package:carousel_slider/carousel_options.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -23,12 +23,12 @@ class DashboardController extends GetxController {
   var currentSolitaireIndex = 0.obs;
   var currentGiftsIndex = 0.obs;
   TextEditingController email = TextEditingController();
-  final slider.CarouselController carouselController =
-      slider.CarouselController();
-  final slider.CarouselController carouselSolitaireController =
-      slider.CarouselController();
-  final slider.CarouselController carouselGiftsController =
-      slider.CarouselController();
+  final slider.CarouselSliderController carouselController =
+      slider.CarouselSliderController();
+  final slider.CarouselSliderController carouselSolitaireController =
+      slider.CarouselSliderController();
+  final slider.CarouselSliderController carouselGiftsController =
+      slider.CarouselSliderController();
   late AnimationController animationController;
   List<Map<String, dynamic>> products = [];
   var isDialogVisible = false.obs;
