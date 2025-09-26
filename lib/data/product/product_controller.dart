@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:carousel_slider/carousel_controller.dart';
+import 'package:carousel_slider/carousel_controller.dart' as slider;
 import 'package:carousel_slider/carousel_options.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
@@ -36,8 +36,8 @@ class ProductController extends GetxController {
   TextEditingController email = TextEditingController();
   RxDouble ratingValue = 0.0.obs;
   var pickedImage = Rx<File?>(null);
-  final CarouselController carouselController =
-      CarouselController(); // Add CarouselController
+  final slider.CarouselController carouselController =
+      slider.CarouselController(); // Add CarouselController
   VideoPlayerController? videoController;
   GetRatingViewModel? getRatingViewModel;
   String? userRatingValue;
