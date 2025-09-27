@@ -160,6 +160,182 @@ class ProductController extends GetxController {
   //   ];
   // }
 
+  // Helper method to dynamically get diamond price from productData
+  dynamic getDiamondPrice(dynamic product) {
+    if (product == null) return null;
+
+    // Try camelCase first
+    try {
+      if (product.diamondPrice != null) {
+        return product.diamondPrice;
+      }
+    } catch (e) {
+      // Continue to next attempt
+    }
+
+    // Try lowercase
+    try {
+      if (product.diamondprice != null) {
+        return product.diamondprice;
+      }
+    } catch (e) {
+      // Continue to next attempt
+    }
+
+    // Try dynamic access as Map
+    try {
+      if (product is Map) {
+        return product['diamondPrice'] ?? product['diamondprice'];
+      }
+    } catch (e) {
+      // Continue to next attempt
+    }
+
+    return null;
+  }
+
+  // Helper method to dynamically access any field with both camelCase and lowercase variants
+  dynamic getDynamicField(
+      dynamic product, String camelCaseField, String lowerCaseField) {
+    if (product == null) return null;
+
+    // Try camelCase first
+    try {
+      final camelValue = _getFieldValue(product, camelCaseField);
+      if (camelValue != null) {
+        return camelValue;
+      }
+    } catch (e) {
+      // Continue to next attempt
+    }
+
+    // Try lowercase
+    try {
+      final lowerValue = _getFieldValue(product, lowerCaseField);
+      if (lowerValue != null) {
+        return lowerValue;
+      }
+    } catch (e) {
+      // Continue to next attempt
+    }
+
+    // Try dynamic access as Map
+    try {
+      if (product is Map) {
+        return product[camelCaseField] ?? product[lowerCaseField];
+      }
+    } catch (e) {
+      // Continue to next attempt
+    }
+
+    return null;
+  }
+
+  // Private helper to get field value using reflection-like access
+  dynamic _getFieldValue(dynamic object, String fieldName) {
+    try {
+      switch (fieldName) {
+        case 'diamondPrice':
+          return object.diamondPrice;
+        case 'diamondprice':
+          return object.diamondprice;
+        case 'makingCharge14KT':
+          return object.makingCharge14KT;
+        case 'makingcharge14kt':
+          return object.makingcharge14kt;
+        case 'makingCharge18KT':
+          return object.makingCharge18KT;
+        case 'makingcharge18kt':
+          return object.makingcharge18kt;
+        case 'diamondQt':
+          return object.diamondQt;
+        case 'diamondqt':
+          return object.diamondqt;
+        case 'diamondWt':
+          return object.diamondWt;
+        case 'diamondwt':
+          return object.diamondwt;
+        case 'netWeight14KT':
+          return object.netWeight14KT;
+        case 'netweight14kt':
+          return object.netweight14kt;
+        case 'netWeight18KT':
+          return object.netWeight18KT;
+        case 'netweight18kt':
+          return object.netweight18kt;
+        case 'grossWt':
+          return object.grossWt;
+        case 'grosswt':
+          return object.grosswt;
+        case 'gst14KT':
+          return object.gst14KT;
+        case 'gst14kt':
+          return object.gst14kt;
+        case 'gst18KT':
+          return object.gst18KT;
+        case 'gst18kt':
+          return object.gst18kt;
+        case 'total14KT':
+          return object.total14KT;
+        case 'total14kt':
+          return object.total14kt;
+        case 'total18KT':
+          return object.total18KT;
+        case 'total18kt':
+          return object.total18kt;
+        default:
+          return null;
+      }
+    } catch (e) {
+      return null;
+    }
+  }
+
+  // Specific helper methods for commonly used fields
+  dynamic getDiamondQt(dynamic product) {
+    return getDynamicField(product, 'diamondQt', 'diamondqt');
+  }
+
+  dynamic getDiamondWt(dynamic product) {
+    return getDynamicField(product, 'diamondWt', 'diamondwt');
+  }
+
+  dynamic getNetWeight14KT(dynamic product) {
+    return getDynamicField(product, 'netWeight14KT', 'netweight14kt');
+  }
+
+  dynamic getNetWeight18KT(dynamic product) {
+    return getDynamicField(product, 'netWeight18KT', 'netweight18kt');
+  }
+
+  dynamic getGrossWt(dynamic product) {
+    return getDynamicField(product, 'grossWt', 'grosswt');
+  }
+
+  dynamic getGst14KT(dynamic product) {
+    return getDynamicField(product, 'gst14KT', 'gst14kt');
+  }
+
+  dynamic getGst18KT(dynamic product) {
+    return getDynamicField(product, 'gst18KT', 'gst18kt');
+  }
+
+  dynamic getTotal14KT(dynamic product) {
+    return getDynamicField(product, 'total14KT', 'total14kt');
+  }
+
+  dynamic getTotal18KT(dynamic product) {
+    return getDynamicField(product, 'total18KT', 'total18kt');
+  }
+
+  dynamic getMakingCharge14KT(dynamic product) {
+    return getDynamicField(product, 'makingCharge14KT', 'makingcharge14kt');
+  }
+
+  dynamic getMakingCharge18KT(dynamic product) {
+    return getDynamicField(product, 'makingCharge18KT', 'makingcharge18kt');
+  }
+
   double calculateAdjustedPrice() {
     final size = byDefaultRingSize.value;
     final is18KT = ktCurrentIndex.value == 1;
@@ -169,7 +345,7 @@ class ProductController extends GetxController {
 
     // Base price from API
     double basePrice =
-        is18KT ? (product.total18KT ?? 0) : (product.total14KT ?? 0);
+        is18KT ? (getTotal18KT(product) ?? 0) : (getTotal14KT(product) ?? 0);
 
     // Return base price for sizes 6–10
     if (size <= 10) {

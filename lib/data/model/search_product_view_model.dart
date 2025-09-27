@@ -86,33 +86,37 @@ class SearchProductsViewModel {
         gift = json['gift'] as String?,
         rating = (json['rating'] as num?)?.toDouble();
 
+  // Getter to handle both camelCase and lowercase field names
+  double? get diamondPrice => diamondprice;
+
   Map<String, dynamic> toJson() => {
-    '_id' : id,
-    'id' : id,
-    'title' : title,
-    'price14KT' : price14KT,
-    'price18KT' : price18KT,
-    'category' : category,
-    'diamondprice' : diamondprice,
-    'makingCharge14KT' : makingCharge14KT,
-    'makingCharge18KT' : makingCharge18KT,
-    'grossWt' : grossWt,
-    'netWeight14KT' : netWeight14KT,
-    'netWeight18KT' : netWeight18KT,
-    'gst14KT' : gst14KT,
-    'gst18KT' : gst18KT,
-    'total14KT' : total14KT,
-    '__v' : v,
-    'gender' : gender,
-    'total18KT' : total18KT,
-    'subCategory' : subCategory,
-    'discount' : discount,
-    'image02' : image02,
-    'image03' : image03,
-    'updatedAt' : updatedAt,
-    'video' : video,
-    'image01' : image01,
-    'gift' : gift,
-    'rating' : rating
-  };
+        '_id': id,
+        'id': id,
+        'title': title,
+        'price14KT': price14KT,
+        'price18KT': price18KT,
+        'category': category,
+        'diamondprice': diamondprice,
+        'diamondPrice': diamondprice, // Add camelCase variant for compatibility
+        'makingCharge14KT': makingCharge14KT,
+        'makingCharge18KT': makingCharge18KT,
+        'grossWt': grossWt,
+        'netWeight14KT': netWeight14KT,
+        'netWeight18KT': netWeight18KT,
+        'gst14KT': gst14KT,
+        'gst18KT': gst18KT,
+        'total14KT': total14KT,
+        '__v': v,
+        'gender': gender,
+        'total18KT': total18KT,
+        'subCategory': subCategory,
+        'discount': discount,
+        'image02': image02,
+        'image03': image03,
+        'updatedAt': updatedAt,
+        'video': video,
+        'image01': image01,
+        'gift': gift,
+        'rating': rating
+      };
 }

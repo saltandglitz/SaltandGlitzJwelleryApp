@@ -46,6 +46,40 @@ class _ProductScreenState extends State<ProductScreen> {
       Get.put<DashboardController>(DashboardController());
   int expandedTileIndex = -1;
 
+  // Helper method to dynamically get diamond price from productData
+  dynamic getDiamondPrice(dynamic productData) {
+    if (productData == null) return null;
+
+    // Try camelCase first
+    try {
+      if (productData.diamondPrice != null) {
+        return productData.diamondPrice;
+      }
+    } catch (e) {
+      // Continue to next attempt
+    }
+
+    // Try lowercase
+    try {
+      if (productData.diamondprice != null) {
+        return productData.diamondprice;
+      }
+    } catch (e) {
+      // Continue to next attempt
+    }
+
+    // Try dynamic access as Map
+    try {
+      if (productData is Map) {
+        return productData['diamondPrice'] ?? productData['diamondprice'];
+      }
+    } catch (e) {
+      // Continue to next attempt
+    }
+
+    return null;
+  }
+
   String _formattedDeliveryDate() {
     DateTime date = DateTime.now().add(const Duration(days: 17));
     List<String> monthNames = [
@@ -1463,7 +1497,7 @@ class _ProductScreenState extends State<ProductScreen> {
                                                       ),
                                                     ),
                                                     Text(
-                                                      "${controller.productData?.grossWt} gram",
+                                                      "${controller.getGrossWt(controller.productData)} gram",
                                                       style:
                                                           mediumSmall.copyWith(
                                                         color: ColorResources
@@ -1487,7 +1521,7 @@ class _ProductScreenState extends State<ProductScreen> {
                                                       ),
                                                     ),
                                                     Text(
-                                                      "${controller.productData?.netWeight14KT} gram",
+                                                      "${controller.getNetWeight14KT(controller.productData)} gram",
                                                       style:
                                                           mediumSmall.copyWith(
                                                         color: ColorResources
@@ -1587,7 +1621,7 @@ class _ProductScreenState extends State<ProductScreen> {
                                                             width: Dimensions
                                                                 .space7),
                                                         Text(
-                                                          "${controller.productData?.diamondQt} CT",
+                                                          "${controller.getDiamondQt(controller.productData)} CT",
                                                           style: semiBoldDefault
                                                               .copyWith(
                                                                   color: ColorResources
@@ -1609,7 +1643,7 @@ class _ProductScreenState extends State<ProductScreen> {
                                                             width: Dimensions
                                                                 .space7),
                                                         Text(
-                                                          "${controller.productData?.diamondQt}",
+                                                          "${controller.getDiamondQt(controller.productData)}",
                                                           style: semiBoldDefault
                                                               .copyWith(
                                                                   color: ColorResources
@@ -1778,29 +1812,33 @@ class _ProductScreenState extends State<ProductScreen> {
                                                         .productData?.price14KT
                                                     : controller
                                                         .productData?.price18KT,
-                                                controller
-                                                    .productData?.diamondPrice,
-                                                controller.ktCurrentIndex
-                                                            .value ==
-                                                        0
-                                                    ? controller.productData
-                                                        ?.makingCharge14KT
-                                                    : controller.productData
-                                                        ?.makingCharge18KT,
+                                                getDiamondPrice(
+                                                    controller.productData),
                                                 controller.ktCurrentIndex
                                                             .value ==
                                                         0
                                                     ? controller
-                                                        .productData?.gst14KT
+                                                        .getMakingCharge14KT(
+                                                            controller
+                                                                .productData)
                                                     : controller
-                                                        .productData?.gst18KT,
+                                                        .getMakingCharge18KT(
+                                                            controller
+                                                                .productData),
                                                 controller.ktCurrentIndex
                                                             .value ==
                                                         0
-                                                    ? controller
-                                                        .productData?.total14KT
-                                                    : controller
-                                                        .productData?.total18KT,
+                                                    ? controller.getGst14KT(
+                                                        controller.productData)
+                                                    : controller.getGst18KT(
+                                                        controller.productData),
+                                                controller.ktCurrentIndex
+                                                            .value ==
+                                                        0
+                                                    ? controller.getTotal14KT(
+                                                        controller.productData)
+                                                    : controller.getTotal18KT(
+                                                        controller.productData),
                                               ];
                                               return Column(
                                                 children: [

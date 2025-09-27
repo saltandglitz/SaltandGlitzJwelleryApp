@@ -303,14 +303,11 @@ class DashboardController extends GetxController {
   animatedMenuIconChange() {
     if (isMenuOpen) {
       animationController.reverse();
-      Future.delayed(const Duration(milliseconds: 400), () {
-        bottomBarController.changeIndex(0);
-      });
+      bottomBarController.changeIndex(0);
     } else {
       animationController.forward();
-      Future.delayed(const Duration(milliseconds: 400), () {
-        bottomBarController.changeIndex(1);
-      });
+
+      bottomBarController.changeIndex(1);
     }
     isMenuOpen = !isMenuOpen;
     update();
