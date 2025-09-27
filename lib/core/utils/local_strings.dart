@@ -35,6 +35,15 @@ class LocalStrings {
   static String logInApi = appStrings.isNotEmpty
       ? appStrings['logInApi']
       : "https://api.saltandglitz.com/api/users/login";
+  static String getUserProfileApi = appStrings.isNotEmpty
+      ? appStrings['getUserProfileApi']
+      : "https://api.saltandglitz.com/api/users/profile";
+  static String editUserProfileApi = appStrings.isNotEmpty
+      ? appStrings['editUserProfileApi']
+      : "https://api.saltandglitz.com/api/users/userEdit";
+  static String markProfileCompletedApi = appStrings.isNotEmpty
+      ? appStrings['markProfileCompletedApi']
+      : "https://api.saltandglitz.com/api/users/markProfileCompleted";
   static String filterProductApi = appStrings.isNotEmpty
       ? appStrings['filterProductApi']
       : "https://api.saltandglitz.com/v1/upload/filterProduct";

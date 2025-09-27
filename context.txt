@@ -1,0 +1,408 @@
+# Salt & Glitz API Documentation
+
+This document provides a detailed overview of the Salt & Glitz API endpoints, including expected payloads and responses.
+
+## User Authentication & Management (`/api/users`)
+
+### User Signup
+
+-   **Endpoint:** `POST /api/users/register`
+-   **Description:** Registers a new user.
+-   **Request Body:**
+    ```json
+    {
+      "firstName": "John",
+      "lastName": "Doe",
+      "email": "john.doe@example.com",
+      "password": "password123",
+      "gender": "male",
+      "mobileNumber": "1234567890"
+    }
+    ```
+-   **Success Response (201):**
+    ```json
+    {
+      "message": "User registered successfully",
+      "user": {
+        "firstName": "John",
+        "lastName": "Doe",
+        "email": "john.doe@example.com",
+        "gender": "male",
+        "mobileNumber": "1234567890",
+        "profileCompleted": false,
+        "token": "jwt_token",
+        "_id": "...",
+        "createdAt": "...",
+        "updatedAt": "..."
+      }
+    }
+    ```
+-   **Error Response (400):**
+    -   `{ "message": "All fields are required" }`
+    -   `{ "message": "User already exists" }`
+    -   `{ "message": "MobileNumber already exists" }`
+
+### User Login
+
+-   **Endpoint:** `POST /api/users/login`
+-   **Description:** Logs in an existing user.
+-   **Request Body:**
+    ```json
+    {
+      "email": "john.doe@example.com",
+      "password": "password123"
+    }
+    ```
+-   **Success Response (200):**
+    ```json
+    {
+      "message": "Login successful",
+      "user": {
+        "...": "user object with token"
+      }
+    }
+    ```
+-   **Error Response (400):** `{ "message": "Invalid credentials" }`
+
+### Google Login
+
+-   **Endpoint:** `POST /api/users/google-login`
+-   **Description:** Authenticates a user via a Google ID token.
+-   **Request Body:**
+    ```json
+    {
+      "token": "firebase_id_token"
+    }
+    ```
+-   **Success Response (200):**
+    ```json
+    {
+      "message": "Token verified successfully",
+      "user": {
+        "...": "decoded firebase token"
+      }
+    }
+    ```
+-   **Error Response (401):** `{ "message": "Invalid Google token" }`
+
+### Get User Profile
+
+-   **Endpoint:** `GET /api/users/profile`
+-   **Description:** Retrieves the profile of the authenticated user.
+-   **Request Headers:** `Authorization: Bearer <your_jwt_token>`
+-   **Success Response (200):** User object from the database, including `userSaltCash`.
+-   **Error Response (401/404):** `{ "message": "..." }`
+
+### Mark Profile as Complete
+
+-   **Endpoint:** `PUT /api/users/markProfileCompleted`
+-   **Description:** Marks the authenticated user's profile as complete.
+-   **Request Headers:** `Authorization: Bearer <your_jwt_token>`
+-   **Success Response (200):**
+    ```json
+    {
+      "message": "Profile marked as completed.",
+      "user": {
+        "...": "updated user object"
+      }
+    }
+    ```
+
+### Edit User Profile
+
+-   **Endpoint:** `PUT /api/users/userEdit/:id`
+-   **Description:** Edits a user's profile information.
+-   **Request Params:** `id` (User ID)
+-   **Request Body:**
+    ```json
+    {
+      "firstName": "John",
+      "lastName": "Doe",
+      "gender": "male",
+      "mobileNumber": "1234567890",
+      "dateOfBirth": "1990-01-01",
+      "aniversaryDate": "2020-01-01",
+      "pincode": "123456",
+      "occupation": "Engineer",
+      "shippingAddress": {
+        "streetAndHouseNumber": "123 Main St",
+        "additionalInfo": "Apt 4B",
+        "city": "Anytown",
+        "state": "Anystate"
+      }
+    }
+    ```
+-   **Success Response (200):**
+    ```json
+    {
+      "message": "User profile updated successfully",
+      "user": {
+        "...": "subset of updated user fields"
+      }
+    }
+    ```
+
+### Get All Users
+
+-   **Endpoint:** `GET /api/users/getUser`
+-   **Description:** Retrieves a list of all users with their wallet balances.
+-   **Success Response (200):**
+    ```json
+    {
+      "message": "Fetched all users with wallet balances",
+      "users": [
+        {
+          "...": "user object with userSaltCash"
+        }
+      ]
+    }
+    ```
+
+### Delete User
+
+-   **Endpoint:** `DELETE /api/users/removeUser/:id`
+-   **Description:** Deletes a user by ID.
+-   **Request Params:** `id` (User ID)
+-   **Success Response (200):**
+    ```json
+    {
+      "message": "user remove successfully",
+      "user": {
+        "...": "deleted user object"
+      }
+    }
+    ```
+
+### Logout User
+
+-   **Endpoint:** `POST /api/users/logout`
+-   **Description:** Logs out the authenticated user.
+-   **Request Headers:** `Authorization: Bearer <your_jwt_token>`
+-   **Success Response (200):** `{ "message": "Logout successful" }`
+
+### Password Management
+
+-   **Reset Password:** `POST /api/users/resetPassword/:id`
+    -   **Payload:** `{ "oldPassword": "...", "newPassword": "..." }`
+    -   **Response:** `{ "message": "password reset successfully", "user": {...} }`
+-   **Forgot Password:** `POST /api/users/forgotPassword`
+    -   **Payload:** `{ "email": "..." }`
+    -   **Response:** `{ "message": "otp sent successfully on registered email" }`
+-   **Verify OTP and Reset Password:** `POST /api/users/verifyOtpAndResetPassword`
+    -   **Payload:** `{ "email": "...", "otp": "...", "newPassword": "..." }`
+    -   **Response:** `{ "message": "password reset successfully" }`
+
+### Phone Verification
+
+-   **Request OTP:** `POST /api/users/request-otp`
+    -   **Payload:** `{ "phone": "..." }`
+    -   **Response:** `{ "message": "OTP sent successfully" }`
+-   **Verify OTP:** `POST /api/users/verify-otp`
+    -   **Payload:** `{ "phone": "...", "otp": "..." }`
+    -   **Response:** `{ "message": "OTP verified successfully", "token": "mock-jwt-token-for-..." }`
+
+## Admin (`/v1/admin`)
+
+### Create Admin
+
+-   **Endpoint:** `POST /v1/admin/create-admin`
+-   **Request Body:**
+    ```json
+    {
+      "email": "admin@example.com",
+      "password": "securepassword"
+    }
+    ```
+-   **Success Response (200):**
+    ```json
+    {
+      "message": "Created",
+      "success": true,
+      "data": {
+        "email": "admin@example.com",
+        "password": "hashedpassword",
+        "_id": "...",
+        "createdAt": "...",
+        "updatedAt": "..."
+      }
+    }
+    ```
+
+### Get Admins
+
+-   **Endpoint:** `GET /v1/admin/get-admin`
+-   **Success Response (200):**
+    ```json
+    {
+      "message": "Founded",
+      "success": true,
+      "data": [
+        {
+          "admin_id": "...",
+          "email": "admin@example.com",
+          "password": "hashedpassword",
+          "createdAt": "...",
+          "updatedAt": "..."
+        }
+      ]
+    }
+    ```
+
+## Cart (`/v1/cart`)
+
+### Add to Cart
+
+-   **Endpoint:** `POST /v1/cart/addCart`
+-   **Request Body:**
+    ```json
+    {
+      "product": "product_id",
+      "user": "user_id_or_guest_uuid",
+      "quantity": 1,
+      "size": 12,
+      "caratBy": "14KT",
+      "colorBy": "yellowgold"
+    }
+    ```
+-   **Success Response (201/200):** `{ "status": true, "message": "...", "newCart/updatedCart": { ...cartObject } }`
+
+### Get Cart
+
+-   **Endpoint:** `GET /v1/cart/getCart/:user`
+-   **Request Params:** `user` (User ID or guest UUID)
+-   **Success Response (200):** `{ "status": true, "message": "Cart fetched successfully", "cart": { ...cartObject }, "totalQuantity": 1, "coupons": [ ...coupons ] }`
+
+### Remove from Cart
+
+-   **Endpoint:** `DELETE /v1/cart/remove/:user/:product`
+-   **Request Params:** `user` (User ID), `product` (Product ID)
+-   **Success Response (200):** `{ "status": true, "message": "...", "updatedCart": { ...cartObject } }`
+
+### Increment Quantity
+
+-   **Endpoint:** `POST /v1/cart/cartIncrement`
+-   **Request Body:**
+    ```json
+    {
+      "cartId": "...",
+      "productId": "...",
+      "quantity": 1,
+      "caratBy": "14KT",
+      "colorBy": "yellowgold",
+      "size": 12
+    }
+    ```
+-   **Success Response (200):** `{ "status": true, "message": "...", "updatedCart": { ...cartObject } }`
+
+### Decrement Quantity
+
+-   **Endpoint:** `POST /v1/cart/cartDecrement`
+-   **Request Body:**
+    ```json
+    {
+      "cartId": "...",
+      "productId": "...",
+      "quantity": 1,
+      "caratBy": "14KT",
+      "colorBy": "yellowgold",
+      "size": 12
+    }
+    ```
+-   **Success Response (200):** `{ "status": true, "message": "...", "updatedCart": { ...cartObject } }`
+
+## Wishlist (`/v1/wishlist`)
+
+### Add to Wishlist
+
+-   **Endpoint:** `POST /v1/wishlist/create_wishlist`
+-   **Request Body:**
+    ```json
+    {
+      "userId": "user_id_or_guest_uuid",
+      "productId": "...",
+      "size": 12,
+      "caratBy": "14KT",
+      "colorBy": "yellowgold"
+    }
+    ```
+-   **Success Response (201):** `{ "status": true, "message": "...", "wishlist": { ...wishlistObject } }`
+
+### Get Wishlist
+
+-   **Endpoint:** `GET /v1/wishlist/get_wishlist/:userId`
+-   **Request Params:** `userId`
+-   **Success Response (200):** `{ "status": true, "message": "Wishlist retrieved", "wishlist": { ...wishlistObject } }`
+
+### Remove from Wishlist
+
+-   **Endpoint:** `DELETE /v1/wishlist/remove_wishlist/:userId/:productId`
+-   **Request Params:** `userId`, `productId`
+-   **Success Response (200):** `{ "status": true, "message": "...", "updatedWishlist": { ...wishlistObject } }`
+
+### Merge Wishlist
+
+-   **Endpoint:** `POST /v1/wishlist/mergeWishlist`
+-   **Request Body:**
+    ```json
+    {
+      "userId": "...",
+      "productIds": ["...", "..."]
+    }
+    ```
+-   **Success Response (201):** `{ "status": true, "message": "Wishlist merged successfully", "wishlist": { ...wishlistObject } }`
+
+## Merge Cart and Wishlist (`/v1/merge`)
+
+-   **Endpoint:** `POST /v1/merge/mergeCartAndWishlist`
+-   **Description:** Merges a guest's cart and wishlist with a registered user's account.
+-   **Request Body:**
+    ```json
+    {
+      "userId": "user_id",
+      "cartProducts": [
+        {
+          "productId": "...",
+          "size": 12,
+          "caratBy": "14KT",
+          "colorBy": "yellowgold"
+        }
+      ],
+      "wishlistProducts": [
+        {
+          "productId": "..."
+        }
+      ]
+    }
+    ```
+-   **Success Response (201):**
+    ```json
+    {
+      "message": "Cart and Wishlist merged successfully",
+      "cart": { "...": "cart object" },
+      "wishlist": { "...": "wishlist object" }
+    }
+    ```
+
+## Product (`/v1/product`)
+
+-   **Get all products:** `GET /v1/product`
+-   **Create a new product:** `POST /v1/product` (multipart/form-data)
+-   **Delete a product:** `DELETE /v1/product/:id`
+
+## Product Upload (`/v1/upload`)
+
+-   **Bulk Upload/Update:** `POST /v1/upload/post_upload`
+    -   **Payload:** `{ "products": [ ...product_objects ] }`
+-   **Get All Uploaded Products:** `GET /v1/upload/get_upload`
+-   **Get Products by Gender:** `GET /v1/upload/get_upload_byGender`
+-   **Get Product by ID:** `GET /v1/upload/get_id/:id`
+-   **Get Similar Products:** `GET /v1/upload/get_similar/:id`
+-   **Get Product by Category and Slug:** `GET /v1/upload/:category/:slug`
+-   **Filter Products:** `POST /v1/upload/filterProduct`
+    -   **Payload:** `{ "title": "...", "category": "...", ... }` (various filter criteria)
+-   **Get New Arrivals:** `GET /v1/upload/newArrival`
+-   **Get Solitaire Products:** `GET /v1/upload/solitire`
+-   **Update Gold Rate:** `POST /v1/upload/updateRate`
+    -   **Payload:** `{ "price14KT": 1000, "price18KT": 1200 }`
+
+## And many more endpoints are available in the codebase...

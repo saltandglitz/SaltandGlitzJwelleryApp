@@ -107,76 +107,154 @@ class _MyAccountScreenState extends State<MyAccountScreen>
                           children: [
                             PrefManager.getString('isLogin') == 'yes'
                                 ?
-                                // After login view
-                                Container(
-                                    width: double.infinity,
-                                    padding: EdgeInsets.only(
-                                        top: padding.top * 1.3,
-                                        left: 15,
-                                        right: 15,
-                                        bottom: 20),
-                                    color: ColorResources.buttonColor,
-                                    child: Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        Expanded(
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                "${LocalStrings.hi}, ${PrefManager.getString('firstName') ?? ''} ${PrefManager.getString('lastName') ?? ''}",
-                                                style:
-                                                    semiBoldExtraLarge.copyWith(
+                                // After login view - show complete profile only if not completed
+                                myAccountController.isProfileCompleted.value ==
+                                        false
+                                    ? Container(
+                                        width: double.infinity,
+                                        padding: EdgeInsets.only(
+                                            top: padding.top * 1.3,
+                                            left: 15,
+                                            right: 15,
+                                            bottom: 20),
+                                        color: ColorResources.buttonColor,
+                                        child: Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            Expanded(
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    "${LocalStrings.hi}, ${PrefManager.getString('firstName') ?? ''} ${PrefManager.getString('lastName') ?? ''}",
+                                                    style: semiBoldExtraLarge
+                                                        .copyWith(
+                                                            color: ColorResources
+                                                                .inactiveCardColor),
+                                                  ),
+                                                  const SizedBox(
+                                                      height:
+                                                          Dimensions.space2),
+                                                  Text(
+                                                    LocalStrings
+                                                        .completeProfile,
+                                                    style: mediumDefault.copyWith(
                                                         color: ColorResources
                                                             .inactiveCardColor),
+                                                  ),
+                                                ],
                                               ),
-                                              const SizedBox(
-                                                  height: Dimensions.space2),
-                                              Text(
-                                                LocalStrings.completeProfile,
-                                                style: mediumDefault.copyWith(
-                                                    color: ColorResources
-                                                        .inactiveCardColor),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        const SizedBox(
-                                            width: Dimensions.space40),
-                                        CommonButton(
-                                          onTap: () {
-                                            /// Analysis Complete profile
-                                            AppAnalytics().actionTriggerLogs(
-                                                eventName: LocalStrings
-                                                    .logMyAccountCompleteProfile,
-                                                index: 2);
-                                            Get.toNamed(
-                                                RouteHelper.editProfileScreen);
-                                          },
-                                          borderColor:
-                                              ColorResources.whiteColor,
-                                          borderRadius: 8,
-                                          height: size.height * 0.040,
-                                          width: size.width * 0.25,
-                                          buttonColor:
-                                              ColorResources.buttonColorDark,
-                                          textStyle: semiBoldLarge.copyWith(),
-                                          gradientFirstColor:
-                                              Colors.transparent,
-                                          gradientSecondColor:
-                                              Colors.transparent,
-                                          child: Text(
-                                            LocalStrings.complete,
-                                            style: mediumDefault.copyWith(
-                                              color: ColorResources.whiteColor,
                                             ),
-                                          ),
+                                            const SizedBox(
+                                                width: Dimensions.space40),
+                                            CommonButton(
+                                              onTap: () {
+                                                /// Analysis Complete profile
+                                                AppAnalytics().actionTriggerLogs(
+                                                    eventName: LocalStrings
+                                                        .logMyAccountCompleteProfile,
+                                                    index: 2);
+                                                Get.toNamed(RouteHelper
+                                                    .editProfileScreen);
+                                              },
+                                              borderColor:
+                                                  ColorResources.whiteColor,
+                                              borderRadius: 8,
+                                              height: size.height * 0.040,
+                                              width: size.width * 0.25,
+                                              buttonColor: ColorResources
+                                                  .buttonColorDark,
+                                              textStyle:
+                                                  semiBoldLarge.copyWith(),
+                                              gradientFirstColor:
+                                                  Colors.transparent,
+                                              gradientSecondColor:
+                                                  Colors.transparent,
+                                              child: Text(
+                                                LocalStrings.complete,
+                                                style: mediumDefault.copyWith(
+                                                  color:
+                                                      ColorResources.whiteColor,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
                                         ),
-                                      ],
-                                    ),
-                                  )
+                                      )
+                                    : Container(
+                                        width: double.infinity,
+                                        padding: EdgeInsets.only(
+                                            top: padding.top * 1.3,
+                                            left: 15,
+                                            right: 15,
+                                            bottom: 20),
+                                        color: ColorResources.buttonColor,
+                                        child: Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            Expanded(
+                                              child: Column(
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.start,
+                                                children: [
+                                                  Text(
+                                                    "${LocalStrings.hi}, ${PrefManager.getString('firstName') ?? ''} ${PrefManager.getString('lastName') ?? ''}",
+                                                    style: semiBoldExtraLarge
+                                                        .copyWith(
+                                                            color: ColorResources
+                                                                .inactiveCardColor),
+                                                  ),
+                                                  const SizedBox(
+                                                      height:
+                                                          Dimensions.space2),
+                                                  Text(
+                                                    "Welcome back! Your profile is complete.",
+                                                    style: mediumDefault.copyWith(
+                                                        color: ColorResources
+                                                            .inactiveCardColor),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            const SizedBox(
+                                                width: Dimensions.space40),
+                                            CommonButton(
+                                              onTap: () {
+                                                /// Analysis Edit profile
+                                                AppAnalytics().actionTriggerLogs(
+                                                    eventName: LocalStrings
+                                                        .logMyAccountCompleteProfile,
+                                                    index: 2);
+                                                Get.toNamed(RouteHelper
+                                                    .editProfileScreen);
+                                              },
+                                              borderColor:
+                                                  ColorResources.whiteColor,
+                                              borderRadius: 8,
+                                              height: size.height * 0.040,
+                                              width: size.width * 0.25,
+                                              buttonColor: ColorResources
+                                                  .buttonColorDark,
+                                              textStyle:
+                                                  semiBoldLarge.copyWith(),
+                                              gradientFirstColor:
+                                                  Colors.transparent,
+                                              gradientSecondColor:
+                                                  Colors.transparent,
+                                              child: Text(
+                                                "Edit Profile",
+                                                style: mediumDefault.copyWith(
+                                                  color:
+                                                      ColorResources.whiteColor,
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      )
                                 :
                                 // without Login view
                                 Container(

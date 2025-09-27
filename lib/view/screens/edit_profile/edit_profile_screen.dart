@@ -490,6 +490,46 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                         ),
                       ),
                     ),
+                    const SizedBox(height: Dimensions.space35),
+                    // Shipping Address Section
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.only(bottom: 10),
+                      child: Text(
+                        LocalStrings.shippingAddress,
+                        style: semiBoldMediumLarge.copyWith(
+                          color: ColorResources.buttonColor,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: Dimensions.space15),
+                    // Street and House Number
+                    AppTextFieldWidget(
+                      controller: controller.streetAndHouseNumber,
+                      isShowCountryPicker: false,
+                      labelText: 'Street and House Number',
+                    ),
+                    const SizedBox(height: Dimensions.space20),
+                    // Additional Info
+                    AppTextFieldWidget(
+                      controller: controller.additionalInfo,
+                      isShowCountryPicker: false,
+                      labelText: 'Additional Info (Optional)',
+                    ),
+                    const SizedBox(height: Dimensions.space20),
+                    // City
+                    AppTextFieldWidget(
+                      controller: controller.city,
+                      isShowCountryPicker: false,
+                      labelText: 'City',
+                    ),
+                    const SizedBox(height: Dimensions.space20),
+                    // State
+                    AppTextFieldWidget(
+                      controller: controller.state,
+                      isShowCountryPicker: false,
+                      labelText: 'State',
+                    ),
                     const SizedBox(height: Dimensions.space25),
                     RichText(
                       textAlign: TextAlign.center,

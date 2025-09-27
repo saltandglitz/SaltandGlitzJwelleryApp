@@ -16,6 +16,7 @@ import '../../../core/utils/local_strings.dart';
 import '../../../core/utils/validation.dart';
 import '../../../local_storage/pref_manager.dart';
 import '../../../view/components/common_message_show.dart';
+import '../../model/user_profile_model.dart';
 import '../bottom_bar/bottom_bar_controller.dart';
 import '../my_account/my_account_controller.dart';
 
@@ -46,6 +47,7 @@ class CreateAccountController extends GetxController {
   RxBool isEnableNetwork = false.obs;
   RxBool isCreateUserAccount = false.obs;
   RxBool isLogin = false.obs;
+  UserProfile? userProfile;
 
   @override
   void onInit() {
@@ -292,6 +294,9 @@ class CreateAccountController extends GetxController {
           PrefManager.setString('phoneNumber', phoneNumber);
           PrefManager.setString('loginType', 'Google');
 
+          // Fetch complete user profile
+          await getUserProfile();
+
           //Todo : Off all navigation and move My account screen
           Get.offAllNamed(RouteHelper.bottomBarScreen);
           bottomBarController.selectedIndex = 2.obs;
@@ -312,7 +317,90 @@ class CreateAccountController extends GetxController {
     return user;
   }
 
-// Google authentication get token and push this api method to login google authentication users
+  //Todo: Get user profile method to fetch complete user data
+  Future<void> getUserProfile() async {
+    try {
+      debugPrint('Fetching user profile...');
+      Response? response;
+      try{
+         response = await APIFunction().apiCall(
+          apiName: LocalStrings.getUserProfileApi,
+          context: Get.context,
+          isLoading: false,
+          token: "Bearer ${PrefManager.getString('token')}",
+          params: {},
+          isGet: true,
+          
+        );
+      } catch(e){
+        debugPrint('Error fetching user profile: $e');
+        return; // Early return if API call fails
+      }
+
+      if (response?.statusCode == 200) {
+        // Parse the user profile data
+        userProfile = UserProfile.fromJson(response!.data);
+
+        // Store complete user profile data in PrefManager
+        if (userProfile != null) {
+          PrefManager.setString('firstName', userProfile!.firstName ?? '');
+          PrefManager.setString('lastName', userProfile!.lastName ?? '');
+          PrefManager.setString('email', userProfile!.email ?? '');
+          PrefManager.setString('phoneNumber', userProfile!.mobileNumber ?? '');
+          PrefManager.setString('gender', userProfile!.gender ?? '');
+          PrefManager.setString('userId', userProfile!.id ?? '');
+          PrefManager.setString('token',
+              userProfile!.token ?? PrefManager.getString('token') ?? '');
+          PrefManager.setString(
+              'userSaltCash', userProfile!.userSaltCash?.toString() ?? '0');
+          PrefManager.setString('profileCompleted',
+              userProfile!.profileCompleted?.toString() ?? 'false');
+          PrefManager.setString(
+              'memberShipTier', userProfile!.memberShipTier ?? '');
+
+          // Store additional profile fields
+          PrefManager.setString('pincode', userProfile!.pincode ?? '');
+          PrefManager.setString('occupation', userProfile!.occupation ?? '');
+
+          if (userProfile!.dateOfBirth != null) {
+            PrefManager.setString('dateOfBirth',
+                userProfile!.dateOfBirth!.toString().split(' ')[0]);
+          }
+
+          if (userProfile!.aniversaryDate != null) {
+            PrefManager.setString('aniversaryDate',
+                userProfile!.aniversaryDate!.toString().split(' ')[0]);
+          }
+
+          // Store shipping address
+          if (userProfile!.shippingAddress != null) {
+            PrefManager.setString('streetAndHouseNumber',
+                userProfile!.shippingAddress!.streetAndHouseNumber ?? '');
+            PrefManager.setString('additionalInfo',
+                userProfile!.shippingAddress!.additionalInfo ?? '');
+            PrefManager.setString(
+                'city', userProfile!.shippingAddress!.city ?? '');
+            PrefManager.setString(
+                'state', userProfile!.shippingAddress!.state ?? '');
+          }
+
+          // Update MyAccountController's profile completion status
+          if (Get.isRegistered<MyAccountController>()) {
+            final myAccountController = Get.find<MyAccountController>();
+            myAccountController.profileCompleteProgress =
+                userProfile!.getProfileCompletionPercentage();
+            myAccountController.update();
+          }
+        }
+
+        update();
+      }
+    } catch (e) {
+      print("Error fetching user profile: $e");
+    }
+  }
+
+  // Google authentication get token and push this api method to login google authentication users
   Future googleSigInPushTokenBackendMethod({String? token}) async {
     try {
       Map<String, dynamic> params = {"token": token ?? ''};
@@ -349,8 +437,6 @@ class CreateAccountController extends GetxController {
     update();
     final bottomBarController =
         Get.put<BottomBarController>(BottomBarController());
-    final myAccountController =
-        Get.put<MyAccountController>(MyAccountController());
     final GoogleSignIn googleSignIn = GoogleSignIn();
     try {
       /// Checked is web or not after sign Out google functionality
@@ -416,7 +502,10 @@ class CreateAccountController extends GetxController {
         PrefManager.setString('lastName', lastName);
         PrefManager.setString('email', email);
         PrefManager.setString('phoneNumber', phoneNumber);
-        PrefManager.setString('loginType', 'FaceBook');
+        PrefManager.setString('loginType', 'Facebook');
+
+        // Fetch complete user profile
+        await getUserProfile();
 
         /// New account create time to back
         //Todo : Off all navigation and move My account screen
@@ -446,8 +535,7 @@ class CreateAccountController extends GetxController {
     update();
     final bottomBarController =
         Get.put<BottomBarController>(BottomBarController());
-    final myAccountController =
-        Get.put<MyAccountController>(MyAccountController());
+
     try {
       // Sign out from Firebase
       await FirebaseAuth.instance.signOut();
@@ -516,6 +604,10 @@ class CreateAccountController extends GetxController {
         PrefManager.setString('gender', gender ?? '');
         PrefManager.setString('token', response.data['user']['token'] ?? '');
         PrefManager.setString('userId', response.data['user']['_id'] ?? '');
+
+        // Fetch complete user profile
+        await getUserProfile();
+
         //Todo : Off all navigation and move My account screen
         Get.offAllNamed(RouteHelper.bottomBarScreen);
         bottomBarController.selectedIndex = 2.obs;
@@ -621,6 +713,10 @@ class CreateAccountController extends GetxController {
         PrefManager.setString('gender', response.data['user']['gender'] ?? '');
         PrefManager.setString('token', response.data['user']['token'] ?? '');
         PrefManager.setString('userId', response.data['user']['_id'] ?? '');
+
+        // Fetch complete user profile
+        await getUserProfile();
+
         Get.offAllNamed(RouteHelper.bottomBarScreen);
         bottomBarController.selectedIndex = 2.obs;
       } else {

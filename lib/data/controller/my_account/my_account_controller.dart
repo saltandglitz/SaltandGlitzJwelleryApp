@@ -1,7 +1,9 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:get/get.dart' hide Response;
 import 'package:saltandGlitz/api_repository/api_function.dart';
+import 'package:saltandGlitz/api_repository/dio_client.dart';
 import 'package:saltandGlitz/core/utils/color_resources.dart';
 import 'package:saltandGlitz/core/utils/dimensions.dart';
 import 'package:saltandGlitz/core/utils/local_strings.dart';
@@ -11,14 +13,17 @@ import '../../../core/route/route.dart';
 import '../../../core/utils/style.dart';
 import '../../../local_storage/pref_manager.dart';
 import '../../../view/components/common_button.dart';
+import '../../model/user_profile_model.dart';
 import '../create_account/create_account_controller.dart';
 
 class MyAccountController extends GetxController {
   late AnimationController animationController;
   late Animation<Color?> borderColorAnimation;
 
-  double profileCompleteProgress = 0.6;
+  double profileCompleteProgress = 0.0;
   RxBool isEnableNetwork = false.obs;
+  RxBool isProfileCompleted = false.obs;
+  UserProfile? userProfile;
   List accountServiceTitleLst = [
     LocalStrings.orders,
     LocalStrings.addCart,
@@ -80,6 +85,104 @@ class MyAccountController extends GetxController {
     LocalStrings.referralCodeFirst,
   ];
 
+  @override
+  void onInit() {
+    super.onInit();
+    // Check if user is logged in and fetch profile
+    if (PrefManager.getString('isLogin') == 'yes') {
+      getUserProfile();
+    }
+    // Load profile status from local storage
+    String profileCompletedStr =
+        PrefManager.getString('profileCompleted') ?? 'false';
+    isProfileCompleted.value = profileCompletedStr == 'true';
+  }
+
+  //Todo: Get user profile method to fetch complete user data
+  Future<void> getUserProfile() async {
+    try {
+      String? token = PrefManager.getString('token');
+      if (token == null || token.isEmpty) return;
+
+      Response response;
+
+      try {
+        response = await Dioclient.get(
+          "/users/profile",
+        );
+      } catch (e) {
+        debugPrint(token);
+        debugPrint(
+            'Error fetching user profile fddddddd-----------------------------: $e');
+        return;
+      }
+      debugPrint('User profile data: ${response.data}');
+      if (response.statusCode == 200) {
+        // Parse the user profile data
+
+        userProfile = UserProfile.fromJson(response.data);
+        debugPrint(
+            'User profile data after response -----------------------: ${response.data}');
+        // Store complete user profile data in PrefManager
+        if (userProfile != null) {
+          PrefManager.setString('firstName', userProfile!.firstName ?? '');
+          PrefManager.setString('lastName', userProfile!.lastName ?? '');
+          PrefManager.setString('email', userProfile!.email ?? '');
+          PrefManager.setString('phoneNumber', userProfile!.mobileNumber ?? '');
+          PrefManager.setString('gender', userProfile!.gender ?? '');
+          PrefManager.setString('userId', userProfile!.id ?? '');
+          PrefManager.setString(
+              'userSaltCash', userProfile!.userSaltCash?.toString() ?? '0');
+          PrefManager.setString('profileCompleted',
+              userProfile!.profileCompleted?.toString() ?? 'false');
+          PrefManager.setString(
+              'memberShipTier', userProfile!.memberShipTier ?? '');
+
+          // Store additional profile fields
+          PrefManager.setString('pincode', userProfile!.pincode ?? '');
+          PrefManager.setString('occupation', userProfile!.occupation ?? '');
+
+          if (userProfile!.dateOfBirth != null) {
+            PrefManager.setString('dateOfBirth',
+                userProfile!.dateOfBirth!.toString().split(' ')[0]);
+          }
+
+          if (userProfile!.aniversaryDate != null) {
+            PrefManager.setString('aniversaryDate',
+                userProfile!.aniversaryDate!.toString().split(' ')[0]);
+          }
+
+          // Store shipping address
+          if (userProfile!.shippingAddress != null) {
+            PrefManager.setString('streetAndHouseNumber',
+                userProfile!.shippingAddress!.streetAndHouseNumber ?? '');
+            PrefManager.setString('additionalInfo',
+                userProfile!.shippingAddress!.additionalInfo ?? '');
+            PrefManager.setString(
+                'city', userProfile!.shippingAddress!.city ?? '');
+            PrefManager.setString(
+                'state', userProfile!.shippingAddress!.state ?? '');
+          }
+
+          // Update profile completion status
+          isProfileCompleted.value = userProfile!.profileCompleted ?? false;
+          profileCompleteProgress =
+              userProfile!.getProfileCompletionPercentage();
+
+          // Update account service list with actual userSaltCash
+          if (userProfile!.userSaltCash != null) {
+            logInAccountServiceSubtitleLst[3] =
+                userProfile!.userSaltCash.toString();
+          }
+        }
+
+        update();
+      }
+    } catch (e) {
+      print("Error fetching user profile: $e");
+    }
+  }
+
   enableNetworkHideLoader() {
     if (isEnableNetwork.value == false) {
       isEnableNetwork.value = true;
@@ -118,6 +221,17 @@ class MyAccountController extends GetxController {
         PrefManager.removeString('gender');
         PrefManager.removeString('token');
         PrefManager.removeString('userId');
+        PrefManager.removeString('profileCompleted');
+        PrefManager.removeString('userSaltCash');
+        PrefManager.removeString('memberShipTier');
+        PrefManager.removeString('pincode');
+        PrefManager.removeString('occupation');
+        PrefManager.removeString('dateOfBirth');
+        PrefManager.removeString('aniversaryDate');
+        PrefManager.removeString('streetAndHouseNumber');
+        PrefManager.removeString('additionalInfo');
+        PrefManager.removeString('city');
+        PrefManager.removeString('state');
         PrefManager.removeEntireItem('wishlistProductId');
         PrefManager.removeEntireItem('cartProductId');
         //Todo : Off all navigation and move My account screen

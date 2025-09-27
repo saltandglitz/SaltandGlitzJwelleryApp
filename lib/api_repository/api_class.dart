@@ -30,8 +30,8 @@ class HttpUtil {
 
     BaseOptions options = BaseOptions(
       // baseUrl: apiUrl,
-      connectTimeout: 15000,
-      receiveTimeout: 15000,
+      connectTimeout: Duration(seconds: 15),
+      receiveTimeout: Duration(seconds: 15),
       headers: {
         // 'key': LocalStrings.apiKey,
         // 'token': token,
@@ -67,7 +67,6 @@ class HttpUtil {
         if (isLoading!) {
           Loading.dismiss();
         }
-        onError(createErrorEntity(e), context);
         return handler.next(e); //continue
       },
     ));
@@ -85,81 +84,6 @@ class HttpUtil {
         icon: Icons.error,
         iconColor: Colors.red,
       );
-    }
-  }
-
-  ErrorEntity createErrorEntity(DioError error) {
-    switch (error.type) {
-      case DioErrorType.cancel:
-        return ErrorEntity(
-            code: -1, message: "Request to server was cancelled");
-      case DioErrorType.connectTimeout:
-        return ErrorEntity(code: -2, message: "Connection timeout with server");
-      case DioErrorType.sendTimeout:
-        return ErrorEntity(
-            code: -3, message: "Send timeout in connection with server");
-      case DioErrorType.receiveTimeout:
-        return ErrorEntity(
-            code: -4,
-            message: "Unable to fetch data. Please check your network.");
-      case DioErrorType.response:
-        {
-          try {
-            int errCode =
-                error.response != null ? error.response!.statusCode! : 00;
-
-            // Now handle the response body correctly if it's a Map
-            String errorMessage = '';
-            if (error.response != null && error.response!.data != null) {
-              var data = error.response!.data;
-              if (data is Map<String, dynamic>) {
-                // Extract a meaningful error message from the Map if it exists
-                errorMessage = data['message'] ??
-                    'Unknown error occurred'; // Adjust this to match your API's response format
-              } else if (data is String) {
-                errorMessage = data;
-              }
-            }
-
-            switch (errCode) {
-              case 401:
-                return ErrorEntity(code: errCode, message: "Permission denied");
-              case 403:
-                return ErrorEntity(
-                    code: errCode, message: "Server refuses to execute");
-              case 405:
-                return ErrorEntity(
-                    code: errCode, message: "Request method is forbidden");
-              case 502:
-                return ErrorEntity(code: errCode, message: "Invalid request");
-              case 503:
-                return ErrorEntity(code: errCode, message: "Server hangs");
-              case 505:
-                return ErrorEntity(
-                    code: errCode,
-                    message: "HTTP protocol requests are not supported");
-              default:
-                return ErrorEntity(code: errCode, message: '');
-            }
-          } on Exception catch (_) {
-            return ErrorEntity(code: 00, message: "Unknown mistake");
-          }
-        }
-      case DioErrorType.other:
-        if (error.message.contains("SocketException")) {
-          return ErrorEntity(
-              code: -5,
-              message:
-                  "Your internet is not available, please try again later");
-        } else if (error.message.contains("Software caused connection abort")) {
-          return ErrorEntity(
-              code: -6,
-              message:
-                  "Your internet is not available, please try again later");
-        }
-        return ErrorEntity(code: -7, message: "Oops something went wrong");
-      default:
-        return ErrorEntity(code: -8, message: "Oops something went wrong");
     }
   }
 

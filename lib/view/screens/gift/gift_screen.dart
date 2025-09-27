@@ -247,6 +247,7 @@ class _GiftScreenState extends State<GiftScreen> {
                 hintTexStyle: semiBoldDefault.copyWith(
                   color: Colors.grey,
                 ),
+                borderRadius: 0,
                 maxLength: 250,
               ),
               const SizedBox(height: Dimensions.space40),
