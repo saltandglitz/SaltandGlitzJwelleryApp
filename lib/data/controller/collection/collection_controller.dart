@@ -320,6 +320,40 @@ class CollectionController extends GetxController {
     update(); // triggers UI refresh for GetBuilder
   }
 
+  // Helper method to calculate total price for 14KT products
+  double calculateTotal14KT(UpdatedProducts product) {
+    var total = product.total14KT ?? 0;
+
+    // If total is 0, calculate it from components
+    if (total == 0) {
+      var goldPrice = product.price14KT ?? 0;
+      var diamondPrice = product.diamondPrice ?? 0;
+      var makingCharge = product.makingCharge14KT ?? 0;
+      var gst = product.gst14KT ?? 0;
+
+      total = goldPrice + diamondPrice + makingCharge + gst;
+    }
+
+    return total;
+  }
+
+  // Helper method to calculate total price for 18KT products
+  double calculateTotal18KT(UpdatedProducts product) {
+    var total = product.total18KT ?? 0;
+
+    // If total is 0, calculate it from components
+    if (total == 0) {
+      var goldPrice = product.price18KT ?? 0;
+      var diamondPrice = product.diamondPrice ?? 0;
+      var makingCharge = product.makingCharge18KT ?? 0;
+      var gst = product.gst18KT ?? 0;
+
+      total = goldPrice + diamondPrice + makingCharge + gst;
+    }
+
+    return total;
+  }
+
 //Todo : Remove wishlist particular product
   Future removeWishlistApiMethod({String? productId}) async {
     try {

@@ -405,4 +405,90 @@ This document provides a detailed overview of the Salt & Glitz API endpoints, in
 -   **Update Gold Rate:** `POST /v1/upload/updateRate`
     -   **Payload:** `{ "price14KT": 1000, "price18KT": 1200 }`
 
+## Payment (`/api/payment`)
+
+### Payment Schema (`src/Model/payment.model.js`)
+
+```javascript
+let mongoose = require("mongoose")
+let Schema = require("mongoose")
+
+const PaymentSchema = new mongoose.Schema({
+    razorpay_order_id: {
+        type: String,
+        required: true,
+    },
+    razorpay_payment_id: {
+        type: String,
+        required: true,
+    },
+    razorpay_signature: {
+        type: String,
+        required: true,
+    },
+    date: {
+        type: Date,
+        default: Date.now
+    },
+});
+let payment = mongoose.model('PaymentSchema', PaymentSchema);
+
+module.exports = payment
+```
+
+### Payment Routes (`src/Routes/v1/payment.routes.js`)
+
+#### Create Order
+
+-   **Endpoint:** `POST /api/payment/pay-order`
+-   **Description:** Creates a Razorpay order.
+-   **Request Body:**
+    ```json
+    {
+      "userId": "user_id",
+      "amount": 500
+    }
+    ```
+    *If `amount` is not provided, it's calculated from the user's cart.*
+-   **Success Response (200):**
+    ```json
+    {
+      "data": {
+        "id": "order_...",
+        "entity": "order",
+        "amount": 50000,
+        "amount_paid": 0,
+        "amount_due": 50000,
+        "currency": "INR",
+        "receipt": "...",
+        "offer_id": null,
+        "status": "created",
+        "attempts": 0,
+        "notes": [],
+        "created_at": 1678886400
+      }
+    }
+    ```
+
+#### Verify Payment
+
+-   **Endpoint:** `POST /api/payment/verify`
+-   **Description:** Verifies the payment signature from Razorpay and saves the payment details.
+-   **Request Body:**
+    ```json
+    {
+      "razorpay_order_id": "order_...",
+      "razorpay_payment_id": "pay_...",
+      "razorpay_signature": "..."
+    }
+    ```
+-   **Success Response (200):**
+    ```json
+    {
+      "message": "Payement Successfully"
+    }
+    ```
+-   **Error Response (500):** `{ "message": "Internal Server Error!" }`
+
+
 ## And many more endpoints are available in the codebase...

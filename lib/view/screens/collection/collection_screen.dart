@@ -1110,7 +1110,7 @@ class _CollectionScreenState extends State<CollectionScreen> {
                     Row(
                       children: [
                         Text(
-                          "₹${filterProductData[index].total14KT?.round()}",
+                          "₹${controller.calculateTotal14KT(filterProductData[index]).round()}",
                           style: semiBoldDefault.copyWith(
                               color: ColorResources.buttonColor),
                         ),

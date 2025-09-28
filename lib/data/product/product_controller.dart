@@ -164,34 +164,79 @@ class ProductController extends GetxController {
   dynamic getDiamondPrice(dynamic product) {
     if (product == null) return null;
 
+    dynamic diamondPrice;
+
     // Try camelCase first
     try {
       if (product.diamondPrice != null) {
-        return product.diamondPrice;
+        diamondPrice = product.diamondPrice;
       }
     } catch (e) {
       // Continue to next attempt
     }
 
     // Try lowercase
-    try {
-      if (product.diamondprice != null) {
-        return product.diamondprice;
+    if (diamondPrice == null) {
+      try {
+        if (product.diamondprice != null) {
+          diamondPrice = product.diamondprice;
+        }
+      } catch (e) {
+        // Continue to next attempt
       }
-    } catch (e) {
-      // Continue to next attempt
     }
 
     // Try dynamic access as Map
-    try {
-      if (product is Map) {
-        return product['diamondPrice'] ?? product['diamondprice'];
+    if (diamondPrice == null) {
+      try {
+        if (product is Map) {
+          diamondPrice = product['diamondPrice'] ?? product['diamondprice'];
+        }
+      } catch (e) {
+        // Continue to next attempt
       }
-    } catch (e) {
-      // Continue to next attempt
     }
 
-    return null;
+    // If diamondPrice is still null or 0, try to get it from diamonds array
+    if (diamondPrice == null || diamondPrice == 0) {
+      try {
+        // Try accessing diamonds array
+        var diamonds;
+        if (product is Map) {
+          diamonds = product['diamonds'];
+        } else {
+          try {
+            diamonds = product.diamonds;
+          } catch (e) {
+            // Continue
+          }
+        }
+
+        if (diamonds != null && diamonds is List && diamonds.isNotEmpty) {
+          double totalDiamondPrice = 0;
+          for (var diamond in diamonds) {
+            if (diamond is Map) {
+              var price = diamond['price'] ?? diamond['applicablePrice'] ?? 0;
+              totalDiamondPrice += (price is num) ? price.toDouble() : 0;
+            } else {
+              try {
+                var price = diamond.price ?? diamond.applicablePrice ?? 0;
+                totalDiamondPrice += (price is num) ? price.toDouble() : 0;
+              } catch (e) {
+                // Continue
+              }
+            }
+          }
+          if (totalDiamondPrice > 0) {
+            return totalDiamondPrice;
+          }
+        }
+      } catch (e) {
+        // Continue to return diamondPrice
+      }
+    }
+
+    return diamondPrice;
   }
 
   // Helper method to dynamically access any field with both camelCase and lowercase variants
@@ -239,6 +284,14 @@ class ProductController extends GetxController {
           return object.diamondPrice;
         case 'diamondprice':
           return object.diamondprice;
+        case 'price14KT':
+          return object.price14KT;
+        case 'price14kt':
+          return object.price14kt;
+        case 'price18KT':
+          return object.price18KT;
+        case 'price18kt':
+          return object.price18kt;
         case 'makingCharge14KT':
           return object.makingCharge14KT;
         case 'makingcharge14kt':
@@ -321,11 +374,35 @@ class ProductController extends GetxController {
   }
 
   dynamic getTotal14KT(dynamic product) {
-    return getDynamicField(product, 'total14KT', 'total14kt');
+    var total = getDynamicField(product, 'total14KT', 'total14kt');
+
+    // If total is 0 or null, calculate it from components
+    if (total == null || total == 0) {
+      var goldPrice = getDynamicField(product, 'price14KT', 'price14kt') ?? 0;
+      var diamondPrice = getDiamondPrice(product) ?? 0;
+      var makingCharge = getMakingCharge14KT(product) ?? 0;
+      var gst = getGst14KT(product) ?? 0;
+
+      total = goldPrice + diamondPrice + makingCharge + gst;
+    }
+
+    return total;
   }
 
   dynamic getTotal18KT(dynamic product) {
-    return getDynamicField(product, 'total18KT', 'total18kt');
+    var total = getDynamicField(product, 'total18KT', 'total18kt');
+
+    // If total is 0 or null, calculate it from components
+    if (total == null || total == 0) {
+      var goldPrice = getDynamicField(product, 'price18KT', 'price18kt') ?? 0;
+      var diamondPrice = getDiamondPrice(product) ?? 0;
+      var makingCharge = getMakingCharge18KT(product) ?? 0;
+      var gst = getGst18KT(product) ?? 0;
+
+      total = goldPrice + diamondPrice + makingCharge + gst;
+    }
+
+    return total;
   }
 
   dynamic getMakingCharge14KT(dynamic product) {

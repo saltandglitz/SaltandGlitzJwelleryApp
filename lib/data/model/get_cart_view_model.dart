@@ -18,19 +18,23 @@ class GetCartApiViewModel {
   GetCartApiViewModel.fromJson(Map<String, dynamic> json)
       : status = json['status'] as bool?,
         message = json['message'] as String?,
-        cart = (json['cart'] as Map<String,dynamic>?) != null ? Cart.fromJson(json['cart'] as Map<String,dynamic>) : null,
+        cart = (json['cart'] as Map<String, dynamic>?) != null
+            ? Cart.fromJson(json['cart'] as Map<String, dynamic>)
+            : null,
         totalQuantity = (json['totalQuantity'] as num?)?.toDouble(),
         totalPrice = json['totalPrice'] as double?,
-        coupons = (json['coupons'] as List?)?.map((dynamic e) => Coupons.fromJson(e as Map<String,dynamic>)).toList();
+        coupons = (json['coupons'] as List?)
+            ?.map((dynamic e) => Coupons.fromJson(e as Map<String, dynamic>))
+            .toList();
 
   Map<String, dynamic> toJson() => {
-    'status' : status,
-    'message' : message,
-    'cart' : cart?.toJson(),
-    'totalQuantity' : totalQuantity,
-    'totalPrice' : totalPrice,
-    'coupons' : coupons?.map((e) => e.toJson()).toList()
-  };
+        'status': status,
+        'message': message,
+        'cart': cart?.toJson(),
+        'totalQuantity': totalQuantity,
+        'totalPrice': totalPrice,
+        'coupons': coupons?.map((e) => e.toJson()).toList()
+      };
 }
 
 class Cart {
@@ -55,21 +59,23 @@ class Cart {
   Cart.fromJson(Map<String, dynamic> json)
       : cartId = json['cart_id'] as String?,
         userId = json['userId'] as String?,
-        quantity = (json['quantity'] as List?)?.map((dynamic e) => Quantity.fromJson(e as Map<String,dynamic>)).toList(),
+        quantity = (json['quantity'] as List?)
+            ?.map((dynamic e) => Quantity.fromJson(e as Map<String, dynamic>))
+            .toList(),
         cartTotal = json['cartTotal'] as double?,
         createdAt = json['createdAt'] as String?,
         updatedAt = json['updatedAt'] as String?,
         v = json['__v'] as int?;
 
   Map<String, dynamic> toJson() => {
-    'cart_id' : cartId,
-    'userId' : userId,
-    'quantity' : quantity?.map((e) => e.toJson()).toList(),
-    'cartTotal' : cartTotal,
-    'createdAt' : createdAt,
-    'updatedAt' : updatedAt,
-    '__v' : v
-  };
+        'cart_id': cartId,
+        'userId': userId,
+        'quantity': quantity?.map((e) => e.toJson()).toList(),
+        'cartTotal': cartTotal,
+        'createdAt': createdAt,
+        'updatedAt': updatedAt,
+        '__v': v
+      };
 }
 
 class Quantity {
@@ -90,7 +96,9 @@ class Quantity {
   });
 
   Quantity.fromJson(Map<String, dynamic> json)
-      : productId = (json['productId'] as Map<String,dynamic>?) != null ? ProductId.fromJson(json['productId'] as Map<String,dynamic>) : null,
+      : productId = (json['productId'] as Map<String, dynamic>?) != null
+            ? ProductId.fromJson(json['productId'] as Map<String, dynamic>)
+            : null,
         quantity = (json['quantity'] as num?)?.toDouble(),
         size = (json['size'] as num?)?.toDouble(),
         caratBy = json['caratBy'] as String?,
@@ -98,13 +106,13 @@ class Quantity {
         totalPriceOfProduct = json['totalPriceOfProduct'] as double?;
 
   Map<String, dynamic> toJson() => {
-    'productId' : productId?.toJson(),
-    'quantity' : quantity,
-    'size' : size,
-    'caratBy' : caratBy,
-    'colorBy' : colorBy,
-    'totalPriceOfProduct' : totalPriceOfProduct
-  };
+        'productId': productId?.toJson(),
+        'quantity': quantity,
+        'size': size,
+        'caratBy': caratBy,
+        'colorBy': colorBy,
+        'totalPriceOfProduct': totalPriceOfProduct
+      };
 }
 
 class ProductId {
@@ -205,37 +213,37 @@ class ProductId {
         v = json['__v'] as int?;
 
   Map<String, dynamic> toJson() => {
-    'product_id' : productId,
-    'id' : id,
-    'title' : title,
-    'gender' : gender,
-    'gift' : gift,
-    'price14KT' : price14KT,
-    'price18KT' : price18KT,
-    'image01' : image01,
-    'image02' : image02,
-    'image03' : image03,
-    'image04' : image04,
-    'image05' : image05,
-    'video' : video,
-    'category' : category,
-    'subCategory' : subCategory,
-    'material' : material,
-    'diamondprice' : diamondprice,
-    'makingCharge14KT' : makingCharge14KT,
-    'makingCharge18KT' : makingCharge18KT,
-    'grossWt' : grossWt,
-    'netWeight14KT' : netWeight14KT,
-    'netWeight18KT' : netWeight18KT,
-    'gst14KT' : gst14KT,
-    'gst18KT' : gst18KT,
-    'total14KT' : total14KT,
-    'total18KT' : total18KT,
-    'isFavourite' : isFavourite,
-    'createdAt' : createdAt,
-    'updatedAt' : updatedAt,
-    '__v' : v
-  };
+        'product_id': productId,
+        'id': id,
+        'title': title,
+        'gender': gender,
+        'gift': gift,
+        'price14KT': price14KT,
+        'price18KT': price18KT,
+        'image01': image01,
+        'image02': image02,
+        'image03': image03,
+        'image04': image04,
+        'image05': image05,
+        'video': video,
+        'category': category,
+        'subCategory': subCategory,
+        'material': material,
+        'diamondprice': diamondprice,
+        'makingCharge14KT': makingCharge14KT,
+        'makingCharge18KT': makingCharge18KT,
+        'grossWt': grossWt,
+        'netWeight14KT': netWeight14KT,
+        'netWeight18KT': netWeight18KT,
+        'gst14KT': gst14KT,
+        'gst18KT': gst18KT,
+        'total14KT': total14KT,
+        'total18KT': total18KT,
+        'isFavourite': isFavourite,
+        'createdAt': createdAt,
+        'updatedAt': updatedAt,
+        '__v': v
+      };
 }
 
 class Coupons {
@@ -261,10 +269,10 @@ class Coupons {
         v = json['__v'] as int?;
 
   Map<String, dynamic> toJson() => {
-    '_id' : id,
-    'couponCode' : couponCode,
-    'couponContent' : couponContent,
-    'couponOffer' : couponOffer,
-    '__v' : v
-  };
+        '_id': id,
+        'couponCode': couponCode,
+        'couponContent': couponContent,
+        'couponOffer': couponOffer,
+        '__v': v
+      };
 }

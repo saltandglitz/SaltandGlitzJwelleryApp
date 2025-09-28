@@ -183,7 +183,7 @@ class EditProfileController extends GetxController {
         return;
       }
 
-      Response response = await Dioclient.get("/users/profile");
+      Response response = await Dioclient.get("/api/users/profile");
 
       if (response.statusCode == 200) {
         // Parse response using UserProfile model

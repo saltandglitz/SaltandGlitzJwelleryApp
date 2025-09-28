@@ -108,7 +108,7 @@ class MyAccountController extends GetxController {
 
       try {
         response = await Dioclient.get(
-          "/users/profile",
+          "/api/users/profile",
         );
       } catch (e) {
         debugPrint(token);

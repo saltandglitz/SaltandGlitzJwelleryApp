@@ -9,7 +9,7 @@ class Dioclient {
   Dioclient() {
     dio = Dio(
       BaseOptions(
-        baseUrl: 'https://api.saltandglitz.com/api',
+        baseUrl: 'https://api.saltandglitz.com',
         // baseUrl: 'https://api.akashch.me/api/v2',
         connectTimeout: Duration(seconds: 20),
         receiveTimeout: Duration(seconds: 30),

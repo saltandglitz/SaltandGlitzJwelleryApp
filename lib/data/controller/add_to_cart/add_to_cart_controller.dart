@@ -86,8 +86,25 @@ class AddToCartController extends GetxController {
 
     for (var item in cartItems) {
       if (item.caratBy == "14KT") {
-        final price =
+        var price =
             double.tryParse(item.productId?.total14KT.toString() ?? '') ?? 0;
+
+        // If price is 0, calculate it from components
+        if (price == 0) {
+          var goldPrice =
+              double.tryParse(item.productId?.price14KT.toString() ?? '') ?? 0;
+          var diamondPrice =
+              double.tryParse(item.productId?.diamondprice.toString() ?? '') ??
+                  0;
+          var makingCharge = double.tryParse(
+                  item.productId?.makingCharge14KT.toString() ?? '') ??
+              0;
+          var gst =
+              double.tryParse(item.productId?.gst14KT.toString() ?? '') ?? 0;
+
+          price = goldPrice + diamondPrice + makingCharge + gst;
+        }
+
         final qty = item.quantity ?? 1;
         total += price * qty;
       }
@@ -103,8 +120,25 @@ class AddToCartController extends GetxController {
 
     for (var item in cartItems) {
       if (item.caratBy == "18KT") {
-        final price =
+        var price =
             double.tryParse(item.productId?.total18KT.toString() ?? '') ?? 0;
+
+        // If price is 0, calculate it from components
+        if (price == 0) {
+          var goldPrice =
+              double.tryParse(item.productId?.price18KT.toString() ?? '') ?? 0;
+          var diamondPrice =
+              double.tryParse(item.productId?.diamondprice.toString() ?? '') ??
+                  0;
+          var makingCharge = double.tryParse(
+                  item.productId?.makingCharge18KT.toString() ?? '') ??
+              0;
+          var gst =
+              double.tryParse(item.productId?.gst18KT.toString() ?? '') ?? 0;
+
+          price = goldPrice + diamondPrice + makingCharge + gst;
+        }
+
         final qty = item.quantity ?? 1;
         total += price * qty;
       }
@@ -116,6 +150,67 @@ class AddToCartController extends GetxController {
 // Combined total
   double calculateTotalPrice() {
     return calculateTotal14KTPrice() + calculateTotal18KTPrice();
+  }
+
+  // Helper method to get price for a single cart item
+  double getItemPrice(dynamic item) {
+    if (item == null) return 0;
+
+    if (item.caratBy == "14KT") {
+      return getItem14KTPrice(item);
+    } else if (item.caratBy == "18KT") {
+      return getItem18KTPrice(item);
+    }
+
+    return 0;
+  }
+
+  // Get 14KT price for a single item
+  double getItem14KTPrice(dynamic item) {
+    if (item?.productId == null) return 0;
+
+    var price =
+        double.tryParse(item.productId?.total14KT.toString() ?? '') ?? 0;
+
+    // If price is 0, calculate it from components
+    if (price == 0) {
+      var goldPrice =
+          double.tryParse(item.productId?.price14KT.toString() ?? '') ?? 0;
+      var diamondPrice =
+          double.tryParse(item.productId?.diamondprice.toString() ?? '') ?? 0;
+      var makingCharge =
+          double.tryParse(item.productId?.makingCharge14KT.toString() ?? '') ??
+              0;
+      var gst = double.tryParse(item.productId?.gst14KT.toString() ?? '') ?? 0;
+
+      price = goldPrice + diamondPrice + makingCharge + gst;
+    }
+
+    return price;
+  }
+
+  // Get 18KT price for a single item
+  double getItem18KTPrice(dynamic item) {
+    if (item?.productId == null) return 0;
+
+    var price =
+        double.tryParse(item.productId?.total18KT.toString() ?? '') ?? 0;
+
+    // If price is 0, calculate it from components
+    if (price == 0) {
+      var goldPrice =
+          double.tryParse(item.productId?.price18KT.toString() ?? '') ?? 0;
+      var diamondPrice =
+          double.tryParse(item.productId?.diamondprice.toString() ?? '') ?? 0;
+      var makingCharge =
+          double.tryParse(item.productId?.makingCharge18KT.toString() ?? '') ??
+              0;
+      var gst = double.tryParse(item.productId?.gst18KT.toString() ?? '') ?? 0;
+
+      price = goldPrice + diamondPrice + makingCharge + gst;
+    }
+
+    return price;
   }
 
   //Todo : Get cart using api method
