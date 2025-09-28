@@ -20,7 +20,6 @@ class PlaceOrderController extends GetxController {
 // Observable to hold selected radio button index
   RxInt selectedIndex = (-1).obs;
 
-
   /// New address
   TextEditingController firstNameNewAddress = TextEditingController();
   TextEditingController lastNameNewAddress = TextEditingController();
@@ -37,24 +36,134 @@ class PlaceOrderController extends GetxController {
   TextEditingController firstNameDifferentAddress = TextEditingController();
   TextEditingController lastNameDifferentAddress = TextEditingController();
   TextEditingController streetDifferentAddress = TextEditingController();
-  TextEditingController additionalInformationDifferentAddress =TextEditingController();
+  TextEditingController additionalInformationDifferentAddress =
+      TextEditingController();
   TextEditingController pinCodeDifferentAddress = TextEditingController();
   TextEditingController cityDifferentAddress = TextEditingController();
   TextEditingController stateDifferentAddress = TextEditingController();
   TextEditingController countryDifferentAddress = TextEditingController();
   TextEditingController mobileNumberDifferentAddress = TextEditingController();
 
-
   void selectAddressOption(bool value) {
     if (isSameAsShipping != value) {
       isSameAsShipping = value;
+      clearAllDifferentAddressField();
       update();
     }
   }
-// Function to set the selected address index
+
   void selectAddress(int index) {
     selectedIndex.value = index;
   }
+
+  /// Get selected address data
+  Map<String, String> getSelectedAddressData() {
+    if (selectedIndex.value >= 0 && selectedIndex.value < getAddress.length) {
+      final address = getAddress[selectedIndex.value];
+      return {
+        'street': address.street ?? '',
+        'city': address.city ?? '',
+        'state': address.state ?? '',
+        'postalCode': address.postalCode ?? '',
+        'country': address.country ?? '',
+      };
+    }
+    return {
+      'street': streetNewAddress.text.trim(),
+      'city': cityNewAddress.text.trim(),
+      'state': stateNewAddress.text.trim(),
+      'postalCode': pinCodeNewAddress.text.trim(),
+      'country': countryNewAddress.text.trim(),
+    };
+  }
+
+  /// Get billing address data based on current selection
+  Map<String, String> getBillingAddressData() {
+    if (isSameAsShipping) {
+      // Use selected address or manual entry for both billing and shipping
+      return getSelectedAddressData();
+    } else {
+      // Use different address for billing when not same as shipping
+      return {
+        'street': streetDifferentAddress.text.trim(),
+        'city': cityDifferentAddress.text.trim(),
+        'state': stateDifferentAddress.text.trim(),
+        'postalCode': pinCodeDifferentAddress.text.trim(),
+        'country': countryDifferentAddress.text.trim(),
+      };
+    }
+  }
+
+  /// Get shipping address data
+  Map<String, String> getShippingAddressData() {
+    // Shipping address is always the selected address or manual entry
+    return getSelectedAddressData();
+  }
+
+  /// Calculate total for 14KT items
+  double calculateTotal14KTPrice() {
+    double total = 0;
+    final cartItems = getCartData?.cart?.quantity ?? [];
+    for (var item in cartItems) {
+      if (item.productId?.total14KT != null) {
+        var price =
+            double.tryParse(item.productId?.total14KT.toString() ?? '') ?? 0;
+        var quantity = item.quantity ?? 0;
+        total += price * quantity;
+      }
+    }
+    return total;
+  }
+
+  /// Calculate total for 18KT items
+  double calculateTotal18KTPrice() {
+    double total = 0;
+    final cartItems = getCartData?.cart?.quantity ?? [];
+    for (var item in cartItems) {
+      if (item.productId?.total18KT != null) {
+        var price =
+            double.tryParse(item.productId?.total18KT.toString() ?? '') ?? 0;
+        var quantity = item.quantity ?? 0;
+        total += price * quantity;
+      }
+    }
+    return total;
+  }
+
+  /// Get the appropriate total price (14KT or 18KT)
+  double getDisplayTotalPrice() {
+    double total14k = calculateTotal14KTPrice();
+    double total18k = calculateTotal18KTPrice();
+
+    // Return the greater value or the one that's not zero
+    if (total14k > 0 && total18k > 0) {
+      return total14k > total18k ? total14k : total18k;
+    } else if (total14k > 0) {
+      return total14k;
+    } else if (total18k > 0) {
+      return total18k;
+    } else {
+      // Fallback to original totalPrice
+      return getCartData?.totalPrice ?? 0.0;
+    }
+  }
+
+  /// Validate that we have valid address data
+  bool _hasValidAddress() {
+    // Check if an address is selected
+    if (selectedIndex.value >= 0 && selectedIndex.value < getAddress.length) {
+      return true;
+    }
+
+    // Check if manual address fields are filled
+    final addressData = getSelectedAddressData();
+    return addressData['street']!.isNotEmpty &&
+        addressData['city']!.isNotEmpty &&
+        addressData['state']!.isNotEmpty &&
+        addressData['postalCode']!.isNotEmpty &&
+        addressData['country']!.isNotEmpty;
+  }
+
   /// Cancel click new address clear field
   clearAllNewAddressField() {
     firstNameNewAddress.clear();
@@ -66,7 +175,6 @@ class PlaceOrderController extends GetxController {
     stateNewAddress.clear();
     countryNewAddress.clear();
     mobileNumberNewAddress.clear();
-    update();
   }
 
   /// Cancel click Different address clear field
@@ -120,31 +228,33 @@ class PlaceOrderController extends GetxController {
   }) async {
     try {
       isCreateOrder.value = true;
+
+      // Validate that we have address data
+      if (!_hasValidAddress()) {
+        showToast(
+            message: "Please select an address or add a new address",
+            context: Get.context!);
+        return;
+      }
+
+      final billingAddress = getBillingAddressData();
+      final shippingAddress = getShippingAddressData();
+
       Map<String, dynamic> params = {
         "cartId": cartId ?? "",
         "billingAddress": {
-          "street": streetNewAddress ?? "",
-          "city": cityNewAddress ?? "",
-          "state": stateNewAddress ?? "",
-          "postalCode": postalCodeNewAddress ?? "",
-          "country": countryNewAddress ?? ""
+          "street": billingAddress['street'] ?? "",
+          "city": billingAddress['city'] ?? "",
+          "state": billingAddress['state'] ?? "",
+          "postalCode": billingAddress['postalCode'] ?? "",
+          "country": billingAddress['country'] ?? ""
         },
         "shippingAddress": {
-          "street": isSameAsShipping == false
-              ? streetDifferentAddress
-              : streetNewAddress ?? "",
-          "city": isSameAsShipping == false
-              ? cityDifferentAddress
-              : cityNewAddress ?? "",
-          "state": isSameAsShipping == false
-              ? stateDifferentAddress
-              : stateNewAddress ?? "",
-          "postalCode": isSameAsShipping == false
-              ? postalCodeDifferentAddress
-              : postalCodeNewAddress ?? "",
-          "country": isSameAsShipping == false
-              ? countryDifferentAddress
-              : countryNewAddress ?? ""
+          "street": shippingAddress['street'] ?? "",
+          "city": shippingAddress['city'] ?? "",
+          "state": shippingAddress['state'] ?? "",
+          "postalCode": shippingAddress['postalCode'] ?? "",
+          "country": shippingAddress['country'] ?? ""
         }
       };
       print("PARAMS ORDER : $params");

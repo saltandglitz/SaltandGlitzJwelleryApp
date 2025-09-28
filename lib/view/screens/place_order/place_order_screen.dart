@@ -223,33 +223,6 @@ class _PlaceOrderScreenState extends State<PlaceOrderScreen> {
                                               onChanged: (value) {
                                                 placeOrderController
                                                     .selectAddress(value!);
-
-                                                /// Add data radio selection time
-                                                controller.streetNewAddress
-                                                    .text = placeOrderController
-                                                        .getAddress[index]
-                                                        .street ??
-                                                    '';
-                                                controller.cityNewAddress.text =
-                                                    placeOrderController
-                                                            .getAddress[index]
-                                                            .city ??
-                                                        '';
-                                                controller.stateNewAddress
-                                                    .text = placeOrderController
-                                                        .getAddress[index]
-                                                        .state ??
-                                                    '';
-                                                controller.pinCodeNewAddress
-                                                    .text = placeOrderController
-                                                        .getAddress[index]
-                                                        .postalCode ??
-                                                    '';
-                                                controller.countryNewAddress
-                                                    .text = placeOrderController
-                                                        .getAddress[index]
-                                                        .country ??
-                                                    '';
                                               },
                                             );
                                           },
@@ -432,6 +405,8 @@ class _PlaceOrderScreenState extends State<PlaceOrderScreen> {
                       mainController.checkToAssignNetworkConnections();
 
                       /// Add address dialog box
+                      // Clear all fields before opening the dialog
+                      controller.clearAllNewAddressField();
                       addAddressDialogBox(
                           selectedAddressType: selectedAddressType,
                           controller: controller);
@@ -1003,7 +978,7 @@ class _PlaceOrderScreenState extends State<PlaceOrderScreen> {
                             ),
                           ),
                           Text(
-                            "₹ ${controller.getCartData?.totalPrice?.round() ?? "0.0"}",
+                            "₹ ${controller.getDisplayTotalPrice().round()}",
                             style: mediumLarge.copyWith(
                               fontWeight: FontWeight.bold,
                             ),
@@ -1061,7 +1036,7 @@ class _PlaceOrderScreenState extends State<PlaceOrderScreen> {
                         ),
                       ),
                       Text(
-                        "₹ ${controller.getCartData?.totalPrice?.round() ?? "0.0"}",
+                        "₹ ${controller.getDisplayTotalPrice().round()}",
                         style: mediumLarge.copyWith(
                           fontWeight: FontWeight.bold,
                         ),
@@ -1327,8 +1302,8 @@ class _PlaceOrderScreenState extends State<PlaceOrderScreen> {
                   children: [
                     ElevatedButton(
                       onPressed: () {
+                        controller?.clearAllNewAddressField();
                         Get.back();
-                        // controller?.clearAllNewAddressField();
                       },
                       child: Text(LocalStrings.cancel),
                     ),
