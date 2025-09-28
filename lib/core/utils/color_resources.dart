@@ -14,6 +14,10 @@ class ColorResources {
       Color(0xFFE1E8ED); //(previously grey[100])
   static const Color splashFirstColor = Color(0xffE5733F);
   static const Color splashSecondColor = Color(0xffF95D47);
+  static const Color luxuryGoldColor = Color(0xFFFFD700);
+  static const Color premiumGradientStart = Color(0xFF1a1a1a);
+  static const Color premiumGradientEnd = Color(0xFF2d2d2d);
+  static const Color shimmerGoldColor = Color(0xFFFFC107);
   static const Color activeCardColor = Color(0xff27B8DA);
   static const Color deliveryColor = Color(0xFF536DFE);
   static const Color inactiveCardColor = Color(0xFFF9F9F9);
@@ -59,4 +63,6 @@ class ColorResources {
   static const Color silverColour = Color(0xffCCCCCC);
   static const Color goldColour = Color(0xffFFCC66);
   static const Color lightGreenBackgroundColour = Color(0xffF1F8F7);
+  static const Color elegantDarkColor = Color(0xFF0D0D0D);
+  static const Color luxuryAccentColor = Color(0xFFD4AF37);
 }

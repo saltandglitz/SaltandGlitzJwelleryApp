@@ -55,7 +55,7 @@ class MyAccountController extends GetxController {
     ColorResources.buttonGradientColor,
   ];
   List accountServiceSubIconLst = [
-    Icons.gif_box_outlined,
+    Icons.shopping_bag_outlined,
     Icons.add_shopping_cart,
     Icons.favorite_border_sharp,
     Icons.currency_rupee,

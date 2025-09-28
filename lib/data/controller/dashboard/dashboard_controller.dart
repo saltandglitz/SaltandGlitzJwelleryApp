@@ -3,6 +3,7 @@ import 'package:carousel_slider/carousel_options.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart' hide Response;
 import 'package:saltandGlitz/api_repository/api_function.dart';
 import 'package:saltandGlitz/core/utils/local_strings.dart';
@@ -386,7 +387,8 @@ class DashboardController extends GetxController {
         }
       }
     });
-    update();
+    // Remove update() call from setupScrollListener to prevent setState during build
+    // The controller will update naturally when state changes
   }
 
   // Handle search field changes

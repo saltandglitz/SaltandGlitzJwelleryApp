@@ -3,7 +3,7 @@ class MyImages {
   static const String imagePath = 'assets/images/';
 
   ///<<<---------------------------- Splash screen images ---------------------------->>>
-  static const String starsSplashBgImage = '${imagePath}stars_splash_bg.png';
+  // Star background removed - splash screen modernized
 
   ///<<<---------------------------- Dashboard screen images ---------------------------->>>
   static const String dashboardIntroFirstImage =

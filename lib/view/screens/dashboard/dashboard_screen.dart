@@ -47,33 +47,31 @@ class _DashboardScreenState extends State<DashboardScreen>
   @override
   void initState() {
     super.initState();
-    dashboardController.setupScrollListener();
-    mainController.checkToAssignNetworkConnections();
+
+    dashboardController.animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 300),
+    );
 
     /// Notification initialize
     Get.putAsync(() => NotificationService().init());
 
     AppAnalytics()
         .actionTriggerLogs(eventName: LocalStrings.logHomeView, index: 0);
-    dashboardController.byDefaultMenu();
-    dashboardController.animationController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 300),
-    );
+
+    // Defer all controller calls that trigger update() to after build
     WidgetsBinding.instance.addPostFrameCallback(
       (_) async {
+        dashboardController.setupScrollListener();
+        mainController.checkToAssignNetworkConnections();
+        dashboardController.byDefaultMenu();
+
         await dashboardController.fetchProducts();
         if (dashboardController.products.isNotEmpty &&
             dashboardController.isShowBottomSheet == false) {
           bottomSheetWidget();
         }
         // Manage when app open only single time show bottom sheet recent view products detail
-        dashboardController.bottomSheetShowMethod();
-        // Loop through bottomBannerList to handle media playback for all the banners
-
-        // if (Get.arguments != null) {
-        //   dashboardController.mediaData = Get.arguments;
-        // }
       },
     );
   }

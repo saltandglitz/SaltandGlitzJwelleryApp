@@ -362,9 +362,11 @@ class _MyAccountScreenState extends State<MyAccountScreen>
                                         /// Analysis services
                                         AppAnalytics().actionTriggerLogs(
                                             eventName:
-                                                "My_Account_${index == 1 ? 'Add_to_cart' : index == 3 ? 'Video_call_history' : controller.accountServiceTitleLst[index]}_${LocalStrings.logMyAccountButtonClick}",
+                                                "My_Account_${index == 0 ? 'Orders' : index == 1 ? 'Add_to_cart' : index == 3 ? 'Video_call_history' : controller.accountServiceTitleLst[index]}_${LocalStrings.logMyAccountButtonClick}",
                                             index: 2);
-                                        if (index == 1) {
+                                        if (index == 0) {
+                                          Get.toNamed(RouteHelper.ordersScreen);
+                                        } else if (index == 1) {
                                           Get.toNamed(
                                               RouteHelper.addCartScreen);
                                         } else if (index == 2) {

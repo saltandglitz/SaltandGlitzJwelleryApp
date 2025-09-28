@@ -405,90 +405,163 @@ This document provides a detailed overview of the Salt & Glitz API endpoints, in
 -   **Update Gold Rate:** `POST /v1/upload/updateRate`
     -   **Payload:** `{ "price14KT": 1000, "price18KT": 1200 }`
 
-## Payment (`/api/payment`)
+## Orders (`/v1/order`)
 
-### Payment Schema (`src/Model/payment.model.js`)
+### Create Order
 
-```javascript
-let mongoose = require("mongoose")
-let Schema = require("mongoose")
-
-const PaymentSchema = new mongoose.Schema({
-    razorpay_order_id: {
-        type: String,
-        required: true,
-    },
-    razorpay_payment_id: {
-        type: String,
-        required: true,
-    },
-    razorpay_signature: {
-        type: String,
-        required: true,
-    },
-    date: {
-        type: Date,
-        default: Date.now
-    },
-});
-let payment = mongoose.model('PaymentSchema', PaymentSchema);
-
-module.exports = payment
-```
-
-### Payment Routes (`src/Routes/v1/payment.routes.js`)
-
-#### Create Order
-
--   **Endpoint:** `POST /api/payment/pay-order`
--   **Description:** Creates a Razorpay order.
+-   **Endpoint:** `POST /v1/order/createOrder/:userId`
+-   **Description:** Creates a new order for a user with billing and shipping addresses.
+-   **Request Params:** `userId` (User ID)
 -   **Request Body:**
     ```json
     {
-      "userId": "user_id",
-      "amount": 500
+      "cartId": "cart_object_id",
+      "billingAddress": {
+        "street": "123 Main St",
+        "city": "Mumbai",
+        "state": "Maharashtra",
+        "postalCode": "400001",
+        "country": "India"
+      },
+      "shippingAddress": {
+        "street": "456 Oak Ave",
+        "city": "Delhi",
+        "state": "Delhi",
+        "postalCode": "110001",
+        "country": "India"
+      }
     }
     ```
-    *If `amount` is not provided, it's calculated from the user's cart.*
--   **Success Response (200):**
+-   **Success Response (201):**
     ```json
     {
-      "data": {
-        "id": "order_...",
-        "entity": "order",
-        "amount": 50000,
-        "amount_paid": 0,
-        "amount_due": 50000,
-        "currency": "INR",
-        "receipt": "...",
-        "offer_id": null,
-        "status": "created",
-        "attempts": 0,
-        "notes": [],
-        "created_at": 1678886400
+      "message": "Order created successfully",
+      "order": {
+        "cartId": "...",
+        "billingAddress": { "..." },
+        "shippingAddress": { "..." },
+        "status": "pending",
+        "orderDate": "...",
+        "_id": "..."
       }
     }
     ```
 
-#### Verify Payment
+### Get Orders by Cart ID
 
--   **Endpoint:** `POST /api/payment/verify`
--   **Description:** Verifies the payment signature from Razorpay and saves the payment details.
--   **Request Body:**
-    ```json
-    {
-      "razorpay_order_id": "order_...",
-      "razorpay_payment_id": "pay_...",
-      "razorpay_signature": "..."
-    }
-    ```
+-   **Endpoint:** `GET /v1/order/getOrder/:cartId`
+-   **Description:** Retrieves all orders associated with a specific cart ID.
+-   **Request Params:** `cartId` (Cart ID)
 -   **Success Response (200):**
     ```json
     {
-      "message": "Payement Successfully"
+      "message": "Orders retrieved successfully",
+      "orders": [
+        {
+          "cartId": { "...": "populated cart object" },
+          "billingAddress": { "..." },
+          "shippingAddress": { "..." },
+          "status": "pending",
+          "orderDate": "...",
+          "totalPrice": 1250.50,
+          "_id": "..."
+        }
+      ]
     }
     ```
--   **Error Response (500):** `{ "message": "Internal Server Error!" }`
 
+### Get Orders for Authenticated User (JWT)
+
+-   **Endpoint:** `GET /v1/order/getOrdersForUser`
+-   **Description:** Retrieves all orders for the authenticated user using JWT token. Automatically finds user's cart and fetches associated orders.
+-   **Request Headers:** `Authorization: Bearer <your_jwt_token>`
+-   **Success Response (200):**
+    ```json
+    {
+      "message": "Orders retrieved successfully",
+      "userId": "user_object_id",
+      "cartId": "cart_object_id",
+      "totalOrders": 3,
+      "orders": [
+        {
+          "cartId": {
+            "userId": {
+              "firstName": "John",
+              "lastName": "Doe",
+              "mobileNumber": "1234567890",
+              "email": "john@example.com"
+            },
+            "quantity": [
+              {
+                "productId": {
+                  "title": "Diamond Ring",
+                  "price": 50000,
+                  "images": ["..."]
+                },
+                "quantity": 1,
+                "totalPrice": 52500,
+                "size": 12,
+                "caratBy": "14KT",
+                "colorBy": "yellowgold"
+              }
+            ]
+          },
+          "billingAddress": {
+            "street": "123 Main St",
+            "city": "Mumbai",
+            "state": "Maharashtra",
+            "postalCode": "400001",
+            "country": "India"
+          },
+          "shippingAddress": {
+            "street": "456 Oak Ave",
+            "city": "Delhi",
+            "state": "Delhi",
+            "postalCode": "110001",
+            "country": "India"
+          },
+          "status": "pending",
+          "orderDate": "2024-01-15T10:30:00.000Z",
+          "totalPrice": 52500,
+          "_id": "order_object_id"
+        }
+      ]
+    }
+    ```
+-   **Error Responses:**
+    -   `401: { "message": "User not authenticated" }`
+    -   `404: { "message": "No cart found for this user" }`
+    -   `404: { "message": "No orders found for this user" }`
+
+### Cancel Order
+
+-   **Endpoint:** `DELETE /v1/order/cancelOrder/:id`
+-   **Description:** Cancels an order. First cancellation sets status to "cancelled", second deletion permanently removes it.
+-   **Request Params:** `id` (Order ID)
+-   **Success Response (200):**
+    ```json
+    {
+      "message": "Order cancelled successfully",
+      "order": {
+        "...": "updated order object with cancelled status"
+      }
+    }
+    ```
+
+### Get All Orders (Admin)
+
+-   **Endpoint:** `GET /v1/order/getAllOrders`
+-   **Description:** Retrieves all orders in the system (admin functionality).
+-   **Success Response (200):**
+    ```json
+    {
+      "message": "get all orders successfully",
+      "orders": [
+        {
+          "...": "order objects with populated data"
+        }
+      ]
+    }
+    ```
 
 ## And many more endpoints are available in the codebase...
