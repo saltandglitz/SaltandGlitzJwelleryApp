@@ -1,7 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:saltandGlitz/data/controller/login/login_controller.dart';
+import 'package:saltandglitz/data/controller/login/login_controller.dart';
 import '../../../core/route/route.dart';
 import '../../../core/utils/color_resources.dart';
 import '../../../core/utils/dimensions.dart';

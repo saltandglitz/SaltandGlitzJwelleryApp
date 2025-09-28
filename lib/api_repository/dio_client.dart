@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:saltandGlitz/local_storage/pref_manager.dart';
+import 'package:saltandglitz/local_storage/pref_manager.dart';
 
 class Dioclient {
   static Dio? dio;

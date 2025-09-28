@@ -4,8 +4,8 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart' hide Banner;
 import 'package:get/get.dart' hide Response;
-import 'package:saltandGlitz/local_storage/pref_manager.dart';
-import 'package:saltandGlitz/view/components/common_message_show.dart';
+import 'package:saltandglitz/local_storage/pref_manager.dart';
+import 'package:saltandglitz/view/components/common_message_show.dart';
 
 import 'api_repository/api_function.dart';
 import 'core/route/route.dart';

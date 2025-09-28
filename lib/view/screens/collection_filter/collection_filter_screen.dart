@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:saltandGlitz/core/utils/dimensions.dart';
-import 'package:saltandGlitz/core/utils/local_strings.dart';
-import 'package:saltandGlitz/data/controller/categories/categories_controller.dart';
+import 'package:saltandglitz/core/utils/dimensions.dart';
+import 'package:saltandglitz/core/utils/local_strings.dart';
+import 'package:saltandglitz/data/controller/categories/categories_controller.dart';
 import '../../../analytics/app_analytics.dart';
 import '../../../core/utils/color_resources.dart';
 import '../../../core/utils/style.dart';

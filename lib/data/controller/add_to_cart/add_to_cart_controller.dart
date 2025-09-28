@@ -4,14 +4,14 @@ import 'package:dio/dio.dart';
 import 'package:get/get.dart' hide Response;
 import 'package:get/get_rx/get_rx.dart';
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
-import 'package:saltandGlitz/api_repository/api_function.dart';
-import 'package:saltandGlitz/core/route/route.dart';
-import 'package:saltandGlitz/core/utils/images.dart';
-import 'package:saltandGlitz/core/utils/local_strings.dart';
-import 'package:saltandGlitz/data/controller/bottom_bar/bottom_bar_controller.dart';
-import 'package:saltandGlitz/data/model/get_add_cart_view_model.dart';
-import 'package:saltandGlitz/local_storage/pref_manager.dart';
-import 'package:saltandGlitz/view/components/common_message_show.dart';
+import 'package:saltandglitz/api_repository/api_function.dart';
+import 'package:saltandglitz/core/route/route.dart';
+import 'package:saltandglitz/core/utils/images.dart';
+import 'package:saltandglitz/core/utils/local_strings.dart';
+import 'package:saltandglitz/data/controller/bottom_bar/bottom_bar_controller.dart';
+import 'package:saltandglitz/data/model/get_add_cart_view_model.dart';
+import 'package:saltandglitz/local_storage/pref_manager.dart';
+import 'package:saltandglitz/view/components/common_message_show.dart';
 
 import '../../../core/utils/app_const.dart';
 

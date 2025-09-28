@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:saltandGlitz/data/controller/in_app_web_view/in_app_web_view_controller.dart';
+import 'package:saltandglitz/data/controller/in_app_web_view/in_app_web_view_controller.dart';
 
 import '../../../core/utils/color_resources.dart';
 

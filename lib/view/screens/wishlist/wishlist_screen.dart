@@ -1,11 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:saltandGlitz/core/utils/images.dart';
-import 'package:saltandGlitz/data/controller/collection/collection_controller.dart';
-import 'package:saltandGlitz/data/controller/wishlist/wishlist_controller.dart';
-import 'package:saltandGlitz/data/product/product_controller.dart';
-import 'package:saltandGlitz/local_storage/pref_manager.dart';
+import 'package:saltandglitz/core/utils/images.dart';
+import 'package:saltandglitz/data/controller/collection/collection_controller.dart';
+import 'package:saltandglitz/data/controller/wishlist/wishlist_controller.dart';
+import 'package:saltandglitz/data/product/product_controller.dart';
+import 'package:saltandglitz/local_storage/pref_manager.dart';
 import 'package:shimmer/shimmer.dart';
 import '../../../analytics/app_analytics.dart';
 import '../../../core/utils/color_resources.dart';

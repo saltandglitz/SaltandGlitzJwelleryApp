@@ -1,14 +1,14 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:saltandGlitz/core/route/route.dart';
-import 'package:saltandGlitz/core/utils/color_resources.dart';
-import 'package:saltandGlitz/core/utils/dimensions.dart';
-import 'package:saltandGlitz/core/utils/images.dart';
-import 'package:saltandGlitz/core/utils/local_strings.dart';
-import 'package:saltandGlitz/data/controller/login/login_controller.dart';
-import 'package:saltandGlitz/view/components/common_button.dart';
-import 'package:saltandGlitz/view/components/common_textfield.dart';
+import 'package:saltandglitz/core/route/route.dart';
+import 'package:saltandglitz/core/utils/color_resources.dart';
+import 'package:saltandglitz/core/utils/dimensions.dart';
+import 'package:saltandglitz/core/utils/images.dart';
+import 'package:saltandglitz/core/utils/local_strings.dart';
+import 'package:saltandglitz/data/controller/login/login_controller.dart';
+import 'package:saltandglitz/view/components/common_button.dart';
+import 'package:saltandglitz/view/components/common_textfield.dart';
 import '../../../analytics/app_analytics.dart';
 import '../../../core/utils/style.dart';
 import '../../../core/utils/validation.dart';
@@ -243,7 +243,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             text: TextSpan(
                               children: [
                                 TextSpan(
-                                  text: LocalStrings.newSaltAndGlitz,
+                                  text: LocalStrings.newsaltandglitz,
                                   style: mediumDefault.copyWith(
                                       color: ColorResources.blackColor),
                                 ),

@@ -5,10 +5,10 @@ import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart' hide Response, FormData, MultipartFile;
 import 'package:image_picker/image_picker.dart';
-import 'package:saltandGlitz/api_repository/api_function.dart';
-import 'package:saltandGlitz/core/utils/dimensions.dart';
-import 'package:saltandGlitz/data/controller/wishlist/wishlist_controller.dart';
-import 'package:saltandGlitz/view/components/common_message_show.dart';
+import 'package:saltandglitz/api_repository/api_function.dart';
+import 'package:saltandglitz/core/utils/dimensions.dart';
+import 'package:saltandglitz/data/controller/wishlist/wishlist_controller.dart';
+import 'package:saltandglitz/view/components/common_message_show.dart';
 import 'package:video_player/video_player.dart';
 
 import '../../analytics/app_analytics.dart';

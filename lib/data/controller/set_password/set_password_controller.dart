@@ -4,9 +4,9 @@ import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart' hide Response;
-import 'package:saltandGlitz/api_repository/api_function.dart';
-import 'package:saltandGlitz/core/utils/local_strings.dart';
-import 'package:saltandGlitz/view/components/common_message_show.dart';
+import 'package:saltandglitz/api_repository/api_function.dart';
+import 'package:saltandglitz/core/utils/local_strings.dart';
+import 'package:saltandglitz/view/components/common_message_show.dart';
 
 import '../../../core/route/route.dart';
 import '../../../core/utils/validation.dart';

@@ -1,10 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart' hide Response;
 import 'package:dio/dio.dart';
-import 'package:saltandGlitz/api_repository/api_function.dart';
-import 'package:saltandGlitz/core/utils/local_strings.dart';
-import 'package:saltandGlitz/local_storage/pref_manager.dart';
-import 'package:saltandGlitz/view/components/common_message_show.dart';
+import 'package:saltandglitz/api_repository/api_function.dart';
+import 'package:saltandglitz/core/utils/local_strings.dart';
+import 'package:saltandglitz/local_storage/pref_manager.dart';
+import 'package:saltandglitz/view/components/common_message_show.dart';
 
 import '../../../core/route/route.dart';
 import '../../model/get_address_view_model.dart';

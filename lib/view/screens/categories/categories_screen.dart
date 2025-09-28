@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:saltandGlitz/data/controller/categories/categories_controller.dart';
-import 'package:saltandGlitz/view/screens/categories/kids_categories.dart';
-import 'package:saltandGlitz/view/screens/categories/women_categories_screen.dart';
+import 'package:saltandglitz/data/controller/categories/categories_controller.dart';
+import 'package:saltandglitz/view/screens/categories/kids_categories.dart';
+import 'package:saltandglitz/view/screens/categories/women_categories_screen.dart';
 import '../../../analytics/app_analytics.dart';
 import '../../../core/route/route.dart';
 import '../../../core/utils/app_const.dart';

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:saltandGlitz/data/controller/place_order_controller/place_order_controller.dart';
-import 'package:saltandGlitz/main_controller.dart';
-import 'package:saltandGlitz/view/components/cached_image.dart';
-import 'package:saltandGlitz/view/components/common_button.dart';
-import 'package:saltandGlitz/view/components/common_textfield.dart';
+import 'package:saltandglitz/data/controller/place_order_controller/place_order_controller.dart';
+import 'package:saltandglitz/main_controller.dart';
+import 'package:saltandglitz/view/components/cached_image.dart';
+import 'package:saltandglitz/view/components/common_button.dart';
+import 'package:saltandglitz/view/components/common_textfield.dart';
 import 'package:shimmer/shimmer.dart';
 import '../../../core/route/route.dart';
 import '../../../core/utils/color_resources.dart';

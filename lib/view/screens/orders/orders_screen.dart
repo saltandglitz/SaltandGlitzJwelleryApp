@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:saltandGlitz/core/route/route.dart';
-import 'package:saltandGlitz/core/utils/color_resources.dart';
+import 'package:saltandglitz/core/route/route.dart';
+import 'package:saltandglitz/core/utils/color_resources.dart';
 
-import 'package:saltandGlitz/core/utils/local_strings.dart';
-import 'package:saltandGlitz/core/utils/style.dart';
-import 'package:saltandGlitz/data/controller/orders/orders_controller.dart';
-import 'package:saltandGlitz/data/model/order/order_model.dart';
-import 'package:saltandGlitz/local_storage/pref_manager.dart';
-import 'package:saltandGlitz/main_controller.dart';
-import 'package:saltandGlitz/view/components/app_circular_loader.dart';
-import 'package:saltandGlitz/view/components/network_connectivity_view.dart';
+import 'package:saltandglitz/core/utils/local_strings.dart';
+import 'package:saltandglitz/core/utils/style.dart';
+import 'package:saltandglitz/data/controller/orders/orders_controller.dart';
+import 'package:saltandglitz/data/model/order/order_model.dart';
+import 'package:saltandglitz/local_storage/pref_manager.dart';
+import 'package:saltandglitz/main_controller.dart';
+import 'package:saltandglitz/view/components/app_circular_loader.dart';
+import 'package:saltandglitz/view/components/network_connectivity_view.dart';
 
 class OrdersScreen extends StatefulWidget {
   const OrdersScreen({super.key});

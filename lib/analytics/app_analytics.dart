@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import 'package:saltandGlitz/main_controller.dart';
+import 'package:saltandglitz/main_controller.dart';
 
 import '../core/utils/local_strings.dart';
 

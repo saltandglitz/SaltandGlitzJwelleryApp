@@ -2,11 +2,11 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:saltandGlitz/core/utils/color_resources.dart';
-import 'package:saltandGlitz/core/utils/local_strings.dart';
-import 'package:saltandGlitz/data/controller/bottom_bar/bottom_bar_controller.dart';
-import 'package:saltandGlitz/view/screens/dashboard/dashboard_screen.dart';
-import 'package:saltandGlitz/view/screens/pop/pop_screen.dart';
+import 'package:saltandglitz/core/utils/color_resources.dart';
+import 'package:saltandglitz/core/utils/local_strings.dart';
+import 'package:saltandglitz/data/controller/bottom_bar/bottom_bar_controller.dart';
+import 'package:saltandglitz/view/screens/dashboard/dashboard_screen.dart';
+import 'package:saltandglitz/view/screens/pop/pop_screen.dart';
 
 import '../../../core/utils/style.dart';
 import '../../../data/controller/categories/categories_controller.dart';

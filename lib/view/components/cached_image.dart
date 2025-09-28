@@ -1,6 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:saltandGlitz/core/utils/color_resources.dart';
+import 'package:saltandglitz/core/utils/color_resources.dart';
 import 'package:shimmer/shimmer.dart';
 
 ///<<<--------------- Handle network image loading time and if error this time handle ---------------------->>>

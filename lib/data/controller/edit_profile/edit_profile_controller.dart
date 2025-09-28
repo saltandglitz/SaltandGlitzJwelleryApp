@@ -5,7 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:get/get.dart' hide Response;
-import 'package:saltandGlitz/view/components/common_message_show.dart';
+import 'package:saltandglitz/view/components/common_message_show.dart';
 
 import '../../../analytics/app_analytics.dart';
 import '../../../api_repository/dio_client.dart';

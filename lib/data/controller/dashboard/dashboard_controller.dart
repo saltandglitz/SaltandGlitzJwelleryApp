@@ -5,12 +5,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:get/get.dart' hide Response;
-import 'package:saltandGlitz/api_repository/api_function.dart';
-import 'package:saltandGlitz/core/utils/local_strings.dart';
-import 'package:saltandGlitz/data/controller/bottom_bar/bottom_bar_controller.dart';
-import 'package:saltandGlitz/data/controller/collection/collection_controller.dart';
-import 'package:saltandGlitz/data/model/home_view_model.dart';
-import 'package:saltandGlitz/view/components/common_message_show.dart';
+import 'package:saltandglitz/api_repository/api_function.dart';
+import 'package:saltandglitz/core/utils/local_strings.dart';
+import 'package:saltandglitz/data/controller/bottom_bar/bottom_bar_controller.dart';
+import 'package:saltandglitz/data/controller/collection/collection_controller.dart';
+import 'package:saltandglitz/data/model/home_view_model.dart';
+import 'package:saltandglitz/view/components/common_message_show.dart';
 import 'package:video_player/video_player.dart';
 import '../../../analytics/app_analytics.dart';
 import '../../../core/utils/app_const.dart';
@@ -184,7 +184,7 @@ class DashboardController extends GetxController {
   ];
 
   final List<String> ourCompanyList = [
-    LocalStrings.saltAndGlitz,
+    LocalStrings.saltandglitz,
     LocalStrings.sustainability,
     LocalStrings.supplyChains,
     LocalStrings.californiaPrivacy,
@@ -195,10 +195,10 @@ class DashboardController extends GetxController {
     LocalStrings.targetedAdvertising,
   ];
 
-  final List<String> relatedSaltAndGlitzSitesList = [
+  final List<String> relatedsaltandglitzSitesList = [
     LocalStrings.weddingsGift,
     LocalStrings.businessAccounts,
-    LocalStrings.saltAndGlitzPress,
+    LocalStrings.saltandglitzPress,
     LocalStrings.foundation,
     LocalStrings.alertline,
     LocalStrings.siteIndex,

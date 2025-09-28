@@ -198,8 +198,8 @@ class LocalStrings {
   static String contact =
       appStrings.isNotEmpty ? appStrings['contact'] : "- Contact Us";
   static String latestFromSalt = "Latest From Salt and Glitz";
-  static String saltAndGlitz =
-      appStrings.isNotEmpty ? appStrings['saltAndGlitz'] : "- Salt and Glitz";
+  static String saltandglitz =
+      appStrings.isNotEmpty ? appStrings['saltandglitz'] : "- Salt and Glitz";
   static String trackOrder =
       appStrings.isNotEmpty ? appStrings['trackOrder'] : "- Track Order";
   static String bookAnAppointment = appStrings.isNotEmpty
@@ -249,8 +249,8 @@ class LocalStrings {
   static String businessAccounts = appStrings.isNotEmpty
       ? appStrings['businessAccounts']
       : "- Business Accounts";
-  static String saltAndGlitzPress = appStrings.isNotEmpty
-      ? appStrings['saltAndGlitzPress']
+  static String saltandglitzPress = appStrings.isNotEmpty
+      ? appStrings['saltandglitzPress']
       : "- Salt and Glitz for the Press";
   static String foundation = appStrings.isNotEmpty
       ? appStrings['foundation']
@@ -260,8 +260,8 @@ class LocalStrings {
       : "- Salt and Glitz Alertline";
   static String siteIndex =
       appStrings.isNotEmpty ? appStrings['siteIndex'] : "- Site index";
-  static String latestSaltAndGlitz = appStrings.isNotEmpty
-      ? appStrings['latestSaltAndGlitz']
+  static String latestsaltandglitz = appStrings.isNotEmpty
+      ? appStrings['latestsaltandglitz']
       : "Latest from Salt and Glitz";
   static String knowAbout = appStrings.isNotEmpty
       ? appStrings['knowAbout']
@@ -474,8 +474,8 @@ class LocalStrings {
       appStrings.isNotEmpty ? appStrings['mostBrowsed'] : "Most Browsed";
   static String moreJewellery =
       appStrings.isNotEmpty ? appStrings['moreJewellery'] : "More Jewellery";
-  static String saltAndGlitzPostcards = appStrings.isNotEmpty
-      ? appStrings['saltAndGlitzPostcards']
+  static String saltandglitzPostcards = appStrings.isNotEmpty
+      ? appStrings['saltandglitzPostcards']
       : 'Saltand Glitz Postcards';
   static String shopGifts =
       appStrings.isNotEmpty ? appStrings['shopGifts'] : "Shop For Gifts";
@@ -1159,8 +1159,8 @@ class LocalStrings {
   static String loginWhatsapp = appStrings.isNotEmpty
       ? appStrings['loginWhatsapp']
       : 'LOGIN WITH WHATSAPP';
-  static String newSaltAndGlitz = appStrings.isNotEmpty
-      ? appStrings['newSaltAndGlitz']
+  static String newsaltandglitz = appStrings.isNotEmpty
+      ? appStrings['newsaltandglitz']
       : 'New to Salt and Glitz?  ';
   static String createAccount =
       appStrings.isNotEmpty ? appStrings['createAccount'] : 'Create Account';

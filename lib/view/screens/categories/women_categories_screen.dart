@@ -1,7 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:saltandGlitz/view/components/common_message_show.dart';
+import 'package:saltandglitz/view/components/common_message_show.dart';
 import 'package:shimmer/shimmer.dart';
 import '../../../analytics/app_analytics.dart';
 import '../../../core/route/route.dart';

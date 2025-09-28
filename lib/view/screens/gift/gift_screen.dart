@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:saltandGlitz/data/controller/gift/gift_controller.dart';
-import 'package:saltandGlitz/view/components/common_textfield.dart';
+import 'package:saltandglitz/data/controller/gift/gift_controller.dart';
+import 'package:saltandglitz/view/components/common_textfield.dart';
 import '../../../core/route/route.dart';
 import '../../../core/utils/color_resources.dart';
 import '../../../core/utils/dimensions.dart';

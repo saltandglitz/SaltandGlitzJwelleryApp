@@ -2,9 +2,9 @@
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:saltandGlitz/core/utils/local_strings.dart';
-import 'package:saltandGlitz/core/utils/validation.dart';
-import 'package:saltandGlitz/view/components/common_message_show.dart';
+import 'package:saltandglitz/core/utils/local_strings.dart';
+import 'package:saltandglitz/core/utils/validation.dart';
+import 'package:saltandglitz/view/components/common_message_show.dart';
 
 import '../../../analytics/app_analytics.dart';
 import '../../../core/route/route.dart';

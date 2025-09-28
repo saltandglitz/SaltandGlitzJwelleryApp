@@ -1,8 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:get/get.dart' hide Response;
-import 'package:saltandGlitz/api_repository/api_function.dart';
-import 'package:saltandGlitz/data/model/get_wishlist_view_model.dart';
-import 'package:saltandGlitz/local_storage/pref_manager.dart';
+import 'package:saltandglitz/api_repository/api_function.dart';
+import 'package:saltandglitz/data/model/get_wishlist_view_model.dart';
+import 'package:saltandglitz/local_storage/pref_manager.dart';
 
 import '../../../core/utils/app_const.dart';
 import '../../../core/utils/images.dart';

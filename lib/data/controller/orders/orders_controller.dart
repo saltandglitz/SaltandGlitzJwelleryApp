@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart' hide Response;
-import 'package:saltandGlitz/api_repository/dio_client.dart';
-import 'package:saltandGlitz/data/model/order/order_model.dart';
-import 'package:saltandGlitz/local_storage/pref_manager.dart';
+import 'package:saltandglitz/api_repository/dio_client.dart';
+import 'package:saltandglitz/data/model/order/order_model.dart';
+import 'package:saltandglitz/local_storage/pref_manager.dart';
 
 class OrdersController extends GetxController {
   // Loading states

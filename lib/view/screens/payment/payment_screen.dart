@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:saltandGlitz/view/components/common_button.dart';
+import 'package:saltandglitz/view/components/common_button.dart';
 
 import '../../../core/utils/color_resources.dart';
 import '../../../core/utils/dimensions.dart';

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:saltandGlitz/data/controller/categories/categories_controller.dart';
-import 'package:saltandGlitz/data/controller/dashboard/dashboard_controller.dart';
+import 'package:saltandglitz/data/controller/categories/categories_controller.dart';
+import 'package:saltandglitz/data/controller/dashboard/dashboard_controller.dart';
 import '../../../core/utils/app_const.dart';
 import '../../../core/utils/color_resources.dart';
 import '../../../core/utils/images.dart';

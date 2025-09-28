@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:saltandGlitz/core/utils/color_resources.dart';
-import 'package:saltandGlitz/core/utils/local_strings.dart';
-import 'package:saltandGlitz/core/utils/style.dart';
-import 'package:saltandGlitz/data/model/order/order_model.dart';
-import 'package:saltandGlitz/data/controller/orders/orders_controller.dart';
+import 'package:saltandglitz/core/utils/color_resources.dart';
+import 'package:saltandglitz/core/utils/local_strings.dart';
+import 'package:saltandglitz/core/utils/style.dart';
+import 'package:saltandglitz/data/model/order/order_model.dart';
+import 'package:saltandglitz/data/controller/orders/orders_controller.dart';
 
 class OrderDetailScreen extends StatelessWidget {
   const OrderDetailScreen({super.key});

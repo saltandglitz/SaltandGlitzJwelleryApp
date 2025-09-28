@@ -5,15 +5,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
-import 'package:saltandGlitz/core/route/route.dart';
-import 'package:saltandGlitz/core/utils/dimensions.dart';
-import 'package:saltandGlitz/core/utils/local_strings.dart';
-import 'package:saltandGlitz/core/utils/style.dart';
-import 'package:saltandGlitz/data/controller/dashboard/dashboard_controller.dart';
-import 'package:saltandGlitz/local_storage/pref_manager.dart';
-import 'package:saltandGlitz/view/components/cached_image.dart';
-import 'package:saltandGlitz/view/components/common_button.dart';
-import 'package:saltandGlitz/view/components/common_textfield.dart';
+import 'package:saltandglitz/core/route/route.dart';
+import 'package:saltandglitz/core/utils/dimensions.dart';
+import 'package:saltandglitz/core/utils/local_strings.dart';
+import 'package:saltandglitz/core/utils/style.dart';
+import 'package:saltandglitz/data/controller/dashboard/dashboard_controller.dart';
+import 'package:saltandglitz/local_storage/pref_manager.dart';
+import 'package:saltandglitz/view/components/cached_image.dart';
+import 'package:saltandglitz/view/components/common_button.dart';
+import 'package:saltandglitz/view/components/common_textfield.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:video_player/video_player.dart';
@@ -2129,7 +2129,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                                       selectedColor: ColorResources.buttonColor,
                                       title: Column(
                                         children: controller
-                                            .relatedSaltAndGlitzSitesList
+                                            .relatedsaltandglitzSitesList
                                             .map(
                                           (text) {
                                             return ListTile(
@@ -2533,7 +2533,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                               ),
                             ),
                             // Text(
-                            //   LocalStrings.latestSaltAndGlitz,
+                            //   LocalStrings.latestsaltandglitz,
                             //   textAlign: TextAlign.center,
                             //   style: semiBoldLarge.copyWith(),
                             // ),

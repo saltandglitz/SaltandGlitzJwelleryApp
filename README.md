@@ -1,4 +1,4 @@
-# saltandGlitz
+# saltandglitz
 
 A new Flutter project.
 

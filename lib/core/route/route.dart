@@ -1,15 +1,15 @@
 import 'package:get/get.dart';
-import 'package:saltandGlitz/view/screens/add_to_cart/add_to_cart_screen.dart';
-import 'package:saltandGlitz/view/screens/bottom_bar/bottom_bar_screen.dart';
-import 'package:saltandGlitz/view/screens/create_account/create_account_screen.dart';
-import 'package:saltandGlitz/view/screens/dashboard/dashboard_screen.dart';
-import 'package:saltandGlitz/view/screens/edit_profile/edit_profile_screen.dart';
-import 'package:saltandGlitz/view/screens/forget_password/forget_password.dart';
-import 'package:saltandGlitz/view/screens/in_app_webview/in_app_webview_screen.dart';
+import 'package:saltandglitz/view/screens/add_to_cart/add_to_cart_screen.dart';
+import 'package:saltandglitz/view/screens/bottom_bar/bottom_bar_screen.dart';
+import 'package:saltandglitz/view/screens/create_account/create_account_screen.dart';
+import 'package:saltandglitz/view/screens/dashboard/dashboard_screen.dart';
+import 'package:saltandglitz/view/screens/edit_profile/edit_profile_screen.dart';
+import 'package:saltandglitz/view/screens/forget_password/forget_password.dart';
+import 'package:saltandglitz/view/screens/in_app_webview/in_app_webview_screen.dart';
 
-import 'package:saltandGlitz/view/screens/login/login_screen.dart';
-import 'package:saltandGlitz/view/screens/set_otp/set_otp_screen.dart';
-import 'package:saltandGlitz/view/screens/set_password/set_password_screen.dart';
+import 'package:saltandglitz/view/screens/login/login_screen.dart';
+import 'package:saltandglitz/view/screens/set_otp/set_otp_screen.dart';
+import 'package:saltandglitz/view/screens/set_password/set_password_screen.dart';
 import '../../view/screens/categories/categories_screen.dart';
 import '../../view/screens/categories/kids_categories.dart';
 import '../../view/screens/categories/men_categories_screen.dart';

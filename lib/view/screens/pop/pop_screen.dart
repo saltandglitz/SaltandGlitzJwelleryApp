@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:saltandGlitz/core/utils/color_resources.dart';
+import 'package:saltandglitz/core/utils/color_resources.dart';
 
 class PopScreen extends StatelessWidget {
   const PopScreen({super.key});

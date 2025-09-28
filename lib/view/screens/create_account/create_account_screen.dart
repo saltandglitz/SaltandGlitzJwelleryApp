@@ -2,9 +2,9 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:saltandGlitz/core/route/route.dart';
-import 'package:saltandGlitz/data/controller/create_account/create_account_controller.dart';
-import 'package:saltandGlitz/view/components/app_textfield.dart';
+import 'package:saltandglitz/core/route/route.dart';
+import 'package:saltandglitz/data/controller/create_account/create_account_controller.dart';
+import 'package:saltandglitz/view/components/app_textfield.dart';
 
 import '../../../analytics/app_analytics.dart';
 import '../../../core/utils/color_resources.dart';

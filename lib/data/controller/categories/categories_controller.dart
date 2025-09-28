@@ -4,8 +4,8 @@ import 'package:carousel_slider/carousel_options.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart' hide Response;
-import 'package:saltandGlitz/data/controller/collection/collection_controller.dart';
-import 'package:saltandGlitz/view/components/common_message_show.dart';
+import 'package:saltandglitz/data/controller/collection/collection_controller.dart';
+import 'package:saltandglitz/view/components/common_message_show.dart';
 import '../../../api_repository/api_function.dart';
 import '../../../core/utils/app_const.dart';
 import '../../../core/utils/images.dart';
@@ -169,7 +169,7 @@ class CategoriesController extends GetxController {
     MyImages.planPurchaseImage,
   ];
   List needHelpHeadingLst = [
-    LocalStrings.saltAndGlitzPostcards,
+    LocalStrings.saltandglitzPostcards,
     LocalStrings.pop,
   ];
   List needHelpTitleLst = [
