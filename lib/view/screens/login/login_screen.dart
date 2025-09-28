@@ -243,7 +243,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             text: TextSpan(
                               children: [
                                 TextSpan(
-                                  text: LocalStrings.newsaltandglitz,
+                                  text: "New to Salt and Glitz?",
                                   style: mediumDefault.copyWith(
                                       color: ColorResources.blackColor),
                                 ),
