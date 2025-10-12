@@ -322,7 +322,7 @@ class _AddToCartScreenState extends State<AddToCartScreen> {
                                                     ],
                                                   ),
                                                   Text(
-                                                    "₹${(controller.getItemPrice(controller.getAddCartData?.cart?.quantity?[index]) * (controller.getAddCartData?.cart?.quantity?[index].quantity ?? 1)).round()}",
+                                                    "₹${((controller.getAddCartData?.cart?.quantity?[index].caratBy == "14KT" ? (controller.getAddCartData?.cart?.quantity?[index].productId?.total14KT ?? 0) : (controller.getAddCartData?.cart?.quantity?[index].productId?.total18KT ?? 0)) * (controller.getAddCartData?.cart?.quantity?[index].quantity ?? 1)).round()}",
                                                     style: boldSmall.copyWith(
                                                       color: ColorResources
                                                           .buttonColor,

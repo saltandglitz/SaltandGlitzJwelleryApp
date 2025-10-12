@@ -765,10 +765,16 @@ class _ProductScreenState extends State<ProductScreen> {
                                                   : 0),
                                       Obx(() {
                                         final price = controller
-                                            .calculateAdjustedPrice()
-                                            .round();
+                                                    .ktCurrentIndex.value ==
+                                                0
+                                            ? (controller.getTotal14KT(
+                                                    controller.productData) ??
+                                                0)
+                                            : (controller.getTotal18KT(
+                                                    controller.productData) ??
+                                                0);
                                         return Text(
-                                          "₹$price",
+                                          "₹${price.round()}",
                                           style: mediumExtraLarge.copyWith(),
                                         );
                                       }),
@@ -1835,10 +1841,10 @@ class _ProductScreenState extends State<ProductScreen> {
                                                 controller.ktCurrentIndex
                                                             .value ==
                                                         0
-                                                    ? controller.getTotal14KT(
-                                                        controller.productData)
-                                                    : controller.getTotal18KT(
-                                                        controller.productData),
+                                                    ? controller
+                                                        .productData?.total14KT
+                                                    : controller
+                                                        .productData?.total18KT,
                                               ];
                                               return Column(
                                                 children: [

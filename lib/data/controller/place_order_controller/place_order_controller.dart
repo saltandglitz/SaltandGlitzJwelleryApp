@@ -105,7 +105,7 @@ class PlaceOrderController extends GetxController {
     double total = 0;
     final cartItems = getCartData?.cart?.quantity ?? [];
     for (var item in cartItems) {
-      if (item.productId?.total14KT != null) {
+      if (item.caratBy == "14KT") {
         var price =
             double.tryParse(item.productId?.total14KT.toString() ?? '') ?? 0;
         var quantity = item.quantity ?? 0;
@@ -120,7 +120,7 @@ class PlaceOrderController extends GetxController {
     double total = 0;
     final cartItems = getCartData?.cart?.quantity ?? [];
     for (var item in cartItems) {
-      if (item.productId?.total18KT != null) {
+      if (item.caratBy == "18KT") {
         var price =
             double.tryParse(item.productId?.total18KT.toString() ?? '') ?? 0;
         var quantity = item.quantity ?? 0;

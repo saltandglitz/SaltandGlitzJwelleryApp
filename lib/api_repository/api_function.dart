@@ -67,11 +67,6 @@ class APIFunction {
     bool isLoading = true,
   }) async {
     try {
-      if (context == null) {
-        printActionError("Context is null");
-        return Future.error('Context is null');
-      }
-
       Response response; // This will hold the full Response object
 
       // Send the DELETE request using Dio

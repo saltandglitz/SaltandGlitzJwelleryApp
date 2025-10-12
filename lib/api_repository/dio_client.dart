@@ -11,8 +11,8 @@ class Dioclient {
       BaseOptions(
         baseUrl: 'https://api.saltandglitz.com',
         // baseUrl: 'https://api.akashch.me/api/v2',
-        connectTimeout: Duration(seconds: 20),
-        receiveTimeout: Duration(seconds: 30),
+        connectTimeout: const Duration(seconds: 20),
+        receiveTimeout: const Duration(seconds: 30),
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',

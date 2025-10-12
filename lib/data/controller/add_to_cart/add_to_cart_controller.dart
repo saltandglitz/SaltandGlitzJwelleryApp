@@ -2,18 +2,13 @@ import 'dart:async';
 
 import 'package:dio/dio.dart';
 import 'package:get/get.dart' hide Response;
-import 'package:get/get_rx/get_rx.dart';
-import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:saltandglitz/api_repository/api_function.dart';
-import 'package:saltandglitz/core/route/route.dart';
 import 'package:saltandglitz/core/utils/images.dart';
 import 'package:saltandglitz/core/utils/local_strings.dart';
 import 'package:saltandglitz/data/controller/bottom_bar/bottom_bar_controller.dart';
 import 'package:saltandglitz/data/model/get_add_cart_view_model.dart';
 import 'package:saltandglitz/local_storage/pref_manager.dart';
 import 'package:saltandglitz/view/components/common_message_show.dart';
-
-import '../../../core/utils/app_const.dart';
 
 class AddToCartController extends GetxController {
   int currentIndex = 0;
@@ -89,22 +84,6 @@ class AddToCartController extends GetxController {
         var price =
             double.tryParse(item.productId?.total14KT.toString() ?? '') ?? 0;
 
-        // If price is 0, calculate it from components
-        if (price == 0) {
-          var goldPrice =
-              double.tryParse(item.productId?.price14KT.toString() ?? '') ?? 0;
-          var diamondPrice =
-              double.tryParse(item.productId?.diamondprice.toString() ?? '') ??
-                  0;
-          var makingCharge = double.tryParse(
-                  item.productId?.makingCharge14KT.toString() ?? '') ??
-              0;
-          var gst =
-              double.tryParse(item.productId?.gst14KT.toString() ?? '') ?? 0;
-
-          price = goldPrice + diamondPrice + makingCharge + gst;
-        }
-
         final qty = item.quantity ?? 1;
         total += price * qty;
       }
@@ -122,22 +101,6 @@ class AddToCartController extends GetxController {
       if (item.caratBy == "18KT") {
         var price =
             double.tryParse(item.productId?.total18KT.toString() ?? '') ?? 0;
-
-        // If price is 0, calculate it from components
-        if (price == 0) {
-          var goldPrice =
-              double.tryParse(item.productId?.price18KT.toString() ?? '') ?? 0;
-          var diamondPrice =
-              double.tryParse(item.productId?.diamondprice.toString() ?? '') ??
-                  0;
-          var makingCharge = double.tryParse(
-                  item.productId?.makingCharge18KT.toString() ?? '') ??
-              0;
-          var gst =
-              double.tryParse(item.productId?.gst18KT.toString() ?? '') ?? 0;
-
-          price = goldPrice + diamondPrice + makingCharge + gst;
-        }
 
         final qty = item.quantity ?? 1;
         total += price * qty;
@@ -172,20 +135,6 @@ class AddToCartController extends GetxController {
     var price =
         double.tryParse(item.productId?.total14KT.toString() ?? '') ?? 0;
 
-    // If price is 0, calculate it from components
-    if (price == 0) {
-      var goldPrice =
-          double.tryParse(item.productId?.price14KT.toString() ?? '') ?? 0;
-      var diamondPrice =
-          double.tryParse(item.productId?.diamondprice.toString() ?? '') ?? 0;
-      var makingCharge =
-          double.tryParse(item.productId?.makingCharge14KT.toString() ?? '') ??
-              0;
-      var gst = double.tryParse(item.productId?.gst14KT.toString() ?? '') ?? 0;
-
-      price = goldPrice + diamondPrice + makingCharge + gst;
-    }
-
     return price;
   }
 
@@ -195,20 +144,6 @@ class AddToCartController extends GetxController {
 
     var price =
         double.tryParse(item.productId?.total18KT.toString() ?? '') ?? 0;
-
-    // If price is 0, calculate it from components
-    if (price == 0) {
-      var goldPrice =
-          double.tryParse(item.productId?.price18KT.toString() ?? '') ?? 0;
-      var diamondPrice =
-          double.tryParse(item.productId?.diamondprice.toString() ?? '') ?? 0;
-      var makingCharge =
-          double.tryParse(item.productId?.makingCharge18KT.toString() ?? '') ??
-              0;
-      var gst = double.tryParse(item.productId?.gst18KT.toString() ?? '') ?? 0;
-
-      price = goldPrice + diamondPrice + makingCharge + gst;
-    }
 
     return price;
   }

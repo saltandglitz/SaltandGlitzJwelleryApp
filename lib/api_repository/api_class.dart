@@ -30,8 +30,8 @@ class HttpUtil {
 
     BaseOptions options = BaseOptions(
       // baseUrl: apiUrl,
-      connectTimeout: Duration(seconds: 15),
-      receiveTimeout: Duration(seconds: 15),
+      connectTimeout: const Duration(seconds: 15),
+      receiveTimeout: const Duration(seconds: 15),
       headers: {
         // 'key': LocalStrings.apiKey,
         // 'token': token,
@@ -63,7 +63,7 @@ class HttpUtil {
         }
         return handler.next(response); // continue
       },
-      onError: (DioError e, handler) {
+      onError: (DioException e, handler) {
         if (isLoading!) {
           Loading.dismiss();
         }

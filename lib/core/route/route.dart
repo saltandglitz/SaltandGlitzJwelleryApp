@@ -83,7 +83,7 @@ class RouteHelper {
     GetPage(name: giftScreen, page: () => const GiftScreen()),
     GetPage(name: paymentScreen, page: () => const PaymentScreen()),
     GetPage(name: inAppWebViewScreen, page: () => InAppWebViewScreen()),
-    GetPage(name: popScreen, page: () => PopScreen()),
+    GetPage(name: popScreen, page: () => const PopScreen()),
     GetPage(name: ordersScreen, page: () => const OrdersScreen()),
     GetPage(name: orderDetailScreen, page: () => const OrderDetailScreen()),
   ];

@@ -6,7 +6,6 @@ import 'package:saltandglitz/view/components/cached_image.dart';
 import 'package:saltandglitz/view/components/common_button.dart';
 import 'package:saltandglitz/view/components/common_textfield.dart';
 import 'package:shimmer/shimmer.dart';
-import '../../../core/route/route.dart';
 import '../../../core/utils/color_resources.dart';
 import '../../../core/utils/dimensions.dart';
 import '../../../core/utils/images.dart';
@@ -948,7 +947,7 @@ class _PlaceOrderScreenState extends State<PlaceOrderScreen> {
                                           const SizedBox(
                                               height: Dimensions.space5),
                                           Text(
-                                            "₹${controller.getCartData?.cart?.quantity![index].totalPriceOfProduct?.round()}",
+                                            "₹${((controller.getCartData?.cart?.quantity![index].caratBy == "14KT" ? (controller.getCartData?.cart?.quantity![index].productId?.total14KT ?? 0) : (controller.getCartData?.cart?.quantity![index].productId?.total18KT ?? 0)) * (controller.getCartData?.cart?.quantity![index].quantity ?? 1)).round()}",
                                             style: boldLarge.copyWith(
                                                 fontWeight: FontWeight.bold,
                                                 color: ColorResources
