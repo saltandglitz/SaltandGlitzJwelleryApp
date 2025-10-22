@@ -212,11 +212,18 @@ class PaymentController extends GetxController {
 
   /// Handle successful payment completion
   void _handlePaymentSuccessComplete() {
-    // Clear cart, navigate to success screen, etc.
-    Get.offAllNamed(RouteHelper.bottomBarScreen); // Navigate to home
-
-    // You can also navigate to an order success screen
-    // Get.toNamed(RouteHelper.orderSuccessScreen);
+    // Navigate to payment success screen with payment details
+    Get.offAllNamed(
+      RouteHelper.paymentSuccessScreen,
+      arguments: {
+        'orderId': orderId,
+        'paymentId': paymentId,
+        'amount': paymentAmount,
+        'paymentMethod': selectedPaymentMethod.value.isNotEmpty
+            ? selectedPaymentMethod.value
+            : 'Online Payment',
+      },
+    );
 
     // Clear payment data
     _clearPaymentData();

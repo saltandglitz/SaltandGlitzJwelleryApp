@@ -21,6 +21,7 @@ import '../../view/screens/my_account/my_account_screen.dart';
 import '../../view/screens/orders/orders_screen.dart';
 import '../../view/screens/orders/order_detail_screen.dart';
 import '../../view/screens/payment/payment_screen.dart';
+import '../../view/screens/payment_success/payment_success_screen.dart';
 import '../../view/screens/place_order/place_order_screen.dart';
 import '../../view/screens/pop/pop_screen.dart';
 import '../../view/screens/product/product_screen.dart';
@@ -50,6 +51,7 @@ class RouteHelper {
   static const String placeOrder = "/place_order";
   static const String giftScreen = "/gift_screen";
   static const String paymentScreen = "/payment_screen";
+  static const String paymentSuccessScreen = "/payment_success_screen";
   static const String inAppWebViewScreen = "/in_app_web_view_screen";
   static const String popScreen = "/pop_screen";
   static const String ordersScreen = "/orders_screen";
@@ -82,6 +84,8 @@ class RouteHelper {
     GetPage(name: placeOrder, page: () => const PlaceOrderScreen()),
     GetPage(name: giftScreen, page: () => const GiftScreen()),
     GetPage(name: paymentScreen, page: () => const PaymentScreen()),
+    GetPage(
+        name: paymentSuccessScreen, page: () => const PaymentSuccessScreen()),
     GetPage(name: inAppWebViewScreen, page: () => InAppWebViewScreen()),
     GetPage(name: popScreen, page: () => const PopScreen()),
     GetPage(name: ordersScreen, page: () => const OrdersScreen()),

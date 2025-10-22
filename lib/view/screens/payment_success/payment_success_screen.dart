@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../../core/utils/color_resources.dart';
 import '../../../core/utils/dimensions.dart';
-import '../../../core/utils/local_strings.dart';
 import '../../../core/utils/style.dart';
 import '../../../core/route/route.dart';
 import '../../components/common_button.dart';
@@ -72,8 +71,6 @@ class _PaymentSuccessScreenState extends State<PaymentSuccessScreen>
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.of(context).size;
-
     return WillPopScope(
       onWillPop: () async {
         _navigateToHome();
@@ -348,10 +345,11 @@ class _PaymentSuccessScreenState extends State<PaymentSuccessScreen>
   }
 
   void _trackOrder() {
-    // Navigate to orders screen or show order tracking
-    // You can implement this based on your app's navigation structure
+    // Navigate to orders screen
     Get.offAllNamed(RouteHelper.bottomBarScreen);
-    // Or navigate to specific orders screen:
-    // Get.toNamed(RouteHelper.ordersScreen);
+    // Then navigate to orders screen
+    Future.delayed(const Duration(milliseconds: 300), () {
+      Get.toNamed(RouteHelper.ordersScreen);
+    });
   }
 }
