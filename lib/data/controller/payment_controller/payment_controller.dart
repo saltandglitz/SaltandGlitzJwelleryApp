@@ -336,8 +336,25 @@ class PaymentController extends GetxController {
         // Extract total amount from cart response
         // This depends on your cart API response structure
         final cartData = response.data;
-        // Implement based on your cart structure
-        return cartData['totalAmount']?.toDouble();
+        debugPrint('Cart API Response: $cartData');
+
+        // Check different possible fields for total amount
+        if (cartData['cart'] != null && cartData['cart']['cartTotal'] != null) {
+          final total = cartData['cart']['cartTotal'].toDouble();
+          debugPrint('Using cartTotal: $total');
+          return total;
+        } else if (cartData['totalPrice'] != null) {
+          final total = cartData['totalPrice'].toDouble();
+          debugPrint('Using totalPrice: $total');
+          return total;
+        } else if (cartData['totalAmount'] != null) {
+          final total = cartData['totalAmount'].toDouble();
+          debugPrint('Using totalAmount: $total');
+          return total;
+        }
+
+        debugPrint('No total amount found in cart response');
+        return null;
       }
     } catch (e) {
       debugPrint('Error getting cart total: $e');
