@@ -502,7 +502,12 @@ class ProductController extends GetxController {
   /// Image picker through gallery image pick
   Future<void> imagePickGalleryMethod() async {
     final pick = ImagePicker();
-    final pickFile = await pick.pickImage(source: ImageSource.gallery);
+    final pickFile = await pick.pickImage(
+      source: ImageSource.gallery,
+      maxWidth: 1920,
+      maxHeight: 1920,
+      imageQuality: 85,
+    );
 // Check if no file was picked
     if (pickFile == null) {
       showSnackBar(
@@ -538,7 +543,13 @@ class ProductController extends GetxController {
   /// Image picker through camera image pick
   Future<void> imagePickCameraMethod() async {
     final pick = ImagePicker();
-    final pickFile = await pick.pickImage(source: ImageSource.camera);
+    final pickFile = await pick.pickImage(
+      source: ImageSource.camera,
+      maxWidth: 1920,
+      maxHeight: 1920,
+      imageQuality: 85,
+      preferredCameraDevice: CameraDevice.rear,
+    );
     // Check if no file was picked
     if (pickFile == null) {
       showSnackBar(
