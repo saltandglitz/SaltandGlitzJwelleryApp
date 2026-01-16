@@ -75,6 +75,7 @@ dependencies:
   url_launcher: ^6.2.5
   font_awesome_flutter: any
   flutter_svg: any
+  share_plus: ^10.1.4
 
 dev_dependencies:
   flutter_test:

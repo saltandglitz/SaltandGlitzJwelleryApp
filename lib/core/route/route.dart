@@ -10,6 +10,7 @@ import 'package:saltandglitz/view/screens/in_app_webview/in_app_webview_screen.d
 import 'package:saltandglitz/view/screens/login/login_screen.dart';
 import 'package:saltandglitz/view/screens/set_otp/set_otp_screen.dart';
 import 'package:saltandglitz/view/screens/set_password/set_password_screen.dart';
+import 'package:saltandglitz/view/screens/special_user/special_user_screen.dart';
 import '../../view/screens/categories/categories_screen.dart';
 import '../../view/screens/categories/kids_categories.dart';
 import '../../view/screens/categories/men_categories_screen.dart';
@@ -56,6 +57,7 @@ class RouteHelper {
   static const String popScreen = "/pop_screen";
   static const String ordersScreen = "/orders_screen";
   static const String orderDetailScreen = "/order_detail_screen";
+  static const String specialUserScreen = "/special_user_screen";
 
   List<GetPage> routes = [
     GetPage(name: bottomBarScreen, page: () => const BottomBarScreen()),
@@ -90,5 +92,6 @@ class RouteHelper {
     GetPage(name: popScreen, page: () => const PopScreen()),
     GetPage(name: ordersScreen, page: () => const OrdersScreen()),
     GetPage(name: orderDetailScreen, page: () => const OrderDetailScreen()),
+    GetPage(name: specialUserScreen, page: () => const SpecialUserScreen()),
   ];
 }

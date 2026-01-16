@@ -459,6 +459,79 @@ class _MyAccountScreenState extends State<MyAccountScreen>
                                 );
                               },
                             ),
+                            // Special User Section - Only show for logged in users
+                            if (PrefManager.getString('isLogin') == 'yes') ...[
+                              const SizedBox(height: Dimensions.space15),
+                              Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 15),
+                                child: GestureDetector(
+                                  onTap: () {
+                                    Get.toNamed(RouteHelper.specialUserScreen);
+                                  },
+                                  child: Container(
+                                    width: double.infinity,
+                                    padding: const EdgeInsets.all(16),
+                                    decoration: BoxDecoration(
+                                      gradient: const LinearGradient(
+                                        colors: [
+                                          ColorResources.buttonColor,
+                                          ColorResources.buttonColorDark,
+                                        ],
+                                        begin: Alignment.topLeft,
+                                        end: Alignment.bottomRight,
+                                      ),
+                                      borderRadius: BorderRadius.circular(
+                                          Dimensions.offersCardRadius),
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        Container(
+                                          padding: const EdgeInsets.all(10),
+                                          decoration: BoxDecoration(
+                                            color: Colors.white.withOpacity(0.2),
+                                            borderRadius: BorderRadius.circular(12),
+                                          ),
+                                          child: const Icon(
+                                            Icons.star_rounded,
+                                            color: Colors.amber,
+                                            size: 28,
+                                          ),
+                                        ),
+                                        const SizedBox(width: 14),
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                'Become a Special User',
+                                                style: semiBoldLarge.copyWith(
+                                                  color: Colors.white,
+                                                  fontSize: 14,
+                                                ),
+                                              ),
+                                              const SizedBox(height: 4),
+                                              Text(
+                                                'Get exclusive 20% discount code to share!',
+                                                style: regularSmall.copyWith(
+                                                  color: Colors.white.withOpacity(0.9),
+                                                  fontSize: 11,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        const Icon(
+                                          Icons.arrow_forward_ios,
+                                          color: Colors.white,
+                                          size: 18,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
                             const SizedBox(height: Dimensions.space15),
                             PrefManager.getString('isLogin') == 'yes'
                                 ?

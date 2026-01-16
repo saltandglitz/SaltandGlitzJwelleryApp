@@ -51,6 +51,9 @@ class UserProfile {
   DateTime? createdAt;
   DateTime? updatedAt;
   int? v;
+  // Referrer fields
+  String? accountType; // "normal" | "special"
+  String? referrerCouponCode; // e.g. "REF-JOHN"
 
   UserProfile({
     this.id,
@@ -71,6 +74,8 @@ class UserProfile {
     this.createdAt,
     this.updatedAt,
     this.v,
+    this.accountType,
+    this.referrerCouponCode,
   });
 
   factory UserProfile.fromJson(Map<String, dynamic> json) => UserProfile(
@@ -103,6 +108,8 @@ class UserProfile {
             ? DateTime.tryParse(json['updatedAt'] as String)
             : null,
         v: json['__v'] as int?,
+        accountType: json['accountType'] as String? ?? 'normal',
+        referrerCouponCode: json['referrerCouponCode'] as String?,
       );
 
   Map<String, dynamic> toJson() => {
@@ -124,6 +131,8 @@ class UserProfile {
         'createdAt': createdAt?.toIso8601String(),
         'updatedAt': updatedAt?.toIso8601String(),
         '__v': v,
+        'accountType': accountType,
+        'referrerCouponCode': referrerCouponCode,
       };
 
   /// Helper to check if essential profile fields are complete
