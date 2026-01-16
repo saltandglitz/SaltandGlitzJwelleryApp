@@ -4,6 +4,7 @@ class GetAddCartViewModel {
   final Cart? cart;
   final dynamic totalQuantity;
   dynamic totalPrice;
+  final List<Coupons>? coupons;
 
   GetAddCartViewModel({
     this.status,
@@ -11,6 +12,7 @@ class GetAddCartViewModel {
     this.cart,
     this.totalQuantity,
     this.totalPrice,
+    this.coupons,
   });
 
   GetAddCartViewModel.fromJson(Map<String, dynamic> json)
@@ -20,7 +22,10 @@ class GetAddCartViewModel {
             ? Cart.fromJson(json['cart'])
             : null,
         totalQuantity = json['totalQuantity'],
-        totalPrice = json['totalPrice'];
+        totalPrice = json['totalPrice'],
+        coupons = (json['coupons'] as List?)
+            ?.map((e) => Coupons.fromJson(e as Map<String, dynamic>))
+            .toList();
 
   Map<String, dynamic> toJson() => {
         'status': status,
@@ -28,6 +33,7 @@ class GetAddCartViewModel {
         'cart': cart?.toJson(),
         'totalQuantity': totalQuantity,
         'totalPrice': totalPrice,
+        'coupons': coupons?.map((e) => e.toJson()).toList(),
       };
 }
 
@@ -35,6 +41,7 @@ class Cart {
   final dynamic cartId;
   final dynamic userId;
   final List<Quantity>? quantity;
+  final AppliedCoupon? appliedCoupon;
   final dynamic createdAt;
   final dynamic updatedAt;
   final dynamic v;
@@ -43,6 +50,7 @@ class Cart {
     this.cartId,
     this.userId,
     this.quantity,
+    this.appliedCoupon,
     this.createdAt,
     this.updatedAt,
     this.v,
@@ -54,6 +62,9 @@ class Cart {
         quantity = (json['quantity'] as List?)
             ?.map((e) => Quantity.fromJson(e))
             .toList(),
+        appliedCoupon = json['appliedCoupon'] != null
+            ? AppliedCoupon.fromJson(json['appliedCoupon'] as Map<String, dynamic>)
+            : null,
         createdAt = json['createdAt'],
         updatedAt = json['updatedAt'],
         v = json['__v'];
@@ -62,8 +73,73 @@ class Cart {
         'cart_id': cartId,
         'userId': userId,
         'quantity': quantity?.map((e) => e.toJson()).toList(),
+        'appliedCoupon': appliedCoupon?.toJson(),
         'createdAt': createdAt,
         'updatedAt': updatedAt,
+        '__v': v,
+      };
+}
+
+/// Applied coupon on cart
+class AppliedCoupon {
+  final String? code;
+  final double? discount;
+  final bool? applied;
+  final bool? isReferrerCoupon;
+  final String? referrerUserId;
+
+  AppliedCoupon({
+    this.code,
+    this.discount,
+    this.applied,
+    this.isReferrerCoupon,
+    this.referrerUserId,
+  });
+
+  AppliedCoupon.fromJson(Map<String, dynamic> json)
+      : code = json['code'] as String?,
+        discount = (json['discount'] as num?)?.toDouble(),
+        applied = json['applied'] as bool?,
+        isReferrerCoupon = json['isReferrerCoupon'] as bool?,
+        referrerUserId = json['referrerUserId'] as String?;
+
+  Map<String, dynamic> toJson() => {
+        'code': code,
+        'discount': discount,
+        'applied': applied,
+        'isReferrerCoupon': isReferrerCoupon,
+        'referrerUserId': referrerUserId,
+      };
+}
+
+/// Available coupon model
+class Coupons {
+  final String? id;
+  final String? couponCode;
+  final String? couponContent;
+  final String? couponOffer;
+  final int? v;
+
+  Coupons({
+    this.id,
+    this.couponCode,
+    this.couponContent,
+    this.couponOffer,
+    this.v,
+  });
+
+  Coupons.fromJson(Map<String, dynamic> json)
+      : id = json['_id'] as String?,
+        couponCode = json['couponCode'] as String?,
+        couponContent = json['couponContent'] as String?,
+        couponOffer = json['couponOffer'] as String?,
+        v = json['__v'] as int?;
+
+  Map<String, dynamic> toJson() => {
+        '_id': id,
+        'couponCode': couponCode,
+        'couponContent': couponContent,
+        'couponOffer': couponOffer,
         '__v': v,
       };
 }

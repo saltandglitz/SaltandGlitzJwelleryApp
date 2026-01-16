@@ -42,6 +42,7 @@ class Cart {
   final String? userId;
   final List<Quantity>? quantity;
   final double? cartTotal;
+  final AppliedCoupon? appliedCoupon;
   final String? createdAt;
   final String? updatedAt;
   final int? v;
@@ -51,6 +52,7 @@ class Cart {
     this.userId,
     this.quantity,
     this.cartTotal,
+    this.appliedCoupon,
     this.createdAt,
     this.updatedAt,
     this.v,
@@ -62,7 +64,10 @@ class Cart {
         quantity = (json['quantity'] as List?)
             ?.map((dynamic e) => Quantity.fromJson(e as Map<String, dynamic>))
             .toList(),
-        cartTotal = json['cartTotal'] as double?,
+        cartTotal = (json['cartTotal'] as num?)?.toDouble(),
+        appliedCoupon = json['appliedCoupon'] != null
+            ? AppliedCoupon.fromJson(json['appliedCoupon'] as Map<String, dynamic>)
+            : null,
         createdAt = json['createdAt'] as String?,
         updatedAt = json['updatedAt'] as String?,
         v = json['__v'] as int?;
@@ -72,9 +77,42 @@ class Cart {
         'userId': userId,
         'quantity': quantity?.map((e) => e.toJson()).toList(),
         'cartTotal': cartTotal,
+        'appliedCoupon': appliedCoupon?.toJson(),
         'createdAt': createdAt,
         'updatedAt': updatedAt,
         '__v': v
+      };
+}
+
+/// Applied coupon on cart
+class AppliedCoupon {
+  final String? code;
+  final double? discount;
+  final bool? applied;
+  final bool? isReferrerCoupon;
+  final String? referrerUserId;
+
+  AppliedCoupon({
+    this.code,
+    this.discount,
+    this.applied,
+    this.isReferrerCoupon,
+    this.referrerUserId,
+  });
+
+  AppliedCoupon.fromJson(Map<String, dynamic> json)
+      : code = json['code'] as String?,
+        discount = (json['discount'] as num?)?.toDouble(),
+        applied = json['applied'] as bool?,
+        isReferrerCoupon = json['isReferrerCoupon'] as bool?,
+        referrerUserId = json['referrerUserId'] as String?;
+
+  Map<String, dynamic> toJson() => {
+        'code': code,
+        'discount': discount,
+        'applied': applied,
+        'isReferrerCoupon': isReferrerCoupon,
+        'referrerUserId': referrerUserId,
       };
 }
 

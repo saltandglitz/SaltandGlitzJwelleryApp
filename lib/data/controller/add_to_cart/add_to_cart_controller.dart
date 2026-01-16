@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart' hide Response;
 import 'package:saltandglitz/api_repository/api_function.dart';
 import 'package:saltandglitz/core/utils/images.dart';
@@ -16,6 +17,11 @@ class AddToCartController extends GetxController {
   RxBool isEnableNetwork = false.obs;
   RxBool isGetCartData = false.obs;
   RxBool isRemoveCart = false.obs;
+  RxBool isApplyingCoupon = false.obs;
+
+  // Coupon state
+  RxString appliedCouponCode = ''.obs;
+  RxDouble couponDiscount = 0.0.obs;
 
   GetAddCartViewModel? getAddCartData;
   final bottomBarController =
@@ -285,6 +291,136 @@ class AddToCartController extends GetxController {
       print("Decrement cart error :$e");
     } finally {
       update();
+    }
+  }
+
+  // ========== COUPON METHODS ==========
+
+  /// Check if a coupon is currently applied
+  bool get hasCouponApplied => appliedCouponCode.value.isNotEmpty;
+
+  /// Calculate final total after discount
+  double calculateFinalTotal() {
+    double subtotal = calculateTotalPrice();
+    return subtotal - couponDiscount.value;
+  }
+
+  /// Apply a coupon code to the cart
+  Future<bool> applyCouponApiMethod(String couponCode) async {
+    if (couponCode.isEmpty) {
+      showToast(context: Get.context!, message: "Please enter a coupon code");
+      return false;
+    }
+
+    try {
+      isApplyingCoupon.value = true;
+      final userId = PrefManager.getString('userId');
+
+      if (userId == null || userId.isEmpty) {
+        showToast(context: Get.context!, message: "Please login to apply coupon");
+        return false;
+      }
+
+      final apiUrl = "${LocalStrings.applyCouponApi}$userId";
+      debugPrint("Applying coupon: $couponCode to URL: $apiUrl");
+
+      Response response = await APIFunction().apiCall(
+        apiName: apiUrl,
+        context: Get.context,
+        params: {"couponCode": couponCode},
+        isLoading: true,
+        isGet: false,
+      );
+
+      debugPrint("Coupon response: ${response.data}");
+
+      if (response.statusCode == 200 && response.data['status'] == true) {
+        // Update local state
+        appliedCouponCode.value = couponCode;
+        final discount = response.data['discountAmount'];
+        couponDiscount.value = discount is num ? discount.toDouble() : 0.0;
+
+        // Refresh cart data to get updated appliedCoupon
+        await getCartDataApiMethod();
+
+        showToast(
+          context: Get.context!,
+          message: response.data['message']?.toString() ?? "Coupon applied successfully!",
+        );
+        return true;
+      } else {
+        showToast(
+          context: Get.context!,
+          message: response.data['message']?.toString() ?? "Failed to apply coupon",
+        );
+        return false;
+      }
+    } catch (e, stackTrace) {
+      debugPrint("Apply coupon error: $e");
+      debugPrint("Stack trace: $stackTrace");
+      showToast(context: Get.context!, message: "Failed to apply coupon");
+      return false;
+    } finally {
+      isApplyingCoupon.value = false;
+      update();
+    }
+  }
+
+  /// Remove the currently applied coupon
+  Future<bool> removeCouponApiMethod() async {
+    try {
+      isApplyingCoupon.value = true;
+      String? userId = PrefManager.getString('userId');
+
+      if (userId == null || userId.isEmpty) {
+        return false;
+      }
+
+      Response response = await APIFunction().delete(
+        apiName: "${LocalStrings.removeCouponApi}$userId",
+        context: Get.context!,
+        token: PrefManager.getString('token'),
+        isLoading: true,
+      );
+
+      if (response.statusCode == 200) {
+        // Clear local state
+        appliedCouponCode.value = '';
+        couponDiscount.value = 0;
+
+        // Refresh cart data
+        await getCartDataApiMethod();
+
+        showToast(
+          context: Get.context!,
+          message: response.data['message'] ?? "Coupon removed",
+        );
+        return true;
+      } else {
+        showToast(
+          context: Get.context!,
+          message: response.data['message'] ?? "Failed to remove coupon",
+        );
+        return false;
+      }
+    } catch (e) {
+      debugPrint("Remove coupon error: $e");
+      return false;
+    } finally {
+      isApplyingCoupon.value = false;
+      update();
+    }
+  }
+
+  /// Sync coupon state from cart data (after fetching cart)
+  void syncCouponState() {
+    final appliedCoupon = getAddCartData?.cart?.appliedCoupon;
+    if (appliedCoupon != null && appliedCoupon.applied == true) {
+      appliedCouponCode.value = appliedCoupon.code ?? '';
+      couponDiscount.value = appliedCoupon.discount ?? 0;
+    } else {
+      appliedCouponCode.value = '';
+      couponDiscount.value = 0;
     }
   }
 }

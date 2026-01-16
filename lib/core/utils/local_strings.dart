@@ -77,6 +77,10 @@ class LocalStrings {
   static String decrementCartItemQuantityApi = appStrings.isNotEmpty
       ? appStrings['decrementCartItemQuantityApi']
       : "https://api.saltandglitz.com/v1/cart/cartDecrement";
+  static String applyCouponApi = appStrings['applyCouponApi'] ?? 
+      "https://saltapi.stuxnet.icu/v1/coupon/applyCoupon/";
+  static String removeCouponApi = appStrings['removeCouponApi'] ?? 
+      "https://saltapi.stuxnet.icu/v1/coupon/removeCoupon/";
   static String mergeProductApi = appStrings.isNotEmpty
       ? appStrings['mergeProductApi']
       : "https://api.saltandglitz.com/v1/merge/mergeCartAndWishlist";

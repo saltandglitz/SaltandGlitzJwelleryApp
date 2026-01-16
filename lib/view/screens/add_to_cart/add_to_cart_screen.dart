@@ -8,6 +8,7 @@ import 'package:saltandglitz/data/controller/add_to_cart/add_to_cart_controller.
 import 'package:saltandglitz/data/controller/collection/collection_controller.dart';
 import 'package:saltandglitz/view/components/common_button.dart';
 import 'package:saltandglitz/view/components/common_message_show.dart';
+import 'package:saltandglitz/view/screens/add_to_cart/coupon_bottom_sheet.dart';
 import 'package:shimmer/shimmer.dart';
 import '../../../analytics/app_analytics.dart';
 import '../../../core/route/route.dart';
@@ -525,81 +526,97 @@ class _AddToCartScreenState extends State<AddToCartScreen> {
                           ),
                         ),
                         const SizedBox(height: Dimensions.space10),
-                        GestureDetector(
-                          onTap: () {
-                            AppAnalytics().actionTriggerLogs(
-                                eventName:
-                                    LocalStrings.logAddCartApplyCouponClick,
-                                index: 4);
-                          },
-                          child: Container(
-                            height: size.height * 0.065,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(
-                                  Dimensions.offersCardRadius),
-                              color: ColorResources.lightGreenColour,
-                              boxShadow: [
-                                BoxShadow(
-                                  color: ColorResources.borderColor
-                                      .withOpacity(0.3),
-                                  offset: const Offset(0, 5),
-                                  blurRadius:
-                                      5, // Adjust the blur radius as needed
-                                ),
-                              ],
-                            ),
-                            child: Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 15),
-                              child: Center(
-                                child: Row(
-                                  children: [
-                                    Image.asset(
-                                      MyImages.discountImage,
-                                      color: ColorResources.blackColor,
-                                      height: 25,
-                                      width: 25,
-                                    ),
-                                    const SizedBox(width: Dimensions.space10),
-                                    Text(
-                                      LocalStrings.applyCoupon,
-                                      style: boldLarge.copyWith(
-                                        color: ColorResources.blackColor,
-                                      ),
-                                    ),
-                                    const Spacer(),
-                                    GestureDetector(
-                                      onTap: () {},
-                                      child: Container(
-                                        height: 30,
-                                        width: 30,
-                                        decoration: const BoxDecoration(
-                                          shape: BoxShape.circle,
-                                          color:
-                                              ColorResources.lightGreenColour,
-                                          boxShadow: [
-                                            BoxShadow(
-                                              color: ColorResources.borderColor,
-                                              spreadRadius: 1,
-                                              blurRadius: 5,
-                                              offset: Offset(0, 3),
-                                            ),
-                                          ],
-                                        ),
-                                        child: const Center(
-                                          child: Icon(
-                                            Icons.arrow_forward_rounded,
-                                            color: ColorResources.blackColor,
-                                          ),
-                                        ),
-                                      ),
+                        // Coupon Section - shows applied coupon or apply button
+                        Obx(() {
+                          if (addCartController.hasCouponApplied) {
+                            // Show applied coupon card
+                            return AppliedCouponCard(
+                              couponCode: addCartController.appliedCouponCode.value,
+                              discount: addCartController.couponDiscount.value,
+                              isLoading: addCartController.isApplyingCoupon.value,
+                              onRemove: () {
+                                addCartController.removeCouponApiMethod();
+                              },
+                            );
+                          } else {
+                            // Show apply coupon button
+                            return GestureDetector(
+                              onTap: () {
+                                AppAnalytics().actionTriggerLogs(
+                                    eventName:
+                                        LocalStrings.logAddCartApplyCouponClick,
+                                    index: 4);
+                                CouponBottomSheet.show(
+                                  context,
+                                  addCartController,
+                                  addCartController.getAddCartData?.coupons,
+                                );
+                              },
+                              child: Container(
+                                height: size.height * 0.065,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(
+                                      Dimensions.offersCardRadius),
+                                  color: ColorResources.lightGreenColour,
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: ColorResources.borderColor
+                                          .withOpacity(0.3),
+                                      offset: const Offset(0, 5),
+                                      blurRadius: 5,
                                     ),
                                   ],
                                 ),
+                                child: Padding(
+                                  padding:
+                                      const EdgeInsets.symmetric(horizontal: 15),
+                                  child: Center(
+                                    child: Row(
+                                      children: [
+                                        Image.asset(
+                                          MyImages.discountImage,
+                                          color: ColorResources.blackColor,
+                                          height: 25,
+                                          width: 25,
+                                        ),
+                                        const SizedBox(width: Dimensions.space10),
+                                        Text(
+                                          LocalStrings.applyCoupon,
+                                          style: boldLarge.copyWith(
+                                            color: ColorResources.blackColor,
+                                          ),
+                                        ),
+                                        const Spacer(),
+                                        Container(
+                                          height: 30,
+                                          width: 30,
+                                          decoration: const BoxDecoration(
+                                            shape: BoxShape.circle,
+                                            color: ColorResources.lightGreenColour,
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color: ColorResources.borderColor,
+                                                spreadRadius: 1,
+                                                blurRadius: 5,
+                                                offset: Offset(0, 3),
+                                              ),
+                                            ],
+                                          ),
+                                          child: const Center(
+                                            child: Icon(
+                                              Icons.arrow_forward_rounded,
+                                              color: ColorResources.blackColor,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
                               ),
-                            ),
-                          ),
-                        ),
+                            );
+                          }
+                        }),
                         const SizedBox(height: Dimensions.space23),
                         Align(
                           alignment: Alignment.centerLeft,
@@ -695,6 +712,44 @@ class _AddToCartScreenState extends State<AddToCartScreen> {
                                 ),
                               ),
                               const SizedBox(height: Dimensions.space10),
+                              // Coupon Discount Row (shown only if coupon applied)
+                              Obx(() {
+                                if (addCartController.hasCouponApplied) {
+                                  return Padding(
+                                    padding:
+                                        const EdgeInsets.symmetric(horizontal: 15),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Row(
+                                          children: [
+                                            Text(
+                                              LocalStrings.couponDiscount,
+                                              style: boldSmall.copyWith(
+                                                  color: ColorResources.buttonColor),
+                                            ),
+                                            const SizedBox(width: 4),
+                                            Text(
+                                              '(${addCartController.appliedCouponCode.value})',
+                                              style: regularSmall.copyWith(
+                                                  color: ColorResources.offerColor),
+                                            ),
+                                          ],
+                                        ),
+                                        Text(
+                                          '-₹${addCartController.couponDiscount.value.round()}',
+                                          style: boldSmall.copyWith(
+                                            color: ColorResources.offerColor,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  );
+                                }
+                                return const SizedBox.shrink();
+                              }),
+                              const SizedBox(height: Dimensions.space10),
                               const Divider(
                                   color: ColorResources.whiteColor,
                                   height: Dimensions.space10),
@@ -735,7 +790,7 @@ class _AddToCartScreenState extends State<AddToCartScreen> {
                                                 ),
                                               )
                                             : Text(
-                                                "₹${controller.calculateTotalPrice().round()}",
+                                                '₹${addCartController.calculateFinalTotal().round()}',
                                                 style: boldMediumLarge.copyWith(
                                                     color: ColorResources
                                                         .buttonColor),
